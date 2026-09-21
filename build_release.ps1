@@ -93,8 +93,10 @@ $standaloneZip = Join-Path $releaseDir "MUTHUR6000-$tagName-win-x64-Standalone.z
 Compress-Archive -Path "$frameworkDepPublishDir\*" -DestinationPath $frameworkDepZip -Force
 Compress-Archive -Path "$standalonePublishDir\*" -DestinationPath $standaloneZip -Force
 
-# Copy standalone exe and text folder to release root for direct download convenience
+# Copy standalone exe with official naming convention
 Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\MUTHUR6000.exe" -Force
+Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\witp-cic-v0.02-alpha3-0.exe" -Force
+Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\WitP-CIC.exe" -Force
 if (Test-Path $textSrc) {
     Copy-Item -Path $textSrc -Destination $releaseDir -Recurse -Force
 }
