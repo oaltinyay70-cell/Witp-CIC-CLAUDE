@@ -1,6 +1,6 @@
-# WITP-CIC documentation index
+# WITP-CIC-MUTHUR Documentation Index
 
-Canonical working tree (**2026-09-19**): **`Documents\Witp-CIC`** only (`/mnt/c/Users/ozgur/Documents/Witp-CIC` from WSL). **`~/Witp-CIC`** is obsolete — do not use. See repo root `CANONICAL.txt`. This `docs/` folder is also mirrored from the Cursor Project Context store for version control and offline use.
+Canonical working tree: **`C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`**. Active GitHub repository: **`https://github.com/TheZenHippie/MUTHUR6000.git`** (branch `main`). Upstream reference archive: `Witp-CIC2` (`https://github.com/oaltinyay70-cell/WITP-CIC2.git`). See repo root `CANONICAL.txt`.
 
 ## Start here
 

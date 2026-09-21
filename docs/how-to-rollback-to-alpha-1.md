@@ -5,6 +5,10 @@
 **Established:** 2026-09-20 16:32 UTC+3  
 **Authority:** Ozgur (Owner)  
 
+> [!NOTE]
+> This rollback guide documents the historical baseline procedure for the upstream **Witp-CIC2** archive (`https://github.com/oaltinyay70-cell/WITP-CIC2`), which is preserved read-only at `C:\Users\ozgur\Documents\Witp-CIC2`.
+> For the active **witp-cic-muthur** project (Alpha 4), all ongoing development takes place at `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` connected to `https://github.com/TheZenHippie/MUTHUR6000.git`.
+
 ---
 
 ## 1. Overview

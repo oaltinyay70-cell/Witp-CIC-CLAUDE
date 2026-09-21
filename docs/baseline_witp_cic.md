@@ -17,8 +17,9 @@
 - **Immutability:** No requirement in the baseline may be diluted, simplified, or deferred without Ozgur's explicit recorded sign-off.
 
 ### 1.2 Git Repository Authority & Exclusivity
-- **Sole Remote:** The only authoritative Git repository for this project is:
-  `origin` -> `https://github.com/oaltinyay70-cell/WITP-CIC2.git` (branch `main`).
+- **Active Authoritative Remote:** The sole active Git repository for `witp-cic-muthur` is:
+  `origin` -> `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`).
+- **Upstream Archive Preserved:** Upstream repository `https://github.com/oaltinyay70-cell/WITP-CIC2.git` is locked as an immutable reference archive.
 - **Cursor Repositories Purged:** All Cursor remotes (`origin.cursor.com`, `WITP-CIC-CURSOR`) and Cursor feature branches (`cursor/...`) are permanently decommissioned and forbidden.
 - **Strict Prohibition:** Never push to, pull from, or reference Cursor repositories.
 

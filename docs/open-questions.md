@@ -1,4 +1,4 @@
-# WITP-CIC2 — Open Spec Questions
+# WITP-CIC-MUTHUR — Open Spec Questions
 
 **Rule:** When Ozgur answers a question, the agent immediately records the answer in `docs/scope-v1.md` changelog (date-stamped) and in the relevant design doc, then marks the question **[ANSWERED]** here with the same timestamp. No implementation starts before the entry is written.
 

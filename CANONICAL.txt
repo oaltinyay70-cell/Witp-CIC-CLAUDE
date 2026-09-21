@@ -1,5 +1,6 @@
 CANONICAL REPOSITORY IDENTIFIER: witp-cic-muthur
 REPOSITORY PATH: C:\Users\ozgur\Documents\Witp-CIC-MUTHUR
 PRODUCT: MUTHUR 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM
-BASE REPOSITORY: Witp-CIC2 (Alpha 3 locked baseline)
+ACTIVE GITHUB REMOTE: https://github.com/TheZenHippie/MUTHUR6000.git (branch main)
+UPSTREAM BASELINE: Witp-CIC2 (Alpha 3 locked baseline reference)
 STATUS: ACTIVE MASTER

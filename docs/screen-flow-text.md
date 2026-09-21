@@ -1,4 +1,4 @@
-# WITP-CIC2 — SCREEN NAVIGATION FLOW (TEXT & ASCII)
+# WITP-CIC-MUTHUR — SCREEN NAVIGATION FLOW (TEXT & ASCII)
 
 Below is the complete screen flow displayed in clean ASCII tree and table formats so you can read it directly without needing an image/diagram renderer.
 

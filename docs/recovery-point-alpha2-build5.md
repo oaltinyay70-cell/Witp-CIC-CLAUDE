@@ -7,6 +7,10 @@
 **Physical Archive:** `backups/WITP-CIC2-RECOVERY-POINT-alpha2-build5.zip` (42,101,712 bytes)  
 **Active Production Binary:** `dist/witp-cic-v0.02-alpha2-5.exe` (Mirrored: `dist/WitP-CIC.exe`)  
 
+> [!NOTE]
+> This recovery point documents the historical state for the upstream **Witp-CIC2** archive (`https://github.com/oaltinyay70-cell/WITP-CIC2`), which is preserved read-only at `C:\Users\ozgur\Documents\Witp-CIC2`.
+> For the active **witp-cic-muthur** project (Alpha 4), all ongoing development takes place at `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` connected to `https://github.com/TheZenHippie/MUTHUR6000.git`.
+
 ---
 
 ## 1. Purpose of this Recovery Point

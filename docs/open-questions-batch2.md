@@ -1,4 +1,4 @@
-# WITP-CIC2 — Open Spec Questions (Batch 2) — [ALL ANSWERED]
+# WITP-CIC-MUTHUR — Open Spec Questions (Batch 2) — [ALL ANSWERED]
 
 **Rule:** Every answer Ozgur provides here is immediately recorded in `docs/scope-v1.md` changelog (date-stamped) and mirrored into `docs/architecture-decisions.md` before any code implementation begins.
 

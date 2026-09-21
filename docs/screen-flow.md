@@ -1,4 +1,4 @@
-# WITP-CIC2 — Screen Navigation State Flow
+# WITP-CIC-MUTHUR — Screen Navigation State Flow
 
 ```mermaid
 stateDiagram-v2

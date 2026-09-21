@@ -159,14 +159,14 @@ A manual folder browse dialog is provided if the user has an alternative install
 
 **Source:** Ozgur answer, `docs/open-questions-batch2.md` Q E1.
 
-## 21. Canonical Remote & Git Repository Rule (2026-09-19 20:25 UTC+3)
+## 21. Canonical Remote & Git Repository Rule (2026-09-19 20:25 UTC+3; updated 2026-09-21)
 
 **Decision:**
 - Permanently decommission and purge all Cursor git remotes (`origin.cursor.com` and `WITP-CIC-CURSOR`) and Cursor local branches.
-- The project's sole, authoritative Git repository is **`https://github.com/oaltinyay70-cell/WITP-CIC2.git`** mapped as canonical **`origin`** on branch **`main`**.
+- The project's active, authoritative Git repository is **`https://github.com/TheZenHippie/MUTHUR6000.git`** mapped as canonical **`origin`** on branch **`main`** for `witp-cic-muthur`. Upstream repository `https://github.com/oaltinyay70-cell/WITP-CIC2.git` is preserved as an immutable reference archive.
 - All commits and pushes are strictly and exclusively made to `origin main` (GitHub). Never push to or pull from Cursor repositories.
 
-**Source:** Ozgur directive (2026-09-19 20:25 UTC+3).
+**Source:** Ozgur directives (2026-09-19 20:25 UTC+3 & 2026-09-21 23:32 UTC+3).
 
 ## 22. Baseline Task Completion Rule (2026-09-19 20:25 UTC+3)
 

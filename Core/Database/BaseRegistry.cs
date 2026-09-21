@@ -53,8 +53,7 @@ namespace MUTHUR6000.Core.Database
             {
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "data", "base_locations.json"),
                 Path.Combine(Directory.GetCurrentDirectory(), "assets", "data", "base_locations.json"),
-                Path.Combine("C:\\Users\\ozgur\\Documents\\Witp-CIC-MUTHUR", "assets", "data", "base_locations.json"),
-                Path.Combine("C:\\Users\\ozgur\\Documents\\Witp-CIC2", "assets", "data", "base_locations.json")
+                Path.Combine("C:\\Users\\ozgur\\Documents\\Witp-CIC-MUTHUR", "assets", "data", "base_locations.json")
             };
 
             string? targetPath = null;

@@ -10,6 +10,10 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-21 23:51 UTC+3: **Comprehensive Repository Reference & Current Reality Alignment (Ozgur):**
+  1. **Documentation Alignment:** Scanned all project documentation, in-app Wiki text, and configuration files, updating all outdated references to the old repository (`oaltinyay70-cell/WITP-CIC2`) and workspace paths (`Witp-CIC2`) to reflect the current active reality.
+  2. **Active Git Authority:** Formally codified `origin` -> `https://github.com/TheZenHippie/MUTHUR6000.git` on branch `main` as the active repository for `witp-cic-muthur`, with `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` as the primary workspace and `Witp-CIC2` preserved strictly as an immutable reference archive.
+
 - 2026-09-21 23:48 UTC+3: **Core Development, Testing & Scope Rigor Baseline Mandate (Ozgur):**
   1. **Mandatory Pre-Delivery Testing:** Always run automated tests and smoke test binaries before delivery.
   2. **Zero Hallucination Standard:** Never invent mechanics, game rules, file formats, or assumptions. Ground all logic in verified telemetry.
