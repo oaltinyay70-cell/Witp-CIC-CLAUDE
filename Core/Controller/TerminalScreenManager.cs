@@ -1958,7 +1958,8 @@ namespace MUTHUR6000.Core.Controller
 
         // ── Width / layout helpers ────────────────────────────────────────────
         private const int W = 80;
-        private static string Rule(char c = '=') => new string(c, W);
+        private static string Rule(char c = '═') =>
+            (c == '-' || c == '─') ? new string('─', W) : new string('═', W);
         private static string PadTo(string s, int width) =>
             s.Length >= width ? s.Substring(0, width) : s + new string(' ', width - s.Length);
 
@@ -1972,7 +1973,7 @@ namespace MUTHUR6000.Core.Controller
 
         private void AppendHeader(StringBuilder sb, string title, string right = "")
         {
-            sb.AppendLine(Rule());
+            sb.AppendLine(Rule('═'));
             string titleStr = $"[ {title} ]";
             if (!string.IsNullOrEmpty(right))
             {
@@ -1988,20 +1989,20 @@ namespace MUTHUR6000.Core.Controller
             {
                 sb.AppendLine(titleStr);
             }
-            sb.AppendLine(Rule());
+            sb.AppendLine(Rule('═'));
         }
 
         private void AppendSectionHeader(StringBuilder sb, string title)
         {
             sb.AppendLine($"[ {title} ]");
-            sb.AppendLine(Rule('-'));
+            sb.AppendLine(Rule('─'));
         }
 
         private void AppendFooter(StringBuilder sb, params string[] hotkeys)
         {
             sb.AppendLine();
-            sb.AppendLine(Rule('-'));
-            sb.AppendLine(string.Join("  |  ", hotkeys));
+            sb.AppendLine(Rule('═'));
+            sb.AppendLine(string.Join("  │  ", hotkeys));
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -2037,7 +2038,7 @@ namespace MUTHUR6000.Core.Controller
 
             var rightBox = new List<string>
             {
-                "+-- [ OPTION EXPLANATION ] ------+"
+                "┌── [ OPTION EXPLANATION ] ──────┐"
             };
             string desc = descriptions[_startScreenSel];
             const int contentWidth = 30;
@@ -2055,11 +2056,11 @@ namespace MUTHUR6000.Core.Controller
                 }
                 string line = desc.Substring(startPos, chunkLen).Trim();
                 if (line.Length < contentWidth) line = line.PadRight(contentWidth);
-                rightBox.Add("| " + line + " |");
+                rightBox.Add("│ " + line + " │");
                 startPos += chunkLen;
                 while (startPos < desc.Length && desc[startPos] == ' ') startPos++;
             }
-            rightBox.Add("+--------------------------------+");
+            rightBox.Add("└────────────────────────────────┘");
 
             int totalRows = Math.Max(leftRows.Count, rightBox.Count);
             for (int r = 0; r < totalRows; r++)
@@ -2374,10 +2375,10 @@ namespace MUTHUR6000.Core.Controller
             AppendSectionHeader(sb, "W A R   R O O M   P R I M A R Y   S C R E E N");
 
             const int bw = 74;
-            sb.AppendLine("    +--------------------------------------------------------------------------+");
-            sb.AppendLine("    |                         WAR ROOM PRIMARY SCREEN                          |");
-            sb.AppendLine("    +--------------------------------------------------------------------------+");
-            sb.AppendLine("    |" + new string(' ', bw) + "|");
+            sb.AppendLine("    ╔══════════════════════════════════════════════════════════════════════════╗");
+            sb.AppendLine("    ║                         WAR ROOM PRIMARY SCREEN                          ║");
+            sb.AppendLine("    ╠══════════════════════════════════════════════════════════════════════════╣");
+            sb.AppendLine("    ║" + new string(' ', bw) + "║");
 
             string[] menuLabels =
             {
@@ -2404,11 +2405,11 @@ namespace MUTHUR6000.Core.Controller
                     rowContent = "   " + optText + new string(' ', Math.Max(0, pad));
                 }
                 if (rowContent.Length > bw) rowContent = rowContent.Substring(0, bw);
-                sb.AppendLine($"    |{rowContent}|");
-                sb.AppendLine("    |" + new string(' ', bw) + "|");
+                sb.AppendLine($"    ║{rowContent}║");
+                sb.AppendLine("    ║" + new string(' ', bw) + "║");
             }
 
-            sb.AppendLine("    +--------------------------------------------------------------------------+");
+            sb.AppendLine("    ╚══════════════════════════════════════════════════════════════════════════╝");
             sb.AppendLine();
             sb.AppendLine("    >> Press [1-5] or [ENTER] to open topic sub-menu. All pop-ups support cursor keys.");
 
@@ -2486,8 +2487,9 @@ namespace MUTHUR6000.Core.Controller
             int startIdx = sel >= maxVisible ? sel - maxVisible + 1 : 0;
 
             string shortTitle = _popUpTitle.Length > 62 ? _popUpTitle.Substring(0, 59) + "..." : _popUpTitle;
-            int rem = boxWidth - 4 - (shortTitle.Length + 4) - 1;
-            sb.AppendLine($"+-- [ {shortTitle} ] " + (rem > 0 ? new string('-', rem - 1) : "") + "+");
+            string topPrefix = $"╔══ [ {shortTitle} ] ";
+            int rem = boxWidth - topPrefix.Length - 1;
+            sb.AppendLine(topPrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
 
             for (int i = 0; i < maxVisible; i++)
             {
@@ -2497,15 +2499,15 @@ namespace MUTHUR6000.Core.Controller
                     string prefix = (idx == sel) ? "> " : "  ";
                     string content = prefix + _popUpBullets[idx];
                     content = PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth);
-                    sb.AppendLine($"| {content} |");
+                    sb.AppendLine($"║ {content} ║");
                 }
                 else
                 {
-                    sb.AppendLine($"| {new string(' ', innerWidth)} |");
+                    sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
                 }
             }
 
-            sb.AppendLine("+" + new string('-', boxWidth - 2) + "+");
+            sb.AppendLine("╚" + new string('═', boxWidth - 2) + "╝");
             sb.AppendLine();
             sb.AppendLine("    >> Press [ENTER] to view granular telemetry evidence & reasoning for this line.");
             AppendFooter(sb, "[UP/DOWN] Traverse Bullets", "[ENTER] View Reasoning", "PRESS ESC TO RETURN");
@@ -2585,7 +2587,7 @@ namespace MUTHUR6000.Core.Controller
                 else
                 {
                     sb.AppendLine("    CATEGORY    NAME / IDENTIFIER           LOCATION / STATUS");
-                    sb.AppendLine("    --------------------------------------------------------------------------------");
+                    sb.AppendLine("    " + new string('─', 76));
                     int maxShow = Math.Min(11, _dossierResults.Count);
                     for (int i = 0; i < maxShow; i++)
                     {
@@ -2611,8 +2613,11 @@ namespace MUTHUR6000.Core.Controller
             sb.AppendLine();
             AppendSectionHeader(sb, "MODULE STATUS : PHASE 08 RESERVED DOMAIN");
 
-            const int bw = 74;
-            sb.AppendLine("+-- [ THEATER BATTLESPACE DOMAIN (TBD) ] " + new string('-', Math.Max(0, bw - 42)) + "+");
+            const int bw = 78;
+            const int innerWidth = 74;
+            string topTitle = "╔══ [ THEATER BATTLESPACE DOMAIN (TBD) ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
 
             string[] lines =
             {
@@ -2633,12 +2638,10 @@ namespace MUTHUR6000.Core.Controller
 
             foreach (var line in lines)
             {
-                string l = line;
-                if (l.Length < bw - 1) l = l + new string(' ', bw - 1 - l.Length);
-                sb.AppendLine($"|{l}|");
+                sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
             }
 
-            sb.AppendLine("+" + new string('-', bw - 1) + "+");
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
             AppendFooter(sb, "PRESS ESC TO RETURN");
             return sb.ToString();
         }
@@ -2749,13 +2752,14 @@ namespace MUTHUR6000.Core.Controller
             const int innerWidth = 74;
             var sb = new StringBuilder();
 
-            int rem = width - 4 - 34;
-            sb.AppendLine($"+-- [ REASONING & TELEMETRY EVIDENCE ] " + (rem > 1 ? new string('-', rem - 2) : "") + "+");
+            string titlePrefix = "╔══ [ REASONING & TELEMETRY EVIDENCE ] ";
+            int rem = width - titlePrefix.Length - 1;
+            sb.AppendLine(titlePrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
 
             string itemLine = $"ITEM: {_reasoningBulletTitle}";
             if (itemLine.Length > innerWidth) itemLine = itemLine.Substring(0, innerWidth);
-            sb.AppendLine($"| {PadTo(itemLine, innerWidth)} |");
-            sb.AppendLine($"| {new string('-', innerWidth)} |");
+            sb.AppendLine($"║ {PadTo(itemLine, innerWidth)} ║");
+            sb.AppendLine("╠" + new string('═', width - 2) + "╣");
 
             if (_reasoningConfPct > 0)
             {
@@ -2763,13 +2767,13 @@ namespace MUTHUR6000.Core.Controller
                 string bar = "[" + new string('=', filled) + new string(' ', 10 - filled) + "]";
                 string tier = _reasoningConfPct >= 90 ? "VERIFIED" : _reasoningConfPct >= 70 ? "CONFIRMED" : _reasoningConfPct >= 40 ? "PROBABLE" : "UNCONFIRMED";
                 string confText = $"CONFIDENCE LEVEL: {bar} {_reasoningConfPct}% [{tier}]";
-                sb.AppendLine($"| {PadTo(confText, innerWidth)} |");
-                sb.AppendLine($"| {new string('-', innerWidth)} |");
+                sb.AppendLine($"║ {PadTo(confText, innerWidth)} ║");
+                sb.AppendLine("╠" + new string('═', width - 2) + "╣");
             }
 
             string prompt = "SELECT REASONING TOPIC & PRESS [ENTER] TO DISCLOSE EVIDENCE:";
-            sb.AppendLine($"| {PadTo(prompt, innerWidth)} |");
-            sb.AppendLine($"| {new string(' ', innerWidth)} |");
+            sb.AppendLine($"║ {PadTo(prompt, innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
 
             for (int i = 0; i < _reasoningTopics.Count; i++)
             {
@@ -2782,30 +2786,30 @@ namespace MUTHUR6000.Core.Controller
                     full = full + new string(' ', innerWidth - full.Length - action.Length) + action;
                 else
                     full = PadTo(full, innerWidth);
-                sb.AppendLine($"| {full} |");
-                sb.AppendLine($"| {new string(' ', innerWidth)} |");
+                sb.AppendLine($"║ {full} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
             }
 
             if (_reasoningTopics.Count > 0 && _reasoningTopicSel < _reasoningTopics.Count)
             {
-                sb.AppendLine($"| {new string('-', innerWidth)} |");
-                sb.AppendLine($"| {PadTo($"--- EVIDENCE: {_reasoningTopics[_reasoningTopicSel].Title} ---", innerWidth)} |");
-                sb.AppendLine($"| {new string(' ', innerWidth)} |");
+                sb.AppendLine("╠" + new string('═', width - 2) + "╣");
+                sb.AppendLine($"║ {PadTo($"--- EVIDENCE: {_reasoningTopics[_reasoningTopicSel].Title} ---", innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
                 foreach (var line in _reasoningTopics[_reasoningTopicSel].Lines)
                 {
                     var wrapped = WrapText(line, innerWidth, 4);
                     foreach (var wLine in wrapped)
                     {
-                        sb.AppendLine($"| {PadTo(wLine, innerWidth)} |");
+                        sb.AppendLine($"║ {PadTo(wLine, innerWidth)} ║");
                     }
                 }
-                sb.AppendLine($"| {new string(' ', innerWidth)} |");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
             }
 
-            sb.AppendLine($"| {new string('-', innerWidth)} |");
-            string footerText = "[UP/DOWN] Select Topic  |  [ENTER] Drill Down  |  PRESS ESC TO RETURN";
-            sb.AppendLine($"| {PadTo(footerText, innerWidth)} |");
-            sb.AppendLine("+" + new string('-', width - 2) + "+");
+            sb.AppendLine("╠" + new string('═', width - 2) + "╣");
+            string footerText = "[UP/DOWN] Select Topic  │  [ENTER] Drill Down  │  PRESS ESC TO RETURN";
+            sb.AppendLine($"║ {PadTo(footerText, innerWidth)} ║");
+            sb.AppendLine("╚" + new string('═', width - 2) + "╝");
             return sb.ToString();
         }
 
@@ -2838,7 +2842,7 @@ namespace MUTHUR6000.Core.Controller
             var rightBox = new List<string>();
             if (_wikiMenuSel >= 0 && _wikiMenuSel < total && !string.IsNullOrEmpty(topics[_wikiMenuSel].Description))
             {
-                rightBox.Add("+-- [ TOPIC EXPLANATION ] -------+");
+                rightBox.Add("┌── [ TOPIC EXPLANATION ] ───────┐");
                 string desc = topics[_wikiMenuSel].Description;
                 const int contentWidth = 30;
                 int startPos = 0;
@@ -2852,11 +2856,11 @@ namespace MUTHUR6000.Core.Controller
                     }
                     string line = desc.Substring(startPos, chunkLen).Trim();
                     if (line.Length < contentWidth) line = line.PadRight(contentWidth);
-                    rightBox.Add("| " + line + " |");
+                    rightBox.Add("│ " + line + " │");
                     startPos += chunkLen;
                     while (startPos < desc.Length && desc[startPos] == ' ') startPos++;
                 }
-                rightBox.Add("+--------------------------------+");
+                rightBox.Add("└────────────────────────────────┘");
             }
 
             int totalRows = Math.Max(leftRows.Count, rightBox.Count);
@@ -2982,7 +2986,7 @@ namespace MUTHUR6000.Core.Controller
 
             if (!string.IsNullOrEmpty(explanation))
             {
-                rightBox.Add("+-- [ TOPIC EXPLANATION ] -------+");
+                rightBox.Add("┌── [ TOPIC EXPLANATION ] ───────┐");
                 const int contentWidth = 30;
                 int startPos = 0;
                 while (startPos < explanation.Length)
@@ -2995,11 +2999,11 @@ namespace MUTHUR6000.Core.Controller
                     }
                     string line = explanation.Substring(startPos, chunkLen).Trim();
                     if (line.Length < contentWidth) line = line.PadRight(contentWidth);
-                    rightBox.Add("| " + line + " |");
+                    rightBox.Add("│ " + line + " │");
                     startPos += chunkLen;
                     while (startPos < explanation.Length && explanation[startPos] == ' ') startPos++;
                 }
-                rightBox.Add("+--------------------------------+");
+                rightBox.Add("└────────────────────────────────┘");
             }
 
             int totalRows = Math.Max(leftRows.Count, rightBox.Count);
@@ -3197,13 +3201,13 @@ namespace MUTHUR6000.Core.Controller
             AppendHeader(sb, "TERMINATE SESSION CONFIRMATION");
             sb.AppendLine();
             sb.AppendLine();
-            sb.AppendLine("    +-----------------------------------------------------------+");
-            sb.AppendLine("    |  [ TERMINATE SESSION ]                                    |");
-            sb.AppendLine("    |-----------------------------------------------------------|");
-            sb.AppendLine("    |  CONFIRM: PURGE ALL IN-MEMORY INTELLIGENCE AND EXIT?      |");
-            sb.AppendLine("    |                                                           |");
-            sb.AppendLine("    |  [Y] YES - PURGE & SHUTDOWN       [N/ESC] CANCEL          |");
-            sb.AppendLine("    +-----------------------------------------------------------+");
+            sb.AppendLine("    ╔═══════════════════════════════════════════════════════════╗");
+            sb.AppendLine("    ║  [ TERMINATE SESSION ]                                    ║");
+            sb.AppendLine("    ╠═══════════════════════════════════════════════════════════╣");
+            sb.AppendLine("    ║  CONFIRM: PURGE ALL IN-MEMORY INTELLIGENCE AND EXIT?      ║");
+            sb.AppendLine("    ║                                                           ║");
+            sb.AppendLine("    ║  [Y] YES - PURGE & SHUTDOWN       [N/ESC] CANCEL          ║");
+            sb.AppendLine("    ╚═══════════════════════════════════════════════════════════╝");
             sb.AppendLine();
             AppendFooter(sb, "[Y] Yes, Purge and Reset", "[N/ESC] Cancel");
             return sb.ToString();
