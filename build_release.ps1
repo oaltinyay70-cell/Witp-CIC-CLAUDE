@@ -95,7 +95,7 @@ Compress-Archive -Path "$standalonePublishDir\*" -DestinationPath $standaloneZip
 
 # Copy standalone exe with official naming convention
 Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\MUTHUR6000.exe" -Force
-Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\witp-cic-v0.02-alpha3-0.exe" -Force
+Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\witp-cic-muthur-alpha4-0.exe" -Force
 Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\WitP-CIC.exe" -Force
 if (Test-Path $textSrc) {
     Copy-Item -Path $textSrc -Destination $releaseDir -Recurse -Force

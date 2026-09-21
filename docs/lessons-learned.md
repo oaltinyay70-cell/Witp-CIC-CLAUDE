@@ -574,8 +574,15 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **Context:** `dotnet publish` failed with `System.IO.IOException: The process cannot access the file ... because it is being used by another process` because a running instance of `MUTHUR6000.exe` was active.
 - **What Was Learned:**
   - Always terminate any active instances of the target executable before running `dotnet publish`.
+### LL-046: Alpha 4 Binary Naming Convention & Phase Transition
+- **Date:** 2026-09-21 23:32 UTC+3
+- **Context:** User instructed:
+  > *"it is witp-cic-muthur-alpha4-0 where alpha is the new phase name 0 is the 1st build and will increment by 1"*
+- **What Was Learned:**
+  - With the transition to standalone repository `witp-cic-muthur`, the phase designation is **Alpha 4** (`alpha4`).
+  - Executables follow `witp-cic-muthur-alpha4-[build#].exe`, starting at `0` for the first build (`witp-cic-muthur-alpha4-0.exe`) and incrementing by 1 for each subsequent build in this phase, with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
 - **What NOT to Repeat:**
-  - DO NOT run publish scripts without ensuring previous instances of the target binary are stopped.
+  - DO NOT omit the project or phase identifier from release binaries.
 
 ---
 

@@ -10,6 +10,10 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-21 23:32 UTC+3: **Phase Progression to Alpha 4 & Binary Naming Convention (Ozgur):**
+  1. **Phase Label:** Officially advance the project phase designation to **Alpha 4** (`alpha4`).
+  2. **Binary Naming Convention:** All executables follow `witp-cic-muthur-alpha4-[build#].exe`, where `alpha4` is the new phase name and `0` is the 1st build incrementing by 1 (e.g. `witp-cic-muthur-alpha4-0.exe`), with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+
 - 2026-09-21 22:20 UTC+3: **Project Switch to Standalone `witp-cic-muthur` Repository (Ozgur):**
   1. **Canonical Master Repository Switch:** Formally established `witp-cic-muthur` (`C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`) as the active, canonical master repository. `Witp-CIC2` is locked, clean, and preserved strictly as an immutable reference archive.
   2. **Platform & Architecture Integration:** Adopted the MUTHUR 6000 vintage CRT phosphor hardware-accelerated GUI shell (.NET 8 WPF) with full analytical parity across all 5 War Room domains, Predictive Models A–G, Field Manual, Wiki, and Settings.
