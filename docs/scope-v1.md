@@ -10,6 +10,15 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-21 23:48 UTC+3: **Core Development, Testing & Scope Rigor Baseline Mandate (Ozgur):**
+  1. **Mandatory Pre-Delivery Testing:** Always run automated tests and smoke test binaries before delivery.
+  2. **Zero Hallucination Standard:** Never invent mechanics, game rules, file formats, or assumptions. Ground all logic in verified telemetry.
+  3. **Strict Test Pass Gate:** Never finish or conclude a task until all tests pass with 100% success.
+  4. **Exact Output Coverage:** Test assertions must strictly cover the exact requested user outputs.
+  5. **Scope Alignment & Active Clash Clarification:** Align all additions and corrections with `docs/scope-v1.md`. If clashes or ambiguities exist, stop and ask Ozgur immediately.
+  6. **Exhaustive Foolproof Documentation:** Every piece of added functionality must be documented in foolproof detail.
+  7. **Algorithm Logic Clash Alerting:** Actively monitor for logic clashes in algorithms and state machines, and immediately alert Ozgur.
+
 - 2026-09-21 23:32 UTC+3: **Phase Progression to Alpha 4 & Binary Naming Convention (Ozgur):**
   1. **Phase Label:** Officially advance the project phase designation to **Alpha 4** (`alpha4`).
   2. **Binary Naming Convention:** All executables follow `witp-cic-muthur-alpha4-[build#].exe`, where `alpha4` is the new phase name and `0` is the 1st build incrementing by 1 (e.g. `witp-cic-muthur-alpha4-0.exe`), with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.

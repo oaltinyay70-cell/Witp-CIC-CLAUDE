@@ -412,3 +412,26 @@ All application errors must follow the standardized format **`[XXX]`**:
 2. **Explicit Multi-Day Campaign Telemetry in Pop-Up Headers:** When displaying navigable pop-up lists of intelligence items (strike clusters, assault targets, trajectories, base pauses, battle claims, routes), the header must explicitly display both the current turn date, the total number of campaign days loaded, and the separate item count:
    `Turn: <Date> (<N> Days Loaded) | ITEMS: <Count>`
 3. **Exhaustive Multi-Day Data Ingestion Processing:** Every file across all operational days ingested into the campaign vault (e.g. all 8 days: Dec 07 through Dec 15 across 60 files) must be fully parsed and fed into the analytical pipeline (`WarRoomAnalytics::analyzeCampaign`). Models A through G, High Value Target tracking, Tab 2 geospatial bearing logs, and sighting chronology must reflect the complete historical telemetry of all loaded turns without dropping or ignoring earlier turns.
+
+---
+
+## 10. Development, Testing & Scope Rigor Principles
+
+### 10.1 Core Development, Testing & Verification Baseline Standards
+> **"baseline :
+> 1. always test before delivery
+> 2. dont hallucinate
+> 3. do not finish until tests run ok
+> 4. test results must be strictly covering the wanted output
+> 5. when new features are added or corrections are made , align it with the current scope , if there are clashes ask, if there is a part u dont understand ask , 
+> 6 everything that is added to functionality must be stored in the documentation in detail - fool proof 
+> 7, always watch for logic clashes in the algorithm and alert me" — Ozgur (2026-09-21 23:48 UTC+3)**
+
+1. **Mandatory Pre-Delivery Testing:** Always run the complete automated test suite and execute binary smoke tests prior to every delivery. Never deliver unverified or untested code.
+2. **Strict Zero-Hallucination Standard:** Never hallucinate, invent, or guess mechanics, file structures, offsets, or requirements. Ground every deduction strictly in verified telemetry, official game manuals, and authoritative domain databases.
+3. **Uncompromising Test Pass Gate:** Never declare a development task or phase completed until all automated tests pass with 100% success rate without errors, failures, or skipped critical checks.
+4. **Strict Output Coverage:** Test suites and assertions must strictly and comprehensively cover the exact requested outputs, edge cases, and user expectations.
+5. **Scope Alignment & Active Clash Clarification:** Whenever new features are introduced or corrections are applied, rigorously align them with the authoritative business scope (`docs/scope-v1.md`). If any clash, contradiction, or ambiguity is detected—or if any requirement is not 100% understood—**STOP IMMEDIATELY AND ASK OZGUR** for clarification.
+6. **Exhaustive Foolproof Documentation:** Every piece of added functionality, architectural enhancement, and behavioral rule must be codified in core project documentation in exhaustive, foolproof detail so that any engineer or agent can understand and maintain it without ambiguity.
+7. **Proactive Algorithm Logic Clash Monitoring & Alerting:** Continuously scrutinize algorithms, state machines, and mathematical models for logic clashes, mathematical contradictions, or unintended side effects, and immediately alert Ozgur whenever a potential clash is identified.
+

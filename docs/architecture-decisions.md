@@ -667,3 +667,26 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
    - The canonical root mirror `dist/WitP-CIC.exe` remains updated in lockstep.
 
 **Source:** Ozgur directives (2026-09-21 20:53 UTC+3).
+
+## 61. Project Switch to Standalone `witp-cic-muthur` & Phase 4 Naming Convention (2026-09-21 23:32 UTC+3)
+
+**Decision:**
+1. **Master Repository:** `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` is the active, canonical master repository. `Witp-CIC2` is read-only and immutable.
+2. **Phase Designation:** **Alpha 4** (`alpha4`).
+3. **Strict Binary Naming Convention:** All compiled executables follow `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-0.exe`), with canonical root mirrors `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+
+**Source:** Ozgur directives (2026-09-21 22:20 & 23:32 UTC+3).
+
+## 62. Core Development, Testing & Scope Rigor Baseline Mandate (2026-09-21 23:48 UTC+3)
+
+**Decision:**
+1. **Mandatory Pre-Delivery Testing:** Every build and code change must be verified via automated test suites and binary smoke test before delivery.
+2. **Zero Hallucination Standard:** Speculation is strictly forbidden; all analytical formulas and telemetry parsing must be grounded in verified game reports and `.pws` binary formats.
+3. **100% Test Pass Gate:** No task is complete until 100% of tests pass without failure or error.
+4. **Strict Output Coverage:** Test suites must strictly validate expected functional and visual outcomes.
+5. **Scope Alignment & Immediate Clash Clarification:** All work must align with `docs/scope-v1.md`. If clashes or ambiguities exist, stop and ask Ozgur immediately.
+6. **Exhaustive Foolproof Documentation:** Every piece of added functionality must be recorded in core documentation in foolproof detail.
+7. **Proactive Algorithm Logic Clash Monitoring:** Constantly inspect algorithms and state machines for logical conflicts and immediately alert Ozgur.
+
+**Source:** Ozgur directives (2026-09-21 23:48 UTC+3).
+

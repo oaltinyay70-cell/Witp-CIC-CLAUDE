@@ -590,6 +590,30 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What NOT to Repeat:**
   - DO NOT omit `<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>` in WPF single-file publish configurations.
 
+### LL-048: Core Development, Testing & Scope Rigor Baseline Mandate
+- **Date:** 2026-09-21 23:48 UTC+3
+- **Context:** User codified the 7 fundamental baseline engineering rules:
+  > *"baseline :
+  > 1. always test before delivery
+  > 2. dont hallucinate
+  > 3. do not finish until tests run ok
+  > 4. test results must be strictly covering the wanted output
+  > 5. when new features are added or corrections are made , align it with the current scope , if there are clashes ask, if there is a part u dont understand ask , 
+  > 6 everything that is added to functionality must be stored in the documentation in detail - fool proof 
+  > 7, always watch for logic clashes in the algorithm and alert me"*
+- **What Was Learned:**
+  1. **Strict Pre-Delivery Verification:** Never deliver changes or binaries without running the full automated test suite and performing binary smoke tests.
+  2. **Zero Hallucination Standard:** Never speculate on data formats or requirements. Ground all deductions in verified telemetry and official rules.
+  3. **Uncompromising Test Pass Gate:** Never declare a task complete until 100% of tests pass cleanly.
+  4. **Strict Output Coverage:** Test suites must strictly validate the intended visual and functional outputs.
+  5. **Scope Alignment & Active Clash Clarification:** Align every change with `docs/scope-v1.md`. If anything is ambiguous or conflicting, ask Ozgur immediately.
+  6. **Exhaustive Foolproof Documentation:** Document all functionality, architecture, and behavior in full, foolproof detail.
+  7. **Proactive Logic Clash Alerting:** Actively audit algorithms and state machines for logic contradictions and alert Ozgur immediately.
+- **What NOT to Repeat:**
+  - DO NOT declare a task done with failing or unrun tests.
+  - DO NOT guess or hallucinate when requirements are unclear.
+  - DO NOT proceed when logic or scope clashes exist without asking Ozgur.
+
 ---
 
 ## 3. Checklist for Future Corrections
