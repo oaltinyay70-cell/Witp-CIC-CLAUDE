@@ -138,19 +138,20 @@ Every future version upgrade, release, or milestone progression must strictly fo
 6. **Memory Pooling & Integer Hex Hashing:** Coordinates are mapped as integers ($X \times 1000 + Y$) to avoid string allocations; temporary parsing maps are cleared and deallocated every turn cycle.
 
 ### 1.13 Versioning and Binary Naming Baseline
-> **"we are Alpha 2 from  now on . Also , baseline : - when compiling a new exe the naming format is witp-cic-[mainversion id]-[phaseid]-[built no] . main version is V.XX . phase id is alpha , beta etc . built no , starts from 0 for each new main phase id" — Ozgur (2026-09-20 23:02 UTC+3)**  
-> **"base line when compiling the new exe increae the build number by 1" — Ozgur (2026-09-21 15:03 UTC+3)**
+> **"it is witp-cic-muthur-alpha4-0 where alpha is the new phase name 0 is the 1st build and will increment by 1" — Ozgur (2026-09-21 23:31 UTC+3)**  
+> **"u will follow this rule as a baseline ! from now on" — Ozgur (2026-09-21 23:32 UTC+3)**
 
-1. **Milestone Progression to Alpha 2:** The project is officially designated as **Alpha 2** (`v0.02-alpha2`), advancing from the preserved Version 0.02 (Stable Alpha 1) baseline.
+1. **Milestone Progression to Alpha 4:** The project is officially designated as **Alpha 4** (`alpha4`) under the standalone **`witp-cic-muthur`** repository.
 2. **Standardized Binary Compilation Naming Format:**
    - Every newly compiled Windows binary MUST strictly adhere to the standardized naming structure:
-     `witp-cic-[mainversion id]-[phaseid]-[built no]`
-   - `[mainversion id]`: Formatted as `V.XX` (e.g. `v0.02`).
-   - `[phaseid]`: Current development lifecycle phase (e.g. `alpha2`, `beta`, etc.).
-   - `[built no]`: Incremental build counter starting strictly from `0` for each new main phase ID, and **strictly incrementing by 1 on each new compiled executable** (e.g. `witp-cic-v0.02-alpha2-0.exe` $\to$ `witp-cic-v0.02-alpha2-1.exe` $\to$ `witp-cic-v0.02-alpha2-2.exe`).
+     `witp-cic-muthur-[phase]-[build#].exe`
+   - `[phase]`: Current development lifecycle phase (e.g. `alpha4`).
+   - `[build#]`: Incremental build counter starting strictly from `0` for each new phase, and **strictly incrementing by 1 on each new compiled executable** (e.g. `witp-cic-muthur-alpha4-0.exe` $\to$ `witp-cic-muthur-alpha4-1.exe` $\to$ `witp-cic-muthur-alpha4-2.exe`).
 3. **Active Executable Artifacts:**
-   - Active versioned release binary: `dist/witp-cic-v0.02-alpha2-1.exe`.
-   - Mirrored canonical entrypoint: `dist/WitP-CIC.exe` (always copied from the latest versioned release binary for build scripts and continuous operational execution).
+   - Active versioned release binary: `dist/witp-cic-muthur-alpha4-0.exe`.
+   - Mirrored canonical entrypoints:
+     - `dist/WitP-CIC.exe` (mirrored from the latest versioned release binary).
+     - `dist/MUTHUR6000.exe` (mirrored for retro-terminal shell launchers).
 
 ### 1.14 Naval Unit Capability & Operational Role Baseline
 > **"An important prerequisite of making sense of the information collected is to know what each unit type can do. I will give u this information in parts. Analyse them , and base your reasoning on these. if u see any conflict and part u dont understand ask. all of the info will goto the documentation for the scope and other related places like the Field Manual. From now on make your predictive work to include these info" — Ozgur (2026-09-21 13:27 UTC+3)**
