@@ -1,0 +1,205 @@
+COMBAT EVENTS FOR 12/08/41
+
+ADJUST TASK FORCE MISSIONS 
+CALCULATE RANGE TO ENEMY
+CALCULATE AIR SUPERIORITY
+ASSIGN COMPUTER CONTROLLED UNITS
+Kwangchowan is occupied by the Japanese
+Combat Events:
+NAVAL REACTION PHASE
+LOADING/UNLOADING TASK FORCES
+Amphibious TF 85 unloading at Kota Bharu
+TASK FORCE LOADING/UNLOADING COMPLETE
+CALCULATING TASK FORCE PATHS
+MINESWEEPING OPERATIONS
+NAVAL MOVEMENT PHASE
+DD Pope hits Type 88 Mine at Bataan
+DD Pillsbury hits Type 88 Mine at Bataan
+DD John D. Ford hits Type 88 Mine at Bataan
+ADJUST SHIP FUEL
+NIGHT AIR OPERATIONS PHASE
+AIR NIGHT STRIKES
+AIRCRAFT LANDING
+DD Bagley sinks....
+DD Pillsbury sinks....
+DD Blue sinks....
+SURFACE COMBAT CHECK
+DIVIDE CRIPPLED TFs
+Amphibious TF 85 unloading at Kota Bharu
+REPAIRING SHIPS
+END 12 HOUR PULSE
+DIVIDE CRIPPLED TFs
+CHECKING TF FUEL
+TF'S RETURN TO PORT
+Combat Events:
+NAVAL REACTION PHASE
+LOADING/UNLOADING TASK FORCES
+Amphibious TF 85 unloading at Kota Bharu
+TASK FORCE LOADING/UNLOADING COMPLETE
+CALCULATING TASK FORCE PATHS
+MINESWEEPING OPERATIONS
+NAVAL MOVEMENT PHASE
+Task Force 444 encounters enemy Task Force at 77 , 66
+Task Force 446 encounters enemy Task Force at 77 , 66
+ADJUST SHIP FUEL
+AIR OPERATIONS PHASE : AM
+xAKL Mauban observes H6K4 Mavis at 78,93 near Dadjangas
+TF 349 snooped by Japanese Level Bomber at 78,93 near Dadjangas
+TF 348 sights Japanese Aircraft at 79,87 near Tagbilaran
+TF 399 snooped by Japanese Aircraft at 49,74 near Georgetown
+TF 400 shadowed by Japanese Float Plane at 49,74 near Georgetown
+TF 447 observes Japanese Aircraft at 76,68 near Paracel Islands
+TF 338 sighted by Japanese Aircraft at 50,84 near Singapore
+E7K2 Alf has spotted an Allied AP at 49,74
+SBD-3 Dauntless reports diving submarine at 143, 105 near Taongi
+SBD-2 Dauntless sighting report: 9 Japanese ships at 166,122 near Johnston Island, speed 13, Moving West
+PBY-5 Catalina sighting report: 9 Japanese ships at 172,103 near French Frigate Shoal , Speed 14 , Moving West
+PBY-5 Catalina sighting report: 7 Japanese ships at 171,103 near French Frigate Shoal , Speed 17 , Moving West
+PBY-4 Catalina sighting report: 6 Japanese ships at 152,87 near Kure Island , Speed 13 , Moving West
+xAK Governor Wright sights Japanese Aircraft at 79,85 near Bacolod
+TF 345 followed by Japanese Level Bomber at 79,85 near Bacolod
+AIR STRIKES
+xAK Demosthenes sinks....
+xAK Ellenga sinks....
+xAP Hong Siang sinks....
+xAP Kelantan sinks....
+CPT Clarkson M. has been KILLED
+AIRCRAFT LANDING
+DIVIDE CRIPPLED TFs
+AIR OPERATIONS PHASE : PM
+TF 342 detects Japanese Torpedo Bomber at 75,67 near Paracel Islands
+xAKL Luzon sights Japanese Float Plane at 75,88 near Zamboanga
+TF 338 shadowed by Japanese Float Plane at 50,84 near Singapore
+PBY-4 Catalina sighting report: 5 Japanese ships at 152,87 near Kure Island , Speed 12 , Moving West
+Do-24K-1 sighting report: 2 Japanese ships at 51,75 near Kota Bharu , Speed unknown 
+AIR STRIKES
+xAK Governor Wright sinks....
+CDR Bordonaro, J.H. has been KILLED
+AIRCRAFT LANDING
+AIR TRANSPORT PHASE
+AIRCRAFT LANDING
+SURFACE COMBAT CHECK
+DIVIDE CRIPPLED TFs
+Amphibious TF 85 unloading at Kota Bharu
+REPAIRING SHIPS
+END 12 HOUR PULSE
+DIVIDE CRIPPLED TFs
+CHECKING TF FUEL
+TF'S RETURN TO PORT
+89th Chinese Corps RETREATING towards Hwaiyin
+Japanese forces CAPTURE Tsingsing !!!
+1/19th Chinese Corps RETREATING towards Yutze
+37th Division IN PURSUIT
+4th Ind.Mixed Brigade IN PURSUIT
+6th Medium Field Artillery Regiment IN PURSUIT
+RECALCULATING ZONES OF CONTROL
+SUPPLY REQUIREMENTS PHASE
+San Francisco expands fortifications to size 2
+Hilo expands fortifications to size 1
+Lahaina expands fortifications to size 1
+Palmyra expands fortifications to size 1
+Pago Pago expands fortifications to size 1
+Manila expands fortifications to size 1
+Christmas Island expands fortifications to size 1
+Bangalore expands fortifications to size 1
+Hyderabad expands fortifications to size 1
+Canberra expands fortifications to size 1
+Portland expands fortifications to size 1
+Wagga Wagga expands fortifications to size 1
+Calgary expands fortifications to size 1
+Winnipeg expands fortifications to size 1
+Puckapunyal expands fortifications to size 1
+MOVING OIL AND RESOURCES
+PRODUCTION PHASE
+SUPPLY MOVEMENT PHASE
+CALCULATING SPOILAGE
+AIRCRAFT REPAIR PHASE
+AIRCRAFT SUPPLY PHASE
+UPGRADING SHIPS
+UPGRADING AIR UNITS
+UPGRADING LAND UNITS
+SUPPLY PHASE COMPLETE
+END OF DAY
+TRAINING SHIP CREWS
+DISBANDING HUMAN CONTROLLED TASK FORCES
+ADJUSTING AVIATION SUPPORT
+LAND UNIT REPLACEMENT PHASE
+AIR UNIT REPLACEMENT PHASE
+MERGING SUB UNITS
+SUB UNIT MERGE COMPLETE
+DIVIDE CRIPPLED TFs
+Low garrison leads to damage and 1 VP loss from partisan attack at Colombo (29, 48)!
+Low garrison leads to damage and 1 VP loss from partisan attack at Mandalay (59, 46)!
+Low garrison leads to damage and 1 VP loss from partisan attack at Madurai (30, 42)!
+LEADER REASSIGNMENT PHASE
+AV Wright arrives at Pearl Harbor
+xAK Ewa arrives at Balboa
+xAKL Island Mail arrives at Balboa
+xAP Largs Bay arrives at Aden
+xAP Felix Roussel arrives at Cape Town
+xAP Cap St Jacques arrives at Cape Town
+20th PG/55th PS arrives at Ogden
+20th PG/55th PS sub-groups COMBINING at Ogden
+42nd BG/75th BS arrives at San Diego
+42nd BG/75th BS sub-groups COMBINING at San Diego
+16th RS arrives at San Diego
+42nd BG/77th BS arrives at San Diego
+42nd BG/76th BS arrives at San Diego
+42nd BG/76th BS sub-groups COMBINING at San Diego
+AVG/1st Sqn arrives at Rangoon
+AVG/1st Sqn sub-groups COMBINING at Rangoon
+No.62 Sqn RAF arrives at Singapore
+No.62 Sqn RAF sub-groups COMBINING at Singapore
+24th PG/20th PS arrives at Manila
+24th PG/20th PS sub-groups COMBINING at Manila
+51st PG/16th PS arrives at San Diego
+51st PG/25th PS arrives at San Diego
+14th PG/48th PS arrives at Ogden
+14th PG/48th PS sub-groups COMBINING at Ogden
+54th PG/56th PS arrives at Ogden
+54th PG/56th PS sub-groups COMBINING at Ogden
+55th PG/38th PS arrives at Ogden
+55th PG/38th PS sub-groups COMBINING at Ogden
+12th BG/82nd BS arrives at Ogden
+12th BG/82nd BS sub-groups COMBINING at Ogden
+No.1 Sqn RAAF arrives at Singapore
+No.1 Sqn RAAF sub-groups COMBINING at Singapore
+No.36 Sqn RAF Det arrives at Singapore
+No.36 Sqn RAF Det sub-groups COMBINING at Singapore
+1e-2-Vl.G.I arrives at Batavia
+1e-2-Vl.G.I sub-groups COMBINING at Batavia
+1-Vl.G.IV arrives at Batavia
+1-Vl.G.IV sub-groups COMBINING at Batavia
+Vk.A.1 arrives at Batavia
+Vk.A.1 sub-groups COMBINING at Batavia
+Vk.A.4 arrives at Batavia
+69 SAD/76 IAP arrives at Vladivostok
+69 SAD/76 IAP sub-groups COMBINING at Vladivostok
+34 SAD/77 IAP arrives at Vladivostok
+34 SAD/77 IAP sub-groups COMBINING at Vladivostok
+34 SAD/59 BAP arrives at Vladivostok
+34 SAD/59 BAP sub-groups COMBINING at Vladivostok
+34 SAD/36 BAP arrives at Vladivostok
+34 SAD/36 BAP sub-groups COMBINING at Vladivostok
+34 SAD/47 IAP arrives at Vladivostok
+34 SAD/47 IAP sub-groups COMBINING at Vladivostok
+No.6 Sqn RAAF Det arrives at Townsville
+No.6 Sqn RAAF Det sub-groups COMBINING at Townsville
+No.6 Sqn RAAF arrives at Townsville
+No.6 Sqn RAAF sub-groups COMBINING at Townsville
+VS-1D11 arrives at San Diego
+No.243 Sqn RAF Det arrives at Singapore
+34 SAD/53 IAP arrives at Vladivostok
+29 IAD/60 IAP arrives at Vladivostok
+69th OG/31st OS arrives at Ogden
+51st PG/26th PS arrives at Ogden
+55th PG/37th PS arrives at Ogden
+54th PG/42nd PS arrives at Ogden
+14th PG/50th PS arrives at Ogden
+55th PG/54th PS arrives at Ogden
+14th PG/HqS arrives at Ogden
+54th PG/HqS arrives at Ogden
+55th PG/HqS arrives at Ogden
+201st PA Construction Battalion arrives at Bataan
+SEARCHING FOR ADJACENT ENEMY UNITS
+REASSIGNING TRANSPORT GROUPS

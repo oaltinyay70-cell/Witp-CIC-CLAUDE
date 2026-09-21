@@ -2,21 +2,21 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net10.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
 
 		<!-- Assembly & Package Metadata -->
-		<AssemblyTitle>MUTHUR 6000 CRT Terminal Emulator</AssemblyTitle>
-		<Product>MUTHUR 6000</Product>
-		<Description>A vintage single-color phosphor CRT monitor terminal emulator for Windows with character streaming, baud rate emulation, and monochrome retro effects.</Description>
-		<Company>TheZenHippie</Company>
-		<Authors>TheZenHippie</Authors>
-		<Version>1.0.0</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<AssemblyTitle>MUTHUR 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM</AssemblyTitle>
+		<Product>WITP-CIC-MUTHUR</Product>
+		<Description>MUTHUR 6000 Pacific War Room Combat Information Center and Intelligence Engine for War in the Pacific: Admiral's Edition.</Description>
+		<Company>Weyland-Yutani // WitP-CIC</Company>
+		<Authors>WitP-CIC Team</Authors>
+		<Version>0.03.0</Version>
+		<AssemblyVersion>0.03.0.0</AssemblyVersion>
+		<FileVersion>0.03.0.0</FileVersion>
 
 		<!-- Publishing & Performance Optimizations -->
 		<PublishSingleFile>true</PublishSingleFile>
@@ -39,6 +39,19 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</None>
+		<None Update="sample_data\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</None>
+		<None Update="assets\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="tests\**\*.*" />
+		<None Remove="tests\**\*.*" />
 	</ItemGroup>
 
 </Project>

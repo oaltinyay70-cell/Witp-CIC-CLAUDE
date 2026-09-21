@@ -11,8 +11,11 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using MUTHUR6000.Core.Controller;
 using MUTHUR6000.Settings;
 using MUTHUR6000.Terminal;
 using Color = System.Windows.Media.Color;
@@ -27,6 +30,9 @@ namespace MUTHUR6000
     {
         private readonly WidgetSettings _settings;
         private readonly TerminalReaderEngine _engine;
+        private readonly TerminalScreenManager _screenManager;
+
+        private string _currentBuffer = string.Empty;
 
         // Visual Styling State
         private FontFamily _currentFontFamily;
@@ -48,14 +54,14 @@ namespace MUTHUR6000
         private bool _crtScanlinesEnabled = false;
         private double _scanlineThickness = 3.0;
 
-        private bool _crtGlitchEnabled = true;
-        private double _glitchChance = 15.0;
+        private bool _crtGlitchEnabled = false;
+        private double _glitchChance = 0.0;
         private readonly DispatcherTimer _glitchTimer;
         private readonly DispatcherTimer _beamResetTimer;
         private Brush[] _glitchBrushes = Array.Empty<Brush>();
 
         private bool _crtSnowEnabled = false;
-        private double _snowAmount = 25.0;
+        private double _snowAmount = 0.0;
         private readonly DispatcherTimer _snowTimer;
         private readonly List<WriteableBitmap> _snowBitmaps = new List<WriteableBitmap>();
         private int _snowFrameIndex = 0;
@@ -184,6 +190,10 @@ namespace MUTHUR6000
             _engine.StatusChanged += OnEngineStatusChanged;
             _engine.PauseStateChanged += OnEnginePauseStateChanged;
 
+            // Initialize Terminal Screen Manager for interactive Pacific War Room
+            _screenManager = new TerminalScreenManager();
+            _screenManager.ScreenRenderRequested += OnScreenRenderRequested;
+
             // Initialize UI elements
             ApplyStyling();
             PopulateFontFamilies();
@@ -253,9 +263,75 @@ namespace MUTHUR6000
 
             Loaded += (s, e) =>
             {
-                _engine.Start();
+                Focus();
+                _screenManager.RenderCurrentScreen();
             };
         }
+
+        #region Terminal Controller & Interactive Screen Streaming
+
+        private void OnScreenRenderRequested(string buffer, bool isFullInstant)
+        {
+            if (_isClosed) return;
+
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (_isClosed) return;
+
+                HeaderStatusText.Text = $"[ {_screenManager.CurrentState.ToString().ToUpperInvariant().Replace("_", " ")} ]";
+                HeaderStatusText.Foreground = _currentPhosphorBrush;
+                ActiveFileText.Text = $"CAMPAIGN: {_screenManager.Manifest.FormattedDate.ToUpperInvariant()}";
+                DeckStatusText.Text = $"VIEW: {_screenManager.CurrentState.ToString().ToUpperInvariant()}";
+                TransmissionStatusText.Text = "SYSTEM: READY";
+
+                _currentBuffer = buffer;
+                _textRun.Text = buffer;
+                TerminalOutputBox.ScrollToEnd();
+            });
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.System) return;
+
+            if (_screenManager.IsAwaitingTextInput)
+            {
+                if (e.Key is Key.Enter or Key.Escape or Key.Back)
+                {
+                    _screenManager.HandleKeyDown(e.Key);
+                    e.Handled = true;
+                    return;
+                }
+                if (e.Key == Key.Space)
+                {
+                    _screenManager.HandleCharInput(' ');
+                    e.Handled = true;
+                    return;
+                }
+                // Allow character keys to bubble to PreviewTextInput
+                return;
+            }
+
+            _screenManager.HandleKeyDown(e.Key);
+            e.Handled = true;
+        }
+
+        private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Text))
+            {
+                foreach (char c in e.Text)
+                {
+                    if (c >= 32 && c <= 126)
+                    {
+                        _screenManager.HandleCharInput(c);
+                    }
+                }
+                e.Handled = true;
+            }
+        }
+
+        #endregion
 
         #region Engine Callbacks
 
@@ -331,7 +407,6 @@ namespace MUTHUR6000
             Dispatcher.InvokeAsync(() =>
             {
                 if (_isClosed) return;
-                PauseButton.Content = isPaused ? "RESUME" : "PAUSE";
                 PauseResumeMenuItem.Header = isPaused ? "Resume Transmission" : "Pause Transmission";
                 TransmissionStatusText.Text = isPaused ? "STATUS: PAUSED" : "STATUS: TRANSMITTING";
             });
@@ -380,7 +455,12 @@ namespace MUTHUR6000
 
         private void GlitchTimer_Tick(object? sender, EventArgs e)
         {
-            if (!_crtGlitchEnabled || _isClosed) return;
+            if (!_crtGlitchEnabled || _isClosed)
+            {
+                ContentJitterTransform.X = 0;
+                ContentJitterTransform.Y = 0;
+                return;
+            }
 
             // Clear previous horizontal slice glitches (keep beam and highlight elements in canvas)
             var sliceRects = CrtGlitchCanvas.Children.OfType<Rectangle>().Where(r => r != GlitchBeamLine).ToList();
@@ -584,10 +664,6 @@ namespace MUTHUR6000
             HeaderStatusText.Text = "[ OVERMONITORING MATRIX ]";
             HeaderStatusText.Foreground = _currentPhosphorBrush;
 
-            BaudBadgeBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
-            BaudBadgeText.Foreground = _currentPhosphorBrush;
-            BaudBadgeText.Text = $"[ {_engine.BaudRate} BAUD ]";
-
             HeaderBarBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(40, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
             FooterBarBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(40, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
 
@@ -687,21 +763,10 @@ namespace MUTHUR6000
             }
         }
 
-        private void BaudRateBadge_Click(object sender, RoutedEventArgs e)
-        {
-            // Cycle through baud rates on badge click: 300 -> 600 -> 1200 -> 2400 -> 4800 -> 9600 -> 300
-            int[] rates = { 300, 600, 1200, 2400, 4800, 9600 };
-            int current = _engine.BaudRate;
-            int idx = Array.IndexOf(rates, current);
-            int nextRate = rates[(idx + 1) % rates.Length];
-            SetBaudRate(nextRate);
-        }
-
         private void SetBaudRate(int baudRate)
         {
             _engine.SetBaudRate(baudRate);
             _settings.BaudRate = baudRate;
-            BaudBadgeText.Text = $"[ {baudRate} BAUD ]";
             UpdateBaudRateMenuChecks(baudRate);
             SaveCurrentSettings();
         }
@@ -724,12 +789,13 @@ namespace MUTHUR6000
 
         private void SkipNext_Click(object sender, RoutedEventArgs e)
         {
-            _engine.SkipNext();
+            _screenManager.HandleKeyDown(Key.Tab);
         }
 
         private void RestartBoot_Click(object sender, RoutedEventArgs e)
         {
-            _engine.RestartBoot();
+            _screenManager.InitializeData();
+            _screenManager.RenderCurrentScreen();
         }
 
         private void ClearScreen_Click(object sender, RoutedEventArgs e)

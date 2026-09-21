@@ -20,11 +20,11 @@ namespace MUTHUR6000.Settings
         public bool CrtScanlinesEnabled { get; set; } = false;
         public double ScanlineThickness { get; set; } = 3.0;
 
-        public bool CrtGlitchEnabled { get; set; } = true;
-        public double GlitchChance { get; set; } = 15.0;
+        public bool CrtGlitchEnabled { get; set; } = false;
+        public double GlitchChance { get; set; } = 0.0;
 
         public bool CrtSnowEnabled { get; set; } = false;
-        public double SnowAmount { get; set; } = 25.0;
+        public double SnowAmount { get; set; } = 0.0;
 
         public double HoldDelaySeconds { get; set; } = 3.0;
 

@@ -1,0 +1,575 @@
+AFTER ACTION REPORTS FOR Dec 08, 41
+--------------------------------------------------------------------------------
+Invasion Support action off Kota Bharu (51,75)
+ 
+18 Coastal gun shots fired in defense.
+ 
+Japanese Ships
+      CL Sendai
+      DD Ayanami
+      DD Uranami
+      PB Tatsumiya Maru
+      SC Ch 9
+      SC Ch 7
+      AK Sasako Maru
+      DD Shikinami
+ 
+Allied ground losses:
+      174 casualties reported
+         Squads: 1 destroyed, 16 disabled
+         Non Combat: 0 destroyed, 3 disabled
+         Engineers: 0 destroyed, 4 disabled
+ 
+DD Uranami firing at 8th Indian Brigade
+PB Tatsumiya Maru fired at enemy troops
+SC Ch 9 fired at enemy troops
+SC Ch 7 fired at enemy troops
+DD Ayanami fired at enemy troops
+Defensive Guns fire at approaching troops in landing craft at 1,000 yards
+ 
+ 
+--------------------------------------------------------------------------------
+TF 442 encounters mine field at Bataan (78,77)
+ 
+Allied Ships
+      DD Pope, Mine hits 1,  on fire,  heavy damage
+      DD Peary
+      DD John D. Ford, Mine hits 1,  on fire,  heavy damage
+      DD Pillsbury, Mine hits 1,  heavy damage
+ 
+4 mines cleared
+ 
+ 
+--------------------------------------------------------------------------------
+ASW attack near Lubang  at 78,78
+ 
+Japanese Ships
+      SS I-124
+ 
+Allied Ships
+      PT-35
+      AM Finch
+      AVD Childs
+      xAP Neptuna
+      xAK Si Kiang
+      PG Isabel
+      AM Whippoorwill
+      AM Lark
+      AM Quail
+ 
+SS I-124 is sighted by escort
+PG Isabel fails to find sub, continues to search...
+AM Whippoorwill fails to find sub, continues to search...
+AM Lark fails to find sub and abandons search
+AM Quail fails to find sub and abandons search
+Escort abandons search for sub
+ 
+ 
+--------------------------------------------------------------------------------
+Submarine attack near Lubang  at 78,78
+ 
+Japanese Ships
+      SS I-124
+ 
+Allied Ships
+      xAKL Don Jose
+ 
+SS I-124 is sighted by xAKL Don Jose
+Captain of SS I-124 elects not to launch torpedoes at this target
+ 
+ 
+--------------------------------------------------------------------------------
+Night Air attack on Clark Field , at 79,76 
+ 
+Weather in hex: Light rain
+ 
+Raid detected at 51 NM, estimated altitude 11,000 feet.
+Estimated time to target is 16 minutes
+ 
+Japanese aircraft
+      Ki-48-Ib Lily x 15
+ 
+Japanese aircraft losses
+      Ki-48-Ib Lily: 1 damaged
+ 
+Aircraft Attacking:
+      15 x Ki-48-Ib Lily bombing from 9000 feet * 
+               Airfield Attack:  2 x 100 kg GP Bomb
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Invasion Support action off Kota Bharu (51,75)
+Defensive Guns engage approaching landing force
+ 
+8 Coastal gun shots fired in defense.
+ 
+Japanese Ships
+      PB Tatsumiya Maru
+      SC Ch 9
+      SC Ch 7
+      AK Sasako Maru
+ 
+PB Tatsumiya Maru fired at enemy troops
+SC Ch 9 fired at enemy troops
+SC Ch 7 fired at enemy troops
+ 
+ 
+--------------------------------------------------------------------------------
+Invasion Support action off Kota Bharu (51,75)
+Defensive Guns engage approaching landing force
+ 
+4 Coastal gun shots fired in defense.
+ 
+Japanese Ships
+      PB Tatsumiya Maru
+      SC Ch 9
+      SC Ch 7
+      AK Sasako Maru
+ 
+PB Tatsumiya Maru fired at enemy troops
+SC Ch 9 fired at enemy troops
+SC Ch 7 fired at enemy troops
+ 
+ 
+--------------------------------------------------------------------------------
+Sub attack near Djemadja  at 52,83
+ 
+Japanese Ships
+      SS I-162
+ 
+Allied Ships
+      HDML 1062
+ 
+Captain of SS I-162 elects not to launch torpedoes at this target
+I-162 bottoming out ....
+Escort abandons search for sub
+ 
+ 
+--------------------------------------------------------------------------------
+Day Time Surface Combat, near Hong Kong at 77,66, Range 16,000 Yards
+ 
+Japanese Ships
+      PC Kaki
+      PC Sumire
+ 
+Allied Ships
+      xAK Bennevis, Shell hits 4
+      MTB 9
+ 
+Maximum visibility in Partly Cloudy Conditions: 28,000 yards
+Range closes to 16,000 yards...
+CONTACT: Japanese lookouts spot Allied task force at 16,000 yards
+CONTACT: Allied lookouts spot Japanese task force at 16,000 yards
+MTB 9 engages PC Sumire at 16,000 yards
+Range closes to 15,000 yards
+PC Sumire engages xAK Bennevis at 15,000 yards
+PC Sumire engages xAK Bennevis at 15,000 yards
+Range closes to 12,000 yards
+PC Kaki engages xAK Bennevis at 12,000 yards
+Range closes to 10,000 yards
+Range closes to 7,000 yards
+PC Sumire engages xAK Bennevis at 7,000 yards
+Range increases to 10,000 yards
+MTB 9 engages PC Sumire at 10,000 yards
+PC Kaki engages xAK Bennevis at 10,000 yards
+Range increases to 12,000 yards
+PC Sumire engages MTB 9 at 12,000 yards
+PC Sumire engages xAK Bennevis at 12,000 yards
+Range increases to 13,000 yards
+MTB 9 engages PC Sumire at 13,000 yards
+PC Kaki engages xAK Bennevis at 13,000 yards
+Task forces break off...
+ 
+ 
+--------------------------------------------------------------------------------
+Day Time Surface Combat, near Hong Kong at 77,66, Range 14,000 Yards
+ 
+Japanese Ships
+      PC Kaki
+      PC Sumire
+ 
+Allied Ships
+      xAK Hanyang, Shell hits 3
+      xAKL Joan Moller, Shell hits 3,  on fire
+ 
+Maximum visibility in Partly Cloudy Conditions: 26,000 yards
+Range closes to 16,000 yards...
+CONTACT: Japanese lookouts spot Allied task force at 16,000 yards
+Range closes to 14,000 yards...
+Japanese open fire on surprised Allied ships at 14,000 yards
+PC Sumire fires at xAK Hanyang at 14,000 yards
+Range closes to 11,000 yards
+PC Sumire engages xAK Hanyang at 11,000 yards
+Range closes to 7,000 yards
+PC Sumire engages xAKL Joan Moller at 7,000 yards
+Range increases to 9,000 yards
+PC Sumire engages xAK Hanyang at 9,000 yards
+PC Kaki engages xAKL Joan Moller at 9,000 yards
+Range increases to 13,000 yards
+PC Sumire engages xAK Hanyang at 13,000 yards
+Range increases to 16,000 yards
+PC Kaki engages xAK Hanyang at 16,000 yards
+PC Kaki engages xAKL Joan Moller at 16,000 yards
+Task forces break off...
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on TF, near Georgetown at 49,74
+ 
+Weather in hex: Heavy cloud
+ 
+Raid spotted at 4 NM, estimated altitude 16,000 feet.
+Estimated time to target is 1 minutes
+ 
+Japanese aircraft
+      A6M2 Zero x 17
+      G3M2 Nell x 18
+ 
+No Japanese losses
+ 
+Allied Ships
+      xAK Ellenga, Torpedo hits 3, and is sunk
+      xAK Demosthenes, Torpedo hits 3, and is sunk
+      xAP Hong Siang, Torpedo hits 2, and is sunk
+ 
+Allied ground losses:
+      1570 casualties reported
+         Squads: 32 destroyed, 34 disabled
+         Non Combat: 55 destroyed, 55 disabled
+         Engineers: 5 destroyed, 0 disabled
+      Guns lost 11 (6 destroyed, 5 disabled)
+      Vehicles lost 14 (9 destroyed, 5 disabled)
+ 
+Aircraft Attacking:
+      18 x G3M2 Nell launching torpedoes at 200 feet
+               Naval Attack:  1 x 18in Type 91 Torpedo
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on Clark Field , at 79,76 
+ 
+Weather in hex: Partial cloud
+ 
+Raid spotted at 40 NM, estimated altitude 22,000 feet.
+Estimated time to target is 13 minutes
+ 
+Japanese aircraft
+      A6M2 Zero x 4
+ 
+Allied aircraft
+      P-40E Warhawk x 8
+ 
+No Japanese losses
+ 
+Allied aircraft losses
+      P-40E Warhawk: 2 destroyed
+ 
+CAP engaged:
+24th PG/3rd PS with P-40E Warhawk (0 airborne, 0 on standby, 0 scrambling)
+      (1 plane(s) diverted to support CAP in hex.)
+      0 plane(s) not yet engaged, 1 being recalled, 0 out of immediate contact.
+      Group patrol altitude is 20000 , scrambling fighters between 0 and 20000.
+      Time for all group planes to reach interception is 3 minutes
+24th PG/17th PS with P-40E Warhawk (2 airborne, 0 on standby, 0 scrambling)
+      (7 plane(s) diverted to support CAP in hex.)
+      2 plane(s) intercepting now.
+      0 plane(s) not yet engaged, 5 being recalled, 0 out of immediate contact.
+      Group patrol altitude is 10000 , scrambling fighters between 0 and 10000.
+      Time for all group planes to reach interception is 1 minutes
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on 20th Chinese Corps, at 83,51 , near Wuchang
+ 
+Weather in hex: Thunderstorms
+ 
+Raid spotted at 10 NM, estimated altitude 11,000 feet.
+Estimated time to target is 2 minutes
+ 
+Japanese aircraft
+      Ki-27b Nate x 12
+      Ki-30 Ann x 11
+ 
+No Japanese losses
+ 
+Aircraft Attacking:
+      11 x Ki-30 Ann bombing from 9000 feet
+               Ground Attack:  1 x 250 kg GP Bomb
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on TF, near Georgetown at 49,74
+ 
+Weather in hex: Heavy cloud
+ 
+Raid spotted at 9 NM, estimated altitude 9,000 feet.
+Estimated time to target is 2 minutes
+ 
+Japanese aircraft
+      Ki-27b Nate x 2
+      Ki-30 Ann x 13
+ 
+No Japanese losses
+ 
+Allied Ships
+      xAKL Nam Yong
+      xAP Kelantan, Bomb hits 1, and is sunk
+ 
+Allied ground losses:
+      15 casualties reported
+         Squads: 0 destroyed, 0 disabled
+         Non Combat: 1 destroyed, 0 disabled
+         Engineers: 0 destroyed, 0 disabled
+ 
+Aircraft Attacking:
+      13 x Ki-30 Ann bombing from 6000 feet
+               Naval Attack:  1 x 250 kg SAP Bomb
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on Hong Kong , at 77,61 
+ 
+Weather in hex: Severe storms
+ 
+Raid spotted at 17 NM, estimated altitude 21,000 feet.
+Estimated time to target is 4 minutes
+ 
+Japanese aircraft
+      Ki-44 Tojo x 8
+ 
+No Japanese losses
+ 
+Aircraft Attacking:
+       8 x Ki-44 Tojo sweeping at 20000 feet
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on Georgetown , at 49,74 
+ 
+Weather in hex: Heavy cloud
+ 
+Raid spotted at 6 NM, estimated altitude 32,000 feet.
+Estimated time to target is 1 minutes
+ 
+Japanese aircraft
+      Ki-43-Ia Oscar x 23
+ 
+No Japanese losses
+ 
+Aircraft Attacking:
+      23 x Ki-43-Ia Oscar sweeping at 30000 feet
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Morning Air attack on Clark Field , at 79,76 
+ 
+Weather in hex: Partial cloud
+ 
+Raid detected at 27 NM, estimated altitude 22,000 feet.
+Estimated time to target is 8 minutes
+ 
+Japanese aircraft
+      A6M2 Zero x 45
+ 
+Allied aircraft
+      P-40B Warhawk x 1
+      P-40E Warhawk x 3
+ 
+No Japanese losses
+ 
+Allied aircraft losses
+      P-40B Warhawk: 1 destroyed
+      P-40E Warhawk: 2 destroyed
+ 
+Aircraft Attacking:
+      45 x A6M2 Zero sweeping at 20000 feet
+ 
+CAP engaged:
+24th PG/20th PS with P-40B Warhawk (0 airborne, 0 on standby, 0 scrambling)
+      (1 plane(s) diverted to support CAP in hex.)
+      0 plane(s) not yet engaged, 0 being recalled, 1 out of immediate contact.
+      Group patrol altitude is 10000 , scrambling fighters between 0 and 10000.
+      Time for all group planes to reach interception is 36 minutes
+24th PG/17th PS with P-40E Warhawk (0 airborne, 0 on standby, 2 scrambling)
+      0 plane(s) not yet engaged, 0 being recalled, 1 out of immediate contact.
+      Group patrol altitude is 10000 
+      Time for all group planes to reach interception is 34 minutes
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Afternoon Air attack on TF, near Kota Bharu at 51,75
+ 
+Weather in hex: Partial cloud
+ 
+Raid spotted at 16 NM, estimated altitude 5,000 feet.
+Estimated time to target is 5 minutes
+ 
+Japanese aircraft
+      Ki-27b Nate x 25
+ 
+Allied aircraft
+      Hudson I x 3
+ 
+No Japanese losses
+ 
+Allied aircraft losses
+      Hudson I: 1 destroyed
+ 
+CAP engaged:
+1st Sentai with Ki-27b Nate (11 airborne, 0 on standby, 0 scrambling)
+      (4 plane(s) diverted to support CAP in hex.)
+      11 plane(s) intercepting now.
+      Group patrol altitude is 15000 , scrambling fighters between 0 and 15000.
+      Raid is overhead
+11th Sentai with Ki-27b Nate (14 airborne, 0 on standby, 0 scrambling)
+      (1 plane(s) diverted to support CAP in hex.)
+      14 plane(s) intercepting now.
+      Group patrol altitude is 10000 , scrambling fighters between 0 and 10000.
+      Raid is overhead
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Afternoon Air attack on TF, near Bacolod at 79,85
+ 
+Weather in hex: Heavy rain
+ 
+Raid spotted at 16 NM, estimated altitude 13,000 feet.
+Estimated time to target is 6 minutes
+ 
+Japanese aircraft
+      A5M4 Claude x 7
+      B5N1 Kate x 12
+ 
+No Japanese losses
+ 
+Allied Ships
+      xAK Governor Wright, Torpedo hits 3, and is sunk
+ 
+Aircraft Attacking:
+      12 x B5N1 Kate launching torpedoes at 200 feet
+               Naval Attack:  1 x 18in Type 91 Torpedo
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+ 
+Ground combat at Pengpu (90,50)
+ 
+Japanese Deliberate attack
+ 
+Attacking force 5629 troops, 38 guns, 0 vehicles, Assault Value = 184
+ 
+Defending force 1498 troops, 18 guns, 0 vehicles, Assault Value = 46
+ 
+Japanese adjusted assault: 191 
+ 
+Allied adjusted defense: 5 
+ 
+Japanese assault odds: 38 to 1 
+ 
+Combat modifiers
+Defender: leaders(+), leaders(-), morale(-), experience(-)
+Attacker: leaders(+)
+ 
+Japanese ground losses:
+      9 casualties reported
+         Squads: 0 destroyed, 1 disabled
+         Non Combat: 0 destroyed, 0 disabled
+         Engineers: 0 destroyed, 0 disabled
+ 
+Allied ground losses:
+      972 casualties reported
+         Squads: 39 destroyed, 9 disabled
+         Non Combat: 19 destroyed, 0 disabled
+         Engineers: 0 destroyed, 0 disabled
+      Guns lost 3 (3 destroyed, 0 disabled)
+      Units retreated 1
+ 
+Defeated Allied Units Retreating!
+ 
+Assaulting units:
+    13th Ind.Mixed Brigade
+ 
+Defending units:
+    89th Chinese Corps
+ 
+ 
+--------------------------------------------------------------------------------
+ 
+Ground combat at Tsingsing (90,40)
+ 
+Japanese Deliberate attack
+ 
+Attacking force 11081 troops, 131 guns, 32 vehicles, Assault Value = 908
+ 
+Defending force 2557 troops, 16 guns, 0 vehicles, Assault Value = 112
+ 
+Japanese adjusted assault: 146 
+ 
+Allied adjusted defense: 37 
+ 
+Japanese assault odds: 3 to 1 (fort level 1) 
+ 
+Japanese forces CAPTURE Tsingsing !!!
+ 
+Combat modifiers
+Defender: terrain(+), forts(+), op mode(-), leaders(-), experience(-)
+Attacker: 
+ 
+Japanese ground losses:
+      348 casualties reported
+         Squads: 2 destroyed, 38 disabled
+         Non Combat: 0 destroyed, 4 disabled
+         Engineers: 0 destroyed, 2 disabled
+      Units pursuing 3
+ 
+Allied ground losses:
+      1493 casualties reported
+         Squads: 55 destroyed, 18 disabled
+         Non Combat: 37 destroyed, 12 disabled
+         Engineers: 4 destroyed, 0 disabled
+      Guns lost 5 (4 destroyed, 1 disabled)
+      Units retreated 1
+ 
+Defeated Allied Units Retreating!
+ 
+Assaulting units:
+    37th Division
+    41st Division
+    4th Ind.Mixed Brigade
+    6th Medium Field Artillery Regiment
+ 
+Defending units:
+    1/19th Chinese Corps
+ 
+ 
+--------------------------------------------------------------------------------
+ 
+Ground combat at Kota Bharu (51,75)
+ 
+Allied Bombardment attack
+ 
+Attacking force 1158 troops, 6 guns, 0 vehicles, Assault Value = 97
+ 
+Defending force 5298 troops, 41 guns, 0 vehicles, Assault Value = 174
+ 
+Assaulting units:
+    FMSV Brigade
+    8th Indian Brigade
+    3rd ISF Base Force
+ 
+Defending units:
+    56th Infantry Regiment
+    12th Engineer Regiment
+    5th JAAF AF Coy 
+ 
+ 

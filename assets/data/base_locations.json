@@ -1,0 +1,9317 @@
+{
+  "version": "1.0",
+  "description": "WITP:AE Authoritative Base Locations and Coordinates Database",
+  "totalBases": 1330,
+  "bases": [
+    {
+      "name": "Akita",
+      "hexX": 117,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Ominato",
+      "hexX": 119,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Asahikawa",
+      "hexX": 121,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Fukuoka",
+      "hexX": 103,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Hakodate",
+      "hexX": 119,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Hamamatsu",
+      "hexX": 111,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Hiroshima/Kure",
+      "hexX": 106,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kagoshima",
+      "hexX": 102,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kanazawa",
+      "hexX": 111,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kobe",
+      "hexX": 108,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kochi",
+      "hexX": 106,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kofu",
+      "hexX": 113,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kumamoto",
+      "hexX": 102,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kushiro",
+      "hexX": 123,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Maebashi",
+      "hexX": 113,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Maizuru",
+      "hexX": 110,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Matsue",
+      "hexX": 107,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Matsuyama",
+      "hexX": 105,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Muroran",
+      "hexX": 120,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Nagaoka",
+      "hexX": 114,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Nagasaki/Sasebo",
+      "hexX": 102,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Nagoya",
+      "hexX": 111,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Niigata",
+      "hexX": 114,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Okayama",
+      "hexX": 108,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Osaka/Kyoto",
+      "hexX": 109,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Sapporo",
+      "hexX": 120,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Sendai",
+      "hexX": 117,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Shimizu",
+      "hexX": 112,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Shimonoseki",
+      "hexX": 104,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Takamatsu",
+      "hexX": 107,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Tokyo",
+      "hexX": 114,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Toyama",
+      "hexX": 112,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Tsu",
+      "hexX": 110,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Wakayama",
+      "hexX": 109,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Wakkanai",
+      "hexX": 122,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Yokohama/Yokosuka",
+      "hexX": 113,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Yamagata",
+      "hexX": 116,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Iwaki",
+      "hexX": 116,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Hirosaki/Aomori",
+      "hexX": 118,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Aogashima",
+      "hexX": 112,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Chichi-jima",
+      "hexX": 111,
+      "hexY": 74,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Fukue-jima",
+      "hexX": 101,
+      "hexY": 58,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Hachijo-jima",
+      "hexX": 113,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Iwo-jima",
+      "hexX": 108,
+      "hexY": 77,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Izu Oshima",
+      "hexX": 113,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Koshiki-jima Retto",
+      "hexX": 101,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Kuroshima",
+      "hexX": 100,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Miyake-jima",
+      "hexX": 112,
+      "hexY": 63,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Nakadori-jima",
+      "hexX": 101,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Oki Shoto",
+      "hexX": 108,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Sadogashima",
+      "hexX": 114,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Tokara Retto",
+      "hexX": 100,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Torishima",
+      "hexX": 111,
+      "hexY": 68,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Tsushima",
+      "hexX": 103,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Yakushima",
+      "hexX": 101,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE ISLANDS"
+    },
+    {
+      "name": "Amami Oshima",
+      "hexX": 98,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Daito Shoto",
+      "hexX": 98,
+      "hexY": 69,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Iriomote",
+      "hexX": 89,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Ishigaki",
+      "hexX": 90,
+      "hexY": 66,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Kume-jima",
+      "hexX": 94,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Miyako-jima",
+      "hexX": 91,
+      "hexY": 66,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Nago",
+      "hexX": 95,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Naha",
+      "hexX": 95,
+      "hexY": 66,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Okinoerabushima",
+      "hexX": 96,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Tanegashima",
+      "hexX": 102,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Tokunoshima",
+      "hexX": 97,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "RYUKYU ISLANDS"
+    },
+    {
+      "name": "Etorofu",
+      "hexX": 128,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Ketoi-jima",
+      "hexX": 134,
+      "hexY": 50,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Kunashiri",
+      "hexX": 125,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Onnekotan-jima",
+      "hexX": 136,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Paramushiro-jima",
+      "hexX": 137,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Shikuka",
+      "hexX": 126,
+      "hexY": 43,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Shimushiri-jima",
+      "hexX": 132,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Toyohara",
+      "hexX": 124,
+      "hexY": 46,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Uruppu-jima",
+      "hexX": 130,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "SAKHALIN/KURILE IS."
+    },
+    {
+      "name": "Chinnampo",
+      "hexX": 102,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Rashin",
+      "hexX": 110,
+      "hexY": 46,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Fusan",
+      "hexX": 103,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Genzan",
+      "hexX": 105,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Gunzan",
+      "hexX": 102,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Heijo",
+      "hexX": 103,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Kaishu",
+      "hexX": 102,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Keijo",
+      "hexX": 103,
+      "hexY": 50,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Seishin",
+      "hexX": 109,
+      "hexY": 46,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Kanko",
+      "hexX": 105,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Taiden",
+      "hexX": 103,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Taikyu",
+      "hexX": 103,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Masan",
+      "hexX": 102,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Moppo",
+      "hexX": 100,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Saishu To",
+      "hexX": 99,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Ulleungdo",
+      "hexX": 107,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "KOREA"
+    },
+    {
+      "name": "Hengchun",
+      "hexX": 84,
+      "hexY": 67,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Karenko",
+      "hexX": 87,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Orchid Island",
+      "hexX": 85,
+      "hexY": 67,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Pescadores",
+      "hexX": 84,
+      "hexY": 63,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Taichu",
+      "hexX": 86,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Taihoku",
+      "hexX": 87,
+      "hexY": 63,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Takao",
+      "hexX": 84,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "FORMOSA"
+    },
+    {
+      "name": "Anshan",
+      "hexX": 102,
+      "hexY": 43,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Arshaan",
+      "hexX": 105,
+      "hexY": 33,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Changchun",
+      "hexX": 106,
+      "hexY": 41,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Chihfeng",
+      "hexX": 100,
+      "hexY": 38,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Chinchow",
+      "hexX": 101,
+      "hexY": 41,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Fuchin",
+      "hexX": 115,
+      "hexY": 41,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Fushun",
+      "hexX": 105,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Fusin",
+      "hexX": 102,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Hailar",
+      "hexX": 107,
+      "hexY": 30,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Hailun",
+      "hexX": 111,
+      "hexY": 37,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Harbin",
+      "hexX": 109,
+      "hexY": 39,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Heiho",
+      "hexX": 113,
+      "hexY": 33,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Jehol",
+      "hexX": 97,
+      "hexY": 39,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Kiamusze",
+      "hexX": 113,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Kirin",
+      "hexX": 108,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Liaoyuan",
+      "hexX": 105,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Linhsi",
+      "hexX": 100,
+      "hexY": 36,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Mishan",
+      "hexX": 114,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Moho",
+      "hexX": 112,
+      "hexY": 27,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Mukden",
+      "hexX": 104,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Mutankiang",
+      "hexX": 111,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Nunkiang",
+      "hexX": 111,
+      "hexY": 34,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Port Arthur",
+      "hexX": 99,
+      "hexY": 44,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Shanhaiguan",
+      "hexX": 99,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Sunwu",
+      "hexX": 113,
+      "hexY": 34,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Taonan",
+      "hexX": 107,
+      "hexY": 38,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Tsitsihar",
+      "hexX": 109,
+      "hexY": 36,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Yingkow",
+      "hexX": 101,
+      "hexY": 43,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MANCHUKUO"
+    },
+    {
+      "name": "Amoy",
+      "hexX": 83,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Anking",
+      "hexX": 88,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Antung",
+      "hexX": 102,
+      "hexY": 45,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Anyang",
+      "hexX": 89,
+      "hexY": 43,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Canton",
+      "hexX": 77,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Chaochow",
+      "hexX": 81,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Chefoo",
+      "hexX": 98,
+      "hexY": 46,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Chengting",
+      "hexX": 92,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Foochow",
+      "hexX": 86,
+      "hexY": 60,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Haichow",
+      "hexX": 93,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Hangchow",
+      "hexX": 90,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Hankow",
+      "hexX": 85,
+      "hexY": 50,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Hwainan",
+      "hexX": 89,
+      "hexY": 50,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Ichang",
+      "hexX": 83,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kaifeng",
+      "hexX": 89,
+      "hexY": 44,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kalgan",
+      "hexX": 95,
+      "hexY": 37,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kaoping",
+      "hexX": 89,
+      "hexY": 42,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kiangtu",
+      "hexX": 91,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kiukiang",
+      "hexX": 85,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kweisui",
+      "hexX": 92,
+      "hexY": 35,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Luchow",
+      "hexX": 88,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Mangan",
+      "hexX": 95,
+      "hexY": 33,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Nanchang",
+      "hexX": 85,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Nanking",
+      "hexX": 91,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tungchow",
+      "hexX": 92,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Ningpo",
+      "hexX": 92,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Paoting",
+      "hexX": 94,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Peiping",
+      "hexX": 95,
+      "hexY": 39,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Shanghai",
+      "hexX": 92,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Shaohing",
+      "hexX": 91,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Sinyang",
+      "hexX": 86,
+      "hexY": 48,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Soochow",
+      "hexX": 92,
+      "hexY": 54,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Suchow",
+      "hexX": 91,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Swatow",
+      "hexX": 81,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Taichow",
+      "hexX": 92,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tangshan",
+      "hexX": 96,
+      "hexY": 41,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tatung",
+      "hexX": 93,
+      "hexY": 37,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tientsin",
+      "hexX": 95,
+      "hexY": 41,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tsinan",
+      "hexX": 93,
+      "hexY": 44,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tsinkiang",
+      "hexX": 84,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Tsingtao",
+      "hexX": 95,
+      "hexY": 47,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Weihsien",
+      "hexX": 95,
+      "hexY": 46,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Wuchang",
+      "hexX": 84,
+      "hexY": 51,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Wuhu",
+      "hexX": 89,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Wusih",
+      "hexX": 91,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Taiyuan",
+      "hexX": 91,
+      "hexY": 40,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OCCUPIED CHINA"
+    },
+    {
+      "name": "Kiungshan",
+      "hexX": 71,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "HAINAN"
+    },
+    {
+      "name": "Samah",
+      "hexX": 69,
+      "hexY": 63,
+      "nation": "JAPANESE EMPIRE",
+      "region": "HAINAN"
+    },
+    {
+      "name": "Battambang",
+      "hexX": 58,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Bien Hoa",
+      "hexX": 61,
+      "hexY": 70,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Cam Ranh Bay",
+      "hexX": 64,
+      "hexY": 72,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Dalat",
+      "hexX": 63,
+      "hexY": 71,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Tourane",
+      "hexX": 66,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Haiphong",
+      "hexX": 68,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Hanoi",
+      "hexX": 68,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Hue",
+      "hexX": 66,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Kompong Chhnang",
+      "hexX": 59,
+      "hexY": 68,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Kompong Trach",
+      "hexX": 57,
+      "hexY": 70,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Kratie",
+      "hexX": 61,
+      "hexY": 69,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Lang Son",
+      "hexX": 70,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Lao Cai",
+      "hexX": 68,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Luangprabang",
+      "hexX": 63,
+      "hexY": 55,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Pakse",
+      "hexX": 63,
+      "hexY": 64,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Phnom Penh",
+      "hexX": 58,
+      "hexY": 69,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Quinhon",
+      "hexX": 65,
+      "hexY": 69,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Rachgia",
+      "hexX": 57,
+      "hexY": 71,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Saigon",
+      "hexX": 60,
+      "hexY": 71,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Siem Reap",
+      "hexX": 59,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Soc Trang",
+      "hexX": 58,
+      "hexY": 73,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Vientiane",
+      "hexX": 62,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Vinh",
+      "hexX": 65,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "INDOCHINA"
+    },
+    {
+      "name": "Ayuthia",
+      "hexX": 56,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Bangkok",
+      "hexX": 56,
+      "hexY": 62,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Chanthaburi",
+      "hexX": 56,
+      "hexY": 65,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Chiang Mai",
+      "hexX": 58,
+      "hexY": 53,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Nakhon Ratchasima",
+      "hexX": 58,
+      "hexY": 61,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Patani",
+      "hexX": 51,
+      "hexY": 73,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Pisanuloke",
+      "hexX": 58,
+      "hexY": 57,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Rahaeng",
+      "hexX": 58,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Singora",
+      "hexX": 51,
+      "hexY": 72,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Surat Thani",
+      "hexX": 51,
+      "hexY": 68,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Ubon",
+      "hexX": 62,
+      "hexY": 63,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Udon Thani",
+      "hexX": 61,
+      "hexY": 59,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Uttaradit",
+      "hexX": 59,
+      "hexY": 56,
+      "nation": "JAPANESE EMPIRE",
+      "region": "THAILAND"
+    },
+    {
+      "name": "Agrihan",
+      "hexX": 111,
+      "hexY": 88,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Almagan",
+      "hexX": 110,
+      "hexY": 90,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Anatahan",
+      "hexX": 109,
+      "hexY": 91,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Pagan",
+      "hexX": 110,
+      "hexY": 89,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Rota",
+      "hexX": 107,
+      "hexY": 95,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Saipan",
+      "hexX": 108,
+      "hexY": 93,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Tinian",
+      "hexX": 108,
+      "hexY": 94,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARIANA ISLANDS"
+    },
+    {
+      "name": "Babeldaob",
+      "hexX": 90,
+      "hexY": 97,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Kusaie Island",
+      "hexX": 125,
+      "hexY": 118,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Peleliu",
+      "hexX": 90,
+      "hexY": 98,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Ponape",
+      "hexX": 119,
+      "hexY": 113,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Satawal",
+      "hexX": 105,
+      "hexY": 105,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Truk",
+      "hexX": 112,
+      "hexY": 108,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Ulithi",
+      "hexX": 98,
+      "hexY": 97,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Woleai",
+      "hexX": 101,
+      "hexY": 103,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Yap",
+      "hexX": 96,
+      "hexY": 97,
+      "nation": "JAPANESE EMPIRE",
+      "region": "CAROLINE ISLANDS"
+    },
+    {
+      "name": "Ailinglaplap",
+      "hexX": 133,
+      "hexY": 117,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Ailuk",
+      "hexX": 136,
+      "hexY": 114,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Bikini",
+      "hexX": 131,
+      "hexY": 110,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Ebon",
+      "hexX": 132,
+      "hexY": 122,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Eniwetok",
+      "hexX": 127,
+      "hexY": 108,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Jaluit",
+      "hexX": 134,
+      "hexY": 120,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Kwajalein Island",
+      "hexX": 132,
+      "hexY": 115,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Likiep",
+      "hexX": 135,
+      "hexY": 114,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Majuro",
+      "hexX": 136,
+      "hexY": 119,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Maloelap",
+      "hexX": 136,
+      "hexY": 117,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Mili",
+      "hexX": 136,
+      "hexY": 121,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Namorik",
+      "hexX": 132,
+      "hexY": 120,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Namu",
+      "hexX": 133,
+      "hexY": 116,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Roi-Namur",
+      "hexX": 132,
+      "hexY": 114,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Rongelap",
+      "hexX": 132,
+      "hexY": 111,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Taongi",
+      "hexX": 136,
+      "hexY": 107,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Wotje",
+      "hexX": 135,
+      "hexY": 115,
+      "nation": "JAPANESE EMPIRE",
+      "region": "MARSHALL ISLANDS"
+    },
+    {
+      "name": "Marcus Island",
+      "hexX": 123,
+      "hexY": 85,
+      "nation": "JAPANESE EMPIRE",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Astoria",
+      "hexX": 211,
+      "hexY": 55,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Boise",
+      "hexX": 218,
+      "hexY": 55,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Butte",
+      "hexX": 220,
+      "hexY": 48,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Eureka",
+      "hexX": 214,
+      "hexY": 65,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Fresno",
+      "hexX": 221,
+      "hexY": 71,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Great Falls",
+      "hexX": 219,
+      "hexY": 44,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Los Angeles",
+      "hexX": 225,
+      "hexY": 76,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "March Field",
+      "hexX": 225,
+      "hexY": 75,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Mare Island",
+      "hexX": 218,
+      "hexY": 69,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Mojave",
+      "hexX": 225,
+      "hexY": 74,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Oak Harbor",
+      "hexX": 210,
+      "hexY": 51,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Pendleton",
+      "hexX": 215,
+      "hexY": 53,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Port Hueneme",
+      "hexX": 224,
+      "hexY": 76,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Portland",
+      "hexX": 213,
+      "hexY": 56,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Sacramento",
+      "hexX": 219,
+      "hexY": 68,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Fort Ord",
+      "hexX": 220,
+      "hexY": 72,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Ogden",
+      "hexX": 225,
+      "hexY": 57,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "San Clemente Island",
+      "hexX": 225,
+      "hexY": 78,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "San Diego",
+      "hexX": 227,
+      "hexY": 78,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "San Francisco",
+      "hexX": 218,
+      "hexY": 70,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Santa Ana",
+      "hexX": 226,
+      "hexY": 76,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Santa Barbara",
+      "hexX": 223,
+      "hexY": 76,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Santa Catalina Is",
+      "hexX": 224,
+      "hexY": 77,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Channel Islands",
+      "hexX": 222,
+      "hexY": 77,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Seattle",
+      "hexX": 212,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Spokane",
+      "hexX": 215,
+      "hexY": 48,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Stockton",
+      "hexX": 219,
+      "hexY": 69,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Tacoma",
+      "hexX": 211,
+      "hexY": 53,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Tillamook",
+      "hexX": 211,
+      "hexY": 57,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Wendover Field",
+      "hexX": 225,
+      "hexY": 60,
+      "nation": "UNITED STATES",
+      "region": "CONTINENTAL US"
+    },
+    {
+      "name": "Adak Island",
+      "hexX": 162,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Agattu Island",
+      "hexX": 154,
+      "hexY": 50,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Akutan Island",
+      "hexX": 171,
+      "hexY": 49,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Amchitka Island",
+      "hexX": 158,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Anchorage",
+      "hexX": 181,
+      "hexY": 36,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Annette Island",
+      "hexX": 198,
+      "hexY": 42,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Atka Island",
+      "hexX": 164,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Attu Island",
+      "hexX": 153,
+      "hexY": 49,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Bethel",
+      "hexX": 173,
+      "hexY": 38,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Buldir Island",
+      "hexX": 156,
+      "hexY": 50,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Chirikof Island",
+      "hexX": 179,
+      "hexY": 46,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Chuginadak Island",
+      "hexX": 168,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Cold Bay",
+      "hexX": 174,
+      "hexY": 48,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Cordova",
+      "hexX": 184,
+      "hexY": 36,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Dutch Harbor",
+      "hexX": 171,
+      "hexY": 50,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Fairbanks",
+      "hexX": 179,
+      "hexY": 29,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Great Sitkin Island",
+      "hexX": 163,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Gulkana",
+      "hexX": 182,
+      "hexY": 33,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Juneau",
+      "hexX": 193,
+      "hexY": 37,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Kiska Island",
+      "hexX": 157,
+      "hexY": 51,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Kodiak",
+      "hexX": 181,
+      "hexY": 42,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Nagai Island",
+      "hexX": 176,
+      "hexY": 48,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Nome",
+      "hexX": 169,
+      "hexY": 32,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Port Heiden",
+      "hexX": 176,
+      "hexY": 45,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Galena",
+      "hexX": 175,
+      "hexY": 30,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Sagigik Island",
+      "hexX": 165,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Sanak Island",
+      "hexX": 173,
+      "hexY": 49,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Seguam Island",
+      "hexX": 166,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Semisopochnoi Island",
+      "hexX": 159,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Seward",
+      "hexX": 182,
+      "hexY": 38,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Sitka",
+      "hexX": 193,
+      "hexY": 39,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Sitkinak Island",
+      "hexX": 180,
+      "hexY": 45,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Skagway",
+      "hexX": 191,
+      "hexY": 35,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Tugidak Island",
+      "hexX": 179,
+      "hexY": 45,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Ulak Island",
+      "hexX": 160,
+      "hexY": 53,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Umnak Island",
+      "hexX": 169,
+      "hexY": 51,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Valdez",
+      "hexX": 183,
+      "hexY": 35,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Whittier",
+      "hexX": 182,
+      "hexY": 36,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Yakutat",
+      "hexX": 189,
+      "hexY": 36,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "Yunaska Island",
+      "hexX": 167,
+      "hexY": 52,
+      "nation": "UNITED STATES",
+      "region": "ALASKA"
+    },
+    {
+      "name": "French Frigate Shoal",
+      "hexX": 170,
+      "hexY": 101,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Hilo",
+      "hexX": 183,
+      "hexY": 111,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Kona",
+      "hexX": 182,
+      "hexY": 111,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Lahaina",
+      "hexX": 182,
+      "hexY": 108,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Lanai",
+      "hexX": 181,
+      "hexY": 109,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Laysan Island",
+      "hexX": 164,
+      "hexY": 96,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Lihue",
+      "hexX": 178,
+      "hexY": 106,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Midway Island",
+      "hexX": 158,
+      "hexY": 91,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Molokai",
+      "hexX": 181,
+      "hexY": 108,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Niihau",
+      "hexX": 177,
+      "hexY": 106,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Pearl Harbor",
+      "hexX": 180,
+      "hexY": 107,
+      "nation": "UNITED STATES",
+      "region": "HAWAII"
+    },
+    {
+      "name": "Jarvis Island",
+      "hexX": 170,
+      "hexY": 144,
+      "nation": "UNITED STATES",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Palmyra",
+      "hexX": 170,
+      "hexY": 133,
+      "nation": "UNITED STATES",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Funafuti",
+      "hexX": 138,
+      "hexY": 147,
+      "nation": "UNITED STATES",
+      "region": "ELLICE ISLANDS"
+    },
+    {
+      "name": "Nanumea",
+      "hexX": 136,
+      "hexY": 141,
+      "nation": "UNITED STATES",
+      "region": "ELLICE ISLANDS"
+    },
+    {
+      "name": "Nukufetau",
+      "hexX": 138,
+      "hexY": 146,
+      "nation": "UNITED STATES",
+      "region": "ELLICE ISLANDS"
+    },
+    {
+      "name": "Vaitupu",
+      "hexX": 138,
+      "hexY": 145,
+      "nation": "UNITED STATES",
+      "region": "ELLICE ISLANDS"
+    },
+    {
+      "name": "Canton Island",
+      "hexX": 153,
+      "hexY": 143,
+      "nation": "UNITED STATES",
+      "region": "PHOENIX ISLANDS"
+    },
+    {
+      "name": "Enderbury Island",
+      "hexX": 154,
+      "hexY": 143,
+      "nation": "UNITED STATES",
+      "region": "PHOENIX ISLANDS"
+    },
+    {
+      "name": "Gardner Island",
+      "hexX": 149,
+      "hexY": 144,
+      "nation": "UNITED STATES",
+      "region": "PHOENIX ISLANDS"
+    },
+    {
+      "name": "Sydney Island",
+      "hexX": 153,
+      "hexY": 145,
+      "nation": "UNITED STATES",
+      "region": "PHOENIX ISLANDS"
+    },
+    {
+      "name": "Pago Pago",
+      "hexX": 148,
+      "hexY": 161,
+      "nation": "UNITED STATES",
+      "region": "AMERICAN SAMOA"
+    },
+    {
+      "name": "Ta'u",
+      "hexX": 150,
+      "hexY": 161,
+      "nation": "UNITED STATES",
+      "region": "AMERICAN SAMOA"
+    },
+    {
+      "name": "Baker Island",
+      "hexX": 149,
+      "hexY": 136,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Guam",
+      "hexX": 106,
+      "hexY": 95,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Howland Island",
+      "hexX": 148,
+      "hexY": 135,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Johnston Island",
+      "hexX": 164,
+      "hexY": 112,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Wake Island",
+      "hexX": 136,
+      "hexY": 98,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Kure Island",
+      "hexX": 157,
+      "hexY": 90,
+      "nation": "UNITED STATES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Cristobal",
+      "hexX": 228,
+      "hexY": 101,
+      "nation": "UNITED STATES",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Eastern USA",
+      "hexX": 227,
+      "hexY": 27,
+      "nation": "UNITED STATES",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Balboa",
+      "hexX": 229,
+      "hexY": 102,
+      "nation": "UNITED STATES",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Aparri",
+      "hexX": 82,
+      "hexY": 73,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Bataan",
+      "hexX": 78,
+      "hexY": 77,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Batangas",
+      "hexX": 79,
+      "hexY": 78,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Bayombong",
+      "hexX": 80,
+      "hexY": 75,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Clark Field",
+      "hexX": 79,
+      "hexY": 76,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Iba",
+      "hexX": 78,
+      "hexY": 75,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Mauban",
+      "hexX": 80,
+      "hexY": 78,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Laoag",
+      "hexX": 81,
+      "hexY": 72,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Legaspi",
+      "hexX": 82,
+      "hexY": 82,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Lingayen",
+      "hexX": 79,
+      "hexY": 75,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Lucena",
+      "hexX": 79,
+      "hexY": 79,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Manila",
+      "hexX": 79,
+      "hexY": 77,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Naga",
+      "hexX": 81,
+      "hexY": 81,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "San Fernando",
+      "hexX": 80,
+      "hexY": 74,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Tuguegarao",
+      "hexX": 82,
+      "hexY": 74,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Vigan",
+      "hexX": 80,
+      "hexY": 73,
+      "nation": "THE PHILIPPINES",
+      "region": "LUZON"
+    },
+    {
+      "name": "Butuan",
+      "hexX": 80,
+      "hexY": 89,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Cagayan",
+      "hexX": 79,
+      "hexY": 89,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Cotabato",
+      "hexX": 78,
+      "hexY": 90,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Dadjangas",
+      "hexX": 78,
+      "hexY": 93,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Davao",
+      "hexX": 79,
+      "hexY": 91,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Dumanquilas",
+      "hexX": 77,
+      "hexY": 89,
+      "nation": "THE PHILIPPINES",
+      "region": "MINDANAO"
+    },
+    {
+      "name": "Babuyan",
+      "hexX": 84,
+      "hexY": 71,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Bacolod",
+      "hexX": 79,
+      "hexY": 85,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Balabac",
+      "hexX": 70,
+      "hexY": 84,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Basilan",
+      "hexX": 75,
+      "hexY": 90,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Batan Island",
+      "hexX": 85,
+      "hexY": 70,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Boac",
+      "hexX": 80,
+      "hexY": 80,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Burias",
+      "hexX": 80,
+      "hexY": 81,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Busuanga",
+      "hexX": 77,
+      "hexY": 80,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Calapan",
+      "hexX": 78,
+      "hexY": 79,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Calayan",
+      "hexX": 83,
+      "hexY": 71,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Camiguin",
+      "hexX": 84,
+      "hexY": 72,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Catanduanes",
+      "hexX": 82,
+      "hexY": 81,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Catbalogan",
+      "hexX": 82,
+      "hexY": 84,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Cebu",
+      "hexX": 80,
+      "hexY": 86,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Culion",
+      "hexX": 76,
+      "hexY": 80,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Dinagat",
+      "hexX": 81,
+      "hexY": 87,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Dumaguete",
+      "hexX": 78,
+      "hexY": 86,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Guiuan",
+      "hexX": 82,
+      "hexY": 85,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Iloilo",
+      "hexX": 79,
+      "hexY": 84,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Itbayat Island",
+      "hexX": 84,
+      "hexY": 69,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Jolo",
+      "hexX": 74,
+      "hexY": 90,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Lubang",
+      "hexX": 78,
+      "hexY": 78,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Masbate",
+      "hexX": 80,
+      "hexY": 83,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Baybay",
+      "hexX": 81,
+      "hexY": 86,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Oroquieta",
+      "hexX": 78,
+      "hexY": 88,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Polillo",
+      "hexX": 81,
+      "hexY": 78,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Puerto Princesa",
+      "hexX": 73,
+      "hexY": 83,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Roxas",
+      "hexX": 79,
+      "hexY": 83,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "San Jose",
+      "hexX": 78,
+      "hexY": 84,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Siargao",
+      "hexX": 82,
+      "hexY": 88,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Sibuyan",
+      "hexX": 80,
+      "hexY": 82,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Siquijor",
+      "hexX": 78,
+      "hexY": 87,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tablas",
+      "hexX": 79,
+      "hexY": 81,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tacloban",
+      "hexX": 81,
+      "hexY": 85,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tagbilaran",
+      "hexX": 79,
+      "hexY": 87,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tapul",
+      "hexX": 73,
+      "hexY": 90,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tawi Tawi",
+      "hexX": 72,
+      "hexY": 90,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Taytay",
+      "hexX": 75,
+      "hexY": 82,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Zamboanga",
+      "hexX": 75,
+      "hexY": 89,
+      "nation": "THE PHILIPPINES",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Colombo",
+      "hexX": 29,
+      "hexY": 48,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Kandy",
+      "hexX": 30,
+      "hexY": 48,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Jaffna",
+      "hexX": 31,
+      "hexY": 45,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Koggala",
+      "hexX": 29,
+      "hexY": 50,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Trincomalee",
+      "hexX": 31,
+      "hexY": 47,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Akyab",
+      "hexX": 54,
+      "hexY": 45,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Bassein",
+      "hexX": 54,
+      "hexY": 52,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Bhamo",
+      "hexX": 63,
+      "hexY": 44,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Katha",
+      "hexX": 61,
+      "hexY": 43,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Lashio",
+      "hexX": 62,
+      "hexY": 46,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Magwe",
+      "hexX": 57,
+      "hexY": 47,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Mandalay",
+      "hexX": 59,
+      "hexY": 46,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Meiktila",
+      "hexX": 58,
+      "hexY": 47,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Moulmein",
+      "hexX": 55,
+      "hexY": 55,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Myitkyina",
+      "hexX": 64,
+      "hexY": 42,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Prome",
+      "hexX": 55,
+      "hexY": 50,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Rangoon",
+      "hexX": 54,
+      "hexY": 53,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Taung Gyi",
+      "hexX": 59,
+      "hexY": 48,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Tavoy",
+      "hexX": 54,
+      "hexY": 60,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Toungoo",
+      "hexX": 57,
+      "hexY": 50,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Victoria Point",
+      "hexX": 51,
+      "hexY": 66,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Warazup",
+      "hexX": 63,
+      "hexY": 41,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "BURMA"
+    },
+    {
+      "name": "Alor Star",
+      "hexX": 49,
+      "hexY": 73,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Georgetown",
+      "hexX": 49,
+      "hexY": 74,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Johore Bahru",
+      "hexX": 50,
+      "hexY": 83,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kota Bharu",
+      "hexX": 51,
+      "hexY": 75,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kuala Lumpur",
+      "hexX": 49,
+      "hexY": 79,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kuantan",
+      "hexX": 51,
+      "hexY": 79,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Malacca",
+      "hexX": 49,
+      "hexY": 81,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Mersing",
+      "hexX": 51,
+      "hexY": 82,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Singapore",
+      "hexX": 50,
+      "hexY": 84,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Taiping",
+      "hexX": 49,
+      "hexY": 75,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Banggi",
+      "hexX": 69,
+      "hexY": 85,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Brunei",
+      "hexX": 65,
+      "hexY": 87,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Jesselton",
+      "hexX": 68,
+      "hexY": 86,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Kuching",
+      "hexX": 58,
+      "hexY": 88,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Kudat",
+      "hexX": 69,
+      "hexY": 86,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Miri",
+      "hexX": 64,
+      "hexY": 87,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Sandakan",
+      "hexX": 70,
+      "hexY": 88,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Tawau",
+      "hexX": 69,
+      "hexY": 90,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SARAWAK/SABAH"
+    },
+    {
+      "name": "Addu",
+      "hexX": 16,
+      "hexY": 52,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALDIVES"
+    },
+    {
+      "name": "North Male",
+      "hexX": 20,
+      "hexY": 45,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "MALDIVES"
+    },
+    {
+      "name": "Auki",
+      "hexX": 115,
+      "hexY": 136,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Choiseul Bay",
+      "hexX": 111,
+      "hexY": 132,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Kirakira",
+      "hexX": 116,
+      "hexY": 140,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Lunga",
+      "hexX": 114,
+      "hexY": 138,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Munda",
+      "hexX": 111,
+      "hexY": 134,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Panggoe",
+      "hexX": 111,
+      "hexY": 133,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Rekata Bay",
+      "hexX": 113,
+      "hexY": 134,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Rennell Island",
+      "hexX": 113,
+      "hexY": 140,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Russell Islands",
+      "hexX": 113,
+      "hexY": 136,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Shortlands",
+      "hexX": 110,
+      "hexY": 132,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Stewart Island",
+      "hexX": 116,
+      "hexY": 139,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Tassafaronga",
+      "hexX": 113,
+      "hexY": 137,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Thousand Ships Bay",
+      "hexX": 114,
+      "hexY": 136,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Tulagi",
+      "hexX": 114,
+      "hexY": 137,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Vella Lavella",
+      "hexX": 110,
+      "hexY": 133,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SOLOMON ISLANDS"
+    },
+    {
+      "name": "Gau Island",
+      "hexX": 133,
+      "hexY": 161,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Kabara",
+      "hexX": 136,
+      "hexY": 162,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Kandavu Island",
+      "hexX": 132,
+      "hexY": 162,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Koro Island",
+      "hexX": 134,
+      "hexY": 160,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Lakeba",
+      "hexX": 135,
+      "hexY": 161,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Moala",
+      "hexX": 134,
+      "hexY": 162,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Nadi",
+      "hexX": 131,
+      "hexY": 160,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Savusavu",
+      "hexX": 134,
+      "hexY": 159,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Suva",
+      "hexX": 132,
+      "hexY": 160,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Taveuni Island",
+      "hexX": 135,
+      "hexY": 159,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Vanua Balavu",
+      "hexX": 136,
+      "hexY": 160,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Yasawa Islands",
+      "hexX": 131,
+      "hexY": 158,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "FIJI"
+    },
+    {
+      "name": "Abemama",
+      "hexX": 136,
+      "hexY": 130,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Arorae",
+      "hexX": 138,
+      "hexY": 137,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Beru",
+      "hexX": 138,
+      "hexY": 134,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Kuria",
+      "hexX": 135,
+      "hexY": 131,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Maiana",
+      "hexX": 135,
+      "hexY": 129,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Makin",
+      "hexX": 136,
+      "hexY": 125,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Nikunau",
+      "hexX": 139,
+      "hexY": 134,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Nonouti",
+      "hexX": 136,
+      "hexY": 133,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Onotoa",
+      "hexX": 137,
+      "hexY": 135,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Tabiteuea",
+      "hexX": 137,
+      "hexY": 134,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Tarawa",
+      "hexX": 136,
+      "hexY": 128,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "GILBERT ISLANDS"
+    },
+    {
+      "name": "Caroline Island",
+      "hexX": 178,
+      "hexY": 164,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Christmas Island",
+      "hexX": 174,
+      "hexY": 141,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Fanning Island",
+      "hexX": 172,
+      "hexY": 137,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Flint Island",
+      "hexX": 175,
+      "hexY": 166,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Malden Island",
+      "hexX": 175,
+      "hexY": 152,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Starbuck Island",
+      "hexX": 173,
+      "hexY": 154,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Washington Island",
+      "hexX": 171,
+      "hexY": 135,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "LINE ISLANDS"
+    },
+    {
+      "name": "Ndeni",
+      "hexX": 120,
+      "hexY": 143,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SANTA CRUZ ISLANDS"
+    },
+    {
+      "name": "Reef Islands",
+      "hexX": 121,
+      "hexY": 142,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SANTA CRUZ ISLANDS"
+    },
+    {
+      "name": "Utupua",
+      "hexX": 121,
+      "hexY": 144,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SANTA CRUZ ISLANDS"
+    },
+    {
+      "name": "Vanikoro",
+      "hexX": 121,
+      "hexY": 145,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "SANTA CRUZ ISLANDS"
+    },
+    {
+      "name": "Eua",
+      "hexX": 138,
+      "hexY": 169,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Late Island",
+      "hexX": 140,
+      "hexY": 165,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Lifuka",
+      "hexX": 140,
+      "hexY": 167,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Niuafo'ou",
+      "hexX": 141,
+      "hexY": 160,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Niuatoputapu",
+      "hexX": 143,
+      "hexY": 161,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Tofua",
+      "hexX": 139,
+      "hexY": 167,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Tongatapu",
+      "hexX": 138,
+      "hexY": 168,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Vava'u",
+      "hexX": 141,
+      "hexY": 165,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "TONGA"
+    },
+    {
+      "name": "Diego Garcia",
+      "hexX": 11,
+      "hexY": 62,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Hong Kong",
+      "hexX": 77,
+      "hexY": 61,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Nauru Island",
+      "hexX": 127,
+      "hexY": 128,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Ocean Island",
+      "hexX": 130,
+      "hexY": 130,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Aden",
+      "hexX": 20,
+      "hexY": 3,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Cape Town",
+      "hexX": 2,
+      "hexY": 67,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Mombasa",
+      "hexX": 2,
+      "hexY": 57,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Port Stanley",
+      "hexX": 229,
+      "hexY": 190,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "United Kingdom",
+      "hexX": 228,
+      "hexY": 3,
+      "nation": "BRITISH COMMONWEALTH",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Agra",
+      "hexX": 50,
+      "hexY": 19,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ajmer",
+      "hexX": 48,
+      "hexY": 16,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ahmedabad",
+      "hexX": 41,
+      "hexY": 18,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Aligarh",
+      "hexX": 51,
+      "hexY": 19,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Allahabad",
+      "hexX": 51,
+      "hexY": 26,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ambala",
+      "hexX": 54,
+      "hexY": 15,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Amritsar",
+      "hexX": 55,
+      "hexY": 11,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Asansol",
+      "hexX": 53,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bangalore",
+      "hexX": 32,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bareilly",
+      "hexX": 53,
+      "hexY": 19,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Benares",
+      "hexX": 51,
+      "hexY": 27,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jessore",
+      "hexX": 53,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bhaunagar",
+      "hexX": 39,
+      "hexY": 19,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bhopal",
+      "hexX": 45,
+      "hexY": 24,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bikaner",
+      "hexX": 49,
+      "hexY": 13,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bombay",
+      "hexX": 36,
+      "hexY": 24,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Calcutta",
+      "hexX": 52,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Calicut",
+      "hexX": 29,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Cawnpore",
+      "hexX": 51,
+      "hexY": 23,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Chittagong",
+      "hexX": 55,
+      "hexY": 41,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Cocanada",
+      "hexX": 41,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Cochin",
+      "hexX": 28,
+      "hexY": 40,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Cox's Bazar",
+      "hexX": 54,
+      "hexY": 43,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Coimbatore",
+      "hexX": 29,
+      "hexY": 39,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Cuttack",
+      "hexX": 48,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Dacca",
+      "hexX": 56,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Delhi",
+      "hexX": 52,
+      "hexY": 17,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Diamond Harbour",
+      "hexX": 52,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Dimapur",
+      "hexX": 62,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ranchi",
+      "hexX": 51,
+      "hexY": 32,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Goa",
+      "hexX": 32,
+      "hexY": 29,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Gorakhpur",
+      "hexX": 54,
+      "hexY": 26,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Gwalior",
+      "hexX": 49,
+      "hexY": 21,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Howrah",
+      "hexX": 52,
+      "hexY": 36,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Hyderabad",
+      "hexX": 39,
+      "hexY": 32,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Hyderabad (Sindh)",
+      "hexX": 42,
+      "hexY": 10,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Imphal",
+      "hexX": 60,
+      "hexY": 40,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Indore",
+      "hexX": 43,
+      "hexY": 22,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jaipur",
+      "hexX": 48,
+      "hexY": 17,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jamshedpur",
+      "hexX": 51,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jodphur",
+      "hexX": 45,
+      "hexY": 14,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jorhat",
+      "hexX": 63,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jubbulpore",
+      "hexX": 46,
+      "hexY": 27,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Karachi",
+      "hexX": 40,
+      "hexY": 8,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Kohima",
+      "hexX": 61,
+      "hexY": 39,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Lahore",
+      "hexX": 55,
+      "hexY": 10,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ledo",
+      "hexX": 65,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Lucknow",
+      "hexX": 52,
+      "hexY": 23,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ludhiana",
+      "hexX": 55,
+      "hexY": 12,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Madras",
+      "hexX": 35,
+      "hexY": 40,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Madurai",
+      "hexX": 30,
+      "hexY": 42,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Mangalore",
+      "hexX": 30,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Meerut",
+      "hexX": 53,
+      "hexY": 18,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Moradabad",
+      "hexX": 54,
+      "hexY": 18,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Multan",
+      "hexX": 50,
+      "hexY": 9,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Mysore",
+      "hexX": 31,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Nagpur",
+      "hexX": 44,
+      "hexY": 28,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Patna",
+      "hexX": 54,
+      "hexY": 30,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Poona",
+      "hexX": 36,
+      "hexY": 26,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Raipur",
+      "hexX": 45,
+      "hexY": 31,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Rangpur",
+      "hexX": 58,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Rawalpindi",
+      "hexX": 58,
+      "hexY": 6,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Salem",
+      "hexX": 32,
+      "hexY": 39,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Sholapur",
+      "hexX": 36,
+      "hexY": 29,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Sialkot",
+      "hexX": 56,
+      "hexY": 9,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Srinagar",
+      "hexX": 60,
+      "hexY": 8,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Surat",
+      "hexX": 39,
+      "hexY": 20,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Tanjore",
+      "hexX": 32,
+      "hexY": 42,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Trichinopoly",
+      "hexX": 31,
+      "hexY": 41,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Trivandrum",
+      "hexX": 27,
+      "hexY": 43,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Vizagapatnam",
+      "hexX": 42,
+      "hexY": 37,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Katmandu",
+      "hexX": 57,
+      "hexY": 28,
+      "nation": "INDIA",
+      "region": "NEPAL"
+    },
+    {
+      "name": "Little Andaman",
+      "hexX": 44,
+      "hexY": 59,
+      "nation": "INDIA",
+      "region": "INDIAN ISLANDS"
+    },
+    {
+      "name": "Great Nicobar",
+      "hexX": 43,
+      "hexY": 66,
+      "nation": "INDIA",
+      "region": "INDIAN ISLANDS"
+    },
+    {
+      "name": "Port Blair",
+      "hexX": 46,
+      "hexY": 58,
+      "nation": "INDIA",
+      "region": "INDIAN ISLANDS"
+    },
+    {
+      "name": "Trinkat",
+      "hexX": 44,
+      "hexY": 64,
+      "nation": "INDIA",
+      "region": "INDIAN ISLANDS"
+    },
+    {
+      "name": "Adelaide",
+      "hexX": 75,
+      "hexY": 163,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Albany",
+      "hexX": 51,
+      "hexY": 153,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Alice Springs",
+      "hexX": 74,
+      "hexY": 143,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Bathurst",
+      "hexX": 88,
+      "hexY": 166,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Bathurst Island",
+      "hexX": 76,
+      "hexY": 123,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Birdsville",
+      "hexX": 81,
+      "hexY": 148,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Bowen",
+      "hexX": 94,
+      "hexY": 146,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Bourke",
+      "hexX": 86,
+      "hexY": 160,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Brisbane",
+      "hexX": 96,
+      "hexY": 160,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Broken Hill",
+      "hexX": 80,
+      "hexY": 160,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Broome",
+      "hexX": 62,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Bundaberg",
+      "hexX": 96,
+      "hexY": 155,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Cairns",
+      "hexX": 92,
+      "hexY": 140,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Canberra",
+      "hexX": 87,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Carnarvon",
+      "hexX": 49,
+      "hexY": 133,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Ceduna",
+      "hexX": 71,
+      "hexY": 156,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Charleville",
+      "hexX": 88,
+      "hexY": 154,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Charters Towers",
+      "hexX": 91,
+      "hexY": 145,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Cloncurry",
+      "hexX": 84,
+      "hexY": 142,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Coen",
+      "hexX": 90,
+      "hexY": 134,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Cooktown",
+      "hexX": 92,
+      "hexY": 137,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Corunna Downs",
+      "hexX": 57,
+      "hexY": 131,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Daly Waters",
+      "hexX": 76,
+      "hexY": 131,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Darwin",
+      "hexX": 76,
+      "hexY": 124,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Derby",
+      "hexX": 64,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Emerald",
+      "hexX": 91,
+      "hexY": 151,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Exmouth",
+      "hexX": 50,
+      "hexY": 129,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Fenton",
+      "hexX": 76,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Geelong",
+      "hexX": 81,
+      "hexY": 170,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Geraldton",
+      "hexX": 49,
+      "hexY": 141,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Gove",
+      "hexX": 82,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Groote Eylandt",
+      "hexX": 82,
+      "hexY": 130,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Hughenden",
+      "hexX": 88,
+      "hexY": 145,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Kalgoorlie",
+      "hexX": 56,
+      "hexY": 147,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Katherine",
+      "hexX": 76,
+      "hexY": 128,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Kingscote",
+      "hexX": 73,
+      "hexY": 163,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Meekatharra",
+      "hexX": 54,
+      "hexY": 139,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Melbourne",
+      "hexX": 82,
+      "hexY": 170,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Mildura",
+      "hexX": 80,
+      "hexY": 164,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Newcastle",
+      "hexX": 92,
+      "hexY": 166,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Normanton",
+      "hexX": 86,
+      "hexY": 138,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Oodnadatta",
+      "hexX": 74,
+      "hexY": 149,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Perth",
+      "hexX": 49,
+      "hexY": 147,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Port Augusta",
+      "hexX": 75,
+      "hexY": 159,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Port Hedland",
+      "hexX": 57,
+      "hexY": 129,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Port Kembla",
+      "hexX": 90,
+      "hexY": 168,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Portland",
+      "hexX": 77,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Portland Roads",
+      "hexX": 91,
+      "hexY": 132,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Rockhampton",
+      "hexX": 95,
+      "hexY": 152,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Sale",
+      "hexX": 84,
+      "hexY": 172,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Sydney",
+      "hexX": 90,
+      "hexY": 167,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Tamworth",
+      "hexX": 91,
+      "hexY": 163,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Tennant Creek",
+      "hexX": 76,
+      "hexY": 137,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Tocumwal",
+      "hexX": 83,
+      "hexY": 167,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Toowoomba",
+      "hexX": 94,
+      "hexY": 159,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Townsville",
+      "hexX": 92,
+      "hexY": 144,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Wagga Wagga",
+      "hexX": 85,
+      "hexY": 167,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Whyalla",
+      "hexX": 74,
+      "hexY": 159,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Winton",
+      "hexX": 86,
+      "hexY": 147,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Wyndham",
+      "hexX": 70,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "MAINLAND"
+    },
+    {
+      "name": "Burnie",
+      "hexX": 81,
+      "hexY": 176,
+      "nation": "AUSTRALIA",
+      "region": "TASMANIA"
+    },
+    {
+      "name": "Hobart",
+      "hexX": 81,
+      "hexY": 179,
+      "nation": "AUSTRALIA",
+      "region": "TASMANIA"
+    },
+    {
+      "name": "Launceston",
+      "hexX": 82,
+      "hexY": 176,
+      "nation": "AUSTRALIA",
+      "region": "TASMANIA"
+    },
+    {
+      "name": "Queenstown",
+      "hexX": 80,
+      "hexY": 177,
+      "nation": "AUSTRALIA",
+      "region": "TASMANIA"
+    },
+    {
+      "name": "Aitape",
+      "hexX": 95,
+      "hexY": 118,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Buna",
+      "hexX": 99,
+      "hexY": 129,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Dagua",
+      "hexX": 95,
+      "hexY": 119,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Finschhafen",
+      "hexX": 100,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Hansa Bay",
+      "hexX": 97,
+      "hexY": 121,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Lae",
+      "hexX": 99,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Madang",
+      "hexX": 97,
+      "hexY": 123,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Milne Bay",
+      "hexX": 101,
+      "hexY": 133,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Port Moresby",
+      "hexX": 98,
+      "hexY": 130,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Saidor",
+      "hexX": 99,
+      "hexY": 124,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Salamaua",
+      "hexX": 98,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Wau",
+      "hexX": 98,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Wewak",
+      "hexX": 96,
+      "hexY": 119,
+      "nation": "AUSTRALIA",
+      "region": "PAPUA NEW GUINEA"
+    },
+    {
+      "name": "Arawe",
+      "hexX": 102,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "NEW BRITAIN"
+    },
+    {
+      "name": "Cape Gloucester",
+      "hexX": 101,
+      "hexY": 125,
+      "nation": "AUSTRALIA",
+      "region": "NEW BRITAIN"
+    },
+    {
+      "name": "Gasmata",
+      "hexX": 103,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "NEW BRITAIN"
+    },
+    {
+      "name": "Rabaul",
+      "hexX": 106,
+      "hexY": 125,
+      "nation": "AUSTRALIA",
+      "region": "NEW BRITAIN"
+    },
+    {
+      "name": "Talasea",
+      "hexX": 103,
+      "hexY": 125,
+      "nation": "AUSTRALIA",
+      "region": "NEW BRITAIN"
+    },
+    {
+      "name": "Emirau Island",
+      "hexX": 105,
+      "hexY": 121,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Feni Islands",
+      "hexX": 108,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Green Island",
+      "hexX": 108,
+      "hexY": 127,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Kavieng",
+      "hexX": 106,
+      "hexY": 122,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Lihir",
+      "hexX": 108,
+      "hexY": 124,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Manus",
+      "hexX": 101,
+      "hexY": 119,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Mussau Island",
+      "hexX": 105,
+      "hexY": 120,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Namatanai",
+      "hexX": 107,
+      "hexY": 125,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "New Hanover Island",
+      "hexX": 105,
+      "hexY": 122,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Tabar Island",
+      "hexX": 107,
+      "hexY": 123,
+      "nation": "AUSTRALIA",
+      "region": "BISMARCK ARCHIPELAGO"
+    },
+    {
+      "name": "Deboyne Islands",
+      "hexX": 103,
+      "hexY": 135,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Fergusson Island",
+      "hexX": 102,
+      "hexY": 132,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Goodenough Island",
+      "hexX": 101,
+      "hexY": 131,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Kiriwina Island",
+      "hexX": 102,
+      "hexY": 131,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Normanby Island",
+      "hexX": 102,
+      "hexY": 133,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Rossel Island",
+      "hexX": 105,
+      "hexY": 137,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Woodlark Island",
+      "hexX": 104,
+      "hexY": 133,
+      "nation": "AUSTRALIA",
+      "region": "LOUISIADE ARCHIPELAG"
+    },
+    {
+      "name": "Buka",
+      "hexX": 109,
+      "hexY": 128,
+      "nation": "AUSTRALIA",
+      "region": "BOUGANVILLE"
+    },
+    {
+      "name": "Torokina",
+      "hexX": 109,
+      "hexY": 130,
+      "nation": "AUSTRALIA",
+      "region": "BOUGANVILLE"
+    },
+    {
+      "name": "Christmas Island IO",
+      "hexX": 45,
+      "hexY": 104,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Cocos Islands",
+      "hexX": 33,
+      "hexY": 101,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "King Island",
+      "hexX": 79,
+      "hexY": 173,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Horn Island",
+      "hexX": 91,
+      "hexY": 128,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Lord Howe Island",
+      "hexX": 100,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Mornington Island",
+      "hexX": 84,
+      "hexY": 135,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Norfolk Island",
+      "hexX": 113,
+      "hexY": 170,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Wessel Islands",
+      "hexX": 83,
+      "hexY": 126,
+      "nation": "AUSTRALIA",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Auckland",
+      "hexX": 115,
+      "hexY": 185,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Blenheim",
+      "hexX": 111,
+      "hexY": 191,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Christchurch",
+      "hexX": 108,
+      "hexY": 193,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Dunedin",
+      "hexX": 104,
+      "hexY": 195,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Gisborne",
+      "hexX": 117,
+      "hexY": 189,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Greymouth",
+      "hexX": 107,
+      "hexY": 191,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Hamilton",
+      "hexX": 115,
+      "hexY": 187,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Invercargill",
+      "hexX": 102,
+      "hexY": 194,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Nelson NZ",
+      "hexX": 110,
+      "hexY": 191,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Palmerston North",
+      "hexX": 114,
+      "hexY": 190,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Waipapakauri",
+      "hexX": 115,
+      "hexY": 182,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Wellington",
+      "hexX": 112,
+      "hexY": 191,
+      "nation": "NEW ZEALAND",
+      "region": "NEW ZEALAND"
+    },
+    {
+      "name": "Aitutaki",
+      "hexX": 159,
+      "hexY": 174,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Atiu",
+      "hexX": 160,
+      "hexY": 176,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Mangaia",
+      "hexX": 159,
+      "hexY": 180,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Manihiki",
+      "hexX": 163,
+      "hexY": 160,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Manuae",
+      "hexX": 159,
+      "hexY": 175,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Mauke",
+      "hexX": 161,
+      "hexY": 177,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Mitiaro",
+      "hexX": 161,
+      "hexY": 176,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Penrhyn Island",
+      "hexX": 168,
+      "hexY": 159,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Pukapuka",
+      "hexX": 157,
+      "hexY": 158,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Rarotonga",
+      "hexX": 157,
+      "hexY": 177,
+      "nation": "NEW ZEALAND",
+      "region": "COOK ISLANDS"
+    },
+    {
+      "name": "Savaii",
+      "hexX": 146,
+      "hexY": 159,
+      "nation": "NEW ZEALAND",
+      "region": "SAMOA"
+    },
+    {
+      "name": "Upolu",
+      "hexX": 147,
+      "hexY": 160,
+      "nation": "NEW ZEALAND",
+      "region": "SAMOA"
+    },
+    {
+      "name": "Niue",
+      "hexX": 146,
+      "hexY": 168,
+      "nation": "NEW ZEALAND",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Alliford Bay",
+      "hexX": 199,
+      "hexY": 46,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Bella Bella",
+      "hexX": 203,
+      "hexY": 46,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Calgary",
+      "hexX": 214,
+      "hexY": 40,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Coal Harbour",
+      "hexX": 204,
+      "hexY": 49,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Edmonton",
+      "hexX": 210,
+      "hexY": 35,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Fort Nelson",
+      "hexX": 199,
+      "hexY": 31,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Fort St. John",
+      "hexX": 203,
+      "hexY": 34,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Nelson",
+      "hexX": 214,
+      "hexY": 44,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Prince Rupert",
+      "hexX": 199,
+      "hexY": 43,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Regina",
+      "hexX": 220,
+      "hexY": 34,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Terrace",
+      "hexX": 200,
+      "hexY": 41,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Vancouver",
+      "hexX": 209,
+      "hexY": 49,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Victoria",
+      "hexX": 209,
+      "hexY": 51,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Whitehorse",
+      "hexX": 190,
+      "hexY": 33,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Winnipeg",
+      "hexX": 224,
+      "hexY": 28,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Canada",
+      "hexX": 227,
+      "hexY": 5,
+      "nation": "CANADA",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Changsha",
+      "hexX": 82,
+      "hexY": 52,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Changteh",
+      "hexX": 81,
+      "hexY": 50,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Chengchow",
+      "hexX": 88,
+      "hexY": 44,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Chengtu",
+      "hexX": 75,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Chihkiang",
+      "hexX": 78,
+      "hexY": 50,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Chungking",
+      "hexX": 76,
+      "hexY": 45,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Hami",
+      "hexX": 81,
+      "hexY": 17,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Hengyang",
+      "hexX": 80,
+      "hexY": 53,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Loyang",
+      "hexX": 87,
+      "hexY": 43,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Hwaiyin",
+      "hexX": 92,
+      "hexY": 50,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kanhsien",
+      "hexX": 81,
+      "hexY": 57,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kashgar",
+      "hexX": 71,
+      "hexY": 6,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kiuchuan",
+      "hexX": 82,
+      "hexY": 26,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kukong",
+      "hexX": 79,
+      "hexY": 57,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kungchang",
+      "hexX": 81,
+      "hexY": 36,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kunming",
+      "hexX": 69,
+      "hexY": 48,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kweilin",
+      "hexX": 76,
+      "hexY": 54,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kweiteh",
+      "hexX": 90,
+      "hexY": 46,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Kweiyang",
+      "hexX": 74,
+      "hexY": 49,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Lanchow",
+      "hexX": 81,
+      "hexY": 34,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Liuchow",
+      "hexX": 74,
+      "hexY": 55,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Mengtze",
+      "hexX": 68,
+      "hexY": 50,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Nanning",
+      "hexX": 72,
+      "hexY": 55,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Nanyang",
+      "hexX": 85,
+      "hexY": 45,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Neikiang",
+      "hexX": 75,
+      "hexY": 44,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Pakhoi",
+      "hexX": 72,
+      "hexY": 58,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Paoshan",
+      "hexX": 65,
+      "hexY": 45,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Patung",
+      "hexX": 81,
+      "hexY": 46,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Pengpu",
+      "hexX": 90,
+      "hexY": 50,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Pucheng",
+      "hexX": 86,
+      "hexY": 57,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Shaoyang",
+      "hexX": 80,
+      "hexY": 52,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Sian",
+      "hexX": 83,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Siangtan",
+      "hexX": 81,
+      "hexY": 52,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Sining",
+      "hexX": 80,
+      "hexY": 32,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Tienshui",
+      "hexX": 81,
+      "hexY": 38,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Tsiaotso",
+      "hexX": 88,
+      "hexY": 42,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Tsuyung",
+      "hexX": 68,
+      "hexY": 46,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Tuyun",
+      "hexX": 74,
+      "hexY": 51,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Urumchi",
+      "hexX": 79,
+      "hexY": 11,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Wasu",
+      "hexX": 79,
+      "hexY": 8,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Wenchow",
+      "hexX": 89,
+      "hexY": 58,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Wuchow",
+      "hexX": 76,
+      "hexY": 57,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Yenan",
+      "hexX": 88,
+      "hexY": 37,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Bengkalis",
+      "hexX": 48,
+      "hexY": 82,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Benkoelen",
+      "hexX": 45,
+      "hexY": 91,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Djambi",
+      "hexX": 48,
+      "hexY": 88,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Lahat",
+      "hexX": 47,
+      "hexY": 92,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Langsa",
+      "hexX": 46,
+      "hexY": 74,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Medan",
+      "hexX": 46,
+      "hexY": 76,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Muntok",
+      "hexX": 50,
+      "hexY": 90,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Padang",
+      "hexX": 44,
+      "hexY": 85,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Palembang",
+      "hexX": 48,
+      "hexY": 91,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Pakanbaroe",
+      "hexX": 46,
+      "hexY": 83,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Sabang",
+      "hexX": 44,
+      "hexY": 70,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Sawahloento",
+      "hexX": 45,
+      "hexY": 85,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Sibolga",
+      "hexX": 44,
+      "hexY": 79,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Tandjoengbalai",
+      "hexX": 47,
+      "hexY": 78,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Oosthaven",
+      "hexX": 48,
+      "hexY": 96,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Toboali",
+      "hexX": 50,
+      "hexY": 93,
+      "nation": "THE NETHERLANDS",
+      "region": "SUMATRA"
+    },
+    {
+      "name": "Bandoeng",
+      "hexX": 50,
+      "hexY": 100,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Banjoewangi",
+      "hexX": 57,
+      "hexY": 107,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Batavia",
+      "hexX": 49,
+      "hexY": 98,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Djokjakarta",
+      "hexX": 52,
+      "hexY": 103,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Madioen",
+      "hexX": 54,
+      "hexY": 104,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Loemadjang",
+      "hexX": 56,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Merak",
+      "hexX": 48,
+      "hexY": 97,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Pamekasan",
+      "hexX": 57,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Probolinggo",
+      "hexX": 56,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Semarang",
+      "hexX": 53,
+      "hexY": 102,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Soerabaja",
+      "hexX": 56,
+      "hexY": 104,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Soerakarta",
+      "hexX": 53,
+      "hexY": 103,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Tjilatjap",
+      "hexX": 51,
+      "hexY": 102,
+      "nation": "THE NETHERLANDS",
+      "region": "JAVA"
+    },
+    {
+      "name": "Balikpapan",
+      "hexX": 64,
+      "hexY": 97,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Bandjermasin",
+      "hexX": 60,
+      "hexY": 99,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Pontianak",
+      "hexX": 56,
+      "hexY": 90,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Samarinda",
+      "hexX": 65,
+      "hexY": 96,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Sampit",
+      "hexX": 58,
+      "hexY": 97,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Ketapang",
+      "hexX": 55,
+      "hexY": 93,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Sambas",
+      "hexX": 57,
+      "hexY": 88,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Singkawang",
+      "hexX": 56,
+      "hexY": 88,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Sintang",
+      "hexX": 59,
+      "hexY": 92,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Tandjoengselor",
+      "hexX": 68,
+      "hexY": 92,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Tarakan",
+      "hexX": 67,
+      "hexY": 91,
+      "nation": "THE NETHERLANDS",
+      "region": "BORNEO"
+    },
+    {
+      "name": "Donggala",
+      "hexX": 68,
+      "hexY": 99,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Gorontalo",
+      "hexX": 72,
+      "hexY": 99,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Kendari",
+      "hexX": 70,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Kolaka",
+      "hexX": 68,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Madjene",
+      "hexX": 65,
+      "hexY": 103,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Makassar",
+      "hexX": 65,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Menado",
+      "hexX": 75,
+      "hexY": 99,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Palopo",
+      "hexX": 67,
+      "hexY": 103,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Pare Pare",
+      "hexX": 66,
+      "hexY": 104,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Watampone",
+      "hexX": 66,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "CELEBES"
+    },
+    {
+      "name": "Babo",
+      "hexX": 83,
+      "hexY": 111,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Biak",
+      "hexX": 87,
+      "hexY": 110,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Hollandia",
+      "hexX": 93,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Kaimana",
+      "hexX": 83,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Manokwari",
+      "hexX": 85,
+      "hexY": 109,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Merauke",
+      "hexX": 89,
+      "hexY": 124,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Nabire",
+      "hexX": 86,
+      "hexY": 114,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Noemfoor",
+      "hexX": 86,
+      "hexY": 110,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Sansapor",
+      "hexX": 83,
+      "hexY": 107,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Sarmi",
+      "hexX": 91,
+      "hexY": 114,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Sorong",
+      "hexX": 82,
+      "hexY": 107,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Timoeka",
+      "hexX": 86,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "DUTCH NEW GUINEA"
+    },
+    {
+      "name": "Dili",
+      "hexX": 71,
+      "hexY": 115,
+      "nation": "THE NETHERLANDS",
+      "region": "TIMOR"
+    },
+    {
+      "name": "Koepang",
+      "hexX": 68,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "TIMOR"
+    },
+    {
+      "name": "Lautem",
+      "hexX": 72,
+      "hexY": 115,
+      "nation": "THE NETHERLANDS",
+      "region": "TIMOR"
+    },
+    {
+      "name": "Alor",
+      "hexX": 70,
+      "hexY": 114,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Ambon",
+      "hexX": 76,
+      "hexY": 109,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Terempa",
+      "hexX": 54,
+      "hexY": 83,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Dobo",
+      "hexX": 83,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Babar",
+      "hexX": 76,
+      "hexY": 117,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Bara",
+      "hexX": 74,
+      "hexY": 107,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Batjan",
+      "hexX": 78,
+      "hexY": 104,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tandjoengpinang",
+      "hexX": 50,
+      "hexY": 85,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Boela",
+      "hexX": 80,
+      "hexY": 110,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Boeton",
+      "hexX": 69,
+      "hexY": 108,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Damar",
+      "hexX": 75,
+      "hexY": 115,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Denpasar",
+      "hexX": 58,
+      "hexY": 108,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Djailolo",
+      "hexX": 78,
+      "hexY": 101,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Djemadja",
+      "hexX": 53,
+      "hexY": 83,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Endeh",
+      "hexX": 65,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Enggano",
+      "hexX": 44,
+      "hexY": 94,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Galeia",
+      "hexX": 79,
+      "hexY": 101,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Gebe",
+      "hexX": 80,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Gorong",
+      "hexX": 81,
+      "hexY": 112,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Kai-eilanden",
+      "hexX": 81,
+      "hexY": 115,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Kalao",
+      "hexX": 66,
+      "hexY": 110,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Kangean",
+      "hexX": 59,
+      "hexY": 105,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Kofiau",
+      "hexX": 80,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Komodo",
+      "hexX": 63,
+      "hexY": 111,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Larantoeka",
+      "hexX": 67,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Lingga",
+      "hexX": 50,
+      "hexY": 87,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Lolobato",
+      "hexX": 79,
+      "hexY": 102,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Lomblen",
+      "hexX": 68,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Mataram",
+      "hexX": 59,
+      "hexY": 109,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Maumere",
+      "hexX": 66,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Memboro",
+      "hexX": 63,
+      "hexY": 112,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Misool",
+      "hexX": 80,
+      "hexY": 108,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Moa",
+      "hexX": 74,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Molu",
+      "hexX": 79,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Morotai",
+      "hexX": 80,
+      "hexY": 101,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Namlea",
+      "hexX": 76,
+      "hexY": 108,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Groot Natoena",
+      "hexX": 57,
+      "hexY": 83,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Nias",
+      "hexX": 42,
+      "hexY": 79,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Obi",
+      "hexX": 77,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Pagai-eilanden",
+      "hexX": 43,
+      "hexY": 88,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Pantar",
+      "hexX": 69,
+      "hexY": 114,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Bima",
+      "hexX": 63,
+      "hexY": 110,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Roti",
+      "hexX": 67,
+      "hexY": 116,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Ruteng",
+      "hexX": 64,
+      "hexY": 111,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Sangi",
+      "hexX": 77,
+      "hexY": 97,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Saumlaki",
+      "hexX": 78,
+      "hexY": 117,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Sawoe-eilanden",
+      "hexX": 65,
+      "hexY": 115,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Selaroe",
+      "hexX": 78,
+      "hexY": 118,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Sepandjang",
+      "hexX": 60,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Serasan",
+      "hexX": 57,
+      "hexY": 86,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Siaoe",
+      "hexX": 77,
+      "hexY": 98,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Siberoet",
+      "hexX": 42,
+      "hexY": 85,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Singkep",
+      "hexX": 49,
+      "hexY": 87,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Soebi-besar",
+      "hexX": 57,
+      "hexY": 85,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Talaud-eilanden",
+      "hexX": 79,
+      "hexY": 97,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Taliaboe",
+      "hexX": 73,
+      "hexY": 104,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tambelan-eilanden",
+      "hexX": 54,
+      "hexY": 92,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tanahdjampea",
+      "hexX": 65,
+      "hexY": 109,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Billiton",
+      "hexX": 52,
+      "hexY": 93,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Ternate",
+      "hexX": 78,
+      "hexY": 102,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Tockangbesi-eilanden",
+      "hexX": 70,
+      "hexY": 109,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Waigeo",
+      "hexX": 82,
+      "hexY": 106,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Waingapoe",
+      "hexX": 63,
+      "hexY": 113,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Wetar",
+      "hexX": 72,
+      "hexY": 114,
+      "nation": "THE NETHERLANDS",
+      "region": "OTHER ISLANDS"
+    },
+    {
+      "name": "Belep Islands",
+      "hexX": 112,
+      "hexY": 155,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Isle of Pines",
+      "hexX": 115,
+      "hexY": 161,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Koumac",
+      "hexX": 113,
+      "hexY": 156,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "La Foa",
+      "hexX": 114,
+      "hexY": 159,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Lifou",
+      "hexX": 116,
+      "hexY": 159,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Mare'",
+      "hexX": 117,
+      "hexY": 160,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Noumea",
+      "hexX": 115,
+      "hexY": 160,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Ouv'ea",
+      "hexX": 116,
+      "hexY": 158,
+      "nation": "FREE FRENCH",
+      "region": "NEW CALEDONIA"
+    },
+    {
+      "name": "Ambrym",
+      "hexX": 121,
+      "hexY": 152,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Anatom",
+      "hexX": 120,
+      "hexY": 159,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Aoba Island",
+      "hexX": 121,
+      "hexY": 150,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Efate",
+      "hexX": 120,
+      "hexY": 154,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Epi",
+      "hexX": 120,
+      "hexY": 153,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Erromango",
+      "hexX": 120,
+      "hexY": 156,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Lakatoro",
+      "hexX": 119,
+      "hexY": 151,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Luganville",
+      "hexX": 120,
+      "hexY": 150,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Pentecost Island",
+      "hexX": 120,
+      "hexY": 151,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Santa Maria",
+      "hexX": 120,
+      "hexY": 149,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Tanna",
+      "hexX": 120,
+      "hexY": 157,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Torres Islands",
+      "hexX": 120,
+      "hexY": 147,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Vanua Lava",
+      "hexX": 121,
+      "hexY": 148,
+      "nation": "FREE FRENCH",
+      "region": "NEW HEBRIDES"
+    },
+    {
+      "name": "Bora Bora",
+      "hexX": 171,
+      "hexY": 174,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Maiao",
+      "hexX": 171,
+      "hexY": 177,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Maupiti",
+      "hexX": 170,
+      "hexY": 174,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Moorea",
+      "hexX": 172,
+      "hexY": 177,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Raiatea",
+      "hexX": 171,
+      "hexY": 175,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Tahiti",
+      "hexX": 173,
+      "hexY": 178,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Tetiaroa",
+      "hexX": 173,
+      "hexY": 176,
+      "nation": "FREE FRENCH",
+      "region": "SOCIETY ISLANDS"
+    },
+    {
+      "name": "Amanu",
+      "hexX": 184,
+      "hexY": 182,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Anaa",
+      "hexX": 178,
+      "hexY": 179,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Apataki",
+      "hexX": 178,
+      "hexY": 175,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Aratika",
+      "hexX": 180,
+      "hexY": 176,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Fakarava",
+      "hexX": 179,
+      "hexY": 177,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Hao",
+      "hexX": 183,
+      "hexY": 183,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Hereheretue",
+      "hexX": 177,
+      "hexY": 184,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Hikueru",
+      "hexX": 181,
+      "hexY": 181,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Katiu",
+      "hexX": 180,
+      "hexY": 178,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Kauehi",
+      "hexX": 180,
+      "hexY": 177,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Makatea",
+      "hexX": 175,
+      "hexY": 175,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Makemo",
+      "hexX": 181,
+      "hexY": 179,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Mangareva",
+      "hexX": 185,
+      "hexY": 195,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Manihi",
+      "hexX": 180,
+      "hexY": 174,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Marokau",
+      "hexX": 182,
+      "hexY": 182,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Mataiva",
+      "hexX": 176,
+      "hexY": 173,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Mururoa",
+      "hexX": 182,
+      "hexY": 191,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Napuka",
+      "hexX": 186,
+      "hexY": 176,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Niau",
+      "hexX": 178,
+      "hexY": 177,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Pukarua",
+      "hexX": 188,
+      "hexY": 186,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Rangiroa",
+      "hexX": 177,
+      "hexY": 174,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Raroia",
+      "hexX": 183,
+      "hexY": 178,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Reao",
+      "hexX": 189,
+      "hexY": 186,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Tahanea",
+      "hexX": 179,
+      "hexY": 179,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Takapoto",
+      "hexX": 180,
+      "hexY": 175,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Takaroa",
+      "hexX": 181,
+      "hexY": 174,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Tatakoto",
+      "hexX": 187,
+      "hexY": 183,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Temoe",
+      "hexX": 187,
+      "hexY": 195,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Tureia",
+      "hexX": 183,
+      "hexY": 189,
+      "nation": "FREE FRENCH",
+      "region": "TUAMOTU ISLANDS"
+    },
+    {
+      "name": "Raevavae",
+      "hexX": 169,
+      "hexY": 189,
+      "nation": "FREE FRENCH",
+      "region": "AUSTRAL ISLANDS"
+    },
+    {
+      "name": "Rimatara",
+      "hexX": 164,
+      "hexY": 183,
+      "nation": "FREE FRENCH",
+      "region": "AUSTRAL ISLANDS"
+    },
+    {
+      "name": "Rurutu",
+      "hexX": 167,
+      "hexY": 184,
+      "nation": "FREE FRENCH",
+      "region": "AUSTRAL ISLANDS"
+    },
+    {
+      "name": "Tubuai",
+      "hexX": 168,
+      "hexY": 187,
+      "nation": "FREE FRENCH",
+      "region": "AUSTRAL ISLANDS"
+    },
+    {
+      "name": "Eiao",
+      "hexX": 191,
+      "hexY": 165,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Fatu Hiva",
+      "hexX": 192,
+      "hexY": 170,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Hiva Oa",
+      "hexX": 192,
+      "hexY": 169,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Nuku Hiva",
+      "hexX": 191,
+      "hexY": 167,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Ua Huka",
+      "hexX": 192,
+      "hexY": 167,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Ua Pou",
+      "hexX": 191,
+      "hexY": 168,
+      "nation": "FREE FRENCH",
+      "region": "MARQUESAS"
+    },
+    {
+      "name": "Hoorn Islands",
+      "hexX": 138,
+      "hexY": 157,
+      "nation": "FREE FRENCH",
+      "region": "OTHER LOCATIONS"
+    },
+    {
+      "name": "Kwangchowan",
+      "hexX": 73,
+      "hexY": 60,
+      "nation": "FREE FRENCH",
+      "region": "OTHER LOCATIONS"
+    },
+    {
+      "name": "Rapa",
+      "hexX": 170,
+      "hexY": 196,
+      "nation": "FREE FRENCH",
+      "region": "OTHER LOCATIONS"
+    },
+    {
+      "name": "Wallis Island",
+      "hexX": 142,
+      "hexY": 156,
+      "nation": "FREE FRENCH",
+      "region": "OTHER LOCATIONS"
+    },
+    {
+      "name": "Abakan",
+      "hexX": 95,
+      "hexY": 5,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Aldan",
+      "hexX": 121,
+      "hexY": 22,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Anadyr",
+      "hexX": 158,
+      "hexY": 30,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Dalan Dzadagad",
+      "hexX": 90,
+      "hexY": 26,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Bering Island",
+      "hexX": 148,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Birobidzhan",
+      "hexX": 117,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Blagoveshchensk",
+      "hexX": 114,
+      "hexY": 33,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Borzya",
+      "hexX": 106,
+      "hexY": 26,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Chita",
+      "hexX": 106,
+      "hexY": 22,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Choybalsan",
+      "hexX": 103,
+      "hexY": 28,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Iman",
+      "hexX": 116,
+      "hexY": 43,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Irkutsk",
+      "hexX": 100,
+      "hexY": 16,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Khabarovsk",
+      "hexX": 118,
+      "hexY": 41,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Komsomolsk",
+      "hexX": 121,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Krasnoyarsk",
+      "hexX": 101,
+      "hexY": 6,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Kysyl",
+      "hexX": 94,
+      "hexY": 10,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Magadan",
+      "hexX": 138,
+      "hexY": 32,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Markovo",
+      "hexX": 153,
+      "hexY": 29,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Medny Island",
+      "hexX": 149,
+      "hexY": 45,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Mogocha",
+      "hexX": 112,
+      "hexY": 25,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Nikolaevsk",
+      "hexX": 126,
+      "hexY": 37,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Okha",
+      "hexX": 128,
+      "hexY": 37,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Ondorhaan",
+      "hexX": 100,
+      "hexY": 27,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Petropavlovsk",
+      "hexX": 141,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Seymchan",
+      "hexX": 141,
+      "hexY": 28,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Skovorodino",
+      "hexX": 114,
+      "hexY": 27,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Sovetskaya Gavan",
+      "hexX": 124,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Suchan",
+      "hexX": 113,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Svobodny",
+      "hexX": 116,
+      "hexY": 32,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Tamsag",
+      "hexX": 104,
+      "hexY": 32,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Uel Kal",
+      "hexX": 160,
+      "hexY": 30,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Ulan Bator",
+      "hexX": 96,
+      "hexY": 23,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Ulan-Ude",
+      "hexX": 102,
+      "hexY": 19,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Vladivostok",
+      "hexX": 112,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Voroshilov",
+      "hexX": 112,
+      "hexY": 45,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Yakutsk",
+      "hexX": 126,
+      "hexY": 20,
+      "nation": "SOVIET UNION",
+      "region": "SOVIET UNION"
+    },
+    {
+      "name": "Alma-Ata",
+      "hexX": 80,
+      "hexY": 3,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Soviet Union",
+      "hexX": 101,
+      "hexY": 3,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kagi",
+      "hexX": 85,
+      "hexY": 64,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Utsonomiya",
+      "hexX": 115,
+      "hexY": 60,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Haha-jima",
+      "hexX": 110,
+      "hexY": 75,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Hachinohe",
+      "hexX": 118,
+      "hexY": 55,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tungho",
+      "hexX": 112,
+      "hexY": 40,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Paotow",
+      "hexX": 92,
+      "hexY": 34,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Alameda",
+      "hexX": 219,
+      "hexY": 70,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Socotra",
+      "hexX": 14,
+      "hexY": 8,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Abadan",
+      "hexX": 39,
+      "hexY": 3,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Temuloh",
+      "hexX": 50,
+      "hexY": 78,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kalemyo",
+      "hexX": 59,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ramree Island",
+      "hexX": 54,
+      "hexY": 48,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Mergui",
+      "hexX": 53,
+      "hexY": 62,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Pegu",
+      "hexX": 55,
+      "hexY": 53,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Shwebo",
+      "hexX": 59,
+      "hexY": 45,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Bellary",
+      "hexX": 34,
+      "hexY": 33,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Bezwada",
+      "hexX": 39,
+      "hexY": 36,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Chanda",
+      "hexX": 42,
+      "hexY": 29,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Comilla",
+      "hexX": 56,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Darjeeling",
+      "hexX": 59,
+      "hexY": 32,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Jalgaon",
+      "hexX": 41,
+      "hexY": 24,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nander",
+      "hexX": 40,
+      "hexY": 29,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Silchar",
+      "hexX": 59,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tezpur",
+      "hexX": 60,
+      "hexY": 36,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Warangal",
+      "hexX": 40,
+      "hexY": 33,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Flinders Island",
+      "hexX": 83,
+      "hexY": 175,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Praboemoelih",
+      "hexX": 48,
+      "hexY": 92,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Taberfane",
+      "hexX": 82,
+      "hexY": 117,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ningsia",
+      "hexX": 84,
+      "hexY": 33,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Oita",
+      "hexX": 104,
+      "hexY": 59,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Chiba",
+      "hexX": 114,
+      "hexY": 61,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tottori",
+      "hexX": 109,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Bihoro",
+      "hexX": 123,
+      "hexY": 51,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kotou",
+      "hexX": 116,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Yenki",
+      "hexX": 110,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tunghua",
+      "hexX": 106,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Chuhsien",
+      "hexX": 88,
+      "hexY": 56,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Pingsiang",
+      "hexX": 82,
+      "hexY": 54,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Lungchen",
+      "hexX": 112,
+      "hexY": 36,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Lopei",
+      "hexX": 114,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Olga",
+      "hexX": 115,
+      "hexY": 47,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Spassk-Dalniy",
+      "hexX": 114,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kuibyshevka",
+      "hexX": 115,
+      "hexY": 33,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Shilka",
+      "hexX": 108,
+      "hexY": 24,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kansk",
+      "hexX": 101,
+      "hexY": 7,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Cheremkhovo",
+      "hexX": 101,
+      "hexY": 14,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nakhodka",
+      "hexX": 112,
+      "hexY": 47,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Bikin",
+      "hexX": 117,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Alexandrovsk",
+      "hexX": 126,
+      "hexY": 41,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Rybolov",
+      "hexX": 113,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "San Luis Obispo",
+      "hexX": 221,
+      "hexY": 75,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Corvallis",
+      "hexX": 213,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Portsea",
+      "hexX": 81,
+      "hexY": 171,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nakhon Si Thammarat",
+      "hexX": 51,
+      "hexY": 70,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Prachuap Khiri Khan",
+      "hexX": 54,
+      "hexY": 64,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Chumphon",
+      "hexX": 52,
+      "hexY": 66,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Phuket",
+      "hexX": 48,
+      "hexY": 69,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Petrovskiy",
+      "hexX": 102,
+      "hexY": 20,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Beaufort",
+      "hexX": 66,
+      "hexY": 87,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Atimonan",
+      "hexX": 80,
+      "hexY": 79,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Bakersfield",
+      "hexX": 223,
+      "hexY": 74,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Coos Bay",
+      "hexX": 213,
+      "hexY": 60,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kamloops",
+      "hexX": 210,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Surigao",
+      "hexX": 81,
+      "hexY": 88,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Prince George",
+      "hexX": 204,
+      "hexY": 40,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Sambalpur",
+      "hexX": 48,
+      "hexY": 34,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kanoya",
+      "hexX": 102,
+      "hexY": 61,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Duff Islands",
+      "hexX": 123,
+      "hexY": 142,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Salajar",
+      "hexX": 66,
+      "hexY": 108,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Sidate",
+      "hexX": 75,
+      "hexY": 100,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Shasukotan",
+      "hexX": 135,
+      "hexY": 49,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Shikotan",
+      "hexX": 125,
+      "hexY": 53,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Shemya Island",
+      "hexX": 154,
+      "hexY": 49,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Treasury Islands",
+      "hexX": 109,
+      "hexY": 132,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Esperance",
+      "hexX": 56,
+      "hexY": 153,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Rambutyo",
+      "hexX": 102,
+      "hexY": 120,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Umboi Island",
+      "hexX": 100,
+      "hexY": 125,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Long Island",
+      "hexX": 100,
+      "hexY": 124,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Vanimo",
+      "hexX": 93,
+      "hexY": 117,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tagula Island",
+      "hexX": 104,
+      "hexY": 137,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Stewart Island",
+      "hexX": 100,
+      "hexY": 195,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Oboto",
+      "hexX": 99,
+      "hexY": 31,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nagano",
+      "hexX": 113,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kurume",
+      "hexX": 103,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kirensk",
+      "hexX": 110,
+      "hexY": 13,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Chinhae",
+      "hexX": 103,
+      "hexY": 54,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Yugodzyr",
+      "hexX": 101,
+      "hexY": 32,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Wuteh",
+      "hexX": 96,
+      "hexY": 30,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tolun",
+      "hexX": 98,
+      "hexY": 36,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kyaktah",
+      "hexX": 99,
+      "hexY": 19,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Car Nicobar",
+      "hexX": 44,
+      "hexY": 62,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Sinabang",
+      "hexX": 42,
+      "hexY": 76,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Batoe-eilanden",
+      "hexX": 43,
+      "hexY": 82,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Sipora",
+      "hexX": 43,
+      "hexY": 86,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tioman Island",
+      "hexX": 51,
+      "hexY": 83,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Langkawi",
+      "hexX": 49,
+      "hexY": 72,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Mangole",
+      "hexX": 74,
+      "hexY": 105,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Loewoek",
+      "hexX": 71,
+      "hexY": 101,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kienko",
+      "hexX": 78,
+      "hexY": 41,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ankang",
+      "hexX": 82,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Togian-eilanden",
+      "hexX": 71,
+      "hexY": 100,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ontong Java",
+      "hexX": 115,
+      "hexY": 131,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Dora Harbor",
+      "hexX": 173,
+      "hexY": 48,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Salt Lake City",
+      "hexX": 226,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Raoul Island",
+      "hexX": 128,
+      "hexY": 177,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Malaybalay",
+      "hexX": 80,
+      "hexY": 90,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Cunderdin",
+      "hexX": 51,
+      "hexY": 147,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Cue",
+      "hexX": 53,
+      "hexY": 141,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Busselton",
+      "hexX": 48,
+      "hexY": 149,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nookanbah",
+      "hexX": 66,
+      "hexY": 130,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Roto",
+      "hexX": 85,
+      "hexY": 164,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Condamine",
+      "hexX": 92,
+      "hexY": 157,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Maryborough",
+      "hexX": 96,
+      "hexY": 157,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Coffs Harbour",
+      "hexX": 94,
+      "hexY": 163,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Fukuyama",
+      "hexX": 107,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Terapo",
+      "hexX": 96,
+      "hexY": 127,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Gifu",
+      "hexX": 110,
+      "hexY": 59,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Malang",
+      "hexX": 55,
+      "hexY": 105,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tjepoe",
+      "hexX": 54,
+      "hexY": 103,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Buitenzorg",
+      "hexX": 48,
+      "hexY": 99,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Kalidjati",
+      "hexX": 50,
+      "hexY": 99,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Las Vegas",
+      "hexX": 227,
+      "hexY": 70,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tonopah",
+      "hexX": 222,
+      "hexY": 67,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Cabanatuan",
+      "hexX": 80,
+      "hexY": 76,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Nadzab",
+      "hexX": 98,
+      "hexY": 125,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ebadon",
+      "hexX": 131,
+      "hexY": 114,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Palm Island",
+      "hexX": 92,
+      "hexY": 143,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Fraser Island",
+      "hexX": 97,
+      "hexY": 156,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Tokuyama",
+      "hexX": 105,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Ansi",
+      "hexX": 80,
+      "hexY": 23,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Iki-shima",
+      "hexX": 102,
+      "hexY": 57,
+      "nation": "SOVIET UNION",
+      "region": "OFF MAP"
+    },
+    {
+      "name": "Sungei Pantani",
+      "hexX": 50,
+      "hexY": 74,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kuala Kangsar",
+      "hexX": 49,
+      "hexY": 76,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kuala Krai",
+      "hexX": 51,
+      "hexY": 76,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kuala Lipis",
+      "hexX": 50,
+      "hexY": 77,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Port Dickson",
+      "hexX": 49,
+      "hexY": 80,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Kluang",
+      "hexX": 50,
+      "hexY": 82,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Ipoh",
+      "hexX": 49,
+      "hexY": 77,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Batang Padang",
+      "hexX": 49,
+      "hexY": 78,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Bukit Besi",
+      "hexX": 52,
+      "hexY": 78,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Port Swettenham",
+      "hexX": 48,
+      "hexY": 79,
+      "nation": "SOVIET UNION",
+      "region": "MALAYA"
+    },
+    {
+      "name": "Donbaik",
+      "hexX": 55,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Sittang Bridge",
+      "hexX": 56,
+      "hexY": 54,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Papun",
+      "hexX": 56,
+      "hexY": 53,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Karen Hills",
+      "hexX": 56,
+      "hexY": 50,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Kachin Hills",
+      "hexX": 61,
+      "hexY": 45,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Gokteik Viaduct",
+      "hexX": 61,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Yamethin",
+      "hexX": 58,
+      "hexY": 48,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Myingyan",
+      "hexX": 58,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Pauk",
+      "hexX": 57,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Kawludo",
+      "hexX": 57,
+      "hexY": 51,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Phyu",
+      "hexX": 56,
+      "hexY": 51,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Daik - u",
+      "hexX": 56,
+      "hexY": 52,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Chin Hills",
+      "hexX": 57,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Mount Victoria",
+      "hexX": 56,
+      "hexY": 45,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Arakan Yoma (N)",
+      "hexX": 56,
+      "hexY": 46,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Arakan Yoma",
+      "hexX": 55,
+      "hexY": 47,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Arakan Yoma (S)",
+      "hexX": 55,
+      "hexY": 48,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Thanbyuzayat",
+      "hexX": 55,
+      "hexY": 56,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Ye",
+      "hexX": 54,
+      "hexY": 57,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Tanbaya",
+      "hexX": 55,
+      "hexY": 57,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Three Pagodas Pass",
+      "hexX": 55,
+      "hexY": 58,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Nieke",
+      "hexX": 55,
+      "hexY": 59,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Bampong",
+      "hexX": 55,
+      "hexY": 61,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Tenchung",
+      "hexX": 63,
+      "hexY": 43,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Fort Hertz",
+      "hexX": 66,
+      "hexY": 38,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Lushai Hills",
+      "hexX": 56,
+      "hexY": 43,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Gangaw",
+      "hexX": 58,
+      "hexY": 44,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Tiddim",
+      "hexX": 58,
+      "hexY": 42,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Naga Hills",
+      "hexX": 61,
+      "hexY": 40,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Kabaw Valley",
+      "hexX": 59,
+      "hexY": 41,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Pangsau Pass",
+      "hexX": 64,
+      "hexY": 39,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Hukawng Valley",
+      "hexX": 64,
+      "hexY": 40,
+      "nation": "SOVIET UNION",
+      "region": "BURMA"
+    },
+    {
+      "name": "Wilcannia",
+      "hexX": 83,
+      "hexY": 160,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Ivanhoe",
+      "hexX": 83,
+      "hexY": 163,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Jervis Bay",
+      "hexX": 89,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Wodonga",
+      "hexX": 84,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Yaraka",
+      "hexX": 86,
+      "hexY": 151,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Quilpie",
+      "hexX": 85,
+      "hexY": 153,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Eucla",
+      "hexX": 66,
+      "hexY": 153,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Norseman",
+      "hexX": 57,
+      "hexY": 150,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Rawlinna",
+      "hexX": 62,
+      "hexY": 149,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Leonora",
+      "hexX": 57,
+      "hexY": 144,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Wiluna",
+      "hexX": 57,
+      "hexY": 140,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Sandstone",
+      "hexX": 55,
+      "hexY": 142,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Fitzroy",
+      "hexX": 73,
+      "hexY": 129,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Carnegie",
+      "hexX": 62,
+      "hexY": 141,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Kokoda Trail",
+      "hexX": 99,
+      "hexY": 130,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Ballarat",
+      "hexX": 80,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Ararat",
+      "hexX": 79,
+      "hexY": 168,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Clare",
+      "hexX": 75,
+      "hexY": 161,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Warnambool",
+      "hexX": 79,
+      "hexY": 170,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Reid River",
+      "hexX": 92,
+      "hexY": 145,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Port Macquarie",
+      "hexX": 94,
+      "hexY": 164,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Mackay",
+      "hexX": 94,
+      "hexY": 148,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Lithglow",
+      "hexX": 89,
+      "hexY": 166,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Goulburn",
+      "hexX": 88,
+      "hexY": 168,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Lismore",
+      "hexX": 95,
+      "hexY": 161,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Croydon",
+      "hexX": 87,
+      "hexY": 140,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Forsayth",
+      "hexX": 89,
+      "hexY": 142,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Puckapunyal",
+      "hexX": 82,
+      "hexY": 169,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Greta",
+      "hexX": 91,
+      "hexY": 166,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Glendambo",
+      "hexX": 73,
+      "hexY": 155,
+      "nation": "AUSTRALIA",
+      "region": "AUSTRALIA"
+    },
+    {
+      "name": "Oamaru",
+      "hexX": 106,
+      "hexY": 194,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Westport",
+      "hexX": 109,
+      "hexY": 190,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Wanganui",
+      "hexX": 113,
+      "hexY": 189,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Tauranga",
+      "hexX": 116,
+      "hexY": 187,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Waiouru",
+      "hexX": 114,
+      "hexY": 189,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Queenstown NZ",
+      "hexX": 103,
+      "hexY": 193,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Plaine Des Gaiacs",
+      "hexX": 114,
+      "hexY": 158,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "New Plymouth",
+      "hexX": 113,
+      "hexY": 188,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Tahakopa",
+      "hexX": 102,
+      "hexY": 195,
+      "nation": "AUSTRALIA",
+      "region": "NZ"
+    },
+    {
+      "name": "Yaowang Mtn",
+      "hexX": 84,
+      "hexY": 42,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Yuntsi",
+      "hexX": 85,
+      "hexY": 42,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Yuanku",
+      "hexX": 85,
+      "hexY": 43,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Tsingsing",
+      "hexX": 90,
+      "hexY": 40,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Yutze",
+      "hexX": 88,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Pingyao",
+      "hexX": 87,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Linfan",
+      "hexX": 86,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Anyi",
+      "hexX": 85,
+      "hexY": 41,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Ban'an",
+      "hexX": 76,
+      "hexY": 46,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Zunyi",
+      "hexX": 75,
+      "hexY": 48,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Nanchuan",
+      "hexX": 76,
+      "hexY": 47,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Wulong",
+      "hexX": 78,
+      "hexY": 47,
+      "nation": "CHINA",
+      "region": "CHINA"
+    },
+    {
+      "name": "Aurukun",
+      "hexX": 89,
+      "hexY": 132,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Bumaga",
+      "hexX": 90,
+      "hexY": 130,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Kowanyama",
+      "hexX": 87,
+      "hexY": 135,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Lakeland",
+      "hexX": 91,
+      "hexY": 137,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Mitchell River",
+      "hexX": 88,
+      "hexY": 137,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Truscott",
+      "hexX": 70,
+      "hexY": 124,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Armidale",
+      "hexX": 92,
+      "hexY": 163,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Laverton",
+      "hexX": 58,
+      "hexY": 145,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Birdum",
+      "hexX": 76,
+      "hexY": 130,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Mount Isa",
+      "hexX": 83,
+      "hexY": 142,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Moranbah",
+      "hexX": 91,
+      "hexY": 149,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Cunnamulla",
+      "hexX": 87,
+      "hexY": 156,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Dirranbandi",
+      "hexX": 90,
+      "hexY": 158,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Pokataroo",
+      "hexX": 90,
+      "hexY": 160,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Inverell",
+      "hexX": 92,
+      "hexY": 161,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Cobar",
+      "hexX": 85,
+      "hexY": 161,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Bairnsdale",
+      "hexX": 85,
+      "hexY": 172,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Hay",
+      "hexX": 82,
+      "hexY": 165,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Stanley",
+      "hexX": 80,
+      "hexY": 175,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Port Lincoln",
+      "hexX": 72,
+      "hexY": 161,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Longreach",
+      "hexX": 87,
+      "hexY": 149,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Penong",
+      "hexX": 70,
+      "hexY": 155,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Scawfell Island",
+      "hexX": 95,
+      "hexY": 148,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Percy Islands",
+      "hexX": 95,
+      "hexY": 149,
+      "nation": "ADDITIONAL AUS BASE",
+      "region": "ADDITIONAL AUS BASE"
+    },
+    {
+      "name": "Kushimoto",
+      "hexX": 108,
+      "hexY": 61,
+      "nation": "ADDITIONAL BASES",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Nemuro",
+      "hexX": 124,
+      "hexY": 53,
+      "nation": "ADDITIONAL BASES",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Choshi",
+      "hexX": 115,
+      "hexY": 61,
+      "nation": "ADDITIONAL BASES",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Miyako",
+      "hexX": 119,
+      "hexY": 56,
+      "nation": "ADDITIONAL BASES",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Kamaishi",
+      "hexX": 118,
+      "hexY": 57,
+      "nation": "ADDITIONAL BASES",
+      "region": "JAPAN"
+    },
+    {
+      "name": "Tehchow",
+      "hexX": 93,
+      "hexY": 43,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Chuyeh",
+      "hexX": 91,
+      "hexY": 45,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Puluwat",
+      "hexX": 108,
+      "hexY": 107,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Namonuito",
+      "hexX": 110,
+      "hexY": 105,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Hall Islands",
+      "hexX": 113,
+      "hexY": 106,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Paracel Islands",
+      "hexX": 71,
+      "hexY": 67,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Pulo Condore",
+      "hexX": 59,
+      "hexY": 75,
+      "nation": "JAPANESE EMPIRE",
+      "region": "JAPANESE EMPIRE"
+    },
+    {
+      "name": "Bremerton",
+      "hexX": 211,
+      "hexY": 52,
+      "nation": "JAPANESE EMPIRE",
+      "region": "U.S.A."
+    },
+    {
+      "name": "Bellingham",
+      "hexX": 210,
+      "hexY": 50,
+      "nation": "JAPANESE EMPIRE",
+      "region": "U.S.A."
+    },
+    {
+      "name": "Northway",
+      "hexX": 184,
+      "hexY": 31,
+      "nation": "JAPANESE EMPIRE",
+      "region": "U.S.A."
+    },
+    {
+      "name": "Pearl & Hermes Reef",
+      "hexX": 160,
+      "hexY": 92,
+      "nation": "JAPANESE EMPIRE",
+      "region": "U.S.A."
+    },
+    {
+      "name": "Lisianski Island",
+      "hexX": 161,
+      "hexY": 95,
+      "nation": "JAPANESE EMPIRE",
+      "region": "U.S.A."
+    },
+    {
+      "name": "Jacobabad",
+      "hexX": 47,
+      "hexY": 6,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Gilgit",
+      "hexX": 62,
+      "hexY": 5,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Rajshashi",
+      "hexX": 55,
+      "hexY": 35,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Talcher",
+      "hexX": 48,
+      "hexY": 36,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Halebid",
+      "hexX": 32,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Mahuva",
+      "hexX": 37,
+      "hexY": 19,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Veraval",
+      "hexX": 37,
+      "hexY": 16,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Dwarka",
+      "hexX": 38,
+      "hexY": 14,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Matli",
+      "hexX": 41,
+      "hexY": 11,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Jammu",
+      "hexX": 57,
+      "hexY": 9,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Nanpara",
+      "hexX": 54,
+      "hexY": 23,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Ambikapur",
+      "hexX": 49,
+      "hexY": 30,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Bina",
+      "hexX": 47,
+      "hexY": 24,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Katni",
+      "hexX": 48,
+      "hexY": 26,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Kota",
+      "hexX": 46,
+      "hexY": 20,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Khulna",
+      "hexX": 54,
+      "hexY": 38,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Latur",
+      "hexX": 39,
+      "hexY": 28,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Guntakal",
+      "hexX": 35,
+      "hexY": 34,
+      "nation": "INDIA",
+      "region": "INDIA"
+    },
+    {
+      "name": "Puttalam",
+      "hexX": 30,
+      "hexY": 46,
+      "nation": "INDIA",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Badulla",
+      "hexX": 30,
+      "hexY": 49,
+      "nation": "INDIA",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Batticaloa",
+      "hexX": 31,
+      "hexY": 48,
+      "nation": "INDIA",
+      "region": "CEYLON"
+    },
+    {
+      "name": "Sandoway",
+      "hexX": 53,
+      "hexY": 51,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Monywa",
+      "hexX": 58,
+      "hexY": 45,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Elphinstone Island",
+      "hexX": 52,
+      "hexY": 62,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Lampi Island",
+      "hexX": 51,
+      "hexY": 64,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Rameswaram",
+      "hexX": 31,
+      "hexY": 44,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Mannar",
+      "hexX": 30,
+      "hexY": 45,
+      "nation": "INDIA",
+      "region": "BURMA"
+    },
+    {
+      "name": "Dawson Creek",
+      "hexX": 204,
+      "hexY": 35,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Fort McMurray",
+      "hexX": 208,
+      "hexY": 28,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Saskatoon",
+      "hexX": 216,
+      "hexY": 32,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Watson Lake",
+      "hexX": 195,
+      "hexY": 32,
+      "nation": "CANADA",
+      "region": "CANADA"
+    },
+    {
+      "name": "Rendova",
+      "hexX": 110,
+      "hexY": 135,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Abd al Kuri",
+      "hexX": 12,
+      "hexY": 5,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Dante",
+      "hexX": 9,
+      "hexY": 7,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Laamu",
+      "hexX": 18,
+      "hexY": 48,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Buin",
+      "hexX": 109,
+      "hexY": 131,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Napier",
+      "hexX": 116,
+      "hexY": 190,
+      "nation": "OTHERS",
+      "region": "OTHERS"
+    },
+    {
+      "name": "Tingchow",
+      "hexX": 83,
+      "hexY": 58,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    },
+    {
+      "name": "Yingchow",
+      "hexX": 89,
+      "hexY": 48,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    },
+    {
+      "name": "Su-Hsien",
+      "hexX": 91,
+      "hexY": 48,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    },
+    {
+      "name": "Chuching",
+      "hexX": 71,
+      "hexY": 48,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    },
+    {
+      "name": "Chian",
+      "hexX": 83,
+      "hexY": 54,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    },
+    {
+      "name": "Chin-Hua",
+      "hexX": 89,
+      "hexY": 56,
+      "nation": "REPUBLIC OF CHINA",
+      "region": "REPUBLIC OF CHINA"
+    }
+  ]
+}

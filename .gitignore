@@ -399,3 +399,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# WitP-CIC MUTHUR build outputs and local caches
+dist/*.pdb
+dist/*.ilk
+dist/Older Code/
+bin/
+obj/
+backups/*.zip

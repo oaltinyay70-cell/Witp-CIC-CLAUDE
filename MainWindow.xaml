@@ -9,6 +9,9 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="CanResizeWithGrip"
+        Focusable="True"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewTextInput="Window_PreviewTextInput"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         SizeChanged="Window_SizeChanged"
         ContextMenuOpening="Window_ContextMenuOpening">
@@ -337,10 +340,10 @@
                                 CornerRadius="4"
                                 Padding="6,2">
                             <TextBlock x:Name="SystemBadgeText"
-                                       Text="[ MUTHUR 6000 ]"
-                                       FontSize="10"
-                                       FontWeight="Bold"
-                                       Foreground="#00FF66"/>
+                                        Text="[ MUTHUR 6000 // PACIFIC CIC ]"
+                                        FontSize="10"
+                                        FontWeight="Bold"
+                                        Foreground="#00FF66"/>
                         </Border>
                     </StackPanel>
 
@@ -353,7 +356,7 @@
                                 CornerRadius="4"
                                 Padding="8,2">
                             <TextBlock x:Name="HeaderStatusText"
-                                       Text="[ OVERMONITORING MATRIX ]"
+                                       Text="[ PACIFIC THEATER CIC MATRIX ]"
                                        FontSize="10"
                                        FontWeight="Bold"
                                        Foreground="#00FF66"
@@ -363,72 +366,6 @@
 
                     <!-- Right-side Quick Action Controls -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <!-- Baud Rate Badge Button -->
-                        <Button x:Name="BaudRateButton"
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Padding="0"
-                                Margin="0,0,6,0"
-                                Cursor="Hand"
-                                ToolTip="Click to cycle Baud Rate"
-                                Click="BaudRateBadge_Click">
-                            <Border x:Name="BaudBadgeBorder"
-                                    Background="Transparent"
-                                    BorderBrush="#5000FF66"
-                                    BorderThickness="1"
-                                    CornerRadius="3"
-                                    Padding="5,2">
-                                <TextBlock x:Name="BaudBadgeText"
-                                           Text="[ 1200 BAUD ]"
-                                           FontSize="9.5"
-                                           FontWeight="Bold"
-                                           Foreground="#00FF66"/>
-                            </Border>
-                        </Button>
-
-                        <!-- Pause / Resume Button -->
-                        <Button x:Name="PauseButton"
-                                Content="PAUSE"
-                                ToolTip="Pause/Resume transmission"
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                Foreground="#80FFFFFF"
-                                BorderThickness="0"
-                                Padding="6,2"
-                                FontSize="10"
-                                FontWeight="SemiBold"
-                                Cursor="Hand"
-                                Click="PauseResume_Click"/>
-
-                        <!-- Skip Button -->
-                        <Button x:Name="SkipButton"
-                                Content="SKIP"
-                                ToolTip="Skip to next telemetry file"
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                Foreground="#80FFFFFF"
-                                BorderThickness="0"
-                                Padding="6,2"
-                                FontSize="10"
-                                FontWeight="SemiBold"
-                                Cursor="Hand"
-                                Click="SkipNext_Click"/>
-
-                        <!-- Clear Button -->
-                        <Button x:Name="ClearButton"
-                                Content="CLR"
-                                ToolTip="Clear terminal screen"
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                Foreground="#80FFFFFF"
-                                BorderThickness="0"
-                                Padding="6,2"
-                                FontSize="10"
-                                FontWeight="SemiBold"
-                                Cursor="Hand"
-                                Click="ClearScreen_Click"/>
-
                         <!-- Close Button -->
                         <Button x:Name="CloseButton"
                                 Content="✕"
@@ -451,6 +388,7 @@
                 <!-- Text Display Box -->
                 <RichTextBox x:Name="TerminalOutputBox"
                              IsReadOnly="True"
+                             Focusable="False"
                              IsReadOnlyCaretVisible="False"
                              Background="Transparent"
                              Foreground="#00FF66"
