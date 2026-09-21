@@ -581,8 +581,14 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What Was Learned:**
   - With the transition to standalone repository `witp-cic-muthur`, the phase designation is **Alpha 4** (`alpha4`).
   - Executables follow `witp-cic-muthur-alpha4-[build#].exe`, starting at `0` for the first build (`witp-cic-muthur-alpha4-0.exe`) and incrementing by 1 for each subsequent build in this phase, with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+### LL-047: WPF Single-File Native Library Self-Extraction Requirement
+- **Date:** 2026-09-21 23:35 UTC+3
+- **Context:** `witp-cic-muthur-alpha4-0.exe` threw `System.DllNotFoundException` at `MS.Internal.WindowsBase.NativeMethodsSetLastError.SetWindowLongPtrWndProc` when launched as a single-file executable.
+- **What Was Learned:**
+  - In .NET 8 WPF single-file deployments, WPF depends on native C++ runtime binaries (`PresentationNative_cor3.dll`, `wpfgfx_cor3.dll`, `PenImc_cor3.dll`).
+  - Without `<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>` and `<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>` in `.csproj`, WPF cannot resolve native Win32 window subclassing functions, causing `DllNotFoundException` on window creation.
 - **What NOT to Repeat:**
-  - DO NOT omit the project or phase identifier from release binaries.
+  - DO NOT omit `<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>` in WPF single-file publish configurations.
 
 ---
 

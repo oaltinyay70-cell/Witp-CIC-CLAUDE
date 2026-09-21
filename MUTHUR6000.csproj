@@ -20,7 +20,9 @@
 
 		<!-- Publishing & Performance Optimizations -->
 		<PublishSingleFile>true</PublishSingleFile>
-		<PublishReadyToRun>true</PublishReadyToRun>
+		<PublishReadyToRun>false</PublishReadyToRun>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 		<SatelliteResourceLanguages>none</SatelliteResourceLanguages>
 		<Deterministic>true</Deterministic>
 		<EnableCompressionInSingleFile Condition="'$(SelfContained)' == 'true'">true</EnableCompressionInSingleFile>
