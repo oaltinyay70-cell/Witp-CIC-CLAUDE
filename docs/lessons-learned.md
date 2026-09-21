@@ -614,6 +614,18 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT guess or hallucinate when requirements are unclear.
   - DO NOT proceed when logic or scope clashes exist without asking Ozgur.
 
+### LL-049: Elimination of Redundant Binary Mirrors & Aliases
+- **Date:** 2026-09-21 23:58 UTC+3
+- **Context:** Agent was generating two duplicate mirror binaries (`dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`) alongside the versioned executable `dist/witp-cic-muthur-alpha4-[build#].exe`. Ozgur asked:
+  > *"why is 2 ? why do we need mirros ... yes and dont make the same mistake again"*
+- **What Was Learned:**
+  1. **Strict Single-Binary Output:** Never produce duplicate mirror files or legacy alias copies (e.g. `WitP-CIC.exe` or `MUTHUR6000.exe`).
+  2. **Disk & Cleanliness Hygiene:** Each build must output ONLY the single, authoritative, versioned binary matching the established naming convention: `dist/witp-cic-muthur-alpha4-[build#].exe`.
+  3. **No Redundant Aliases:** The test suite and runtime do not need mirrors; generating duplicate 70 MB binaries creates clutter and wastes storage.
+- **What NOT to Repeat:**
+  - NEVER copy or mirror the output binary to `WitP-CIC.exe` or `MUTHUR6000.exe`.
+  - NEVER generate redundant binary copies in `dist/`. Only generate the single versioned `witp-cic-muthur-alpha4-[build#].exe`.
+
 ---
 
 ## 3. Checklist for Future Corrections

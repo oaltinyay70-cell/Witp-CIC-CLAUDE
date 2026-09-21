@@ -6,8 +6,8 @@ Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user
 
 - Product name: **MUTHUR 6000 // WITP-CIC Intelligence System**
 - Active Milestone: **Alpha 4** (Active 2026-09-21 23:32 UTC+3)
-- Executable Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-0.exe`; build counter increments by 1 per compilation)
-- Active Release Binary: `dist/witp-cic-muthur-alpha4-0.exe` (Canonical mirrors: `dist/WitP-CIC.exe`, `dist/MUTHUR6000.exe`)
+- Executable Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-1.exe`; build counter increments by 1 per compilation; zero mirrors/aliases)
+- Active Release Binary: `dist/witp-cic-muthur-alpha4-1.exe` (Single authoritative versioned binary; no mirrors)
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`
 - Preserved Baseline: **Version 0.02 (Stable Alpha 1)** (Tagged `v0.02`, `v0.02-alpha.1`, branch `stable-alpha-1`, archive `backups/WITP-CIC2-v0.02-alpha1.zip`)
 - Rollback Guide: [`docs/how-to-rollback-to-alpha-1.md`](docs/how-to-rollback-to-alpha-1.md)
@@ -103,7 +103,7 @@ Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user
 ## Active Milestone: Alpha 4 (2026-09-21 23:32 UTC+3)
 
 - **Active Milestone:** **Alpha 4** (`alpha4`)
-- **Binary Naming Format:** `witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-0.exe`; mirrored entrypoints: `dist/WitP-CIC.exe`, `dist/MUTHUR6000.exe`).
+- **Binary Naming Format:** `witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`; single versioned binary; zero mirrors).
 - **Hierarchical Reasoning Modal Navigation:** 2-tier navigable modal; cursor traversal (`[UP/DOWN]`); unified Telemetry Source & Localization History drill-down; on-demand confidence computation drill-down; program-wide word-wrapping with zero text cutoff.
 - **Opponent-Only Intelligence Display:** War Room BDA and Model E claims register filter strictly for enemy assets; friendly losses excluded.
 - **Naval Unit Capabilities Baseline:** 7 functional classes & 40+ hull codes, plus Auxiliary / Tender Doctrine (AS, AD, AV/AVD/AVP, AR, ARD, AE/AKE, AO, APD, ACM, AKV, AMc). All predictive models (A, B, D, F, G) and tactical reasoning pop-ups must be grounded in these capabilities.

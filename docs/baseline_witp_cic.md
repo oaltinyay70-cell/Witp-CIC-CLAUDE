@@ -436,3 +436,9 @@ All application errors must follow the standardized format **`[XXX]`**:
 6. **Exhaustive Foolproof Documentation:** Every piece of added functionality, architectural enhancement, and behavioral rule must be codified in core project documentation in exhaustive, foolproof detail so that any engineer or agent can understand and maintain it without ambiguity.
 7. **Proactive Algorithm Logic Clash Monitoring & Alerting:** Continuously scrutinize algorithms, state machines, and mathematical models for logic clashes, mathematical contradictions, or unintended side effects, and immediately alert Ozgur whenever a potential clash is identified.
 
+### 10.2 Single-Binary Output Mandate & Prohibition of Redundant Mirrors
+> **"why is 2 ? why do we need mirros ... yes and dont make the same mistake again" — Ozgur (2026-09-21 23:57 UTC+3)**
+
+- **Strict Single-Binary Output:** Each build must compile and output **exclusively** the single versioned executable matching the established naming format: `dist/witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-1.exe`).
+- **Absolute Prohibition of Mirrors:** Never create redundant duplicate copies or legacy aliases in `dist/` (such as `WitP-CIC.exe` or `MUTHUR6000.exe`). Neither the runtime nor the test suite requires duplicate mirrors. Generating extra copies is strictly forbidden.
+

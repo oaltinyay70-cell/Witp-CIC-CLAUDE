@@ -10,6 +10,10 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-21 23:58 UTC+3: **Elimination of Redundant Binary Mirrors & Aliases (Ozgur):**
+  1. **Strict Single-Binary Deliverable:** Permanently eliminated generation of duplicate mirror binaries (`WitP-CIC.exe`, `MUTHUR6000.exe`).
+  2. **Authoritative Versioned Output Only:** Every release build must output exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`).
+
 - 2026-09-21 23:51 UTC+3: **Comprehensive Repository Reference & Current Reality Alignment (Ozgur):**
   1. **Documentation Alignment:** Scanned all project documentation, in-app Wiki text, and configuration files, updating all outdated references to the old repository (`oaltinyay70-cell/WITP-CIC2`) and workspace paths (`Witp-CIC2`) to reflect the current active reality.
   2. **Active Git Authority:** Formally codified `origin` -> `https://github.com/TheZenHippie/MUTHUR6000.git` on branch `main` as the active repository for `witp-cic-muthur`, with `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` as the primary workspace and `Witp-CIC2` preserved strictly as an immutable reference archive.

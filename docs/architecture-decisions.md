@@ -673,7 +673,7 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 **Decision:**
 1. **Master Repository:** `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` is the active, canonical master repository. `Witp-CIC2` is read-only and immutable.
 2. **Phase Designation:** **Alpha 4** (`alpha4`).
-3. **Strict Binary Naming Convention:** All compiled executables follow `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-0.exe`), with canonical root mirrors `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+3. **Strict Binary Naming Convention:** All compiled executables follow `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-0.exe`).
 
 **Source:** Ozgur directives (2026-09-21 22:20 & 23:32 UTC+3).
 
@@ -689,4 +689,12 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 7. **Proactive Algorithm Logic Clash Monitoring:** Constantly inspect algorithms and state machines for logical conflicts and immediately alert Ozgur.
 
 **Source:** Ozgur directives (2026-09-21 23:48 UTC+3).
+
+## 63. Single-Binary Output Mandate & Elimination of Redundant Mirrors (2026-09-21 23:58 UTC+3)
+
+**Decision:**
+1. **Single-Binary Output:** Each release compilation produces exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe`.
+2. **Prohibition of Mirrors:** Duplicate mirror copies (`WitP-CIC.exe`, `MUTHUR6000.exe`) are permanently eliminated and forbidden. Neither the test suite nor the application runtime requires aliases.
+
+**Source:** Ozgur directives (2026-09-21 23:58 UTC+3).
 
