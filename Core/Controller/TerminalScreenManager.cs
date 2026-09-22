@@ -54,6 +54,8 @@ namespace MUTHUR6000.Core.Controller
         PredictiveModels,
         PredModelPopUp,
         ReasoningModal,
+        Heuristics,
+        HeuristicsPopUp,
 
         // ── Wiki Module ───────────────────────────────────────────────────────
         WikiTopicMenu,
@@ -116,6 +118,8 @@ namespace MUTHUR6000.Core.Controller
         private int _predModelsSel = 0;
         private int _predPopUpSel = 0;
         private int _reasoningTopicSel = 0;
+        private int _heuristicsSel = 0;
+        private int _heuristicsPopUpSel = 0;
 
         // ── Dossier Search ───────────────────────────────────────────────────
         private string _dossierQuery = "";
@@ -260,6 +264,14 @@ namespace MUTHUR6000.Core.Controller
 
                 case ScreenState.ReasoningModal:
                     HandleReasoningModal(key);
+                    break;
+
+                case ScreenState.Heuristics:
+                    HandleHeuristics(key);
+                    break;
+
+                case ScreenState.HeuristicsPopUp:
+                    HandleHeuristicsPopUp(key);
                     break;
 
                 case ScreenState.WikiTopicMenu:
@@ -723,13 +735,13 @@ namespace MUTHUR6000.Core.Controller
                     break;
 
                 case System.Windows.Input.Key.Up:
-                    _warRoomSel = (_warRoomSel - 1 + 5) % 5;
+                    _warRoomSel = (_warRoomSel - 1 + 6) % 6;
                     RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Down:
                 case System.Windows.Input.Key.Tab:
-                    _warRoomSel = (_warRoomSel + 1) % 5;
+                    _warRoomSel = (_warRoomSel + 1) % 6;
                     RenderCurrentScreen();
                     break;
 
@@ -742,6 +754,7 @@ namespace MUTHUR6000.Core.Controller
                 case System.Windows.Input.Key.D3: OpenWarRoomSubMenu(2); break;
                 case System.Windows.Input.Key.D4: OpenWarRoomSubMenu(3); break;
                 case System.Windows.Input.Key.D5: OpenWarRoomSubMenu(4); break;
+                case System.Windows.Input.Key.D6: OpenWarRoomSubMenu(5); break;
             }
         }
 
@@ -768,6 +781,10 @@ namespace MUTHUR6000.Core.Controller
                 case 4:
                     _state = ScreenState.PredictiveModels;
                     _predModelsSel = 0;
+                    break;
+                case 5:
+                    _state = ScreenState.Heuristics;
+                    _heuristicsSel = 0;
                     break;
             }
             RenderCurrentScreen();
@@ -1389,6 +1406,436 @@ namespace MUTHUR6000.Core.Controller
             }
         }
 
+        // ── Heuristics Screen ────────────────────────────────────────────────
+        private void HandleHeuristics(System.Windows.Input.Key key)
+        {
+            switch (key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    _state = ScreenState.WarRoomPrimary;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Up:
+                    _heuristicsSel = (_heuristicsSel - 1 + 6) % 6;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Down:
+                case System.Windows.Input.Key.Tab:
+                    _heuristicsSel = (_heuristicsSel + 1) % 6;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    OpenHeuristicsPopUp(_heuristicsSel);
+                    break;
+
+                case System.Windows.Input.Key.D1: OpenHeuristicsPopUp(0); break;
+                case System.Windows.Input.Key.D2: OpenHeuristicsPopUp(1); break;
+                case System.Windows.Input.Key.D3: OpenHeuristicsPopUp(2); break;
+                case System.Windows.Input.Key.D4: OpenHeuristicsPopUp(3); break;
+                case System.Windows.Input.Key.D5: OpenHeuristicsPopUp(4); break;
+                case System.Windows.Input.Key.D6: OpenHeuristicsPopUp(5); break;
+            }
+        }
+
+        private void OpenHeuristicsPopUp(int metricIdx)
+        {
+            _heuristicsSel = metricIdx;
+            _heuristicsPopUpSel = 0;
+            _popUpBullets.Clear();
+            _popUpReasonings.Clear();
+            _popUpConfidences.Clear();
+
+            var h = Analytics.Heuristics;
+            bool enoughData = h.HasSufficientTemporalData;
+
+            switch (metricIdx)
+            {
+                case 0: // 1. Regional Power Shift
+                    _popUpTitle = "HEURISTIC METRIC 1 : REGIONAL POWER SHIFT (7-DAY DELTA)";
+                    if (!enoughData)
+                    {
+                        _popUpBullets.Add("NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE");
+                        _popUpReasonings.Add(new List<string> {
+                            "MATHEMATICAL PROCESS: Shift = Count_today - Count_7days_ago",
+                            "TEMPORAL LOGIC: Calculate a 7-day Delta. Positive = Build-up; Negative = Withdrawal.",
+                            $"CURRENT DATASET: {h.CampaignDaysProcessed} daily report snapshots processed.",
+                            "REQUIREMENT: Minimum 4 daily telemetry snapshots required before calculating temporal power shifts."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    foreach (var s in h.RegionalShifts)
+                    {
+                        string sign = s.ShiftDelta > 0 ? $"+{s.ShiftDelta}" : s.ShiftDelta.ToString();
+                        _popUpBullets.Add($"{s.RegionName,-32} Today: {s.CountToday,2} | 7D: {s.Count7DaysAgo,2} | Delta: {sign,3} [{s.Trend}]");
+                        var reason = new List<string> {
+                            $"REGION: {s.RegionName}",
+                            $"MATHEMATICAL ALGORITHM: Shift = Count_today ({s.CountToday}) - Count_7days_ago ({s.Count7DaysAgo}) = {sign}",
+                            $"ASSESSMENT: {s.Trend}",
+                            "EVIDENCE - CURRENT TURNS RECON / LOADOUTS:"
+                        };
+                        foreach (var v in s.TodayVessels.Take(8)) reason.Add($"  - {v}");
+                        if (s.TodayVessels.Count == 0) reason.Add("  - No vessels localized in region today.");
+                        _popUpReasonings.Add(reason);
+                        _popUpConfidences.Add(0);
+                    }
+                    break;
+
+                case 1: // 4. Minefield Mapping
+                    _popUpTitle = "HEURISTIC METRIC 4 : MINEFIELD MAPPING & HIT CORRIDORS";
+                    if (h.MineHitsChronological.Count == 0)
+                    {
+                        _popUpBullets.Add("NO CONFIRMED MINEFIELD ENCOUNTERS RECORDED IN COMBAT REPORTS.");
+                        _popUpReasonings.Add(new List<string> {
+                            "DATA SOURCE: combatreport (Query: 'encounters mine field at X,Y')",
+                            "ALGORITHM: Create a HashSet<(int x, int y)> of all mine-hit coordinates. Store date of each hit.",
+                            "STATUS: Zero minefield detonating actions detected in ingested reports."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var m in h.MineHitsChronological)
+                        {
+                            _popUpBullets.Add($"[{m.DateYYMMDD}] Hex {m.HexX,3},{m.HexY,-3} ({m.LocationName}) : {m.Details}");
+                            _popUpReasonings.Add(new List<string> {
+                                "TELEMETRY SOURCE: Combat Report Minefield Engagement Log",
+                                $"COORDINATES: Hex {m.HexX},{m.HexY} (Near {m.LocationName})",
+                                $"DATE OF ENCOUNTER: {m.DateYYMMDD}",
+                                $"RAW EXCERPT: {m.RawLine}",
+                                "TACTICAL INTERPRETATION: Active Japanese passage carved through mine barrier."
+                            });
+                            _popUpConfidences.Add(0);
+                        }
+                    }
+                    break;
+
+                case 2: // 5. Submarine Migration
+                    _popUpTitle = "HEURISTIC METRIC 5 : SUBMARINE MIGRATION (DAILY CENTROIDS)";
+                    if (h.SubmarineCentroids.Count == 0)
+                    {
+                        _popUpBullets.Add("NO SUBMARINE CONTACTS LOCALIZED FOR CENTROID CALCULATION.");
+                        _popUpReasonings.Add(new List<string> {
+                            "DATA SOURCE: asigint (SS) + Combat Events Submarine sightings",
+                            "ALGORITHM: Group SS sightings by date. Centroid = (AvgX, AvgY) per day.",
+                            "STATUS: Zero SS sightings logged in telemetry."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var c in h.SubmarineCentroids)
+                        {
+                            _popUpBullets.Add($"[{c.DateYYMMDD}] Centroid: ({c.CentroidX:F1}, {c.CentroidY:F1}) across {c.ContactCount} SS contacts");
+                            var rList = new List<string> {
+                                $"DATE: {c.DateYYMMDD}",
+                                $"CENTROID COORDINATE: ({c.CentroidX:F2}, {c.CentroidY:F2})",
+                                $"CONTACTS IN CLUSTER: {c.ContactCount} submarine sighting events",
+                                "EVIDENCE SIGHTINGS:"
+                            };
+                            foreach (var sc in c.Contacts.Take(6)) rList.Add($"  - [{sc.Source}] Hex {sc.HexX},{sc.HexY} : {sc.SubmarineName}");
+                            _popUpReasonings.Add(rList);
+                            _popUpConfidences.Add(0);
+                        }
+                        foreach (var v in h.SubmarineVectors)
+                        {
+                            _popUpBullets.Add($"VECTOR [{v.FromDate} -> {v.ToDate}]: Drift dX={v.DeltaX:+0.0;-0.0;0}, dY={v.DeltaY:+0.0;-0.0;0} | {v.DistanceHex:F1} Hex Brg {v.BearingDeg:000}° ({v.CompassHeading})");
+                            _popUpReasonings.Add(new List<string> {
+                                "MATHEMATICAL PROCESS: Day-to-Day Centroid Delta (v = Pos_today - Pos_prev)",
+                                $"INTERVAL: {v.FromDate} to {v.ToDate}",
+                                $"DISPLACEMENT: ΔX = {v.DeltaX:+0.00;-0.00;0.00}, ΔY = {v.DeltaY:+0.00;-0.00;0.00}",
+                                $"DISTANCE: {v.DistanceHex:F1} hexes ({v.DistanceHex * 40.0:F0} NM)",
+                                $"STRATEGIC HEADING: {v.BearingDeg:000}° ({v.CompassHeading})"
+                            });
+                            _popUpConfidences.Add(0);
+                        }
+                    }
+                    break;
+
+                case 3: // 46. Intelligence Blindspots
+                    _popUpTitle = "HEURISTIC METRIC 46 : INTELLIGENCE BLINDSPOTS (COMBAT VS SIGINT)";
+                    if (h.IntelligenceBlindspots.Count == 0)
+                    {
+                        _popUpBullets.Add("NO COMBAT BLINDSPOTS DETECTED (ALL ACTION HEXES HAD PRIOR SURVEILLANCE).");
+                        _popUpReasonings.Add(new List<string> {
+                            "DATA SOURCES: combatreport vs asigint / sightings (3-day lookback)",
+                            "ALGORITHM: If Combat_Events > 0 AND Sighting_Events == 0 in prior 3 days -> Blindspot.",
+                            "ASSESSMENT: All tactical engagements were preceded by SIGINT or visual reconnaissance."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var b in h.IntelligenceBlindspots)
+                        {
+                            _popUpBullets.Add($"[{b.DateYYMMDD}] Hex {b.HexX,3},{b.HexY,-3} ({b.LocationName}) : Unheralded Combat Engagement");
+                            _popUpReasonings.Add(new List<string> {
+                                "CLASSIFICATION: CRITICAL INTELLIGENCE BLINDSPOT",
+                                $"LOCATION: Hex {b.HexX},{b.HexY} ({b.LocationName}) on {b.DateYYMMDD}",
+                                $"COMBAT EVENT EXCERPT: {b.Description}",
+                                "SURVEILLANCE STATUS: Zero prior SIGINT transmissions or air recon sightings within prior 3 days.",
+                                "STRATEGIC IMPACT: Hostile forces achieved tactical surprise on unmonitored approach vector."
+                            });
+                            _popUpConfidences.Add(0);
+                        }
+                    }
+                    break;
+
+                case 4: // 49. Axis of Advance
+                    _popUpTitle = "HEURISTIC METRIC 49 : AXIS OF ADVANCE & STRATEGIC DRIFT";
+                    if (h.FleetMeans.Count == 0)
+                    {
+                        _popUpBullets.Add("NO JAPANESE VESSEL CONCENTRATIONS DETECTED TO COMPUTE AXIS OF ADVANCE.");
+                        _popUpReasonings.Add(new List<string> {
+                            "DATA SOURCE: asigint (All ships) + visual sightings",
+                            "ALGORITHM: Mean coordinate (AvgX, AvgY) per day. Vector V = Pos_today - Pos_yesterday.",
+                            "STRATEGIC DRIFT: Average of the last 3 vectors."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var m in h.FleetMeans)
+                        {
+                            _popUpBullets.Add($"[{m.DateYYMMDD}] Mean Fleet Center: ({m.MeanX:F1}, {m.MeanY:F1}) | {m.TotalVesselsCounted} vessels counted");
+                            var r = new List<string> {
+                                $"DATE: {m.DateYYMMDD}",
+                                $"FLEET MEAN COORDINATES: ({m.MeanX:F2}, {m.MeanY:F2})",
+                                $"TOTAL SIGHTED / DESTINATION SHIPS: {m.TotalVesselsCounted}",
+                                "SAMPLE CONTRIBUTING CONTACTS:"
+                            };
+                            foreach (var cu in m.ContributingUnits.Take(6)) r.Add($"  - {cu}");
+                            _popUpReasonings.Add(r);
+                            _popUpConfidences.Add(0);
+                        }
+                        if (h.StrategicDrift.DistanceHex > 0.001)
+                        {
+                            var sd = h.StrategicDrift;
+                            _popUpBullets.Add($"STRATEGIC DRIFT: Vector dX={sd.DeltaX:+0.0;-0.0;0}, dY={sd.DeltaY:+0.0;-0.0;0} | {sd.DistanceHex:F1} Hex/Day Heading {sd.BearingDeg:000}° ({sd.CompassHeading})");
+                            _popUpReasonings.Add(new List<string> {
+                                "ALGORITHM: 3-Day Rolling Average of Step Vectors (Strategic Drift)",
+                                $"DRIFT VECTOR: ΔX = {sd.DeltaX:+0.00;-0.00;0.00}, ΔY = {sd.DeltaY:+0.00;-0.00;0.00}",
+                                $"ADVANCE RATE: {sd.DistanceHex:F1} hexes/day ({sd.DistanceHex * 40.0:F0} NM/day)",
+                                $"MAIN AXIS BEARING: {sd.BearingDeg:000}° ({sd.CompassHeading})",
+                                "OPERATIONAL CONCLUSION: Sustained offensive thrust along this strategic axis."
+                            });
+                            _popUpConfidences.Add(0);
+                        }
+                    }
+                    break;
+
+                case 5: // 50. Operational Tempo (OPTEMPO)
+                    _popUpTitle = "HEURISTIC METRIC 50 : OPERATIONAL TEMPO (OPTEMPO)";
+                    if (h.DailyOptempo.Count == 0)
+                    {
+                        _popUpBullets.Add("NO COMBAT REPORT ENGAGEMENT SEPARATORS DETECTED.");
+                        _popUpReasonings.Add(new List<string> {
+                            "DATA SOURCE: All files (combatreport '---' separators)",
+                            "ALGORITHM: Count total '---' separators per day. Rolling 3-day average = sum(events_last_3_days) / 3.",
+                            "STATUS: No combat reports available."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var opt in h.DailyOptempo)
+                        {
+                            int barLen = Math.Min(20, opt.SeparatorCount / 2);
+                            string bar = new string('█', barLen) + new string('░', Math.Max(0, 20 - barLen));
+                            _popUpBullets.Add($"[{opt.DateYYMMDD}] Engagements: {opt.SeparatorCount,2} [{bar}] 3D-Avg: {opt.Rolling3DayAvg:F1}");
+                            var r = new List<string> {
+                                $"OPERATIONAL DATE: {opt.DateYYMMDD}",
+                                $"TOTAL ENGAGEMENTS (--- SEPARATORS): {opt.SeparatorCount}",
+                                $"ROLLING 3-DAY AVERAGE TEMPO: {opt.Rolling3DayAvg:F2} engagements/day",
+                                "ENGAGEMENT SAMPLES:"
+                            };
+                            foreach (var s in opt.EngagementsSample) r.Add($"  - {s}");
+                            if (opt.EngagementsSample.Count == 0) r.Add("  - Multiple combat operations resolved.");
+                            _popUpReasonings.Add(r);
+                            _popUpConfidences.Add(0);
+                        }
+                    }
+                    break;
+            }
+
+            _popUpCallerState = ScreenState.Heuristics;
+            _state = ScreenState.HeuristicsPopUp;
+            RenderCurrentScreen();
+        }
+
+        private void HandleHeuristicsPopUp(System.Windows.Input.Key key)
+        {
+            int total = _popUpBullets.Count;
+            switch (key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    _state = ScreenState.Heuristics;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Up:
+                    if (total > 0) { _heuristicsPopUpSel = Math.Max(0, _heuristicsPopUpSel - 1); RenderCurrentScreen(); }
+                    break;
+
+                case System.Windows.Input.Key.Down:
+                    if (total > 0) { _heuristicsPopUpSel = Math.Min(total - 1, _heuristicsPopUpSel + 1); RenderCurrentScreen(); }
+                    break;
+
+                case System.Windows.Input.Key.Tab:
+                    if (total > 0) { _heuristicsPopUpSel = (_heuristicsPopUpSel + 1) % total; RenderCurrentScreen(); }
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    if (total > 0 && _heuristicsPopUpSel < total)
+                        OpenReasoningModal(_popUpBullets[_heuristicsPopUpSel],
+                                           _popUpReasonings[_heuristicsPopUpSel],
+                                           0,
+                                           ScreenState.HeuristicsPopUp);
+                    break;
+            }
+        }
+
+        private string BuildHeuristicsScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : HEURISTICS & LOGICAL BLUEPRINTS", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "MATHEMATICAL HEURISTIC DOMAINS // TEMPORAL NAVAL INTENTIONS");
+            sb.AppendLine();
+
+            var h = Analytics.Heuristics;
+            bool enoughData = h.HasSufficientTemporalData;
+            string earlyWarning = enoughData ? "" : " [!] DATA ACCUMULATING (< 4 DAYS)";
+
+            string[] titles =
+            {
+                "1. Regional Power Shift (7-Day Delta)",
+                "4. Minefield Mapping (Encounters & Path)",
+                "5. Submarine Migration (Centroid Vectors)",
+                "46. Intelligence Blindspots (Combat vs SIGINT)",
+                "49. Axis of Advance (Strategic Drift)",
+                "50. Operational Tempo (OPTEMPO 3D-Avg)"
+            };
+
+            string[] summaries = new string[6];
+
+            // Summary 1
+            if (!enoughData)
+                summaries[0] = "NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE";
+            else
+            {
+                var topBuild = h.RegionalShifts.OrderByDescending(s => s.ShiftDelta).FirstOrDefault();
+                summaries[0] = topBuild != null && topBuild.ShiftDelta != 0
+                    ? $"Primary Shift: {topBuild.RegionName} ({topBuild.Trend})"
+                    : "Regional power distribution stable across all theaters";
+            }
+
+            // Summary 4
+            summaries[1] = h.MineHitsChronological.Count > 0
+                ? $"{h.MineHitCoordinates.Count} minefield hexes mapped across {h.MineHitsChronological.Count} encounter events"
+                : "No minefield encounter coordinates logged in combat reports";
+
+            // Summary 5
+            summaries[2] = h.SubmarineCentroids.Count > 0
+                ? $"{h.SubmarineCentroids.Count} daily SS centroids computed across {h.SubmarineVectors.Count} migration vectors"
+                : "No submarine sightings logged for centroid vectorization";
+
+            // Summary 46
+            summaries[3] = h.IntelligenceBlindspots.Count > 0
+                ? $"{h.IntelligenceBlindspots.Count} combat engagements occurred with ZERO prior 3-day SIGINT/sightings"
+                : "All combat hexes had prior intelligence coverage (0 blindspots)";
+
+            // Summary 49
+            if (h.StrategicDrift.DistanceHex > 0.001)
+                summaries[4] = $"Strategic Drift: Heading {h.StrategicDrift.BearingDeg:000}° ({h.StrategicDrift.CompassHeading}) at {h.StrategicDrift.DistanceHex:F1} hexes/day";
+            else if (h.FleetMeans.Count > 0)
+                summaries[4] = $"Fleet mean localized at ({h.FleetMeans.Last().MeanX:F1},{h.FleetMeans.Last().MeanY:F1}); drift accumulating";
+            else
+                summaries[4] = "Insufficient vessel coordinates to calculate advance axis";
+
+            // Summary 50
+            if (h.DailyOptempo.Count > 0)
+            {
+                var latest = h.DailyOptempo.Last();
+                summaries[5] = $"Today: {latest.SeparatorCount} engagements | 3-Day Rolling OPTEMPO: {latest.Rolling3DayAvg:F1} events/day";
+            }
+            else
+                summaries[5] = "No combat reports found to compute operational tempo";
+
+            for (int i = 0; i < titles.Length; i++)
+            {
+                string numStr = $"[{i + 1}] ";
+                string titleStr = titles[i];
+                string sumStr = summaries[i];
+
+                if (i == _heuristicsSel)
+                {
+                    sb.AppendLine($"    > {numStr}{titleStr} <");
+                    sb.AppendLine($"        STATUS: {sumStr}");
+                }
+                else
+                {
+                    sb.AppendLine($"      {numStr}{titleStr}");
+                    sb.AppendLine($"        STATUS: {sumStr}");
+                }
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("    >> Press [1-6] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
+            AppendFooter(sb, "[UP/DOWN] Select Metric", "[ENTER] Open Findings", "PRESS ESC TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildHeuristicsPopUp()
+        {
+            const int boxWidth = 78;
+            const int innerWidth = 74;
+            const int maxVisible = 11;
+
+            var sb = new StringBuilder();
+            string turnInfo = TurnInfo();
+            string rightHeader = string.IsNullOrEmpty(turnInfo)
+                ? $"ITEMS: {_popUpBullets.Count}"
+                : $"{turnInfo} | ITEMS: {_popUpBullets.Count}";
+
+            AppendHeader(sb, _popUpTitle, rightHeader);
+            sb.AppendLine();
+            AppendSectionHeader(sb, "TRAVERSE FINDINGS WITH ARROW KEYS | PRESS [ENTER] TO VERIFY RAW TELEMETRY");
+
+            int total = _popUpBullets.Count;
+            int sel = _heuristicsPopUpSel;
+            int startIdx = sel >= maxVisible ? sel - maxVisible + 1 : 0;
+
+            string shortTitle = _popUpTitle.Length > 62 ? _popUpTitle.Substring(0, 59) + "..." : _popUpTitle;
+            string topPrefix = $"╔══ [ {shortTitle} ] ";
+            int rem = boxWidth - topPrefix.Length - 1;
+            sb.AppendLine(topPrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            for (int i = 0; i < maxVisible; i++)
+            {
+                int idx = startIdx + i;
+                if (idx < total)
+                {
+                    string prefix = (idx == sel) ? "> " : "  ";
+                    string content = prefix + _popUpBullets[idx];
+                    content = PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth);
+                    sb.AppendLine($"║ {content} ║");
+                }
+                else
+                {
+                    sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                }
+            }
+
+            sb.AppendLine("╚" + new string('═', boxWidth - 2) + "╝");
+            sb.AppendLine();
+            sb.AppendLine("    >> Press [ENTER] to view granular telemetry evidence & reasoning for this finding.");
+            AppendFooter(sb, "[UP/DOWN] Traverse Findings", "[ENTER] View Raw Evidence", "PRESS ESC TO RETURN");
+            return sb.ToString();
+        }
+
         // ── Reasoning Modal ──────────────────────────────────────────────────
         private void OpenReasoningModal(string bulletTitle, List<string> rawLines, int confPct, ScreenState returnTo)
         {
@@ -1941,6 +2388,8 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.PredictiveModels        => BuildPredictiveModelsScreen(),
                 ScreenState.PredModelPopUp          => BuildNavigablePopUp(),
                 ScreenState.ReasoningModal          => BuildReasoningModal(),
+                ScreenState.Heuristics              => BuildHeuristicsScreen(),
+                ScreenState.HeuristicsPopUp         => BuildHeuristicsPopUp(),
                 ScreenState.WikiTopicMenu           => BuildWikiTopicMenuScreen(),
                 ScreenState.WikiArticleView         => BuildWikiArticleViewScreen(),
                 ScreenState.FieldManualMenu         => BuildFieldManualMenuScreen(),
@@ -2373,12 +2822,7 @@ namespace MUTHUR6000.Core.Controller
             AppendHeader(sb, "WAR ROOM : THEATER COMBAT INFORMATION CENTER", TurnInfo());
             sb.AppendLine();
             AppendSectionHeader(sb, "W A R   R O O M   P R I M A R Y   S C R E E N");
-
-            const int bw = 74;
-            sb.AppendLine("    ╔══════════════════════════════════════════════════════════════════════════╗");
-            sb.AppendLine("    ║                         WAR ROOM PRIMARY SCREEN                          ║");
-            sb.AppendLine("    ╠══════════════════════════════════════════════════════════════════════════╣");
-            sb.AppendLine("    ║" + new string(' ', bw) + "║");
+            sb.AppendLine();
 
             string[] menuLabels =
             {
@@ -2386,33 +2830,21 @@ namespace MUTHUR6000.Core.Controller
                 "SIGINT Map",
                 "TBD",
                 "TPIE Warning Dashboard",
-                "Predictive Models Sub-Menu"
+                "Predictive Models Sub-Menu",
+                "Heuristics (Logical Blueprints)"
             };
 
             for (int i = 0; i < menuLabels.Length; i++)
             {
-                string optText = $"[{i + 1}] {menuLabels[i]}";
-                string rowContent;
+                string optText = $"[{i + 1}]  {menuLabels[i]}";
                 if (i == _warRoomSel)
-                {
-                    string selText = $"> {optText} <";
-                    int pad = bw - 4 - selText.Length;
-                    rowContent = "   " + selText + new string(' ', Math.Max(0, pad));
-                }
+                    sb.AppendLine($"    > {optText} <");
                 else
-                {
-                    int pad = bw - 3 - optText.Length;
-                    rowContent = "   " + optText + new string(' ', Math.Max(0, pad));
-                }
-                if (rowContent.Length > bw) rowContent = rowContent.Substring(0, bw);
-                sb.AppendLine($"    ║{rowContent}║");
-                sb.AppendLine("    ║" + new string(' ', bw) + "║");
+                    sb.AppendLine($"      {optText}");
+                sb.AppendLine();
             }
 
-            sb.AppendLine("    ╚══════════════════════════════════════════════════════════════════════════╝");
-            sb.AppendLine();
-            sb.AppendLine("    >> Press [1-5] or [ENTER] to open topic sub-menu. All pop-ups support cursor keys.");
-
+            sb.AppendLine("    >> Press [1-6] or [ENTER] to open topic sub-menu. All pop-ups support cursor keys.");
             AppendFooter(sb, "[UP/DOWN] Select Topic", "[ENTER] Open Sub-Menu", "PRESS ESC TO RETURN");
             return sb.ToString();
         }

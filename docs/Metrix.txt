@@ -1,0 +1,110 @@
+
+ 3. Escort Desnity: Daily rate of change in escort density around naval bases.
+
+
+ 5. Coordination Symmetry: Tracking if raids in two different regions (e.g., Philippines and Malaya) happen within the same 24-hour window. 
+
+
+
+ 6. Raid Size Escalation: The slope of the increase in aircraft numbers per raid over a 5-day period.
+ 7. Divergence of Intent: Difference between the number of ships "reported" in asigint vs. ships actually "engaging" in combatreport.
+ 8. Port-to-Front Pipeline: Time elapsed from a ship leaving a home port to its first combat action.
+ 9. Logistical Shadow: Tracking the movement of AOs (Tankers) to predict the maximum operational range of a TF.
+10. The "Bait" Pattern: Frequency of small raids that draw CAP away from a secondary, larger target.
+
+The "Efficiency" Metrics (Analyzing Enemy Skill/State)
+
+11. Kill-to-Loss Ratio Slope: Is the Japanese attrition rate improving or worsening over time?
+12. Targeting Accuracy Drift: Change in the ratio of "hits" to "shots fired" per day.
+13. Fatigue Accumulation Rate: How many turns of continuous combat it takes before "Fatigue" modifiers appear.
+
+
+The "Strategic" Metrics (High-Level Intent)
+
+21. Center of Gravity Shift: The movement of the "mean coordinate" of all Japanese activity.
+22. Offensive Breath: Number of unique hexes engaged per turn (Narrow/Deep vs. Wide/Shallow).
+23. Operational Tempo (OPTEMPO) Volatility: The variance in "Events per Turn" (Stable vs. Erratic).
+24. Resource Drain Rate: Estimated total Japanese air/ship losses per week.
+25. Sector Saturation: When a region reaches a peak density of units before a "push" begins. 
+27. Strategic Pivot Latency: Time elapsed between the end of one offensive and the start of another. How does one define an offensive ? find a way to define an offensive both naval and air
+28. Territorial Gain Velocity: Hexes captured per day, plotted against troop losses. There are regions described in the base location with an x y for each base under a certain region. u can base this on that grouping.
+30. Causal Linkage: Correlation between asigint sightings of TFs and subsequent combatreport naval battles.
+
+The "Anomaly" Metrics (Spotting the Trap)
+32. Sighting Spike: A sudden 200%+ increase in sightings in a previously quiet sector.
+33. Raid-to-Sighting Mismatch: When air raids occur without any prior asigint warnings.
+34. Asymmetric Attack: A huge air raid followed by zero naval movement (or vice versa).
+37. Targeting Anomalies: Sudden attacks on low-value targets (suggests diversion).
+38. Escort-less Transports: Sighting of transports without escorts (suggests a trap or desperation).
+40. Coordinate "Clustering": High density of sightings in a single hex or a clustered hex around it ( 10 hexes ) over multiple days.
+
+
+The "Prediction" Metrics (AI-Ready)
+43. Probable Axis of Advance: Based on the vector of the last 3 movements.
+44. Likely Target Cluster: Based on the overlap of asigint ship positions and air raid targets.
+45. Force Concentration Index: Ratio of units in the "Main Effort" vs. "Secondary Efforts."
+47. Logistic Exhaustion Point: Estimating when a TF must retreat to refuel based on AO movement.
+50. Global Tempo Phase: Classifying the current state as "Build-up," "Strike," "Consolidation," or "Withdrawal." How will u do it
+50 Graph Suggestions for the Stat Screen
+
+Since you are vibe coding, these are the "Visuals" you should ask your AI to implement (using libraries like OxyPlot, LiveCharts, or ScottPlot for C#).
+
+Naval & Air Heatmaps (Spatial-Temporal)
+
+1. Activity Heatmap: Hexes colored by number of events (fade over time).
+2. TF Path Tracer: Lines connecting ship sightings over the last 5 days.
+3. Carrier "Danger Zone": A circle around known carriers that expands/contracts based on air range.
+4. Sighting Density Map: Bubbles that grow in size based on the number of ships reported.
+5. Air Raid Vector Map: Arrows pointing from Japanese airbases to target hexes.
+
+
+Trend Lines (The "What's Happening" Graphs)
+ 6. OPTEMPO Line: Events per turn (Y-axis) vs. Date (X-axis).
+ 7. Attrition Cross-Chart: Allied Losses vs. Japanese Losses over time.
+ 8. The "Tension" Curve: A combined line of asigint sightings + combatreport events.
+ 9. Troop Build-up Slope: Total Japanese troops in a region over time.
+10. Target Pivot Pie-Chart (Animated): Target distribution changing day-by-day.
+11. Detection Latency Line: Warning time (minutes) per raid.
+12. Assault Value Trend: Average Japanese Assault Value over time.
+13. Sighting vs. Combat Gap: The delta between sighting a TF and it fighting.
+14. Ship Class Distribution: Stacked area chart of BB, CA, CL, DD counts.
+15. Air Raid Size Histogram: Distribution of raid sizes (Small/Medium/Large).
+Correlation & Logic Graphs (The "Why it's Happening" Graphs)
+16. Raid-to-Capture Correlation: Air raid intensity vs. Cities captured.
+17. Weather vs. Activity Scatter: Weather severity (X) vs. Event count (Y).
+18. Transport-to-Escort Ratio Line: The "Invasion Indicator."
+19. Sighting Frequency vs. Combat Frequency: Overlapping lines to see if SIGINT is leading combat.
+20. Replacement Rate vs. Attrition Rate: When the lines cross, the enemy is failing.
+21. Fort Level Decay Curve: Fort level (Y) vs. Days of combat (X).
+22. Unit Freshness Chart: Fatigue levels across key Japanese divisions.
+23. Logistics Pipeline: Movement of AOs relative to Combat TFs.
+24. Air Base Saturation: Bar chart of raids per base.
+25. Targeting Heatmap: Which city/port is being hit the most?
+Strategic & Intelligence Overviews
+26. The "Offensive Phase" Gantt Chart: Marking periods of "Build-up" $\rightarrow$ "Strike."
+27. Regional Power Balance: A "Tug-of-War" bar showing Allied vs. Japanese ship counts.
+28. Axis of Advance Vector: A large arrow showing the mean movement of the enemy.
+29. SIGINT Coverage Map: Areas of the map with high vs. low reporting.
+30. Unit Life-span Bar: How long a Japanese unit survives before being destroyed.
+31. The "Silence" Gauge: A timer showing days since the last sighting in a sector.
+32. Raid Timing Clock: A 24-hour clock showing when raids typically hit.
+33. Combined Arms Index: A radar chart (Air, Sea, Land) showing enemy strength.
+34. Territorial Gain Velocity: A speedometer-style gauge.
+35. Enemy "Symmetry" Chart: Comparing activity in East vs. West sectors.
+Anomaly & Warning Visuals
+36. The "Red Flag" List: A scrolling list of anomalies (e.g., "TF 12 vanished!").
+37. Spike Detector: A line graph with markers where activity exceeded 2 standard deviations.
+38. The "Ghost" Chart: Sightings that never resulted in combat.
+39. Detection Gap Area: The shaded area between "First Sighting" and "Actual Attack."
+40. Anomaly Cluster Map: Clusters of "Odd" activity (e.g., high-value ships in low-value hexes).
+Tactical "Drill-Down" Visuals
+41. Unit-specific Loss Curve: Loss rate for a specific Division (e.g., 32nd Division).
+42. Ship-specific Damage Log: A health bar for known Japanese ships.
+43. Airbase Range Overlap: Overlapping circles showing which bases can hit a specific hex.
+44. Combat Odds Histogram: Distribution of assault odds (e.g., "Most attacks are 3:1").
+45. Casualty Breakdown Pie: Squads vs. Non-combat vs. Engineers.
+46. Time-to-Capture Gauge: Predicted days until a city falls.
+47. Sighting Confidence Score: A bar showing how "sure" we are of a ship's location.
+48. The "Pincer" Indicator: Lines showing two TFs moving toward one Allied hub.
+49. Engagement Duration: Average time an ASW search lasts before abandonment.
+50. Global Awareness Score: A single 0-100% "Awareness" metric based on all the above.

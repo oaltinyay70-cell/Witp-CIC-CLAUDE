@@ -174,6 +174,50 @@ namespace MUTHUR6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "IntelligenceSummary -> WarRoom on [ESC]");
 
+            // ── Test Suite 8: War Room Heuristics & Logical Blueprints ──────────────
+            Console.WriteLine("\n--- TEST SUITE 8: War Room Heuristics & Logical Blueprints ---");
+            var heuristics = analytics.Heuristics;
+            Assert(heuristics != null, "HeuristicsEngine instantiated on WarRoomAnalytics");
+
+            // Metric 1: Regional Power Shift
+            Assert(heuristics.RegionalShifts.Count >= 8, $"Regional Power Shift evaluated {heuristics.RegionalShifts.Count} strategic regions");
+            Assert(heuristics.HasSufficientTemporalData == false, "Temporal Guard active: < 4 days marked as data accumulating");
+
+            // Metric 4: Minefield Mapping
+            Assert(heuristics.MineHitCoordinates.Count > 0, $"Minefield Mapping identified {heuristics.MineHitCoordinates.Count} mine-hit hexes (HashSet)");
+            Assert(heuristics.MineHitsChronological.Count > 0, $"Chronological mine encounter log contains {heuristics.MineHitsChronological.Count} entries");
+
+            // Metric 5: Submarine Migration
+            Assert(heuristics.SubmarineCentroids.Count > 0, $"Submarine Migration computed {heuristics.SubmarineCentroids.Count} daily centroids");
+
+            // Metric 46: Intelligence Blindspots
+            Assert(heuristics.IntelligenceBlindspots.Count > 0, $"Intelligence Blindspots identified {heuristics.IntelligenceBlindspots.Count} unheralded combat engagements");
+
+            // Metric 49: Axis of Advance
+            Assert(heuristics.FleetMeans.Count > 0, $"Axis of Advance calculated {heuristics.FleetMeans.Count} daily fleet center positions");
+
+            // Metric 50: Operational Tempo
+            Assert(heuristics.DailyOptempo.Count > 0, $"Operational Tempo parsed {heuristics.DailyOptempo.Count} operational days of combatreport separators");
+
+            // Heuristics Screen & Pop-up Navigation
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D6);
+            Assert(screenManager.CurrentState == ScreenState.Heuristics, "WarRoomPrimary -> Heuristics on [6]");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
+            Assert(screenManager.CurrentState == ScreenState.HeuristicsPopUp, "Heuristics -> HeuristicsPopUp on [ENTER]");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
+            Assert(screenManager.CurrentState == ScreenState.ReasoningModal, "HeuristicsPopUp -> ReasoningModal (Raw Evidence) on [ENTER]");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+            Assert(screenManager.CurrentState == ScreenState.HeuristicsPopUp, "ReasoningModal -> HeuristicsPopUp on [ESC]");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+            Assert(screenManager.CurrentState == ScreenState.Heuristics, "HeuristicsPopUp -> Heuristics on [ESC]");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+            Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "Heuristics -> WarRoomPrimary on [ESC]");
+
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.MasterMenu, "WarRoom -> MasterMenu on [ESC]");
 

@@ -5,9 +5,9 @@ Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user
 ## What this is
 
 - Product name: **MUTHUR 6000 // WITP-CIC Intelligence System**
-- Active Milestone: **Alpha 4** (Active 2026-09-21 23:32 UTC+3)
-- Executable Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-1.exe`; build counter increments by 1 per compilation; zero mirrors/aliases)
-- Active Release Binary: `dist/witp-cic-muthur-alpha4-1.exe` (Single authoritative versioned binary; no mirrors)
+- Active Milestone: **Alpha 4** (Active 2026-09-22 19:35 UTC+3)
+- Executable Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-2.exe`; build counter increments by 1 per compilation; zero mirrors/aliases)
+- Active Release Binary: `dist/witp-cic-muthur-alpha4-2.exe` (Single authoritative versioned binary; no mirrors)
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`
 - Preserved Baseline: **Version 0.02 (Stable Alpha 1)** (Tagged `v0.02`, `v0.02-alpha.1`, branch `stable-alpha-1`, archive `backups/WITP-CIC2-v0.02-alpha1.zip`)
 - Rollback Guide: [`docs/how-to-rollback-to-alpha-1.md`](docs/how-to-rollback-to-alpha-1.md)

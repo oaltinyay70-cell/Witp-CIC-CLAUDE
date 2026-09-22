@@ -9,15 +9,16 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4`)** (2026-09-21 23:32 UTC+3)  
-- Release Executable: `dist/witp-cic-muthur-alpha4-1.exe` (Single authoritative versioned binary; zero mirrors)  
-- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-1.exe`; build counter increments by 1 on each new compilation)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4`)** (2026-09-22 19:35 UTC+3)  
+- Release Executable: `dist/witp-cic-muthur-alpha4-2.exe` (Single authoritative versioned binary; zero mirrors)  
+- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-2.exe`; build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
 - Clean Baseline Recovery Branch: `recovery-point-clean-baseline`  
 - Checkpoint Release Tag: `checkpoint-pre-major-addition-clean-baseline`  
 - Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-clean-baseline.zip` (88,791,871 bytes)  
 - Recovery & Rollback Guide: [`docs/recovery-point-clean-baseline.md`](recovery-point-clean-baseline.md)  
+- War Room Heuristics & The 6 Logical Blueprints: Dedicated analytical domain option `[6]` in War Room Primary Screen covering Metric 1 (Regional Power Shift across 10 regions), Metric 4 (Minefield Mapping), Metric 5 (Submarine Migration daily centroids), Metric 46 (Intelligence Blindspots), Metric 49 (Axis of Advance & Strategic Drift), and Metric 50 (Operational Tempo 3D-Avg). Includes temporal guard (< 4 days) and drill-down raw telemetry verification modals (2026-09-22 19:35 UTC+3).  
 - Turn Count Disambiguation & Multi-Day Ingestion: Pop-up headers show `Turn: <Date> (<N> Days Loaded) | ITEMS: <X>`; verified all 8 operational days in `D1.wic` across 60 files fully processed into models and sighting logs (2026-09-21 18:54 UTC+3).  
 - Naval Capabilities Integration: 7 functional classes & 40+ hull codes, Auxiliary / Tender Doctrine wired into Field Manual `1.15`/`1.16` and predictive models (2026-09-21 13:27 UTC+3).  
 - Base Location Registry Integration: 1,330 authentic bases across 71 regions with $(X, Y)$ coordinates, maritime housing constraints, dynamic controller mutations, and predictive models grounding (2026-09-21 14:45 UTC+3).  
@@ -30,7 +31,7 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - **Alpha 2 Build 5 Recovery Point:** Tag: `checkpoint-pre-major-addition-alpha2-build5` | Branch: `recovery-point-alpha2-build5` | Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha2-build5.zip` (See [`docs/recovery-point-alpha2-build5.md`](recovery-point-alpha2-build5.md))  
 - **Version 0.02 (Stable Alpha 1):** Tags: `v0.02`, `v0.02-alpha.1` | Branch: `stable-alpha-1` | Archive: `backups/WITP-CIC2-v0.02-alpha1.zip` (See [`docs/how-to-rollback-to-alpha-1.md`](how-to-rollback-to-alpha-1.md))  
 
-**Runtime note (2026-09-21):** Standalone executable `dist/witp-cic-muthur-alpha4-1.exe`. Continuous Unicode box frames program-wide. Vault files: `C:\WitP-CIC\Campaigns\*.wic`.
+**Runtime note (2026-09-22):** Standalone executable `dist/witp-cic-muthur-alpha4-2.exe`. Continuous Unicode box frames program-wide. Vault files: `C:\WitP-CIC\Campaigns\*.wic`.
 
 ---
 

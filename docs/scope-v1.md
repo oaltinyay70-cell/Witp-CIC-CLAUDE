@@ -10,9 +10,22 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-22 19:35 UTC+3: **War Room Heuristics Domain & The 6 Logical Blueprints (Ozgur):**
+  1. **Dedicated Heuristics Domain:** Established a new analytical domain accessible as option `[6]` on the War Room Primary Screen.
+  2. **6 Logical Blueprints Implemented:**
+     - **Metric 1 (Regional Power Shift):** Granular tracking across 10 strategic regions (Malaya, DEI, Philippines, New Guinea, Solomon Islands, South Pacific, Home Islands, China/Manchuria/Formosa, Mandates, Central Pacific) computing 7-day power shift deltas.
+     - **Metric 4 (Minefield Mapping):** HashSet-based spatial deduplication of minefield hits extracted from `combatreport`, tracking chronological passage through mine barriers.
+     - **Metric 5 (Submarine Migration):** Unified submarine contact aggregation across `asigint`, `Combat_Events`, and `combatreport` calculating daily spatial centroids and migration vectors.
+     - **Metric 46 (Intelligence Blindspots):** Cross-correlation of combat engagements against 3-day prior SIGINT/sightings to isolate unmonitored approach axes.
+     - **Metric 49 (Axis of Advance):** Fleet mean center calculations and 3-day rolling Strategic Drift vector computation.
+     - **Metric 50 (Operational Tempo):** Rolling 3-day OPTEMPO calculation based on `combatreport` `---` engagement separator frequency.
+  3. **Temporal Guard (< 4 Days Old):** Added automatic guard displaying `"NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE"` when fewer than 4 daily reports exist.
+  4. **Drill-Down Evidence Modals:** Interactive pop-up modals disclosing mathematical derivations and raw telemetry excerpts for independent user verification.
+  5. **Clean War Room Primary Styling:** Removed the outer text box surrounding choices on the War Room Primary Screen, presenting options cleanly and directly.
+
 - 2026-09-21 23:58 UTC+3: **Elimination of Redundant Binary Mirrors & Aliases (Ozgur):**
   1. **Strict Single-Binary Deliverable:** Permanently eliminated generation of duplicate mirror binaries (`WitP-CIC.exe`, `MUTHUR6000.exe`).
-  2. **Authoritative Versioned Output Only:** Every release build must output exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`).
+  2. **Authoritative Versioned Output Only:** Every release build must output exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`, `dist/witp-cic-muthur-alpha4-2.exe`).
 
 - 2026-09-21 23:51 UTC+3: **Comprehensive Repository Reference & Current Reality Alignment (Ozgur):**
   1. **Documentation Alignment:** Scanned all project documentation, in-app Wiki text, and configuration files, updating all outdated references to the old repository (`oaltinyay70-cell/WITP-CIC2`) and workspace paths (`Witp-CIC2`) to reflect the current active reality.

@@ -708,4 +708,21 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 
 **Source:** Ozgur directive (2026-09-22 18:16 UTC+3).
 
+## 65. War Room Heuristics Domain & 6 Logical Blueprints (2026-09-22 19:30 UTC+3)
+
+**Decision:**
+1. **Heuristics Domain Architecture:** Established a dedicated analytical subsystem `HeuristicsEngine` accessible as option `[6]` in the War Room Primary Screen.
+2. **The 6 Logical Blueprints:**
+   - **Metric 1 (Regional Power Shift):** Groups ships across 10 granular strategic theaters (Malaya, DEI, Philippines, New Guinea, Solomon Islands, South Pacific, Home Islands, China/Manchuria/Formosa, Mandates, Central Pacific) and computes 7-day deltas (\(\text{Shift} = \text{Count}_{\text{today}} - \text{Count}_{7\text{days\_ago}}\)).
+   - **Metric 4 (Minefield Mapping):** Scans combat reports for `encounters mine field at X,Y` and `hits Type ... Mine at`, indexing into `HashSet<(int X, int Y)>` and logging chronological encounters with ship damage.
+   - **Metric 5 (Submarine Migration):** Extracts submarine sightings across `asigint` and combat telemetry, calculates daily spatial centroids \((\text{AvgX}, \text{AvgY})\), and derives day-to-day migration step vectors with compass bearings.
+   - **Metric 46 (Intelligence Blindspots):** Correlates `combatreport` tactical actions against preceding 3-day SIGINT/sightings to flag unheralded hostile operations.
+   - **Metric 49 (Axis of Advance):** Calculates daily fleet mean positions and a 3-day averaged Strategic Drift vector \(\vec{V}\).
+   - **Metric 50 (Operational Tempo):** Evaluates daily `combatreport` `---` engagement separators and computes a rolling 3-day average OPTEMPO.
+3. **Temporal Guard (< 4 Days Old):** If campaign history has fewer than 4 days of reports, the engine displays: `"NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE"`.
+4. **Drill-Down Verification Modals:** Every metric opens a dedicated navigable pop-up allowing the user to inspect raw telemetry lines, dates, and coordinates.
+5. **Clean Primary Menu Styling:** The outer text box surrounding choices on the War Room Primary Screen is eliminated, rendering options directly with standard header and section rules.
+
+**Source:** Ozgur directives (2026-09-22 19:20 & 19:28 UTC+3).
+
 

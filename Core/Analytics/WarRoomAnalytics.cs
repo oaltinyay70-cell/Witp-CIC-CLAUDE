@@ -330,6 +330,7 @@ namespace MUTHUR6000.Core.Analytics
         public IReadOnlyList<string> AlertFeed => _alertFeed;
         public IReadOnlyList<string> EventLog => _eventLog;
         public IReadOnlyList<DiscoveredEntity> DiscoveredEntities => _discoveredEntities;
+        public HeuristicsEngine Heuristics { get; } = new();
 
         public bool AnalyzeCampaign(IngestionManifest manifest)
         {
@@ -390,6 +391,7 @@ namespace MUTHUR6000.Core.Analytics
             ComputeModelF();
             ComputeModelG();
             BuildGeospatialAndDossier(manifest);
+            Heuristics.Analyze(manifest, _unitLoadouts, _sightings, _radioIntercepts, _confidenceReports);
 
             return true;
         }
