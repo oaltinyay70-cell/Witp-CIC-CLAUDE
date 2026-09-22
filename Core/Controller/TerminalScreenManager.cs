@@ -1471,13 +1471,20 @@ namespace MUTHUR6000.Core.Controller
                         string sign = s.ShiftDelta > 0 ? $"+{s.ShiftDelta}" : s.ShiftDelta.ToString();
                         _popUpBullets.Add($"{s.RegionName,-32} Today: {s.CountToday,2} | 7D: {s.Count7DaysAgo,2} | Delta: {sign,3} [{s.Trend}]");
                         var reason = new List<string> {
+                            $"TELEMETRY SOURCE: asigint & Operations Reports ({s.RegionName} Sector)",
                             $"REGION: {s.RegionName}",
-                            $"MATHEMATICAL ALGORITHM: Shift = Count_today ({s.CountToday}) - Count_7days_ago ({s.Count7DaysAgo}) = {sign}",
-                            $"ASSESSMENT: {s.Trend}",
-                            "EVIDENCE - CURRENT TURNS RECON / LOADOUTS:"
+                            $"MATHEMATICAL FORMULATION: Shift = Count_today ({s.CountToday}) - Count_7days_ago ({s.Count7DaysAgo}) = {sign}",
+                            "TEMPORAL LOGIC: 7-day lookback delta. Positive = Build-up (+); Negative = Withdrawal (-); 0 = Stable.",
+                            $"TACTICAL ASSESSMENT: Regional force posture evaluated as {s.Trend}.",
+                            "EVIDENCE - ACTIVE SIGHTINGS / TRANSPORT LOADOUTS (TODAY):"
                         };
-                        foreach (var v in s.TodayVessels.Take(8)) reason.Add($"  - {v}");
-                        if (s.TodayVessels.Count == 0) reason.Add("  - No vessels localized in region today.");
+                        foreach (var v in s.TodayVessels.Take(10)) reason.Add($"  - [TODAY] {v}");
+                        if (s.TodayVessels.Count == 0) reason.Add("  - No naval vessels localized in region today.");
+                        if (s.BaselineVessels.Count > 0)
+                        {
+                            reason.Add("EVIDENCE - BASELINE DISPOSITIONS (7 DAYS AGO):");
+                            foreach (var bv in s.BaselineVessels.Take(6)) reason.Add($"  - [BASELINE] {bv}");
+                        }
                         _popUpReasonings.Add(reason);
                         _popUpConfidences.Add(0);
                     }
@@ -1489,9 +1496,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         _popUpBullets.Add("NO CONFIRMED MINEFIELD ENCOUNTERS RECORDED IN COMBAT REPORTS.");
                         _popUpReasonings.Add(new List<string> {
-                            "DATA SOURCE: combatreport (Query: 'encounters mine field at X,Y')",
-                            "ALGORITHM: Create a HashSet<(int x, int y)> of all mine-hit coordinates. Store date of each hit.",
-                            "STATUS: Zero minefield detonating actions detected in ingested reports."
+                            "TELEMETRY SOURCE: combatreport files (Filter: 'encounters mine field at X,Y')",
+                            "MATHEMATICAL FORMULATION: HashSet<(int X, int Y)> spatial deduplication with chronological ordering",
+                            "TACTICAL ASSESSMENT: Zero minefield detonating actions detected in ingested reports."
                         });
                         _popUpConfidences.Add(0);
                     }
@@ -1503,9 +1510,10 @@ namespace MUTHUR6000.Core.Controller
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: Combat Report Minefield Engagement Log",
                                 $"COORDINATES: Hex {m.HexX},{m.HexY} (Near {m.LocationName})",
-                                $"DATE OF ENCOUNTER: {m.DateYYMMDD}",
+                                $"DATE: {m.DateYYMMDD}",
                                 $"RAW EXCERPT: {m.RawLine}",
-                                "TACTICAL INTERPRETATION: Active Japanese passage carved through mine barrier."
+                                "MATHEMATICAL FORMULATION: Coordinate (X,Y) registered in HashSet unique spatial barrier set",
+                                "TACTICAL ASSESSMENT: Hostile naval passage through Allied defensive mine barrier."
                             });
                             _popUpConfidences.Add(0);
                         }
@@ -1518,9 +1526,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         _popUpBullets.Add("NO SUBMARINE CONTACTS LOCALIZED FOR CENTROID CALCULATION.");
                         _popUpReasonings.Add(new List<string> {
-                            "DATA SOURCE: asigint (SS) + Combat Events Submarine sightings",
-                            "ALGORITHM: Group SS sightings by date. Centroid = (AvgX, AvgY) per day.",
-                            "STATUS: Zero SS sightings logged in telemetry."
+                            "TELEMETRY SOURCE: asigint (SS) + Combat Events Submarine sightings",
+                            "MATHEMATICAL FORMULATION: X_bar = (1/N) * sum(X_i), Y_bar = (1/N) * sum(Y_i)",
+                            "TACTICAL ASSESSMENT: Zero SS sightings logged in telemetry."
                         });
                         _popUpConfidences.Add(0);
                     }
@@ -1530,12 +1538,13 @@ namespace MUTHUR6000.Core.Controller
                         {
                             _popUpBullets.Add($"[{c.DateYYMMDD}] Centroid: ({c.CentroidX:F1}, {c.CentroidY:F1}) across {c.ContactCount} SS contacts");
                             var rList = new List<string> {
+                                "TELEMETRY SOURCE: asigint & Operational Submarine Sightings Log",
                                 $"DATE: {c.DateYYMMDD}",
-                                $"CENTROID COORDINATE: ({c.CentroidX:F2}, {c.CentroidY:F2})",
-                                $"CONTACTS IN CLUSTER: {c.ContactCount} submarine sighting events",
-                                "EVIDENCE SIGHTINGS:"
+                                $"MATHEMATICAL FORMULATION: Centroid (X_bar, Y_bar) = ({c.CentroidX:F2}, {c.CentroidY:F2}) computed across N={c.ContactCount} contacts",
+                                $"TACTICAL ASSESSMENT: Daily spatial center of mass for hostile submarine operations.",
+                                "EVIDENCE SIGHTINGS & INTERCEPTS:"
                             };
-                            foreach (var sc in c.Contacts.Take(6)) rList.Add($"  - [{sc.Source}] Hex {sc.HexX},{sc.HexY} : {sc.SubmarineName}");
+                            foreach (var sc in c.Contacts.Take(8)) rList.Add($"  - [{sc.Source}] Hex {sc.HexX},{sc.HexY} near {sc.LocationName} : {sc.SubmarineName}");
                             _popUpReasonings.Add(rList);
                             _popUpConfidences.Add(0);
                         }
@@ -1543,11 +1552,12 @@ namespace MUTHUR6000.Core.Controller
                         {
                             _popUpBullets.Add($"VECTOR [{v.FromDate} -> {v.ToDate}]: Drift dX={v.DeltaX:+0.0;-0.0;0}, dY={v.DeltaY:+0.0;-0.0;0} | {v.DistanceHex:F1} Hex Brg {v.BearingDeg:000}° ({v.CompassHeading})");
                             _popUpReasonings.Add(new List<string> {
-                                "MATHEMATICAL PROCESS: Day-to-Day Centroid Delta (v = Pos_today - Pos_prev)",
+                                "TELEMETRY SOURCE: Derived from Consecutive Daily Submarine Centroid Coordinates",
                                 $"INTERVAL: {v.FromDate} to {v.ToDate}",
-                                $"DISPLACEMENT: ΔX = {v.DeltaX:+0.00;-0.00;0.00}, ΔY = {v.DeltaY:+0.00;-0.00;0.00}",
-                                $"DISTANCE: {v.DistanceHex:F1} hexes ({v.DistanceHex * 40.0:F0} NM)",
-                                $"STRATEGIC HEADING: {v.BearingDeg:000}° ({v.CompassHeading})"
+                                $"MATHEMATICAL FORMULATION: Delta_X = X_today - X_prev ({v.DeltaX:+0.00;-0.00;0.00}), Delta_Y = Y_today - Y_prev ({v.DeltaY:+0.00;-0.00;0.00})",
+                                $"DISPLACEMENT: Distance = sqrt(dX^2 + dY^2) = {v.DistanceHex:F1} hexes ({v.DistanceHex * 40.0:F0} NM)",
+                                $"ADVANCE RATE: Strategic Bearing = atan2(dX, -dY) = {v.BearingDeg:000}° ({v.CompassHeading})",
+                                $"TACTICAL ASSESSMENT: Submarine flotilla migrating towards strategic bearing {v.CompassHeading}."
                             });
                             _popUpConfidences.Add(0);
                         }
@@ -1560,9 +1570,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         _popUpBullets.Add("NO COMBAT BLINDSPOTS DETECTED (ALL ACTION HEXES HAD PRIOR SURVEILLANCE).");
                         _popUpReasonings.Add(new List<string> {
-                            "DATA SOURCES: combatreport vs asigint / sightings (3-day lookback)",
-                            "ALGORITHM: If Combat_Events > 0 AND Sighting_Events == 0 in prior 3 days -> Blindspot.",
-                            "ASSESSMENT: All tactical engagements were preceded by SIGINT or visual reconnaissance."
+                            "TELEMETRY SOURCE: combatreport vs asigint / sightings (3-day lookback)",
+                            "MATHEMATICAL FORMULATION: Blindspot = 1 if Combat_Hex > 0 AND Sigint_Hex(t-3..t) == 0",
+                            "TACTICAL ASSESSMENT: All tactical engagements were preceded by SIGINT or visual reconnaissance."
                         });
                         _popUpConfidences.Add(0);
                     }
@@ -1572,11 +1582,12 @@ namespace MUTHUR6000.Core.Controller
                         {
                             _popUpBullets.Add($"[{b.DateYYMMDD}] Hex {b.HexX,3},{b.HexY,-3} ({b.LocationName}) : Unheralded Combat Engagement");
                             _popUpReasonings.Add(new List<string> {
-                                "CLASSIFICATION: CRITICAL INTELLIGENCE BLINDSPOT",
-                                $"LOCATION: Hex {b.HexX},{b.HexY} ({b.LocationName}) on {b.DateYYMMDD}",
-                                $"COMBAT EVENT EXCERPT: {b.Description}",
-                                "SURVEILLANCE STATUS: Zero prior SIGINT transmissions or air recon sightings within prior 3 days.",
-                                "STRATEGIC IMPACT: Hostile forces achieved tactical surprise on unmonitored approach vector."
+                                "TELEMETRY SOURCE: combatreport Engagement Records",
+                                $"LOCATION: Hex {b.HexX},{b.HexY} ({b.LocationName})",
+                                $"DATE: {b.DateYYMMDD}",
+                                $"RAW EXCERPT: {b.Description}",
+                                "MATHEMATICAL FORMULATION: Engagement_Events = 1, Prior_SIGINT_Count(3 Days) = 0 -> Blindspot Confirmed",
+                                "TACTICAL ASSESSMENT: Hostile force achieved tactical surprise on unmonitored approach vector."
                             });
                             _popUpConfidences.Add(0);
                         }
@@ -1589,9 +1600,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         _popUpBullets.Add("NO JAPANESE VESSEL CONCENTRATIONS DETECTED TO COMPUTE AXIS OF ADVANCE.");
                         _popUpReasonings.Add(new List<string> {
-                            "DATA SOURCE: asigint (All ships) + visual sightings",
-                            "ALGORITHM: Mean coordinate (AvgX, AvgY) per day. Vector V = Pos_today - Pos_yesterday.",
-                            "STRATEGIC DRIFT: Average of the last 3 vectors."
+                            "TELEMETRY SOURCE: asigint (All vessels) + Operations reports",
+                            "MATHEMATICAL FORMULATION: Mean_X = sum(X_i)/N, Mean_Y = sum(Y_i)/N; Drift = avg(last 3 step vectors)",
+                            "TACTICAL ASSESSMENT: No Japanese vessels localized to compute mean movement."
                         });
                         _popUpConfidences.Add(0);
                     }
@@ -1601,12 +1612,13 @@ namespace MUTHUR6000.Core.Controller
                         {
                             _popUpBullets.Add($"[{m.DateYYMMDD}] Mean Fleet Center: ({m.MeanX:F1}, {m.MeanY:F1}) | {m.TotalVesselsCounted} vessels counted");
                             var r = new List<string> {
+                                "TELEMETRY SOURCE: asigint & Sighting Telemetry Log",
                                 $"DATE: {m.DateYYMMDD}",
-                                $"FLEET MEAN COORDINATES: ({m.MeanX:F2}, {m.MeanY:F2})",
-                                $"TOTAL SIGHTED / DESTINATION SHIPS: {m.TotalVesselsCounted}",
-                                "SAMPLE CONTRIBUTING CONTACTS:"
+                                $"MATHEMATICAL FORMULATION: Mean Coordinates = ({m.MeanX:F2}, {m.MeanY:F2}) across N={m.TotalVesselsCounted} vessels",
+                                "TACTICAL ASSESSMENT: Daily theater-wide center of enemy naval mass.",
+                                "EVIDENCE CONTRIBUTING CONTACTS:"
                             };
-                            foreach (var cu in m.ContributingUnits.Take(6)) r.Add($"  - {cu}");
+                            foreach (var cu in m.ContributingUnits.Take(8)) r.Add($"  - {cu}");
                             _popUpReasonings.Add(r);
                             _popUpConfidences.Add(0);
                         }
@@ -1615,11 +1627,12 @@ namespace MUTHUR6000.Core.Controller
                             var sd = h.StrategicDrift;
                             _popUpBullets.Add($"STRATEGIC DRIFT: Vector dX={sd.DeltaX:+0.0;-0.0;0}, dY={sd.DeltaY:+0.0;-0.0;0} | {sd.DistanceHex:F1} Hex/Day Heading {sd.BearingDeg:000}° ({sd.CompassHeading})");
                             _popUpReasonings.Add(new List<string> {
-                                "ALGORITHM: 3-Day Rolling Average of Step Vectors (Strategic Drift)",
-                                $"DRIFT VECTOR: ΔX = {sd.DeltaX:+0.00;-0.00;0.00}, ΔY = {sd.DeltaY:+0.00;-0.00;0.00}",
-                                $"ADVANCE RATE: {sd.DistanceHex:F1} hexes/day ({sd.DistanceHex * 40.0:F0} NM/day)",
-                                $"MAIN AXIS BEARING: {sd.BearingDeg:000}° ({sd.CompassHeading})",
-                                "OPERATIONAL CONCLUSION: Sustained offensive thrust along this strategic axis."
+                                "TELEMETRY SOURCE: 3-Day Rolling Window of Mean Fleet Coordinates",
+                                $"INTERVAL: {sd.FromDate} to {sd.ToDate}",
+                                $"MATHEMATICAL FORMULATION: Drift_Vector = (1/3) * sum(V_step_k); dX={sd.DeltaX:+0.00;-0.00;0.00}, dY={sd.DeltaY:+0.00;-0.00;0.00}",
+                                $"ADVANCE RATE: Advance Rate = {sd.DistanceHex:F1} hexes/day ({sd.DistanceHex * 40.0:F0} NM/day)",
+                                $"DISPLACEMENT: Axis Bearing = atan2(avg_dX, -avg_dY) = {sd.BearingDeg:000}° ({sd.CompassHeading})",
+                                "TACTICAL ASSESSMENT: Sustained offensive thrust along this strategic axis."
                             });
                             _popUpConfidences.Add(0);
                         }
@@ -1632,9 +1645,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         _popUpBullets.Add("NO COMBAT REPORT ENGAGEMENT SEPARATORS DETECTED.");
                         _popUpReasonings.Add(new List<string> {
-                            "DATA SOURCE: All files (combatreport '---' separators)",
-                            "ALGORITHM: Count total '---' separators per day. Rolling 3-day average = sum(events_last_3_days) / 3.",
-                            "STATUS: No combat reports available."
+                            "TELEMETRY SOURCE: combatreport files (Regex: '^---.*')",
+                            "MATHEMATICAL FORMULATION: OPTEMPO = sum(separators_3days) / 3.0",
+                            "TACTICAL ASSESSMENT: Zero combat reports available."
                         });
                         _popUpConfidences.Add(0);
                     }
@@ -1646,10 +1659,12 @@ namespace MUTHUR6000.Core.Controller
                             string bar = new string('█', barLen) + new string('░', Math.Max(0, 20 - barLen));
                             _popUpBullets.Add($"[{opt.DateYYMMDD}] Engagements: {opt.SeparatorCount,2} [{bar}] 3D-Avg: {opt.Rolling3DayAvg:F1}");
                             var r = new List<string> {
+                                "TELEMETRY SOURCE: combatreport files across daily turns",
                                 $"OPERATIONAL DATE: {opt.DateYYMMDD}",
-                                $"TOTAL ENGAGEMENTS (--- SEPARATORS): {opt.SeparatorCount}",
-                                $"ROLLING 3-DAY AVERAGE TEMPO: {opt.Rolling3DayAvg:F2} engagements/day",
-                                "ENGAGEMENT SAMPLES:"
+                                $"TOTAL ENGAGEMENTS: {opt.SeparatorCount} individual combat resolution engagements ('---')",
+                                $"MATHEMATICAL FORMULATION: Rolling 3-Day Avg = sum(Separators_last_3_days) / 3.0 = {opt.Rolling3DayAvg:F2} engagements/day",
+                                $"TACTICAL ASSESSMENT: Operational tempo evaluated at {opt.Rolling3DayAvg:F1} engagements per day.",
+                                "EVIDENCE SAMPLES (ENGAGEMENT HEADERS):"
                             };
                             foreach (var s in opt.EngagementsSample) r.Add($"  - {s}");
                             if (opt.EngagementsSample.Count == 0) r.Add("  - Multiple combat operations resolved.");
@@ -1859,7 +1874,11 @@ namespace MUTHUR6000.Core.Controller
                     line.StartsWith("ENDPOINTS:") || line.StartsWith("PROJECTED POSITION:") ||
                     line.StartsWith("TARGET ASSET:") || line.StartsWith("VESSEL:") ||
                     line.StartsWith("TASK FORCE:") || line.StartsWith("PILOT:") ||
-                    line.StartsWith("CONTACT:") || line.StartsWith("TARGET:"))
+                    line.StartsWith("CONTACT:") || line.StartsWith("TARGET:") ||
+                    line.StartsWith("RAW EXCERPT:") || line.StartsWith("EVIDENCE:") ||
+                    line.StartsWith("DATA SOURCE:") || line.StartsWith("DATA SOURCES:") ||
+                    line.StartsWith("  - ") || line.StartsWith("INTERVAL:") ||
+                    line.StartsWith("DATE:") || line.StartsWith("LOCATION:"))
                 {
                     topic1.Lines.Add(line);
                 }
@@ -1871,7 +1890,11 @@ namespace MUTHUR6000.Core.Controller
                          line.StartsWith("Analyst Note:") || line.StartsWith("MATHEMATICAL FORMULATION:") ||
                          line.StartsWith("MATHEMATICAL REASONING:") || line.StartsWith("TEMPORAL FACTOR:") ||
                          line.StartsWith("CONFIDENCE RATING:") || line.StartsWith("CONFIDENCE ASSESSMENT:") ||
-                         line.StartsWith("CONFIDENCE LEVEL:") || line.StartsWith("ALGORITHMIC FORMULATION:"))
+                         line.StartsWith("CONFIDENCE LEVEL:") || line.StartsWith("ALGORITHMIC FORMULATION:") ||
+                         line.StartsWith("MATHEMATICAL PROCESS:") || line.StartsWith("MATHEMATICAL ALGORITHM:") ||
+                         line.StartsWith("ALGORITHM:") || line.StartsWith("FORMULATION:") ||
+                         line.StartsWith("DISPLACEMENT:") || line.StartsWith("ADVANCE RATE:") ||
+                         line.StartsWith("ROLLING") || line.StartsWith("TOTAL ENGAGEMENTS"))
                 {
                     topic3.Lines.Add(line);
                 }
@@ -3188,9 +3211,11 @@ namespace MUTHUR6000.Core.Controller
             int rem = width - titlePrefix.Length - 1;
             sb.AppendLine(titlePrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
 
-            string itemLine = $"ITEM: {_reasoningBulletTitle}";
-            if (itemLine.Length > innerWidth) itemLine = itemLine.Substring(0, innerWidth);
-            sb.AppendLine($"║ {PadTo(itemLine, innerWidth)} ║");
+            var itemLines = WrapText($"ITEM: {_reasoningBulletTitle}", innerWidth, 6);
+            foreach (var l in itemLines)
+            {
+                sb.AppendLine($"║ {PadTo(l, innerWidth)} ║");
+            }
             sb.AppendLine("╠" + new string('═', width - 2) + "╣");
 
             if (_reasoningConfPct > 0)

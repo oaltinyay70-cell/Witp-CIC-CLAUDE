@@ -31,7 +31,7 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - **Alpha 2 Build 5 Recovery Point:** Tag: `checkpoint-pre-major-addition-alpha2-build5` | Branch: `recovery-point-alpha2-build5` | Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha2-build5.zip` (See [`docs/recovery-point-alpha2-build5.md`](recovery-point-alpha2-build5.md))  
 - **Version 0.02 (Stable Alpha 1):** Tags: `v0.02`, `v0.02-alpha.1` | Branch: `stable-alpha-1` | Archive: `backups/WITP-CIC2-v0.02-alpha1.zip` (See [`docs/how-to-rollback-to-alpha-1.md`](how-to-rollback-to-alpha-1.md))  
 
-**Runtime note (2026-09-22):** Standalone executable `dist/witp-cic-muthur-alpha4-2.exe`. Continuous Unicode box frames program-wide. Vault files: `C:\WitP-CIC\Campaigns\*.wic`.
+**Runtime note (2026-09-22):** Standalone executable `dist/witp-cic-muthur-alpha4-3.exe`. Continuous Unicode box frames program-wide. Mathematical evidence pop-up transparency, bottom-ribbon resolution dropdown (1280x720 HD, 720p, Full HD, Standard), and Phosphor quick-switch pill buttons. Vault files: `C:\WitP-CIC\Campaigns\*.wic`.
 
 ---
 

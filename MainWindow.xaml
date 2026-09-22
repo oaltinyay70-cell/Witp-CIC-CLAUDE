@@ -481,7 +481,117 @@
                         <TextBlock x:Name="TransmissionStatusText"
                                    Text="STATUS: CONNECTED"
                                    FontSize="10"
-                                   Foreground="#70FFFFFF"/>
+                                   Foreground="#70FFFFFF"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,12,0"/>
+
+                        <!-- Resolution Selector Pull-Down Menu -->
+                        <Border BorderBrush="#3500FF66" BorderThickness="1" CornerRadius="3" Background="#14000000" Margin="0,0,14,0" VerticalAlignment="Center">
+                            <ComboBox x:Name="ResolutionComboBox"
+                                      FontSize="10"
+                                      FontFamily="Cascadia Code, Consolas, Courier New"
+                                      Foreground="#00FF66"
+                                      Background="#08140B"
+                                      BorderThickness="0"
+                                      Padding="4,1"
+                                      Cursor="Hand"
+                                      SelectionChanged="ResolutionComboBox_SelectionChanged">
+                                <ComboBox.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#08140B" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#00FF66" />
+                                </ComboBox.Resources>
+                                <ComboBoxItem Content="1280 x 720 (HD)" Tag="1280x720"/>
+                                <ComboBoxItem Content="1366 x 768 (720p)" Tag="1366x768"/>
+                                <ComboBoxItem Content="1920 x 1080 (Full HD)" Tag="1920x1080"/>
+                                <ComboBoxItem Content="1024 x 640 (Standard)" Tag="1024x640"/>
+                            </ComboBox>
+                        </Border>
+
+                        <!-- Phosphor Quick-Switch Buttons -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,8,0">
+                            <TextBlock x:Name="PhosphorLabelText"
+                                       Text="PHOSPHOR:"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="#80FFFFFF"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0"/>
+                            <Button x:Name="PhosphorMatrixGreenBtn"
+                                    Content="Matrix Green"
+                                    Tag="#00FF66"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#00FF66"
+                                    Background="#1000FF66"
+                                    BorderBrush="#00FF66"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorSolarAmberBtn"
+                                    Content="Solar Amber"
+                                    Tag="#FFB000"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#FFB000"
+                                    Background="#10FFB000"
+                                    BorderBrush="#FFB000"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorNostromoCyanBtn"
+                                    Content="Nostromo Cyan"
+                                    Tag="#00F0FF"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#00F0FF"
+                                    Background="#1000F0FF"
+                                    BorderBrush="#00F0FF"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorGlitchRedBtn"
+                                    Content="Glitch Red"
+                                    Tag="#FF2244"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#FF2244"
+                                    Background="#10FF2244"
+                                    BorderBrush="#FF2244"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">

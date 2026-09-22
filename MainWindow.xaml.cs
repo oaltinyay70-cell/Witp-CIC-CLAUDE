@@ -253,6 +253,16 @@ namespace MUTHUR6000
             UpdateBackgroundColorMenuChecks(_settings.BackgroundColorHex);
             UpdateFontSizeMenuChecks();
 
+            // Sync Resolution ComboBox selection
+            if (ResolutionComboBox != null)
+            {
+                double curW = Width;
+                if (curW >= 1800) ResolutionComboBox.SelectedIndex = 2; // 1920x1080
+                else if (curW >= 1340) ResolutionComboBox.SelectedIndex = 1; // 1366x768
+                else if (curW >= 1200) ResolutionComboBox.SelectedIndex = 0; // 1280x720
+                else ResolutionComboBox.SelectedIndex = 3; // 1024x640
+            }
+
             // Apply effects state
             ApplyEffectsState();
 
@@ -668,6 +678,14 @@ namespace MUTHUR6000
             FooterBarBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(40, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
 
             ActiveFileText.Foreground = _currentPhosphorBrush;
+            if (ResolutionComboBox != null)
+            {
+                ResolutionComboBox.Foreground = _currentPhosphorBrush;
+            }
+            if (PhosphorLabelText != null)
+            {
+                PhosphorLabelText.Foreground = new SolidColorBrush(Color.FromArgb(160, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
+            }
 
             // Scrollbar thumb indicator tint
             var thumbColor = Color.FromArgb(110, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B);
@@ -839,6 +857,60 @@ namespace MUTHUR6000
                 SetPhosphorColor(newColor, hex);
                 UpdatePhosphorColorMenuChecks(hex);
             });
+        }
+
+        private void PhosphorQuickSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string hex)
+            {
+                UpdatePhosphorColorMenuChecks(hex);
+                try
+                {
+                    var color = (Color)ColorConverter.ConvertFromString(hex);
+                    SetPhosphorColor(color, hex);
+                }
+                catch { }
+            }
+        }
+
+        private void ResolutionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isInitialized || ResolutionComboBox == null) return;
+            if (ResolutionComboBox.SelectedItem is ComboBoxItem item && item.Tag is string res)
+            {
+                double targetW = 1024, targetH = 640;
+                switch (res)
+                {
+                    case "1280x720":
+                        targetW = 1280;
+                        targetH = 720;
+                        break;
+                    case "1366x768":
+                        targetW = 1366;
+                        targetH = 768;
+                        break;
+                    case "1920x1080":
+                        targetW = 1920;
+                        targetH = 1080;
+                        break;
+                    case "1024x640":
+                    default:
+                        targetW = 1024;
+                        targetH = 640;
+                        break;
+                }
+
+                Width = targetW;
+                Height = targetH;
+
+                // Center on current display monitor
+                double workW = SystemParameters.WorkArea.Width;
+                double workH = SystemParameters.WorkArea.Height;
+                Left = Math.Max(0, (workW - targetW) / 2);
+                Top = Math.Max(0, (workH - targetH) / 2);
+
+                SaveCurrentSettings(true);
+            }
         }
 
         private void SetPhosphorColor(Color color, string hexCode)

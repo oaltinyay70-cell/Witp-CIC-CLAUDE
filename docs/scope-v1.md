@@ -10,6 +10,13 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-22 20:25 UTC+3: **Evidence Transparency, Resolution Pull-Down & Phosphor Ribbon Controls (Ozgur):**
+  1. **Full Evidence Transparency & Mathematical Proofs:** Pop-ups explicitly disclose mathematical formulas, input parameters, contributing source files (`asigint`, `combatreport`, `operations`), hex coordinates, dates, and raw excerpts across all 6 Heuristics metrics. Sourcing lines and mathematical derivations route to Topic 1 and Topic 3 for complete user verification.
+  2. **Monospace Resolution Dropdown Menu:** Added pull-down menu to bottom status ribbon (`1280 x 720 HD`, `1366 x 768 720p`, `1920 x 1080 Full HD`, `1024 x 640 Standard`) to the right of `STATUS: CONNECTED / READY`. Resizes window, centers on screen, and persists to settings.
+  3. **Phosphor Quick-Switch Pill Buttons:** Integrated retro pill buttons into bottom status ribbon matching `media_1790096672384.png`: `PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]` for instantaneous console re-tinting.
+  4. **Elimination of Text Truncation:** Multi-line wrapping (`WrapText`) prevents horizontal truncation in Reasoning modal headers.
+  5. **Release Binary Compilation:** Compiled and smoke-tested single authoritative binary `dist/witp-cic-muthur-alpha4-3.exe` with zero redundant mirrors.
+
 - 2026-09-22 19:35 UTC+3: **War Room Heuristics Domain & The 6 Logical Blueprints (Ozgur):**
   1. **Dedicated Heuristics Domain:** Established a new analytical domain accessible as option `[6]` on the War Room Primary Screen.
   2. **6 Logical Blueprints Implemented:**

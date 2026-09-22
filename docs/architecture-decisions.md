@@ -723,6 +723,21 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 4. **Drill-Down Verification Modals:** Every metric opens a dedicated navigable pop-up allowing the user to inspect raw telemetry lines, dates, and coordinates.
 5. **Clean Primary Menu Styling:** The outer text box surrounding choices on the War Room Primary Screen is eliminated, rendering options directly with standard header and section rules.
 
-**Source:** Ozgur directives (2026-09-22 19:20 & 19:28 UTC+3).
+## 66. Evidence Transparency, Resolution Menu & Phosphor Quick-Switch Ribbon (2026-09-22 20:20 UTC+3)
 
+**Decision:**
+1. **Mathematical Proof & Evidence Transparency:**
+   - Pop-ups and reasoning modals must explicitly display exact mathematical formulas, input parameters, and raw contributing files (`asigint`, `combatreport`, `operations`), hex coordinates, dates, and line excerpts for all 6 Heuristics metrics.
+   - Sourcing and reasoning lines are automatically routed into **Topic 1 (TELEMETRY SOURCE & LOCALIZATION HISTORY)** and **Topic 3 (CONFIDENCE DERIVATION & MATHEMATICAL PROOF)** to provide 100% verification transparency.
+2. **Monospace Resolution Selector Dropdown:**
+   - Embedded directly into the bottom ribbon (`FooterBarBorder`) immediately to the right of `TransmissionStatusText` ("STATUS: CONNECTED / READY").
+   - Pull-down options: `1280 x 720 (HD)`, `1366 x 768 (720p)`, `1920 x 1080 (Full HD)`, and `1024 x 640 (Standard)`.
+   - Selecting any resolution instantly resizes the window, centers it on screen, and persists to `WidgetSettings`.
+3. **Phosphor Quick-Switch Pill Buttons:**
+   - Embedded directly into the bottom status ribbon matching `media_1790096672384.png`:
+     `PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]`
+   - Rounded border buttons with retro styling that instantly switch CRT phosphor text color, bloom, borders, and UI accents.
+4. **Elimination of Text Truncation:**
+   - Multi-line word-wrapping (`WrapText`) is applied to modal item headers in `BuildReasoningModal` so status descriptions like `[WITHDRAWAL (-24)]` or long region names are never sliced or chopped off.
 
+**Source:** Ozgur directives (2026-09-22 20:05 & 20:14 UTC+3).
