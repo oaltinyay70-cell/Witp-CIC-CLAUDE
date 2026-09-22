@@ -698,3 +698,14 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 
 **Source:** Ozgur directives (2026-09-21 23:58 UTC+3).
 
+## 64. In-Terminal Unicode & Character Graphing Standard (2026-09-22 18:16 UTC+3)
+
+**Decision:**
+1. **In-Terminal Native Rendering (Option 1):** All future telemetry and analytical graphs in MUTHUR 6000 will be constructed natively using monospace character formatting, Unicode block elements (` ▂▃▄▅▆▇█`, `░▒▓█`, `■`), Braille curves (`⣀⣤⣶⣿`), and continuous box-drawing frames.
+2. **Prohibition of Heavy Third-Party Charting Libraries:** External plotting libraries (OxyPlot, LiveCharts, ScottPlot) and native C++ graphics backends (SkiaSharp) are excluded to prevent binary bloat, native DLL extraction friction in single-file executables, and aesthetic clashes with the 1979 CRT phosphor terminal.
+3. **Automatic Phosphor Theme & FX Integration:** In-terminal graphs automatically inherit CRT bloom glow, vintage scanlines, dynamic phosphor switching (Matrix Green, Solar Amber, Nostromo Cyan, Glitch Red), and teletype feed dynamics with zero overhead.
+4. **Scope Governance:** Graph implementations will be driven strictly by explicit data specifications provided by Ozgur.
+
+**Source:** Ozgur directive (2026-09-22 18:16 UTC+3).
+
+
