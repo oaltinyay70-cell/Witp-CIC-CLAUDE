@@ -180,7 +180,7 @@ namespace MUTHUR6000.Tests
             Assert(heuristics != null, "HeuristicsEngine instantiated on WarRoomAnalytics");
 
             // Metric 1: Regional Power Shift
-            Assert(heuristics.RegionalShifts.Count >= 8, $"Regional Power Shift evaluated {heuristics.RegionalShifts.Count} strategic regions");
+            Assert(heuristics!.RegionalShifts.Count >= 8, $"Regional Power Shift evaluated {heuristics.RegionalShifts.Count} strategic regions");
             Assert(heuristics.HasSufficientTemporalData == false, "Temporal Guard active: < 4 days marked as data accumulating");
 
             // Metric 4: Minefield Mapping
@@ -206,8 +206,41 @@ namespace MUTHUR6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.HeuristicsPopUp, "Heuristics -> HeuristicsPopUp on [ENTER]");
 
+            // Verification of ADR 64 / User Constraint: Right side of graph box is always straight
+            string popUpBuffer = screenManager.BuildCurrentScreen();
+            var popUpLines = popUpBuffer.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            bool allPopUpBordersStraight = true;
+            foreach (var line in popUpLines)
+            {
+                if (line.StartsWith("║") && line.EndsWith("║"))
+                {
+                    if (line.Length != 78)
+                    {
+                        allPopUpBordersStraight = false;
+                        Console.WriteLine($"[FAIL] Box line length mismatch: {line.Length} expected 78: '{line}'");
+                    }
+                }
+            }
+            Assert(allPopUpBordersStraight, "ADR 64: In-Terminal Unicode Graph Box right side is 100% straight (Length == 78)");
+
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.ReasoningModal, "HeuristicsPopUp -> ReasoningModal (Raw Evidence) on [ENTER]");
+
+            string modalBuffer = screenManager.BuildCurrentScreen();
+            var modalLines = modalBuffer.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            bool allModalBordersStraight = true;
+            foreach (var line in modalLines)
+            {
+                if (line.StartsWith("║") && line.EndsWith("║"))
+                {
+                    if (line.Length != 78)
+                    {
+                        allModalBordersStraight = false;
+                        Console.WriteLine($"[FAIL] Modal line length mismatch: {line.Length} expected 78: '{line}'");
+                    }
+                }
+            }
+            Assert(allModalBordersStraight, "ADR 64: Reasoning & Evidence Modal Box right side is 100% straight (Length == 78)");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.HeuristicsPopUp, "ReasoningModal -> HeuristicsPopUp on [ESC]");

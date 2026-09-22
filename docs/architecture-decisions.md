@@ -741,3 +741,25 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
    - Multi-line word-wrapping (`WrapText`) is applied to modal item headers in `BuildReasoningModal` so status descriptions like `[WITHDRAWAL (-24)]` or long region names are never sliced or chopped off.
 
 **Source:** Ozgur directives (2026-09-22 20:05 & 20:14 UTC+3).
+
+## 67. Header Phosphor Relocation, In-Terminal Unicode Graphs & Monospace Box Alignment (2026-09-22 21:30 UTC+3)
+
+**Decision:**
+1. **Header Phosphor Quick-Switch Relocation:**
+   - Relocated phosphor quick-switch buttons (`PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]`) to the top draggable header bar (`HeaderBarBorder`) directly adjacent to the `OvermonitoringBadgeBorder` `[ PACIFIC THEATER CIC MATRIX ]`, fulfilling user visual directive in `media_1790098927695.png`.
+   - The resolution selector dropdown remains positioned in the bottom status ribbon (`FooterBarBorder`) to the right of `TransmissionStatusText`.
+2. **Implementation of ADR 64 (Option 1 In-Terminal Unicode Graphing):**
+   - Implemented native monospace ASCII/Unicode graphing inside Heuristics finding pop-ups:
+     - **Metric 1 (Regional Shift):** Directional delta bar graph `[►████░░░░]` / `[◄████░░░░]`.
+     - **Metric 4 (Minefield Encounters):** Chronological hit corridor axis `──■──`.
+     - **Metric 5 (Submarine Migration):** Contact density histogram `[■■■···]` and drift vector velocity indicator `[==►  ]`.
+     - **Metric 46 (Intelligence Blindspots):** Surveillance gap sensor meter `[░░░░░░ GAP 0%]`.
+     - **Metric 49 (Axis of Advance):** Fleet concentration meter `[████░░░░]` and strategic advance speed bar.
+     - **Metric 50 (OPTEMPO):** 16-character combat activity histogram `[████░░░░░░░░░░░░]`.
+3. **Monospace Box Straight Border Guarantee:**
+   - Strict constraint enforced: The right border `║` of terminal modal boxes must always remain straight with zero displacement, bending, or line wobbling.
+   - All modal rows are clamped and padded to `innerWidth = 74` using single-width UTF-8 code points, guaranteeing `boxWidth = 78` throughout `BuildHeuristicsPopUp` and `BuildReasoningModal`.
+   - Verified via automated unit tests in `tests/MUTHUR6000.Tests/Program.cs`.
+
+**Source:** Ozgur directives (2026-09-22 21:05 UTC+3).
+

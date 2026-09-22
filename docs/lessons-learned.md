@@ -626,6 +626,20 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - NEVER copy or mirror the output binary to `WitP-CIC.exe` or `MUTHUR6000.exe`.
   - NEVER generate redundant binary copies in `dist/`. Only generate the single versioned `witp-cic-muthur-alpha4-[build#].exe`.
 
+### LL-050: In-Terminal Unicode Graphing & Monospace Box Straight Border Mandate
+- **Date:** 2026-09-22 21:45 UTC+3
+- **Context:** User requested:
+  > *"implement Option 1 (In-Terminal Unicode & Character Graphing) the ADR 64. Make sure that right side of the graph box is always straight and when done add everything to documentation & backup"*
+- **What Was Learned:**
+  1. **Strict Monospace Column Integrity:** In console/TUI windowing systems with box-drawing frames (`╔═╗`, `║ ║`, `╚═╝`), all rows enclosed within vertical side borders `║` MUST have identical display column widths. Any variation in character count or presence of wide characters causes the right border `║` to bend, indent, or wobble.
+  2. **Single-Width Monospace Glyphs:** When generating in-terminal graphs, use only standard single-width characters (`█`, `░`, `▓`, `■`, `▲`, `▼`, `►`, `◄`, `+`, `-`, `=`, `·`) whose string `.Length` matches their visual cell width in monospace fonts like Cascadia Code and Consolas.
+  3. **Strict Clamping & Padding:** All content lines inserted into pop-up boxes must be explicitly clamped and padded to `innerWidth = 74` so that every row has exact length 78 including borders (`$"║ {PadTo(line, 74)} ║"`).
+  4. **Automated Line-Length Regression Testing:** Test suites must assert that every box row in generated screen buffers has exact character length `boxWidth == 78` to mechanically guard against border warping.
+- **What NOT to Repeat:**
+  - NEVER use wide full-width glyphs or unpadded strings inside box frames.
+  - NEVER permit lines inside a modal box to vary in length.
+  - NEVER deliver graph or modal changes without automated test validation confirming that the right border is 100% straight.
+
 ---
 
 ## 3. Checklist for Future Corrections

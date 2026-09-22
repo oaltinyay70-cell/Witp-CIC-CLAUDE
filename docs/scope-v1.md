@@ -10,6 +10,18 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-22 21:45 UTC+3: **Header Phosphor Relocation, In-Terminal Unicode Graphs & Straight Border Assurance (Ozgur):**
+  1. **Phosphor Quick-Switch Header Relocation:** Moved the quick-switch phosphor color buttons (`PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]`) to the top draggable header bar directly beside `[ PACIFIC THEATER CIC MATRIX ]` per screenshot `media_1790098927695.png`.
+  2. **In-Terminal Unicode & Character Graphing (ADR 64):** Implemented native monospace graphs inside the Heuristics domain pop-up:
+     - Metric 1 (Regional Shift): Horizontal delta bar chart `[►████░░░░]` / `[◄████░░░░]`.
+     - Metric 4 (Minefield Mapping): Coordinate timeline with hit markers `──■──`.
+     - Metric 5 (Submarine Centroid Vectors): Contact density meter `[■■■···]` and directional vector velocity indicator `[==►  ]`.
+     - Metric 46 (Intelligence Blindspots): Surveillance gap sensor meter `[░░░░░░ GAP 0%]`.
+     - Metric 49 (Axis of Advance): Fleet concentration meter `[████░░░░]` and strategic advance speed bar.
+     - Metric 50 (Operational Tempo): 16-character combat activity histogram `[████░░░░░░░░░░░░]`.
+  3. **Rigid Monospace Box Alignment (Straight Right Border):** All rows inside terminal pop-up frames (`║ ... ║`) are strictly constrained to 74 inner monospace character columns, guaranteeing that the right border `║` never shifts, bends, or wobbles. Verified with automated regression assertions in the test suite.
+  4. **Release Binary Build 4:** Published and smoke-tested single authoritative executable `dist/witp-cic-muthur-alpha4-4.exe` (no redundant mirrors per ADR 63).
+
 - 2026-09-22 20:25 UTC+3: **Evidence Transparency, Resolution Pull-Down & Phosphor Ribbon Controls (Ozgur):**
   1. **Full Evidence Transparency & Mathematical Proofs:** Pop-ups explicitly disclose mathematical formulas, input parameters, contributing source files (`asigint`, `combatreport`, `operations`), hex coordinates, dates, and raw excerpts across all 6 Heuristics metrics. Sourcing lines and mathematical derivations route to Topic 1 and Topic 3 for complete user verification.
   2. **Monospace Resolution Dropdown Menu:** Added pull-down menu to bottom status ribbon (`1280 x 720 HD`, `1366 x 768 720p`, `1920 x 1080 Full HD`, `1024 x 640 Standard`) to the right of `STATUS: CONNECTED / READY`. Resizes window, centers on screen, and persists to settings.

@@ -347,14 +347,15 @@
                         </Border>
                     </StackPanel>
 
-                    <!-- Center: Overmonitoring Matrix Boxed Badge -->
+                    <!-- Center: Overmonitoring Matrix Boxed Badge & Phosphor Quick-Switch Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Border x:Name="OvermonitoringBadgeBorder"
                                 Background="Transparent"
                                 BorderBrush="#6000FF66"
                                 BorderThickness="1"
                                 CornerRadius="4"
-                                Padding="8,2">
+                                Padding="8,2"
+                                Margin="0,0,10,0">
                             <TextBlock x:Name="HeaderStatusText"
                                        Text="[ PACIFIC THEATER CIC MATRIX ]"
                                        FontSize="10"
@@ -362,6 +363,93 @@
                                        Foreground="#00FF66"
                                        VerticalAlignment="Center"/>
                         </Border>
+
+                        <!-- Phosphor Quick-Switch Buttons -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="PhosphorLabelText"
+                                       Text="PHOSPHOR:"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="#80FFFFFF"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0"/>
+                            <Button x:Name="PhosphorMatrixGreenBtn"
+                                    Content="Matrix Green"
+                                    Tag="#00FF66"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#00FF66"
+                                    Background="#1000FF66"
+                                    BorderBrush="#00FF66"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorSolarAmberBtn"
+                                    Content="Solar Amber"
+                                    Tag="#FFB000"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#FFB000"
+                                    Background="#10FFB000"
+                                    BorderBrush="#FFB000"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorNostromoCyanBtn"
+                                    Content="Nostromo Cyan"
+                                    Tag="#00F0FF"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#00F0FF"
+                                    Background="#1000F0FF"
+                                    BorderBrush="#00F0FF"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="PhosphorGlitchRedBtn"
+                                    Content="Glitch Red"
+                                    Tag="#FF2244"
+                                    FontSize="9.5"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    Foreground="#FF2244"
+                                    Background="#10FF2244"
+                                    BorderBrush="#FF2244"
+                                    BorderThickness="1"
+                                    Padding="7,1"
+                                    Margin="0,0,5,0"
+                                    Cursor="Hand"
+                                    Click="PhosphorQuickSwitch_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="4"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
 
                     <!-- Right-side Quick Action Controls -->
@@ -506,92 +594,6 @@
                                 <ComboBoxItem Content="1024 x 640 (Standard)" Tag="1024x640"/>
                             </ComboBox>
                         </Border>
-
-                        <!-- Phosphor Quick-Switch Buttons -->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,8,0">
-                            <TextBlock x:Name="PhosphorLabelText"
-                                       Text="PHOSPHOR:"
-                                       FontSize="10"
-                                       FontWeight="SemiBold"
-                                       Foreground="#80FFFFFF"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,6,0"/>
-                            <Button x:Name="PhosphorMatrixGreenBtn"
-                                    Content="Matrix Green"
-                                    Tag="#00FF66"
-                                    FontSize="9.5"
-                                    FontFamily="Cascadia Code, Consolas, Courier New"
-                                    Foreground="#00FF66"
-                                    Background="#1000FF66"
-                                    BorderBrush="#00FF66"
-                                    BorderThickness="1"
-                                    Padding="7,1"
-                                    Margin="0,0,5,0"
-                                    Cursor="Hand"
-                                    Click="PhosphorQuickSwitch_Click">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="4"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
-                            <Button x:Name="PhosphorSolarAmberBtn"
-                                    Content="Solar Amber"
-                                    Tag="#FFB000"
-                                    FontSize="9.5"
-                                    FontFamily="Cascadia Code, Consolas, Courier New"
-                                    Foreground="#FFB000"
-                                    Background="#10FFB000"
-                                    BorderBrush="#FFB000"
-                                    BorderThickness="1"
-                                    Padding="7,1"
-                                    Margin="0,0,5,0"
-                                    Cursor="Hand"
-                                    Click="PhosphorQuickSwitch_Click">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="4"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
-                            <Button x:Name="PhosphorNostromoCyanBtn"
-                                    Content="Nostromo Cyan"
-                                    Tag="#00F0FF"
-                                    FontSize="9.5"
-                                    FontFamily="Cascadia Code, Consolas, Courier New"
-                                    Foreground="#00F0FF"
-                                    Background="#1000F0FF"
-                                    BorderBrush="#00F0FF"
-                                    BorderThickness="1"
-                                    Padding="7,1"
-                                    Margin="0,0,5,0"
-                                    Cursor="Hand"
-                                    Click="PhosphorQuickSwitch_Click">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="4"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
-                            <Button x:Name="PhosphorGlitchRedBtn"
-                                    Content="Glitch Red"
-                                    Tag="#FF2244"
-                                    FontSize="9.5"
-                                    FontFamily="Cascadia Code, Consolas, Courier New"
-                                    Foreground="#FF2244"
-                                    Background="#10FF2244"
-                                    BorderBrush="#FF2244"
-                                    BorderThickness="1"
-                                    Padding="7,1"
-                                    Cursor="Hand"
-                                    Click="PhosphorQuickSwitch_Click">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="4"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
-                        </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">

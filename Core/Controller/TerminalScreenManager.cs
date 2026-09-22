@@ -1469,7 +1469,21 @@ namespace MUTHUR6000.Core.Controller
                     foreach (var s in h.RegionalShifts)
                     {
                         string sign = s.ShiftDelta > 0 ? $"+{s.ShiftDelta}" : s.ShiftDelta.ToString();
-                        _popUpBullets.Add($"{s.RegionName,-32} Today: {s.CountToday,2} | 7D: {s.Count7DaysAgo,2} | Delta: {sign,3} [{s.Trend}]");
+                        int magnitude = Math.Min(8, Math.Abs(s.ShiftDelta) / 2);
+                        string graphBar;
+                        if (s.ShiftDelta > 0)
+                        {
+                            graphBar = "►" + new string('█', magnitude) + new string('░', 8 - magnitude);
+                        }
+                        else if (s.ShiftDelta < 0)
+                        {
+                            graphBar = "◄" + new string('█', magnitude) + new string('░', 8 - magnitude);
+                        }
+                        else
+                        {
+                            graphBar = "───░░░░░░";
+                        }
+                        _popUpBullets.Add($"{s.RegionName,-22} [{graphBar}] T:{s.CountToday,2} 7D:{s.Count7DaysAgo,2} D:{sign,3} [{s.Trend}]");
                         var reason = new List<string> {
                             $"TELEMETRY SOURCE: asigint & Operations Reports ({s.RegionName} Sector)",
                             $"REGION: {s.RegionName}",
@@ -1506,7 +1520,7 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var m in h.MineHitsChronological)
                         {
-                            _popUpBullets.Add($"[{m.DateYYMMDD}] Hex {m.HexX,3},{m.HexY,-3} ({m.LocationName}) : {m.Details}");
+                            _popUpBullets.Add($"[{m.DateYYMMDD}] Hex {m.HexX,3},{m.HexY,-3} ──■── ({m.LocationName}) : {m.Details}");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: Combat Report Minefield Engagement Log",
                                 $"COORDINATES: Hex {m.HexX},{m.HexY} (Near {m.LocationName})",
@@ -1536,7 +1550,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var c in h.SubmarineCentroids)
                         {
-                            _popUpBullets.Add($"[{c.DateYYMMDD}] Centroid: ({c.CentroidX:F1}, {c.CentroidY:F1}) across {c.ContactCount} SS contacts");
+                            int barCount = Math.Min(6, c.ContactCount);
+                            string densityBar = new string('■', barCount) + new string('·', 6 - barCount);
+                            _popUpBullets.Add($"[{c.DateYYMMDD}] Centroid: ({c.CentroidX:F1},{c.CentroidY:F1}) [{densityBar}] {c.ContactCount,2} SS contacts");
                             var rList = new List<string> {
                                 "TELEMETRY SOURCE: asigint & Operational Submarine Sightings Log",
                                 $"DATE: {c.DateYYMMDD}",
@@ -1550,7 +1566,9 @@ namespace MUTHUR6000.Core.Controller
                         }
                         foreach (var v in h.SubmarineVectors)
                         {
-                            _popUpBullets.Add($"VECTOR [{v.FromDate} -> {v.ToDate}]: Drift dX={v.DeltaX:+0.0;-0.0;0}, dY={v.DeltaY:+0.0;-0.0;0} | {v.DistanceHex:F1} Hex Brg {v.BearingDeg:000}° ({v.CompassHeading})");
+                            int driftBarLen = Math.Min(5, (int)(v.DistanceHex / 5.0));
+                            string driftBar = new string('=', driftBarLen) + "►";
+                            _popUpBullets.Add($"VECTOR [{v.FromDate}->{v.ToDate}]: [{driftBar,-6}] {v.DistanceHex:F1}Hx Brg {v.BearingDeg:000}° ({v.CompassHeading}) dX:{v.DeltaX:+0.0;-0.0;0} dY:{v.DeltaY:+0.0;-0.0;0}");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: Derived from Consecutive Daily Submarine Centroid Coordinates",
                                 $"INTERVAL: {v.FromDate} to {v.ToDate}",
@@ -1580,7 +1598,7 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var b in h.IntelligenceBlindspots)
                         {
-                            _popUpBullets.Add($"[{b.DateYYMMDD}] Hex {b.HexX,3},{b.HexY,-3} ({b.LocationName}) : Unheralded Combat Engagement");
+                            _popUpBullets.Add($"[{b.DateYYMMDD}] Hex {b.HexX,3},{b.HexY,-3} [░░░░░░ GAP 0%] {b.LocationName} : Combat Blindspot");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: combatreport Engagement Records",
                                 $"LOCATION: Hex {b.HexX},{b.HexY} ({b.LocationName})",
@@ -1610,7 +1628,9 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var m in h.FleetMeans)
                         {
-                            _popUpBullets.Add($"[{m.DateYYMMDD}] Mean Fleet Center: ({m.MeanX:F1}, {m.MeanY:F1}) | {m.TotalVesselsCounted} vessels counted");
+                            int densityBars = Math.Min(8, m.TotalVesselsCounted / 4);
+                            string fleetBar = new string('█', densityBars) + new string('░', 8 - densityBars);
+                            _popUpBullets.Add($"[{m.DateYYMMDD}] Fleet Center: ({m.MeanX:F1},{m.MeanY:F1}) [{fleetBar}] {m.TotalVesselsCounted,2} vessels counted");
                             var r = new List<string> {
                                 "TELEMETRY SOURCE: asigint & Sighting Telemetry Log",
                                 $"DATE: {m.DateYYMMDD}",
@@ -1625,7 +1645,9 @@ namespace MUTHUR6000.Core.Controller
                         if (h.StrategicDrift.DistanceHex > 0.001)
                         {
                             var sd = h.StrategicDrift;
-                            _popUpBullets.Add($"STRATEGIC DRIFT: Vector dX={sd.DeltaX:+0.0;-0.0;0}, dY={sd.DeltaY:+0.0;-0.0;0} | {sd.DistanceHex:F1} Hex/Day Heading {sd.BearingDeg:000}° ({sd.CompassHeading})");
+                            int speedBars = Math.Min(8, (int)sd.DistanceHex);
+                            string speedGraph = new string('█', speedBars) + new string('░', 8 - speedBars);
+                            _popUpBullets.Add($"STRATEGIC DRIFT: [{speedGraph}] {sd.DistanceHex:F1} Hx/D Brg {sd.BearingDeg:000}° ({sd.CompassHeading}) dX:{sd.DeltaX:+0.0;-0.0;0} dY:{sd.DeltaY:+0.0;-0.0;0}");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: 3-Day Rolling Window of Mean Fleet Coordinates",
                                 $"INTERVAL: {sd.FromDate} to {sd.ToDate}",
@@ -1655,8 +1677,8 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var opt in h.DailyOptempo)
                         {
-                            int barLen = Math.Min(20, opt.SeparatorCount / 2);
-                            string bar = new string('█', barLen) + new string('░', Math.Max(0, 20 - barLen));
+                            int barLen = Math.Min(16, opt.SeparatorCount / 2);
+                            string bar = new string('█', barLen) + new string('░', Math.Max(0, 16 - barLen));
                             _popUpBullets.Add($"[{opt.DateYYMMDD}] Engagements: {opt.SeparatorCount,2} [{bar}] 3D-Avg: {opt.Rolling3DayAvg:F1}");
                             var r = new List<string> {
                                 "TELEMETRY SOURCE: combatreport files across daily turns",
@@ -2391,9 +2413,9 @@ namespace MUTHUR6000.Core.Controller
         //  SCREEN BUILDERS
         // ════════════════════════════════════════════════════════════════════
 
-        public void RenderCurrentScreen()
+        public string BuildCurrentScreen()
         {
-            string buffer = _state switch
+            return _state switch
             {
                 ScreenState.Boot                   => BuildBootScreen(),
                 ScreenState.StartScreen            => BuildStartScreen(),
@@ -2422,6 +2444,11 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.ExitConfirmModal        => BuildExitConfirmModal(),
                 _                                   => BuildStartScreen()
             };
+        }
+
+        public void RenderCurrentScreen()
+        {
+            string buffer = BuildCurrentScreen();
             bool isInstant = _state is ScreenState.ReasoningModal
                                     or ScreenState.VaultIngestion
                                     or ScreenState.ExitConfirmModal;
