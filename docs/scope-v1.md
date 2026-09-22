@@ -10,6 +10,18 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-22 22:15 UTC+3: **War Room Graphics Domain & ASCII Wireframe Blueprint Template (Ozgur):**
+  1. **Rename War Room Option [3] to Graphics:** Option `[3]` in the War Room Primary Screen is officially transitioned from `TBD` to `Graphics`.
+  2. **Graphics Sub-Menu Categories:** Selecting Graphics opens a dedicated 6-item navigation sub-menu:
+     - `[1] Trend Lines (The "What's Happening" Graphs)`
+     - `[2] Correlation & Logic Graphs (The "Why it's Happening" Graphs)`
+     - `[3] Strategic & Intelligence Overviews`
+     - `[4] Tactical & Operational Telemetry`
+     - `[5] [ TBD ]` (retained as unassigned TBD per user directive)
+     - `[6] [ TBD ]` (retained as unassigned TBD per user directive)
+  3. **Full-Screen Graphical Presentation View:** When a category is chosen, the terminal renders a full-screen native monospace visualization matching the exact architecture of `media_1790103739294.jpg` (top metric rate bars, central time-series Braille/scatter curve, lower readiness gauges, and bottom tactical assessment box) with rigid monospace straight borders.
+  4. **ASCII Wireframe Specification Template:** Established `docs/graphics-blueprints-template.md` as an ASCII-art wireframe template allowing Ozgur to directly edit mockups, data sources, math formulas, and axis parameters before implementation begins.
+
 - 2026-09-22 21:45 UTC+3: **Header Phosphor Relocation, In-Terminal Unicode Graphs & Straight Border Assurance (Ozgur):**
   1. **Phosphor Quick-Switch Header Relocation:** Moved the quick-switch phosphor color buttons (`PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]`) to the top draggable header bar directly beside `[ PACIFIC THEATER CIC MATRIX ]` per screenshot `media_1790098927695.png`.
   2. **In-Terminal Unicode & Character Graphing (ADR 64):** Implemented native monospace graphs inside the Heuristics domain pop-up:

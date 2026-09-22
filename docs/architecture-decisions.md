@@ -761,5 +761,29 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
    - All modal rows are clamped and padded to `innerWidth = 74` using single-width UTF-8 code points, guaranteeing `boxWidth = 78` throughout `BuildHeuristicsPopUp` and `BuildReasoningModal`.
    - Verified via automated unit tests in `tests/MUTHUR6000.Tests/Program.cs`.
 
-**Source:** Ozgur directives (2026-09-22 21:05 UTC+3).
+## 68. War Room Graphics Domain & ASCII Wireframe Specification Architecture (2026-09-22 22:15 UTC+3)
+
+**Decision:**
+1. **Transition Option [3] from TBD to Graphics:**
+   - Option `[3]` in the War Room Primary Screen is formally renamed to `Graphics (Visual Telemetry Matrix)`.
+2. **Dedicated Graphics Sub-Menu (6 Categories):**
+   - Sub-Menu contains 6 navigable categories:
+     - `[1] Trend Lines (The "What's Happening" Graphs)`
+     - `[2] Correlation & Logic Graphs (The "Why it's Happening" Graphs)`
+     - `[3] Strategic & Intelligence Overviews`
+     - `[4] Tactical & Operational Telemetry`
+     - `[5] [ TBD ]` (Strict user directive: NO default name assignment; retained strictly as TBD)
+     - `[6] [ TBD ]` (Strict user directive: NO default name assignment; retained strictly as TBD)
+3. **Full-Screen In-Terminal Presentation Visual Screen (Option 1):**
+   - Pressing `[ENTER]` on any category launches a dedicated full-screen presentation matching `media_1790103739294.jpg`:
+     - Top category/turn banner.
+     - Section 1: High-level metric rate bars (`[MODEL] SORTIES: X LOSSES: Y RATE: Z% [███░░░░]`).
+     - Section 2: Time-series / correlation curve or scatter plot using Braille (`⣀⣤⣶⣿`) and stepped blocks.
+     - Section 3: Force readiness / logistics meters (`[TF]: [FUEL: XX% ████░░] [AMMO: YY% █████░]`).
+     - Section 4: Tactical assessment & commander deduction box.
+     - Monospace rigid border guarantee (`boxWidth = 78`, `innerWidth = 74`).
+4. **Editable ASCII Wireframe Specification Template:**
+   - Created `docs/graphics-blueprints-template.md` formatted with direct ASCII art wireframes, allowing Ozgur to easily fill, comment, and define plotting parameters before code implementation.
+
+**Source:** Ozgur directives (2026-09-22 22:07 & 22:16 UTC+3).
 

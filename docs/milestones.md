@@ -18,6 +18,7 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Checkpoint Release Tag: `checkpoint-pre-major-addition-clean-baseline`  
 - Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-clean-baseline.zip` (88,791,871 bytes)  
 - Recovery & Rollback Guide: [`docs/recovery-point-clean-baseline.md`](recovery-point-clean-baseline.md)  
+- War Room Graphics Domain & ASCII Wireframe Blueprint: Renaming War Room Option [3] to Graphics with 6 navigable sub-categories, full-screen in-terminal visualization matching `media_1790103739294.jpg`, and ASCII wireframe specification template [`docs/graphics-blueprints-template.md`](graphics-blueprints-template.md) (2026-09-22 22:15 UTC+3).
 - In-Terminal Unicode Character Graphing (ADR 64): Monospace delta bars `[►████░░░░]`, hit markers `──■──`, contact density meters `[■■■···]`, drift vector velocity arrows `[==►  ]`, gap sensors `[░░░░░░ GAP 0%]`, and OPTEMPO histograms `[████░░░░░░░░░░░░]`.
 - Rigid Box Monospace Alignment: 100% straight right border guarantee with zero line wobbling or bending.
 - Header Phosphor Relocation: Phosphor quick-switch buttons positioned in top draggable window header adjacent to CIC matrix badge.

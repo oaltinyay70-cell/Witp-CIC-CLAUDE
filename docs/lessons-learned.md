@@ -633,12 +633,22 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What Was Learned:**
   1. **Strict Monospace Column Integrity:** In console/TUI windowing systems with box-drawing frames (`╔═╗`, `║ ║`, `╚═╝`), all rows enclosed within vertical side borders `║` MUST have identical display column widths. Any variation in character count or presence of wide characters causes the right border `║` to bend, indent, or wobble.
   2. **Single-Width Monospace Glyphs:** When generating in-terminal graphs, use only standard single-width characters (`█`, `░`, `▓`, `■`, `▲`, `▼`, `►`, `◄`, `+`, `-`, `=`, `·`) whose string `.Length` matches their visual cell width in monospace fonts like Cascadia Code and Consolas.
-  3. **Strict Clamping & Padding:** All content lines inserted into pop-up boxes must be explicitly clamped and padded to `innerWidth = 74` so that every row has exact length 78 including borders (`$"║ {PadTo(line, 74)} ║"`).
-  4. **Automated Line-Length Regression Testing:** Test suites must assert that every box row in generated screen buffers has exact character length `boxWidth == 78` to mechanically guard against border warping.
 - **What NOT to Repeat:**
   - NEVER use wide full-width glyphs or unpadded strings inside box frames.
   - NEVER permit lines inside a modal box to vary in length.
   - NEVER deliver graph or modal changes without automated test validation confirming that the right border is 100% straight.
+
+### LL-051: ASCII-Art Wireframe Protocol for User Plotting Specifications
+- **Date:** 2026-09-22 22:15 UTC+3
+- **Context:** User requested:
+  > *"make the template easier to edit like a ascii file to fill ? it maybe like an ascii- zied version of the pic u sent me where I fill and comment ... NO [do not invent names for items 5 and 6] ... document everything"*
+- **What Was Learned:**
+  1. **Visual ASCII Mockups Over Abstract Lists:** Providing user-facing design templates in formatted ASCII art wireframes (mirroring the actual CRT screen layout) allows the user to directly visualize and edit data fields, curves, axes, and gauges with maximum intuitive clarity.
+  2. **Strict User Guidance on Placeholders:** When a user requests TBD items (such as items 5 and 6), NEVER invent speculative names or categories. Strictly preserve `[ TBD ]` until the user supplies explicit labels.
+  3. **Exhaustive Documentation Synchronization:** Every directive must immediately update all Core Docs (`scope-v1.md`, `architecture-decisions.md`, `milestones.md`, `lessons-learned.md`, `todo.md`) before taking code actions.
+- **What NOT to Repeat:**
+  - DO NOT provide plain bullet lists when the user requests an editable visual ASCII layout.
+  - DO NOT invent category names for unassigned slots when the user commands NO.
 
 ---
 
