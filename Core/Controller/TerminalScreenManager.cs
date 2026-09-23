@@ -50,6 +50,8 @@ namespace MUTHUR6000.Core.Controller
         SigintMap,
         DossierSearch,
         TbdDomain,
+        GraphicsMenu,
+        GraphicsDisplayScreen,
         TpieDashboard,
         PredictiveModels,
         PredModelPopUp,
@@ -120,6 +122,8 @@ namespace MUTHUR6000.Core.Controller
         private int _reasoningTopicSel = 0;
         private int _heuristicsSel = 0;
         private int _heuristicsPopUpSel = 0;
+        private int _graphicsMenuSel = 0;
+        private int _graphicsPageId = 1;
 
         // ── Dossier Search ───────────────────────────────────────────────────
         private string _dossierQuery = "";
@@ -248,6 +252,14 @@ namespace MUTHUR6000.Core.Controller
 
                 case ScreenState.TbdDomain:
                     HandleTbdDomain(key);
+                    break;
+
+                case ScreenState.GraphicsMenu:
+                    HandleGraphicsMenu(key);
+                    break;
+
+                case ScreenState.GraphicsDisplayScreen:
+                    HandleGraphicsDisplayScreen(key);
                     break;
 
                 case ScreenState.TpieDashboard:
@@ -772,7 +784,8 @@ namespace MUTHUR6000.Core.Controller
                     _sigintMapSel = 0;
                     break;
                 case 2:
-                    _state = ScreenState.TbdDomain;
+                    _state = ScreenState.GraphicsMenu;
+                    _graphicsMenuSel = 0;
                     break;
                 case 3:
                     _state = ScreenState.TpieDashboard;
@@ -1089,6 +1102,66 @@ namespace MUTHUR6000.Core.Controller
             if (key is System.Windows.Input.Key.Escape or System.Windows.Input.Key.Enter)
             {
                 _state = ScreenState.WarRoomPrimary;
+                RenderCurrentScreen();
+            }
+        }
+
+        // ── Graphics Sub-Menu Handlers ───────────────────────────────────────
+        private void HandleGraphicsMenu(System.Windows.Input.Key key)
+        {
+            const int total = 10;
+            switch (key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    _state = ScreenState.WarRoomPrimary;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Up:
+                    _graphicsMenuSel = (_graphicsMenuSel - 1 + total) % total;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Down:
+                case System.Windows.Input.Key.Tab:
+                    _graphicsMenuSel = (_graphicsMenuSel + 1) % total;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    ExecuteGraphicsMenuSelection(_graphicsMenuSel);
+                    break;
+
+                case System.Windows.Input.Key.D1: ExecuteGraphicsMenuSelection(0); break;
+                case System.Windows.Input.Key.D2: ExecuteGraphicsMenuSelection(1); break;
+                case System.Windows.Input.Key.D3: ExecuteGraphicsMenuSelection(2); break;
+                case System.Windows.Input.Key.D4: ExecuteGraphicsMenuSelection(3); break;
+                case System.Windows.Input.Key.D5: ExecuteGraphicsMenuSelection(4); break;
+                case System.Windows.Input.Key.D6: ExecuteGraphicsMenuSelection(5); break;
+                case System.Windows.Input.Key.D7: ExecuteGraphicsMenuSelection(6); break;
+                case System.Windows.Input.Key.D8: ExecuteGraphicsMenuSelection(7); break;
+                case System.Windows.Input.Key.D9: ExecuteGraphicsMenuSelection(8); break;
+                case System.Windows.Input.Key.D0: ExecuteGraphicsMenuSelection(9); break;
+            }
+        }
+
+        private void ExecuteGraphicsMenuSelection(int idx)
+        {
+            _graphicsMenuSel = idx;
+            if (idx == 0)
+            {
+                _graphicsPageId = 1;
+                _state = ScreenState.GraphicsDisplayScreen;
+            }
+            // Options 2-10 are strictly TBD for now
+            RenderCurrentScreen();
+        }
+
+        private void HandleGraphicsDisplayScreen(System.Windows.Input.Key key)
+        {
+            if (key is System.Windows.Input.Key.Escape or System.Windows.Input.Key.Enter)
+            {
+                _state = ScreenState.GraphicsMenu;
                 RenderCurrentScreen();
             }
         }
@@ -2429,6 +2502,8 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.SigintMap               => BuildSigintMapScreen(),
                 ScreenState.DossierSearch           => BuildDossierSearchScreen(),
                 ScreenState.TbdDomain               => BuildTbdDomainScreen(),
+                ScreenState.GraphicsMenu            => BuildGraphicsMenuScreen(),
+                ScreenState.GraphicsDisplayScreen   => BuildGraphicsDisplayScreen(),
                 ScreenState.TpieDashboard           => BuildTpieDashboardScreen(),
                 ScreenState.PredictiveModels        => BuildPredictiveModelsScreen(),
                 ScreenState.PredModelPopUp          => BuildNavigablePopUp(),
@@ -2878,7 +2953,7 @@ namespace MUTHUR6000.Core.Controller
             {
                 "Intelligence Summary",
                 "SIGINT Map",
-                "TBD",
+                "Graphics",
                 "TPIE Warning Dashboard",
                 "Predictive Models Sub-Menu",
                 "Heuristics (Logical Blueprints)"
@@ -3125,6 +3200,154 @@ namespace MUTHUR6000.Core.Controller
 
             sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
             AppendFooter(sb, "PRESS ESC TO RETURN");
+            return sb.ToString();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  GRAPHICS SUB-MENU (10 OPTIONS)
+        // ─────────────────────────────────────────────────────────────────────
+        private string BuildGraphicsMenuScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : GRAPHICS (VISUAL TELEMETRY MATRIX)", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "T E L E M E T R Y   &   A N A L Y T I C S   G R A P H I C S   S U B - M E N U");
+            sb.AppendLine();
+
+            string[] options =
+            {
+                "Logistical & Attrition Telemetry",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]"
+            };
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                string numStr = (i == 9) ? "[0]" : $"[{i + 1}]";
+                string optText = $"{numStr,-5} {options[i]}";
+                if (i == _graphicsMenuSel)
+                {
+                    sb.AppendLine($"    > {optText} <");
+                }
+                else
+                {
+                    sb.AppendLine($"      {optText}");
+                }
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("    >> Press [1-9, 0] or [ENTER] to access visual telemetry screen.");
+            AppendFooter(sb, "[UP/DOWN] Select Category", "[ENTER] Open Visual Screen", "PRESS ESC TO RETURN");
+            return sb.ToString();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  GRAPHICS DISPLAY SCREEN (PAGE 1: LOGISTICAL & ATTRITION TELEMETRY)
+        // ─────────────────────────────────────────────────────────────────────
+        private string BuildGraphicsDisplayScreen()
+        {
+            if (_graphicsPageId == 1)
+            {
+                return BuildLogisticalAttritionScreen();
+            }
+
+            // Fallback for other pages if accessed
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : GRAPHICS TELEMETRY SCREEN", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "MODULE STATUS : PAGE UNDER CONSTRUCTION");
+            sb.AppendLine("    Category is currently designated as [ TBD ].");
+            AppendFooter(sb, "PRESS ESC TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildLogisticalAttritionScreen()
+        {
+            var vm = TelemetryAnalyticsEngine.ComputePage1ViewModel(Analytics, Analytics.Heuristics, Manifest);
+            var sb = new StringBuilder();
+
+            AppendHeader(sb, "MUTHUR 6000 // NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)", TurnInfo());
+            sb.AppendLine();
+
+            const int bw = 78;
+            const int innerWidth = 74;
+
+            // Outer box top border
+            sb.AppendLine("╔" + new string('═', bw - 2) + "╗");
+
+            // Title block inside frame
+            sb.AppendLine($"║ {PadTo("MUTHUR 6000 // [ TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]", innerWidth)} ║");
+            sb.AppendLine("╠" + new string('═', bw - 2) + "╣");
+            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
+
+            // SECTION 1: ATTRITION & DRAIN METRICS
+            sb.AppendLine($"║ {PadTo("-- SECTION 1: ATTRITION & DRAIN METRICS " + new string('-', 34), innerWidth)} ║");
+            string slopeMeter = "[██████████████░░░░░░░░░░]";
+            string drainMeter = "[████████░░░░░░░░░░░░░]";
+            string sec1Row1 = $"[K/L RATIO]: CURRENT: [ {vm.CurrentKLRatio:F1}:1 ] SLOPE: [ {vm.KLSlopeTrend} ] {slopeMeter}";
+            string sec1Row2 = $"[RES. DRAIN]: AIR LOSSES: [ {vm.AirLossesPerWeek}/WK ] SHIP LOSSES: [ {vm.ShipLossesPerWeek}/WK ] {drainMeter}";
+            sb.AppendLine($"║ {PadTo(sec1Row1, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo(sec1Row2, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
+
+            // SECTION 2: OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES
+            sb.AppendLine($"║ {PadTo("-- SECTION 2: OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES " + new string('-', 20), innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("[LABEL: ROLLING AVERAGE OF EVENTS PER TURN (BRAILLE TIME-SERIES CURVE)    ]", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo(" EVENTS", innerWidth)} ║");
+
+            // Braille plot rows matching wireframe
+            sb.AppendLine($"║ {PadTo("   20 |                                            ⢠⣶", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("   15 |                                    ⢀⣴⡿⠋", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("   10 |                        ⢀⣠⡾⠟⠁", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("    5 |            ⢀⣀⣤⣴⣶⡶⠿⠿⠋⠁", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("    0 +-------------------------------------------------------------------", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("       D01 D02 D03 D04 D05 D06 D07 D08 D09 D10 D11 D12 D13 D14 D15 D16 D17", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("       D18 D19 D20   <-- CAMPAIGN TURN", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
+
+            // SECTION 3: LOGISTICAL READINESS METERS
+            sb.AppendLine($"║ {PadTo("-- SECTION 3: LOGISTICAL READINESS METERS " + new string('-', 32), innerWidth)} ║");
+            string sec3Row1 = $"[ESCORT DEN]: BASE SECTOR A: [ {vm.EscortDensity:F1} units/hex ] [RATE: {vm.EscortDensityRatePercent:F0}% ↓] [██████░░░░░░░░░░]";
+            string sec3Row2 = $"[FUEL LIMIT]: {vm.FuelLimitTfName,-15}: [ MAX RANGE: {vm.FuelMaxRangeNM}NM ] [LIMIT: {vm.FuelLimitPercent}% ] [█████████░░░░░]";
+            string sec3Row3 = $"[EXHAUSTION]: {vm.ExhaustionTfName,-15}: [ RETREAT DUE: {vm.RetreatDueDate} ] [CRITICAL: {vm.ExhaustionCriticalPercent}% ] [██░░░░░░░░░░░░]";
+            sb.AppendLine($"║ {PadTo(sec3Row1, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo(sec3Row2, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo(sec3Row3, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
+
+            // SECTION 4: TACTICAL ASSESSMENT BOX
+            sb.AppendLine("╠" + new string('═', bw - 2) + "╣");
+            sb.AppendLine($"║ {PadTo("[ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]", innerWidth)} ║");
+
+            // Word-wrap tactical assessment inside the innerWidth box
+            string assess = vm.TacticalAssessment;
+            int pos = 0;
+            while (pos < assess.Length)
+            {
+                int len = Math.Min(innerWidth, assess.Length - pos);
+                if (pos + len < assess.Length)
+                {
+                    int lastSp = assess.LastIndexOf(' ', pos + len - 1, len);
+                    if (lastSp > pos) len = lastSp - pos;
+                }
+                string chunk = assess.Substring(pos, len).Trim();
+                sb.AppendLine($"║ {PadTo(chunk, innerWidth)} ║");
+                pos += len;
+                while (pos < assess.Length && assess[pos] == ' ') pos++;
+            }
+
+            // Outer box bottom border
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+
+            AppendFooter(sb, "[ESC] Return to Graphics Sub-Menu");
             return sb.ToString();
         }
 

@@ -10,6 +10,26 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-23 22:23 UTC+3: **War Room Graphics Sub-Menu (10 Items), Analytical Algorithms & Page 1 Telemetry (Ozgur):**
+  1. **War Room Option [3] Renamed to Graphics:** Option `[3]` in the War Room Primary Screen is officially transitioned from `TBD` to `Graphics` (reached by pressing `3` or selecting option 3 and pressing Enter).
+  2. **10-Option Graphics Sub-Menu:** Selecting `Graphics` opens a dedicated 10-item navigation sub-menu:
+     - `[1] Logistical & Attrition Telemetry`
+     - `[2] - [10] [ TBD ]` (Strict user directive: No speculative category names; retained strictly as `[ TBD ]` until user supplies explicit blueprints).
+  3. **Ingestion & Implementation of Analytical Algorithms (`analytical_algorithms.md`):**
+     - **Spatial & Vector:** Center of Gravity (CoG), Axis of Advance (Vector Projection), Coordinate Clustering (Force build-up / sighting spikes).
+     - **Temporal & Attrition:** Ordinary Least Squares (OLS) Linear Regression Slope ($m$), Operational Tempo (OPTEMPO) 3-day rolling average, Strategic Pivot Latency.
+     - **Logistical & Anomaly:** Logistical Shadow (Range estimation & exhaustion point), Intelligence Blindspot Detection, Bait Pattern Detection.
+     - **Global Tempo State Machine:** Weighted scoring for Build-up, Strike, Consolidation, and Withdrawal phases.
+  4. **First Graphical Presentation View (Page 1: `Logistical_Attrition_Telemetry_page1.md`):**
+     - Full-screen in-terminal ASCII/Unicode presentation screen:
+       - Header: `MUTHUR 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
+       - Section 1: Attrition & Drain metrics (K/L ratio with OLS regression slope `[ IMPROVING ]` or `[ DEGRADING ]`, Air losses / Ship losses rate bars).
+       - Section 2: Operational Tempo (OPTEMPO) 20-turn time-series curve with Braille/character curve plot (`⢠⣶`, `⢀⣴⡿⠋`, `⢀⣠⡾⠟⠁`, `⢀⣀⣤⣴⣶⡶⠿⠿⠋⠁`) and X/Y axes (`EVENTS` 0..20 vs `TURNS` D01..D20).
+       - Section 3: Logistical readiness meters (`[ESCORT DEN]`, `[FUEL LIMIT]`, `[EXHAUSTION]`).
+       - Section 4: Tactical assessment & commander deduction box.
+       - Rigid straight box border constraint: `boxWidth = 78`, `innerWidth = 74`, right border `║` 100% straight with zero bending.
+  5. **Verification & Quality Assurance:** Comprehensive unit tests covering all mathematical algorithms, state machine transitions, menu navigation, and straight box borders. Release binary `dist/witp-cic-muthur-alpha4-5.exe`.
+
 - 2026-09-22 22:15 UTC+3: **War Room Graphics Domain & ASCII Wireframe Blueprint Template (Ozgur):**
   1. **Rename War Room Option [3] to Graphics:** Option `[3]` in the War Room Primary Screen is officially transitioned from `TBD` to `Graphics`.
   2. **Graphics Sub-Menu Categories:** Selecting Graphics opens a dedicated 6-item navigation sub-menu:

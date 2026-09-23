@@ -251,8 +251,125 @@ namespace MUTHUR6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "Heuristics -> WarRoomPrimary on [ESC]");
 
+            // ── Test Suite 9: Telemetry Analytics Engine & Core Algorithms ───────────
+            Console.WriteLine("\n--- TEST SUITE 9: Telemetry Analytics Engine & Core Algorithms ---");
+            
+            // 1.1 CoG
+            var cogCoords = new List<(double X, double Y)> { (50, 70), (52, 72), (54, 74) };
+            var cog = TelemetryAnalyticsEngine.CalculateCenterOfGravity(cogCoords);
+            Assert(Math.Abs(cog.CoG_X - 52.0) < 0.001 && Math.Abs(cog.CoG_Y - 72.0) < 0.001, "Section 1.1: Center of Gravity (CoG) correctly computed (52.0, 72.0)");
+
+            // 1.2 Axis of Advance
+            var advance = TelemetryAnalyticsEngine.CalculateAxisOfAdvance((54, 76), (50, 70));
+            Assert(advance.Vector_X == 4.0 && advance.Vector_Y == 6.0 && advance.Projected_X == 58.0 && advance.Projected_Y == 82.0,
+                "Section 1.2: Axis of Advance vector projection verified (Projected: 58, 82)");
+
+            // 1.3 Clustering
+            var candidateS = new List<(int X, int Y)> { (50, 70), (100, 100) };
+            var histS = new List<(int X, int Y)> { (50, 70), (51, 71), (52, 70), (49, 69) };
+            var clusters = TelemetryAnalyticsEngine.DetectCoordinateClustering(candidateS, histS, 5, 1.0);
+            Assert(clusters.Any(c => c.HexX == 50 && c.IsSightingSpike), "Section 1.3: Force build-up sighting spike identified in hex (50, 70)");
+
+            // 2.1 OLS Linear Regression Slope
+            var improvingVals = new List<double> { 1.0, 1.2, 1.4, 1.6, 1.8 };
+            var slopeRes = TelemetryAnalyticsEngine.CalculateLinearRegressionSlope(improvingVals);
+            Assert(slopeRes.Slope > 0 && slopeRes.Trend == "IMPROVING", "Section 2.1: OLS Regression correctly detects IMPROVING slope (m > 0)");
+
+            var degradingVals = new List<double> { 2.0, 1.8, 1.5, 1.3, 1.0 };
+            var slopeDegRes = TelemetryAnalyticsEngine.CalculateLinearRegressionSlope(degradingVals);
+            Assert(slopeDegRes.Slope < 0 && slopeDegRes.Trend == "DEGRADING", "Section 2.1: OLS Regression correctly detects DEGRADING slope (m < 0)");
+
+            // 2.2 Rolling OPTEMPO
+            var dailyEvts = new List<int> { 3, 6, 9, 12 };
+            var rollingOpt = TelemetryAnalyticsEngine.ComputeRollingOptempo(dailyEvts, 3);
+            Assert(rollingOpt.Count == 4 && Math.Abs(rollingOpt[2] - 6.0) < 0.001 && Math.Abs(rollingOpt[3] - 9.0) < 0.001,
+                "Section 2.2: Rolling 3-day OPTEMPO rolling average correctly smoothed");
+
+            // 2.3 Strategic Pivot Latency
+            var pivot = TelemetryAnalyticsEngine.CalculateStrategicPivotLatency("Malaya", new DateTime(1941, 12, 10), "Philippines", new DateTime(1941, 12, 15));
+            Assert(pivot.LatencyDays == 5, "Section 2.3: Strategic Pivot Latency measured (5 days)");
+
+            // 3.1 Logistical Shadow
+            var shadow = TelemetryAnalyticsEngine.EstimateLogisticalShadow("TF 402", 50, 50, "Kure", 50, 55, 6000, 0.25);
+            Assert(shadow.DistanceToHomePort == 200.0 && shadow.MaxRangeNM == 1500.0 && !shadow.IsExhaustionPointReached,
+                "Section 3.1: Logistical Shadow range calculation verified (Max 1500NM, Dist 200NM)");
+
+            // 3.2 Intelligence Blindspot
+            var priorS = new List<(int X, int Y, string Date)> { (10, 10, "411207") };
+            var blindspot = TelemetryAnalyticsEngine.DetectIntelligenceBlindspot(50, 50, "411208", "Air Attack", priorS);
+            Assert(blindspot.IsBlindspot && blindspot.RiskTier == "HIGH", "Section 3.2: Intelligence Blindspot detected (Combat with 0 prior sightings)");
+
+            // 3.3 Bait Pattern
+            var bait = TelemetryAnalyticsEngine.DetectBaitPattern("Hex 40,50", "Hex 45,55", 6.0, true);
+            Assert(bait.IsPotentialTrap, "Section 3.3: Bait pattern diversion detected (CAP diverted 6h prior)");
+
+            // 4. Global Tempo State Machine
+            var (phase, scores) = TelemetryAnalyticsEngine.EvaluateGlobalTempoPhase(true, true, false, false, false, false, false);
+            Assert(phase == GlobalTempoPhase.BuildUp, "Section 4: Global Tempo State Machine classifies Build-Up (+2 Build-Up)");
+
+            // ── Test Suite 10: Graphics Sub-Menu & Logistical Attrition Telemetry (Page 1) ─
+            Console.WriteLine("\n--- TEST SUITE 10: Graphics Sub-Menu & Logistical Attrition Telemetry ---");
+
+            // Navigate MasterMenu -> WarRoomPrimary
+            screenManager.HandleKeyDown(System.Windows.Input.Key.A);
+            Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "MasterMenu -> WarRoomPrimary on [A]");
+
+            string warRoomScreen = screenManager.BuildCurrentScreen();
+            Assert(warRoomScreen.Contains("[3]  Graphics"), "War Room Option [3] displays '[3]  Graphics' (renamed from TBD)");
+
+            // Press 3 to open GraphicsMenu
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D3);
+            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "WarRoomPrimary -> GraphicsMenu on [3]");
+
+            string graphicsMenuScreen = screenManager.BuildCurrentScreen();
+            Assert(graphicsMenuScreen.Contains("[1]   Logistical & Attrition Telemetry"), "Graphics Menu option [1] is 'Logistical & Attrition Telemetry'");
+            Assert(graphicsMenuScreen.Contains("[2]   [ TBD ]") && graphicsMenuScreen.Contains("[0]   [ TBD ]"),
+                "Graphics Menu options [2] through [10] strictly designated as [ TBD ]");
+
+            // Press Enter to open Page 1 (Logistical & Attrition Telemetry)
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
+            Assert(screenManager.CurrentState == ScreenState.GraphicsDisplayScreen, "GraphicsMenu -> GraphicsDisplayScreen (Page 1) on [ENTER]");
+
+            string page1Buffer = screenManager.BuildCurrentScreen();
+            bool hasHeader = page1Buffer.Contains("TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)");
+            Assert(hasHeader,
+                "Page 1 contains exact header title from wireframe blueprint");
+            Assert(page1Buffer.Contains("[K/L RATIO]: CURRENT:") && page1Buffer.Contains("[RES. DRAIN]: AIR LOSSES:"),
+                "Page 1 contains Section 1: Attrition & Drain metrics");
+            Assert(page1Buffer.Contains("OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES") && page1Buffer.Contains("⢠⣶"),
+                "Page 1 contains Section 2: OPTEMPO Braille time-series curve");
+            Assert(page1Buffer.Contains("[ESCORT DEN]:") && page1Buffer.Contains("[FUEL LIMIT]:") && page1Buffer.Contains("[EXHAUSTION]:"),
+                "Page 1 contains Section 3: Logistical readiness meters");
+            Assert(page1Buffer.Contains("[ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]"),
+                "Page 1 contains Section 4: Tactical assessment box");
+
+            // Monospace straight border check for Page 1
+            var page1Lines = page1Buffer.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            bool allPage1BordersStraight = true;
+            foreach (var line in page1Lines)
+            {
+                if (line.StartsWith("║") && line.EndsWith("║"))
+                {
+                    if (line.Length != 78)
+                    {
+                        allPage1BordersStraight = false;
+                        Console.WriteLine($"[FAIL] Page 1 box line length mismatch: {line.Length} expected 78: '{line}'");
+                    }
+                }
+            }
+            Assert(allPage1BordersStraight, "ADR 64 / ADR 69: Page 1 In-Terminal Unicode Graph Box right side is 100% straight (Length == 78)");
+
+            // ESC returns to GraphicsMenu
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
-            Assert(screenManager.CurrentState == ScreenState.MasterMenu, "WarRoom -> MasterMenu on [ESC]");
+            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "Page 1 -> GraphicsMenu on [ESC]");
+
+            // ESC returns to WarRoomPrimary
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+            Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "GraphicsMenu -> WarRoomPrimary on [ESC]");
+
+            // ESC returns to MasterMenu
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+            Assert(screenManager.CurrentState == ScreenState.MasterMenu, "WarRoomPrimary -> MasterMenu on [ESC]");
 
             Console.WriteLine("\n================================================================================");
             Console.WriteLine($"  SUMMARY: {_passedCount} Passed, {_failedCount} Failed");

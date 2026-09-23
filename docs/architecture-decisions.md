@@ -787,3 +787,29 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 
 **Source:** Ozgur directives (2026-09-22 22:07 & 22:16 UTC+3).
 
+## 69. 10-Item Graphics Sub-Menu, Analytical Algorithms Engine & Page 1 Telemetry (2026-09-23 22:23 UTC+3)
+
+**Decision:**
+1. **War Room Option [3] Direct Navigation:**
+   - Pressing `3` or selecting `[3]  Graphics` in War Room Primary Screen opens the dedicated Graphics Sub-Menu.
+2. **Graphics Sub-Menu Configuration (10 Items):**
+   - Item `[1]`: `Logistical & Attrition Telemetry`
+   - Items `[2]` through `[10]`: Strictly designated as `[ TBD ]`. No speculative titles or assumptions.
+3. **Analytical Algorithms Engine (`analytical_algorithms.md`):**
+   - Centralized under `Core/Analytics/TelemetryAnalyticsEngine.cs` executing all 4 core algorithm suites:
+     - Spatial & Vector: Center of Gravity (CoG), Axis of Advance (Vector Projection), Coordinate Clustering (Density & Spikes).
+     - Temporal & Attrition: Ordinary Least Squares (OLS) Regression Slope ($m$), OPTEMPO 3-day rolling average, Strategic Pivot Latency.
+     - Logistical & Anomaly: Logistical Shadow range calculation, Intelligence Blindspot detection, Bait pattern sequence detection.
+     - Global Tempo State Machine: Weighted multi-signal evaluation producing discrete states (Build-up, Strike, Consolidation, Withdrawal).
+4. **Page 1 In-Terminal Presentation Display (`Logistical_Attrition_Telemetry_page1.md`):**
+   - Implemented as full-screen native monospace view:
+     - Header: `MUTHUR 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
+     - Section 1: Attrition & Drain metrics (K/L ratio with OLS regression slope `[ IMPROVING ]` or `[ DEGRADING ]`, Air losses / Ship losses rate bars).
+     - Section 2: Operational Tempo (OPTEMPO) 20-turn time-series curve with Braille/character curve plot (`⢠⣶`, `⢀⣴⡿⠋`, etc.) and X/Y axes (`EVENTS` 0..20 vs `TURNS` D01..D20).
+     - Section 3: Logistical readiness meters (`[ESCORT DEN]`, `[FUEL LIMIT]`, `[EXHAUSTION]`).
+     - Section 4: Tactical assessment & commander deduction box.
+     - Strict straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
+
+**Source:** Ozgur directives (2026-09-23 22:15 & 22:23 UTC+3).
+
+

@@ -9,16 +9,16 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 4)** (2026-09-22 21:45 UTC+3)  
-- Release Executable: `dist/witp-cic-muthur-alpha4-4.exe` (Single authoritative versioned binary; zero mirrors)  
-- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-4.exe`; build counter increments by 1 on each new compilation)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 5)** (2026-09-23 22:23 UTC+3)  
+- Release Executable: `dist/witp-cic-muthur-alpha4-5.exe` (Single authoritative versioned binary; zero mirrors)  
+- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-5.exe`; build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
 - Clean Baseline Recovery Branch: `recovery-point-clean-baseline`  
 - Checkpoint Release Tag: `checkpoint-pre-major-addition-clean-baseline`  
 - Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-clean-baseline.zip` (88,791,871 bytes)  
 - Recovery & Rollback Guide: [`docs/recovery-point-clean-baseline.md`](recovery-point-clean-baseline.md)  
-- War Room Graphics Domain & ASCII Wireframe Blueprint: Renaming War Room Option [3] to Graphics with 6 navigable sub-categories, full-screen in-terminal visualization matching `media_1790103739294.jpg`, and ASCII wireframe specification template [`docs/graphics-blueprints-template.md`](graphics-blueprints-template.md) (2026-09-22 22:15 UTC+3).
+- War Room Graphics Sub-Menu (10 Items) & Page 1 Telemetry: Renaming War Room Option [3] to Graphics with 10-item sub-menu ([1] Logistical & Attrition Telemetry, [2]-[10] [ TBD ]), full-screen in-terminal visualization matching `docs/OPENCODE INPUT/Logistical_Attrition_Telemetry_page1.md`, and core mathematical algorithms engine implementing `docs/OPENCODE INPUT/analytical_algorithms.md` (2026-09-23 22:23 UTC+3).
 - In-Terminal Unicode Character Graphing (ADR 64): Monospace delta bars `[►████░░░░]`, hit markers `──■──`, contact density meters `[■■■···]`, drift vector velocity arrows `[==►  ]`, gap sensors `[░░░░░░ GAP 0%]`, and OPTEMPO histograms `[████░░░░░░░░░░░░]`.
 - Rigid Box Monospace Alignment: 100% straight right border guarantee with zero line wobbling or bending.
 - Header Phosphor Relocation: Phosphor quick-switch buttons positioned in top draggable window header adjacent to CIC matrix badge.

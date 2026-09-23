@@ -650,6 +650,19 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT provide plain bullet lists when the user requests an editable visual ASCII layout.
   - DO NOT invent category names for unassigned slots when the user commands NO.
 
+### LL-052: Ingestion of Analytical Algorithms & Dedicated Graphics Sub-Menu
+- **Date:** 2026-09-23 22:23 UTC+3
+- **Context:** User requested:
+  > *"Graph page wll be reached by pressing 3 TBD from the war room menu. when user presses graph page then he will reach a sub menu page where are 10 options. No 1 is Logistical Attrition Telemetry rest is TBD for now document and implement and test this once this is done under C:\Users\ozgur\Documents\Witp-CIC-MUTHUR\docs\OPENCODE INPUT find and ingest analytical_algorithms.md file where algorithms that will be used in the pages are store. implement them , add them to the scope and other related dox test and verify as usual then implement first graph page Logistical_Attrition_Telemetry_page1.md under the same directory"*
+- **What Was Learned:**
+  1. **Strict 10-Item Graphics Menu Layout:** The Graphics sub-menu must have 10 numbered slots, with option `[1]` dedicated to `Logistical & Attrition Telemetry`, and slots `[2]` through `[10]` strictly designated as `[ TBD ]`.
+  2. **Decoupled Analytical Engine Architecture:** Encapsulate mathematical models and algorithms (CoG, vector projection, OLS regression slope, OPTEMPO rolling average, logistical shadow, anomaly detection, global tempo state machine) in a dedicated analytics engine class (`TelemetryAnalyticsEngine`) to keep UI controllers clean, modular, and easily testable.
+  3. **Preservation of Rigid Monospace Alignment in Graphing:** For in-terminal ASCII/Unicode presentation screens, all rows must adhere to `boxWidth = 78` and `innerWidth = 74` so that right borders `║` remain perfectly straight across ASCII plots, rate bars, and Braille curves.
+- **What NOT to Repeat:**
+  - DO NOT invent labels for items 2 through 10.
+  - DO NOT mix UI rendering logic directly with complex mathematical formulations.
+  - DO NOT emit varying-width graph rows that cause box borders to wobble.
+
 ---
 
 ## 3. Checklist for Future Corrections
