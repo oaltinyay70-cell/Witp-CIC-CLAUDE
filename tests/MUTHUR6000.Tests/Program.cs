@@ -307,8 +307,8 @@ namespace MUTHUR6000.Tests
             var (phase, scores) = TelemetryAnalyticsEngine.EvaluateGlobalTempoPhase(true, true, false, false, false, false, false);
             Assert(phase == GlobalTempoPhase.BuildUp, "Section 4: Global Tempo State Machine classifies Build-Up (+2 Build-Up)");
 
-            // ── Test Suite 10: Graphics Sub-Menu & Logistical Attrition Telemetry (Page 1) ─
-            Console.WriteLine("\n--- TEST SUITE 10: Graphics Sub-Menu & Logistical Attrition Telemetry ---");
+            // ── Test Suite 10: Graphics Sub-Menu & TBD Marker Display ────────────────
+            Console.WriteLine("\n--- TEST SUITE 10: Graphics Sub-Menu & TBD Marker Display ---");
 
             // Navigate MasterMenu -> WarRoomPrimary
             screenManager.HandleKeyDown(System.Windows.Input.Key.A);
@@ -322,28 +322,23 @@ namespace MUTHUR6000.Tests
             Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "WarRoomPrimary -> GraphicsMenu on [3]");
 
             string graphicsMenuScreen = screenManager.BuildCurrentScreen();
-            Assert(graphicsMenuScreen.Contains("[1]   Logistical & Attrition Telemetry"), "Graphics Menu option [1] is 'Logistical & Attrition Telemetry'");
+            Assert(graphicsMenuScreen.Contains("[1]   [ TBD ]"), "Graphics Menu option [1] is '[ TBD ]'");
             Assert(graphicsMenuScreen.Contains("[2]   [ TBD ]") && graphicsMenuScreen.Contains("[0]   [ TBD ]"),
-                "Graphics Menu options [2] through [10] strictly designated as [ TBD ]");
+                "Graphics Menu options [1] through [10] strictly designated as [ TBD ]");
 
-            // Press Enter to open Page 1 (Logistical & Attrition Telemetry)
+            // Press Enter on option [1] to open GraphicsDisplayScreen (TBD Placeholder)
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.CurrentState == ScreenState.GraphicsDisplayScreen, "GraphicsMenu -> GraphicsDisplayScreen (Page 1) on [ENTER]");
+            Assert(screenManager.CurrentState == ScreenState.GraphicsDisplayScreen, "GraphicsMenu -> GraphicsDisplayScreen on [ENTER]");
 
             string page1Buffer = screenManager.BuildCurrentScreen();
-            bool hasHeader = page1Buffer.Contains("TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)");
-            Assert(hasHeader,
-                "Page 1 contains exact header title from wireframe blueprint");
-            Assert(page1Buffer.Contains("[K/L RATIO]: CURRENT:") && page1Buffer.Contains("[RES. DRAIN]: AIR LOSSES:"),
-                "Page 1 contains Section 1: Attrition & Drain metrics");
-            Assert(page1Buffer.Contains("OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES") && page1Buffer.Contains("⢠⣶"),
-                "Page 1 contains Section 2: OPTEMPO Braille time-series curve");
-            Assert(page1Buffer.Contains("[ESCORT DEN]:") && page1Buffer.Contains("[FUEL LIMIT]:") && page1Buffer.Contains("[EXHAUSTION]:"),
-                "Page 1 contains Section 3: Logistical readiness meters");
-            Assert(page1Buffer.Contains("[ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]"),
-                "Page 1 contains Section 4: Tactical assessment box");
+            Assert(page1Buffer.Contains("VISUAL TELEMETRY MATRIX : OPTION 1 (TBD)"),
+                "Page 1 contains standardized TBD marker title");
+            Assert(page1Buffer.Contains("MODULE STATUS : RESERVED TELEMETRY PARTITION (TBD)"),
+                "Page 1 section header indicates reserved telemetry partition");
+            Assert(page1Buffer.Contains("This operational partition is designated as [ TBD ]"),
+                "Page 1 body describes pending wireframe specification");
 
-            // Monospace straight border check for Page 1
+            // Monospace straight border check for TBD Display Screen
             var page1Lines = page1Buffer.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             bool allPage1BordersStraight = true;
             foreach (var line in page1Lines)
@@ -353,15 +348,15 @@ namespace MUTHUR6000.Tests
                     if (line.Length != 78)
                     {
                         allPage1BordersStraight = false;
-                        Console.WriteLine($"[FAIL] Page 1 box line length mismatch: {line.Length} expected 78: '{line}'");
+                        Console.WriteLine($"[FAIL] TBD box line length mismatch: {line.Length} expected 78: '{line}'");
                     }
                 }
             }
-            Assert(allPage1BordersStraight, "ADR 64 / ADR 69: Page 1 In-Terminal Unicode Graph Box right side is 100% straight (Length == 78)");
+            Assert(allPage1BordersStraight, "ADR 64 / ADR 70: Graphics TBD Screen right side is 100% straight (Length == 78)");
 
             // ESC returns to GraphicsMenu
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
-            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "Page 1 -> GraphicsMenu on [ESC]");
+            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "GraphicsDisplayScreen -> GraphicsMenu on [ESC]");
 
             // ESC returns to WarRoomPrimary
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);

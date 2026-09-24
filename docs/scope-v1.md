@@ -10,6 +10,11 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-24 09:14 UTC+3: **Graphics Option [1] Replaced with TBD Placeholder (Ozgur):**
+  1. **Option [1] Replacement:** The `Logistical & Attrition Telemetry` screen is removed from the active graphics display, and item `[1]` in the Graphics sub-menu is transitioned to a strict placeholder: `[ TBD ]`. All 10 items `[1]` through `[10]` in the Graphics Sub-Menu now strictly display `[ TBD ]`.
+  2. **Page 1 Navigation & Display:** Selecting option `[1]` (or any option `1` through `10`) now opens a standardized `TBD` placeholder screen (`WAR ROOM : GRAPHICS TELEMETRY SCREEN // MODULE STATUS : RESERVED TELEMETRY PARTITION (TBD)`) with rigid monospace straight borders, awaiting future user wireframe blueprints.
+  3. **Analytical Engine Preservation:** Core mathematical logic in `TelemetryAnalyticsEngine.cs` is retained in the analytical layer for background processing and subsequent graphic wireframes.
+
 - 2026-09-23 22:23 UTC+3: **War Room Graphics Sub-Menu (10 Items), Analytical Algorithms & Page 1 Telemetry (Ozgur):**
   1. **War Room Option [3] Renamed to Graphics:** Option `[3]` in the War Room Primary Screen is officially transitioned from `TBD` to `Graphics` (reached by pressing `3` or selecting option 3 and pressing Enter).
   2. **10-Option Graphics Sub-Menu:** Selecting `Graphics` opens a dedicated 10-item navigation sub-menu:

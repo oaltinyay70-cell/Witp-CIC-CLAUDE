@@ -810,6 +810,22 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
      - Section 4: Tactical assessment & commander deduction box.
      - Strict straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
 
-**Source:** Ozgur directives (2026-09-23 22:15 & 22:23 UTC+3).
+## 70. Graphics Option [1] Replaced with TBD Marker (2026-09-24 09:14 UTC+3)
+
+**Decision:**
+1. **Transition Option [1] to [ TBD ] Marker:**
+   - In the War Room Graphics Sub-Menu, option `[1]` label is changed from `Logistical & Attrition Telemetry` to `[ TBD ]`. All 10 sub-menu options are now consistently presented as `[ TBD ]`.
+2. **Unified TBD Placeholder Presentation:**
+   - When the user selects option `[1]` (or any slot `1` through `10`), the display routes to `BuildGraphicsDisplayScreen()`, rendering a standardized full-screen monospace placeholder:
+     - Header: `MUTHUR 6000 // GRAPHICS TELEMETRY SCREEN`
+     - Box Title: `╔══ [ RESERVED TELEMETRY PARTITION (TBD) ] ═...═╗`
+     - Body: Explicitly states that this partition is reserved for upcoming wireframe specifications.
+     - Strict straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
+     - Pressing `[ESC]` or `[ENTER]` returns directly to the Graphics Sub-Menu.
+3. **Preservation of TelemetryAnalyticsEngine:**
+   - The mathematical formulations (CoG, vector projection, clustering, OLS regression slope, OPTEMPO rolling average, logistical shadow, anomaly detection, global tempo state machine) remain intact in `TelemetryAnalyticsEngine.cs` for analytical pipeline computations and subsequent blueprints.
+
+**Source:** Ozgur directive (2026-09-24 09:14 UTC+3).
+
 
 

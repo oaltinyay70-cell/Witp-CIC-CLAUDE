@@ -658,12 +658,20 @@ The following documentation suite constitutes the governing **Core Docs** of the
   1. **Strict 10-Item Graphics Menu Layout:** The Graphics sub-menu must have 10 numbered slots, with option `[1]` dedicated to `Logistical & Attrition Telemetry`, and slots `[2]` through `[10]` strictly designated as `[ TBD ]`.
   2. **Decoupled Analytical Engine Architecture:** Encapsulate mathematical models and algorithms (CoG, vector projection, OLS regression slope, OPTEMPO rolling average, logistical shadow, anomaly detection, global tempo state machine) in a dedicated analytics engine class (`TelemetryAnalyticsEngine`) to keep UI controllers clean, modular, and easily testable.
   3. **Preservation of Rigid Monospace Alignment in Graphing:** For in-terminal ASCII/Unicode presentation screens, all rows must adhere to `boxWidth = 78` and `innerWidth = 74` so that right borders `║` remain perfectly straight across ASCII plots, rate bars, and Braille curves.
+### LL-053: Immediate Feature Reversal & TBD Marker Replacement
+- **Date:** 2026-09-24 09:14 UTC+3
+- **Context:** User commanded:
+  > *"delete Logistical Attrition Telemetry page , put a TBD Market in its place"*
+- **What Was Learned:**
+  1. **Immediate Execution of Deletion / Reversion Directives:** When the user explicitly requests deleting an interface screen and replacing it with a TBD marker, execute the change cleanly across the controller, UI text, test suite, and Core Docs without hesitation or unnecessary pushback.
+  2. **Uniformity of Reserved Sub-Menu Slots:** Replacing option `[1]` with `[ TBD ]` creates a clean, unified 10-item placeholder menu where every item consistently communicates its pending status to the user.
+  3. **Preservation of Underpinning Logic:** Removing an interface screen does not mean destroying the underlying analytical algorithms if they are needed for future blueprints; keep background math decoupled in the analytics engine while presenting a clean TBD placeholder in the UI.
 - **What NOT to Repeat:**
-  - DO NOT invent labels for items 2 through 10.
-  - DO NOT mix UI rendering logic directly with complex mathematical formulations.
-  - DO NOT emit varying-width graph rows that cause box borders to wobble.
+  - DO NOT leave traces of removed titles in active menus when asked to replace with TBD.
+  - DO NOT delete underlying domain algorithms unless explicitly instructed to destroy them.
 
 ---
+
 
 ## 3. Checklist for Future Corrections
 Whenever Ozgur provides feedback or a correction:

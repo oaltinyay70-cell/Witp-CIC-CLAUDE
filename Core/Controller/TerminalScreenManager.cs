@@ -1148,12 +1148,8 @@ namespace MUTHUR6000.Core.Controller
         private void ExecuteGraphicsMenuSelection(int idx)
         {
             _graphicsMenuSel = idx;
-            if (idx == 0)
-            {
-                _graphicsPageId = 1;
-                _state = ScreenState.GraphicsDisplayScreen;
-            }
-            // Options 2-10 are strictly TBD for now
+            _graphicsPageId = idx + 1;
+            _state = ScreenState.GraphicsDisplayScreen;
             RenderCurrentScreen();
         }
 
@@ -3216,7 +3212,7 @@ namespace MUTHUR6000.Core.Controller
 
             string[] options =
             {
-                "Logistical & Attrition Telemetry",
+                "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
@@ -3249,105 +3245,44 @@ namespace MUTHUR6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  GRAPHICS DISPLAY SCREEN (PAGE 1: LOGISTICAL & ATTRITION TELEMETRY)
+        //  GRAPHICS DISPLAY SCREEN (TBD PLACEHOLDER SCREEN)
         // ─────────────────────────────────────────────────────────────────────
         private string BuildGraphicsDisplayScreen()
         {
-            if (_graphicsPageId == 1)
-            {
-                return BuildLogisticalAttritionScreen();
-            }
-
-            // Fallback for other pages if accessed
             var sb = new StringBuilder();
             AppendHeader(sb, "WAR ROOM : GRAPHICS TELEMETRY SCREEN", TurnInfo());
             sb.AppendLine();
-            AppendSectionHeader(sb, "MODULE STATUS : PAGE UNDER CONSTRUCTION");
-            sb.AppendLine("    Category is currently designated as [ TBD ].");
-            AppendFooter(sb, "PRESS ESC TO RETURN");
-            return sb.ToString();
-        }
-
-        private string BuildLogisticalAttritionScreen()
-        {
-            var vm = TelemetryAnalyticsEngine.ComputePage1ViewModel(Analytics, Analytics.Heuristics, Manifest);
-            var sb = new StringBuilder();
-
-            AppendHeader(sb, "MUTHUR 6000 // NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)", TurnInfo());
-            sb.AppendLine();
+            AppendSectionHeader(sb, "MODULE STATUS : RESERVED TELEMETRY PARTITION (TBD)");
 
             const int bw = 78;
             const int innerWidth = 74;
 
-            // Outer box top border
-            sb.AppendLine("╔" + new string('═', bw - 2) + "╗");
+            string topTitle = $"╔══ [ VISUAL TELEMETRY MATRIX : OPTION {_graphicsPageId} (TBD) ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
 
-            // Title block inside frame
-            sb.AppendLine($"║ {PadTo("MUTHUR 6000 // [ TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]", innerWidth)} ║");
-            sb.AppendLine("╠" + new string('═', bw - 2) + "╣");
-            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
-
-            // SECTION 1: ATTRITION & DRAIN METRICS
-            sb.AppendLine($"║ {PadTo("-- SECTION 1: ATTRITION & DRAIN METRICS " + new string('-', 34), innerWidth)} ║");
-            string slopeMeter = "[██████████████░░░░░░░░░░]";
-            string drainMeter = "[████████░░░░░░░░░░░░░]";
-            string sec1Row1 = $"[K/L RATIO]: CURRENT: [ {vm.CurrentKLRatio:F1}:1 ] SLOPE: [ {vm.KLSlopeTrend} ] {slopeMeter}";
-            string sec1Row2 = $"[RES. DRAIN]: AIR LOSSES: [ {vm.AirLossesPerWeek}/WK ] SHIP LOSSES: [ {vm.ShipLossesPerWeek}/WK ] {drainMeter}";
-            sb.AppendLine($"║ {PadTo(sec1Row1, innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo(sec1Row2, innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
-
-            // SECTION 2: OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES
-            sb.AppendLine($"║ {PadTo("-- SECTION 2: OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES " + new string('-', 20), innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("[LABEL: ROLLING AVERAGE OF EVENTS PER TURN (BRAILLE TIME-SERIES CURVE)    ]", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo(" EVENTS", innerWidth)} ║");
-
-            // Braille plot rows matching wireframe
-            sb.AppendLine($"║ {PadTo("   20 |                                            ⢠⣶", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("   15 |                                    ⢀⣴⡿⠋", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("   10 |                        ⢀⣠⡾⠟⠁", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("    5 |            ⢀⣀⣤⣴⣶⡶⠿⠿⠋⠁", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("    0 +-------------------------------------------------------------------", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("       D01 D02 D03 D04 D05 D06 D07 D08 D09 D10 D11 D12 D13 D14 D15 D16 D17", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("       D18 D19 D20   <-- CAMPAIGN TURN", innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
-
-            // SECTION 3: LOGISTICAL READINESS METERS
-            sb.AppendLine($"║ {PadTo("-- SECTION 3: LOGISTICAL READINESS METERS " + new string('-', 32), innerWidth)} ║");
-            string sec3Row1 = $"[ESCORT DEN]: BASE SECTOR A: [ {vm.EscortDensity:F1} units/hex ] [RATE: {vm.EscortDensityRatePercent:F0}% ↓] [██████░░░░░░░░░░]";
-            string sec3Row2 = $"[FUEL LIMIT]: {vm.FuelLimitTfName,-15}: [ MAX RANGE: {vm.FuelMaxRangeNM}NM ] [LIMIT: {vm.FuelLimitPercent}% ] [█████████░░░░░]";
-            string sec3Row3 = $"[EXHAUSTION]: {vm.ExhaustionTfName,-15}: [ RETREAT DUE: {vm.RetreatDueDate} ] [CRITICAL: {vm.ExhaustionCriticalPercent}% ] [██░░░░░░░░░░░░]";
-            sb.AppendLine($"║ {PadTo(sec3Row1, innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo(sec3Row2, innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo(sec3Row3, innerWidth)} ║");
-            sb.AppendLine($"║ {PadTo("", innerWidth)} ║");
-
-            // SECTION 4: TACTICAL ASSESSMENT BOX
-            sb.AppendLine("╠" + new string('═', bw - 2) + "╣");
-            sb.AppendLine($"║ {PadTo("[ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]", innerWidth)} ║");
-
-            // Word-wrap tactical assessment inside the innerWidth box
-            string assess = vm.TacticalAssessment;
-            int pos = 0;
-            while (pos < assess.Length)
+            string[] lines =
             {
-                int len = Math.Min(innerWidth, assess.Length - pos);
-                if (pos + len < assess.Length)
-                {
-                    int lastSp = assess.LastIndexOf(' ', pos + len - 1, len);
-                    if (lastSp > pos) len = lastSp - pos;
-                }
-                string chunk = assess.Substring(pos, len).Trim();
-                sb.AppendLine($"║ {PadTo(chunk, innerWidth)} ║");
-                pos += len;
-                while (pos < assess.Length && assess[pos] == ' ') pos++;
+                "",
+                "  This operational partition is designated as [ TBD ] (To Be Defined).",
+                "  Awaiting analytical wireframe specification and data mapping.",
+                "",
+                "    - Real-time time-series telemetry curve integration pending",
+                "    - Multi-axis correlation & vector projections pending",
+                "    - Combat attrition & operational drain algorithms active in background",
+                "",
+                "  Authentic PBEM telemetry is actively computed across Models A through G",
+                "  and the Telemetry Analytics Engine. Visual plotting template active.",
+                ""
+            };
+
+            foreach (var line in lines)
+            {
+                sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
             }
 
-            // Outer box bottom border
             sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
-
-            AppendFooter(sb, "[ESC] Return to Graphics Sub-Menu");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
             return sb.ToString();
         }
 
