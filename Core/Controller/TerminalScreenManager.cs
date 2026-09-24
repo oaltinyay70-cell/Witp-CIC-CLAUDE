@@ -3212,11 +3212,11 @@ namespace MUTHUR6000.Core.Controller
 
             string[] options =
             {
-                "Logistical & Attrition Telemetry",
-                "Strategic Vector Analysis",
-                "Intelligence & Anomaly Detection",
-                "Operational Tempo & Pivots",
-                "Predictive Forecasting",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
+                "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
@@ -3245,19 +3245,11 @@ namespace MUTHUR6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  GRAPHICS DISPLAY SCREEN (DISPATCHER TO PAGES 1-5 OR TBD 6-10)
+        //  GRAPHICS DISPLAY SCREEN (STANDARDIZED TBD PARTITIONS)
         // ─────────────────────────────────────────────────────────────────────
         private string BuildGraphicsDisplayScreen()
         {
-            return _graphicsPageId switch
-            {
-                1 => BuildLogisticalAttritionScreen(),
-                2 => BuildStrategicVectorScreen(),
-                3 => BuildIntelligenceAnomalyScreen(),
-                4 => BuildOperationalTempoScreen(),
-                5 => BuildPredictiveForecastingScreen(),
-                _ => BuildGraphicsTbdScreen(_graphicsPageId)
-            };
+            return BuildGraphicsTbdScreen(_graphicsPageId);
         }
 
         private string BuildLogisticalAttritionScreen()

@@ -10,6 +10,11 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-24 23:20 UTC+3: **Complete TBD Standardization Across Graphics Sub-Menu (Ozgur):**
+  1. **All 10 Items Replaced with TBD:** At user direction (*"delete all of these pages and replace menu items with TBD"*), all 10 slots `[1]` through `[10]` in the Graphics Sub-Menu are rendered as `[ TBD ]`.
+  2. **Standardized TBD Placeholder Routing:** Selecting any item routes to `BuildGraphicsTbdScreen(_graphicsPageId)`, rendering the clean reserved partition monospace box (`boxWidth = 78`, `innerWidth = 74`).
+  3. **Analytical Math Maintained:** Core algorithms in `TelemetryAnalyticsEngine.cs` remain active in the analytics domain.
+
 - 2026-09-24 23:10 UTC+3: **Graphics Sub-Menu Telemetry Views (Pages 1–5) & TBD Reservation (Slots 6–10) (Ozgur):**
   1. **User Alignment Confirmed:** Slots 6 through 10 in the Graphics Sub-Menu remain strictly designated as `[ TBD ]` placeholders with rigid monospace borders. Pages 1 through 5 are fully implemented from blueprints in `docs/OPENCODE INPUT/`.
   2. **Page Definitions & Screen Routing:**

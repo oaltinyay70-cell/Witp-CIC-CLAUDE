@@ -870,3 +870,23 @@ Following user directive ("1 YES they will remain TBD, 2 OK"), the Graphics Sub-
      - Page 5: Global Tempo State Machine (Build-Up, Strike, Consolidation, Withdrawal) phase and confidence, advance axis projection, submarine migration, and mine pathing trends.
 
 **Source:** Ozgur directive (2026-09-24 23:10 UTC+3).
+
+## 73. Complete TBD Standardization Across All 10 Graphics Sub-Menu Slots (2026-09-24 23:20 UTC+3)
+
+**Context:**
+Following review of the Graphics Sub-Menu (`media_1790281139697.png`), the user explicitly commanded:
+> *"delete all of these pages and replace menu items with TBD"*
+
+**Decision:**
+1. **Sub-Menu Item Titles:**
+   - All 10 slots `[1]` through `[10]` (`[0]`) in the Graphics Sub-Menu are rendered strictly as `[ TBD ]`.
+2. **Unified Display Screen Routing:**
+   - Selecting any option (`[1]` through `[0]`) in the sub-menu routes to the standardized reserved partition placeholder `BuildGraphicsTbdScreen(_graphicsPageId)`:
+     - Header: `MUTHUR 6000 // WAR ROOM : GRAPHICS TELEMETRY SCREEN`
+     - Box Title: `╔══ [ VISUAL TELEMETRY MATRIX : OPTION {slot} (TBD) ] ═...═╗`
+     - Body: Explains partition reservation and background telemetry integration.
+     - Rigid straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
+3. **Preservation of Analytical Foundation:**
+   - The underlying mathematical models in `TelemetryAnalyticsEngine.cs` remain fully functional for background campaign processing and future user specifications.
+
+**Source:** Ozgur directive (2026-09-24 23:20 UTC+3).

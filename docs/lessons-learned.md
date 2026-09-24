@@ -693,9 +693,16 @@ The following documentation suite constitutes the governing **Core Docs** of the
   1. **Strict Preservation of Unassigned Slots:** When user confirms that slots 6 through 10 remain TBD, never attempt to fill or speculatively title them. Render them strictly as `[ TBD ]` routing to the standardized reserved placeholder.
   2. **Comprehensive Algorithmic Wiring for Defined Pages:** For pages 1 through 5, ensure full integration between raw campaign event logs, analytical models (`WarRoomAnalytics`), heuristics metrics (`HeuristicsEngine`), and the specialized mathematical engine (`TelemetryAnalyticsEngine`).
   3. **Strict Monospace Border Formatting:** Standardized box rendering with `boxWidth = 78` and `innerWidth = 74` (`║ {PadTo(line, 74)} ║`) guarantees that text tables, histograms, ASCII coordinate grids, and Braille curves never disrupt right border alignment.
+### LL-056: Immediate Complete Reversion to TBD Markers Across Graphics Sub-Menu
+- **Date:** 2026-09-24 23:20 UTC+3
+- **Context:** User provided screenshot `media_1790281139697.png` and commanded:
+  > *"delete all of these pages and replace menu items with TBD"*
+- **What Was Learned:**
+  1. **Immediate Execution of Complete Reversion:** When the user orders deleting all visual telemetry pages and replacing all menu items with TBD, execute the command without hesitation across all 10 options.
+  2. **Clean Uniform Menu Experience:** Rendering all 10 slots as `[1] [ TBD ]` through `[0] [ TBD ]` presents an uncluttered, fully uniform sub-menu awaiting future specifications.
+  3. **Decoupled Math Preservation:** Keep the underlying analytical models intact in `TelemetryAnalyticsEngine.cs` while the UI presentation layer routes cleanly to the standardized TBD reserved placeholder.
 - **What NOT to Repeat:**
-  - DO NOT assign labels to slots 6 through 10 when user instructed they remain TBD.
-  - DO NOT omit data bindings between live campaign ingestion and graphics viewmodels.
+  - DO NOT retain any named titles in the Graphics Sub-Menu when user instructs to replace all with TBD.
 
 ---
 
