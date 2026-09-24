@@ -827,5 +827,25 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 
 **Source:** Ozgur directive (2026-09-24 09:14 UTC+3).
 
+## 71. Proportional Dynamic Font & Chrome Scaling System (2026-09-24 22:35 UTC+3)
+
+**Context:**
+On high-resolution displays (such as 1080p, 1440p QHD, or 4K), resizing the window or selecting higher resolutions in the Resolution pull-down menu previously left the terminal text fixed at 13pt. This caused the text to occupy only a fraction of the screen, leaving vast empty areas. Additionally, scaling only the terminal text would leave the top title bar and bottom status bar disproportionately small (~10pt–11pt), breaking visual harmony.
+
+**Decision:**
+1. **Option 1 Implementation (Native Proportional Auto-Scaling):**
+   - Implement an automated scaling factor $S = \min\left(\frac{\text{Width}}{1024}, \frac{\text{Height}}{640}\right)$ calculated on window resize and resolution preset changes.
+   - **Terminal Text Scaling:** Scale `TerminalOutputBox.FontSize = Math.Round(13.0 * S, 1)` (clamped between 12pt and 36pt).
+   - **Line-Height Proportionality:** Dynamically adjust Paragraph `LineHeight = Math.Round(FontSize * 1.35, 1)` to maintain consistent line spacing and avoid text clipping.
+   - **Header Chrome Scaling:** Scale header text, badges, and quick-switch phosphor buttons proportionally ($10\text{pt} \times \text{scale}$ bounded), adjusting header padding.
+   - **Footer Chrome Scaling:** Scale status text, active campaign labels, and resolution selector font and padding proportionally.
+2. **Preset Expansion:**
+   - Add `2560 x 1440 (QHD)` preset to `ResolutionComboBox` alongside `1920x1080`, `1366x768`, `1280x720`, and `1024x640`.
+3. **Monospace Fidelity:**
+   - Character cell width and height grow in unison, maintaining the rigid 78-column monospace box geometry (`boxWidth = 78`, `innerWidth = 74`) with 100% straight borders.
+
+**Source:** Ozgur directive (2026-09-24 22:35 UTC+3).
+
+
 
 

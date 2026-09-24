@@ -591,6 +591,7 @@
                                 <ComboBoxItem Content="1280 x 720 (HD)" Tag="1280x720"/>
                                 <ComboBoxItem Content="1366 x 768 (720p)" Tag="1366x768"/>
                                 <ComboBoxItem Content="1920 x 1080 (Full HD)" Tag="1920x1080"/>
+                                <ComboBoxItem Content="2560 x 1440 (QHD 2K)" Tag="2560x1440"/>
                                 <ComboBoxItem Content="1024 x 640 (Standard)" Tag="1024x640"/>
                             </ComboBox>
                         </Border>

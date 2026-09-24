@@ -10,6 +10,13 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-24 22:35 UTC+3: **Proportional Dynamic Font & Chrome Scaling System (Option 1) (Ozgur):**
+  1. **Dynamic Font Scaling:** In higher screen resolutions (1280x720, 1366x768, 1920x1080 Full HD, and 2560x1440 QHD / 2K), terminal text (`TerminalOutputBox.FontSize`) scales dynamically based on window dimensions to utilize the full screen area without manual tweaking.
+  2. **Harmonized Header and Footer Scaling:** The top retro title bar and bottom status/telemetry footer bar dynamically scale their font sizes, element heights, and padding proportionally with the main terminal text so they never appear shrunken or disconnected at high resolutions.
+  3. **Paragraph Line-Height Proportionality:** The terminal's Paragraph `LineHeight` dynamically scales with font size (`FontSize * 1.35`) ensuring 100% vertical padding consistency and preventing text clipping or compression.
+  4. **QHD (2560x1440) Preset Integration:** Added native 2560x1440 selection to the Resolution pull-down menu alongside existing presets.
+  5. **Monospace & Straight Border Preservation:** Monospace character aspect ratio is strictly preserved across all resolutions, maintaining 100% straight right borders (`boxWidth = 78`, `innerWidth = 74`).
+
 - 2026-09-24 09:14 UTC+3: **Graphics Option [1] Replaced with TBD Placeholder (Ozgur):**
   1. **Option [1] Replacement:** The `Logistical & Attrition Telemetry` screen is removed from the active graphics display, and item `[1]` in the Graphics sub-menu is transitioned to a strict placeholder: `[ TBD ]`. All 10 items `[1]` through `[10]` in the Graphics Sub-Menu now strictly display `[ TBD ]`.
   2. **Page 1 Navigation & Display:** Selecting option `[1]` (or any option `1` through `10`) now opens a standardized `TBD` placeholder screen (`WAR ROOM : GRAPHICS TELEMETRY SCREEN // MODULE STATUS : RESERVED TELEMETRY PARTITION (TBD)`) with rigid monospace straight borders, awaiting future user wireframe blueprints.

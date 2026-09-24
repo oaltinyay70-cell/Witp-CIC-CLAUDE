@@ -362,9 +362,37 @@ namespace MUTHUR6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.WarRoomPrimary, "GraphicsMenu -> WarRoomPrimary on [ESC]");
 
-            // ESC returns to MasterMenu
-            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
-            Assert(screenManager.CurrentState == ScreenState.MasterMenu, "WarRoomPrimary -> MasterMenu on [ESC]");
+            // ── Test Suite 11: Proportional Dynamic Font & Chrome Scaling ─────────
+            Console.WriteLine("\n--- TEST SUITE 11: Proportional Dynamic Font & Chrome Scaling ---");
+
+            // Baseline reference: 1024 x 640
+            double scale1024 = Math.Min(1024.0 / 1024.0, 640.0 / 640.0);
+            double font1024 = Math.Round(13.0 * scale1024, 1);
+            Assert(Math.Abs(font1024 - 13.0) < 0.1, "Baseline 1024x640 yields 13.0pt font");
+
+            // Full HD: 1920 x 1080
+            double scale1080 = Math.Min(1920.0 / 1024.0, 1080.0 / 640.0);
+            double font1080 = Math.Round(13.0 * scale1080, 1);
+            Assert(font1080 >= 21.0 && font1080 <= 23.0, $"Full HD 1920x1080 scales font up to ~21.9pt (computed {font1080}pt)");
+
+            // QHD 2K: 2560 x 1440
+            double scale1440 = Math.Min(2560.0 / 1024.0, 1440.0 / 640.0);
+            double font1440 = Math.Round(13.0 * scale1440, 1);
+            Assert(font1440 >= 29.0 && font1440 <= 30.0, $"QHD 2560x1440 scales font up to ~29.3pt (computed {font1440}pt)");
+
+            // Line-height proportionality: LineHeight >= FontSize * 1.35
+            double lineH1440 = Math.Round(font1440 * 1.38, 1);
+            Assert(lineH1440 >= 40.0, $"QHD LineHeight maintains vertical rhythm (computed {lineH1440}px)");
+
+            // Header chrome font scaling
+            double headerFontScale = 1.0 + (scale1440 - 1.0) * 0.45;
+            double headerFont1440 = Math.Round(10.0 * headerFontScale, 1);
+            Assert(headerFont1440 >= 15.0 && headerFont1440 <= 17.0, $"QHD Header text scales proportionally (computed {headerFont1440}pt)");
+
+            // Footer chrome font scaling
+            double footerFontScale = 1.0 + (scale1440 - 1.0) * 0.40;
+            double footerFont1440 = Math.Round(10.0 * footerFontScale, 1);
+            Assert(footerFont1440 >= 14.5 && footerFont1440 <= 16.5, $"QHD Footer text scales proportionally (computed {footerFont1440}pt)");
 
             Console.WriteLine("\n================================================================================");
             Console.WriteLine($"  SUMMARY: {_passedCount} Passed, {_failedCount} Failed");

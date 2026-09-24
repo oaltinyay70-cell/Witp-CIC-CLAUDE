@@ -257,10 +257,11 @@ namespace MUTHUR6000
             if (ResolutionComboBox != null)
             {
                 double curW = Width;
-                if (curW >= 1800) ResolutionComboBox.SelectedIndex = 2; // 1920x1080
+                if (curW >= 2400) ResolutionComboBox.SelectedIndex = 3; // 2560x1440
+                else if (curW >= 1800) ResolutionComboBox.SelectedIndex = 2; // 1920x1080
                 else if (curW >= 1340) ResolutionComboBox.SelectedIndex = 1; // 1366x768
                 else if (curW >= 1200) ResolutionComboBox.SelectedIndex = 0; // 1280x720
-                else ResolutionComboBox.SelectedIndex = 3; // 1024x640
+                else ResolutionComboBox.SelectedIndex = 4; // 1024x640
             }
 
             // Apply effects state
@@ -274,6 +275,7 @@ namespace MUTHUR6000
             Loaded += (s, e) =>
             {
                 Focus();
+                UpdateProportionalScaling(ActualWidth > 0 ? ActualWidth : Width, ActualHeight > 0 ? ActualHeight : Height);
                 _screenManager.RenderCurrentScreen();
             };
         }
@@ -893,6 +895,10 @@ namespace MUTHUR6000
                         targetW = 1920;
                         targetH = 1080;
                         break;
+                    case "2560x1440":
+                        targetW = 2560;
+                        targetH = 1440;
+                        break;
                     case "1024x640":
                     default:
                         targetW = 1024;
@@ -909,6 +915,7 @@ namespace MUTHUR6000
                 Left = Math.Max(0, (workW - targetW) / 2);
                 Top = Math.Max(0, (workH - targetH) / 2);
 
+                UpdateProportionalScaling(targetW, targetH);
                 SaveCurrentSettings(true);
             }
         }
@@ -1490,7 +1497,81 @@ namespace MUTHUR6000
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            if (_isInitialized)
+            {
+                UpdateProportionalScaling(ActualWidth > 0 ? ActualWidth : Width, ActualHeight > 0 ? ActualHeight : Height);
+            }
             SaveCurrentSettings(false);
+        }
+
+        private void UpdateProportionalScaling(double windowWidth, double windowHeight)
+        {
+            if (windowWidth <= 100 || windowHeight <= 100) return;
+
+            // Base reference layout: 1024 x 640
+            double scaleW = windowWidth / 1024.0;
+            double scaleH = windowHeight / 640.0;
+            double scale = Math.Min(scaleW, scaleH);
+            scale = Math.Clamp(scale, 0.85, 3.0);
+
+            // 1. Terminal Font Size: 13pt base, scaling up to 32pt+
+            double computedTerminalFontSize = Math.Round(13.0 * scale, 1);
+            _currentFontSize = computedTerminalFontSize;
+
+            if (TerminalOutputBox != null)
+            {
+                TerminalOutputBox.FontSize = computedTerminalFontSize;
+            }
+
+            // 2. Terminal LineHeight: Keep vertical rhythm proportional (FontSize * 1.38)
+            double computedLineHeight = Math.Round(computedTerminalFontSize * 1.38, 1);
+            if (_activeParagraph != null)
+            {
+                _activeParagraph.LineHeight = computedLineHeight;
+            }
+
+            // 3. Header Chrome Proportional Scaling
+            double headerFontScale = 1.0 + (scale - 1.0) * 0.45;
+            double computedHeaderFontSize = Math.Round(10.0 * headerFontScale, 1);
+            double computedButtonFontSize = Math.Round(9.5 * headerFontScale, 1);
+
+            if (SystemBadgeText != null) SystemBadgeText.FontSize = computedHeaderFontSize;
+            if (HeaderStatusText != null) HeaderStatusText.FontSize = computedHeaderFontSize;
+            if (PhosphorLabelText != null) PhosphorLabelText.FontSize = computedHeaderFontSize;
+
+            if (PhosphorMatrixGreenBtn != null) PhosphorMatrixGreenBtn.FontSize = computedButtonFontSize;
+            if (PhosphorSolarAmberBtn != null) PhosphorSolarAmberBtn.FontSize = computedButtonFontSize;
+            if (PhosphorNostromoCyanBtn != null) PhosphorNostromoCyanBtn.FontSize = computedButtonFontSize;
+            if (PhosphorGlitchRedBtn != null) PhosphorGlitchRedBtn.FontSize = computedButtonFontSize;
+
+            if (CloseButton != null) CloseButton.FontSize = Math.Round(11.0 * headerFontScale, 1);
+
+            if (HeaderBarBorder != null)
+            {
+                double headerPadY = Math.Round(6.0 * headerFontScale, 1);
+                double headerPadX = Math.Round(10.0 * headerFontScale, 1);
+                HeaderBarBorder.Padding = new Thickness(headerPadX, headerPadY, headerPadX, headerPadY);
+            }
+
+            // 4. Footer Chrome Proportional Scaling
+            double footerFontScale = 1.0 + (scale - 1.0) * 0.40;
+            double computedFooterFontSize = Math.Round(10.0 * footerFontScale, 1);
+
+            if (ActiveFileText != null) ActiveFileText.FontSize = Math.Round(10.5 * footerFontScale, 1);
+            if (TransmissionStatusText != null) TransmissionStatusText.FontSize = computedFooterFontSize;
+            if (ResolutionComboBox != null) ResolutionComboBox.FontSize = computedFooterFontSize;
+            if (DeckStatusText != null) DeckStatusText.FontSize = computedFooterFontSize;
+            if (HoldStatusText != null) HoldStatusText.FontSize = computedFooterFontSize;
+
+            if (FooterBarBorder != null)
+            {
+                double footerPadY = Math.Round(4.0 * footerFontScale, 1);
+                double footerPadX = Math.Round(10.0 * footerFontScale, 1);
+                FooterBarBorder.Padding = new Thickness(footerPadX, footerPadY, footerPadX, footerPadY);
+            }
+
+            // Sync menu checkmarks to closest standard tag
+            UpdateFontSizeMenuChecks();
         }
 
         private void AlwaysOnTop_Click(object sender, RoutedEventArgs e)

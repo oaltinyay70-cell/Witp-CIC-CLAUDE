@@ -670,6 +670,22 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT leave traces of removed titles in active menus when asked to replace with TBD.
   - DO NOT delete underlying domain algorithms unless explicitly instructed to destroy them.
 
+### LL-054: Structured Pros/Cons Analysis & Proportional Chrome Scaling
+- **Date:** 2026-09-24 22:35 UTC+3
+- **Context:** User requested:
+  > *"base line : i need honest answers. say what u think is best and what can be really done. dont ever bullshit"*
+  > *"suggest what can be done : 1. screen res chane doesnt change the size of the fonts. in its current state the writing doesnt use all the screen especially in the higher resolutions. Tell me what can be done without losing the MUTHUR Look and feel"*
+  > *"when I ask sth like thi always state pros/cons ...."*
+  > *"I want to go option 1 but as is known - the top title bar and bottom status bar are currently fixed at ~28px. When the terminal text scales up to 24pt, the main content looks great, but the title and footer text will look relatively smaller unless we scale their font sizes slightly as well. this must be fixed ... can u solve it ?"*
+- **What Was Learned:**
+  1. **Mandatory Structured Pros/Cons for Architectural Decisions:** Whenever presenting architectural options or design alternatives, always explicitly list structured Pros, Cons, risks, and trade-offs for each choice without sugarcoating or hand-waving.
+  2. **Holistic Window Scaling (Chrome + Body):** In retro terminal desktop emulators, scaling the central monospace character font alone creates an unnatural, miniature border around large text. The surrounding chrome (title badges, quick-switch buttons, header padding, footer telemetry labels, resolution combo boxes) must scale proportionally to preserve the visual weight, ergonomics, and aesthetic authenticity of the terminal.
+  3. **Aspect-Ratio-Safe Font Scaling Factor:** Using $S = \min(\text{Width} / W_{\text{base}}, \text{Height} / H_{\text{base}})$ prevents vertical clipping on wide monitors and horizontal clipping on tall displays.
+- **What NOT to Repeat:**
+  - DO NOT present technical choices without explicit structured Pros and Cons.
+  - DO NOT scale body fonts while leaving header/footer chrome tiny and fixed.
+
+
 ---
 
 
