@@ -2526,6 +2526,197 @@ namespace MUTHUR6000.Core.Controller
             ScreenRenderRequested?.Invoke(buffer, isInstant);
         }
 
+        public string GetRochefortComment()
+        {
+            return _state switch
+            {
+                ScreenState.ReasoningModal   => BuildReasoningRochefortComment(),
+                ScreenState.HeuristicsPopUp  => BuildHeuristicsRochefortComment(),
+                ScreenState.IntelDetailPopUp => BuildIntelRochefortComment(),
+                ScreenState.PredModelPopUp   => BuildPredModelRochefortComment(),
+                _                            => string.Empty
+            };
+        }
+
+        private string BuildReasoningRochefortComment()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("CMDR. ROCHEFORT // HYPO CRYPTANALYTIC ASSESSMENT");
+            sb.AppendLine("────────────────────────────────────────────────");
+            sb.AppendLine($"SUBJECT: {_reasoningBulletTitle}");
+            if (_reasoningConfPct > 0)
+            {
+                string tier = _reasoningConfPct >= 90 ? "HIGH CONFIDENCE / VERIFIED" :
+                              _reasoningConfPct >= 70 ? "PROBABLE / CORROBORATED" :
+                              _reasoningConfPct >= 40 ? "PLAUSIBLE / UNCONFIRMED" : "LOW / NOISE";
+                sb.AppendLine($"CONFIDENCE: {_reasoningConfPct}% [{tier}]");
+            }
+            sb.AppendLine();
+
+            if (_reasoningTopics.Count > 0 && _reasoningTopicSel < _reasoningTopics.Count)
+            {
+                var topic = _reasoningTopics[_reasoningTopicSel];
+                sb.AppendLine($"FOCUS: {topic.Title}");
+                sb.AppendLine();
+
+                if (topic.Title.Contains("TELEMETRY"))
+                {
+                    sb.AppendLine("HYPO COMBAT INTEL NOTES:");
+                    sb.AppendLine("Radio traffic intercepts and coastal watcher reports confirm coordinated Imperial Japanese movement.");
+                    var sampleLines = topic.Lines.Take(5).ToList();
+                    foreach (var line in sampleLines)
+                    {
+                        sb.AppendLine($" • {line.Trim()}");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine("TACTICAL INFERENCE:");
+                    sb.AppendLine("Do not treat this contact in isolation; look for tender vessels and tanker escorts trailing within 120 NM.");
+                }
+                else if (topic.Title.Contains("TACTICAL") || topic.Title.Contains("DOCTRINE"))
+                {
+                    sb.AppendLine("OPERATIONAL DOCTRINE ANALYSIS:");
+                    sb.AppendLine("The enemy adheres strictly to doctrine schedules once underway. Fleet assets will prioritize land-based air cover before committing surface combatants.");
+                    sb.AppendLine();
+                    sb.AppendLine("RECOMMENDED REACTION:");
+                    sb.AppendLine("Position fleet submarines along the projected chokepoint axes. Avoid surface engagement inside their land-based Betty/Nell search radius.");
+                }
+                else
+                {
+                    sb.AppendLine("MATHEMATICAL & SENSOR EVALUATION:");
+                    sb.AppendLine("Bayesian triangulation correlates multi-source signals. Sighting recency decay ensures phantom contacts fall below threshold.");
+                    sb.AppendLine();
+                    sb.AppendLine("CRYPTANALYTIC REMARK:");
+                    sb.AppendLine("Even partial JN-25 decrypts corroborate this vector. Maintain continuous visual reconnaissance over adjacent hexes.");
+                }
+            }
+            else
+            {
+                sb.AppendLine("Awaiting topic selection for detailed signal decryption breakdown.");
+            }
+
+            return sb.ToString();
+        }
+
+        private string BuildHeuristicsRochefortComment()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("CMDR. ROCHEFORT // THEATER HEURISTIC APPRAISAL");
+            sb.AppendLine("────────────────────────────────────────────────");
+            sb.AppendLine($"METRIC: {_popUpTitle}");
+            sb.AppendLine();
+
+            var h = Analytics.Heuristics;
+            if (_heuristicsSel == 0) // Regional Power Shift
+            {
+                if (_heuristicsPopUpSel < h.RegionalShifts.Count)
+                {
+                    var shift = h.RegionalShifts[_heuristicsPopUpSel];
+                    sb.AppendLine($"SECTOR: {shift.RegionName}");
+                    sb.AppendLine($"7-DAY DISPOSITION: Today {shift.CountToday} vs Baseline {shift.Count7DaysAgo} (Delta: {shift.ShiftDelta:+0;-0;0})");
+                    sb.AppendLine($"STATUS: {shift.Trend}");
+                    sb.AppendLine();
+                    if (shift.ShiftDelta > 0)
+                    {
+                        sb.AppendLine("ASSESSMENT:");
+                        sb.AppendLine($"Concentrated force buildup detected in {shift.RegionName}. The presence of {shift.CountToday} assets indicates offensive preparation or convoy reinforcement. Prepare defensive air umbrella.");
+                    }
+                    else if (shift.ShiftDelta < 0)
+                    {
+                        sb.AppendLine("ASSESSMENT:");
+                        sb.AppendLine($"Force dispersal observed in {shift.RegionName}. Enemy units have either completed their push, or diverted tonnage to adjacent theaters.");
+                    }
+                    else
+                    {
+                        sb.AppendLine("ASSESSMENT:");
+                        sb.AppendLine($"Force posture in {shift.RegionName} is stable. Maintain vigilance along peripheral shipping channels.");
+                    }
+                }
+            }
+            else if (_heuristicsSel == 1) // Minefields
+            {
+                sb.AppendLine("MINE WARFARE REPORT:");
+                sb.AppendLine($"Identified {h.MineHitCoordinates.Count} hazardous mine clusters across theater waters.");
+                sb.AppendLine();
+                sb.AppendLine("CAUTION:");
+                sb.AppendLine("Ensure sweepers clear passage before sending capital assets into shallow port approaches.");
+            }
+            else if (_heuristicsSel == 2) // Submarine Migration
+            {
+                sb.AppendLine("SUBMARINE PATROL CENTROIDS:");
+                sb.AppendLine($"Tracked {h.SubmarineCentroids.Count} daily centroid points.");
+                sb.AppendLine();
+                sb.AppendLine("TACTICAL GUIDANCE:");
+                sb.AppendLine("Enemy I-boats patrol along anticipated carrier transit lines. Reroute TF waypoints 60 NM south of direct routes.");
+            }
+            else if (_heuristicsSel == 3) // Blindspots
+            {
+                sb.AppendLine("INTELLIGENCE BLINDSPOTS:");
+                sb.AppendLine($"Flagged {h.IntelligenceBlindspots.Count} unheralded engagements.");
+                sb.AppendLine();
+                sb.AppendLine("APPRAISAL:");
+                sb.AppendLine("Zero prior radio detection in these sectors signifies radar silence or bad weather corridors. Intensify Catalina recon sweeps.");
+            }
+            else if (_heuristicsSel == 4) // Axis of Advance
+            {
+                sb.AppendLine("STRATEGIC AXIS OF ADVANCE:");
+                if (h.StrategicDrift != null && !string.IsNullOrEmpty(h.StrategicDrift.CompassHeading))
+                {
+                    sb.AppendLine($"Overall Vector: Heading {h.StrategicDrift.CompassHeading} ({h.StrategicDrift.BearingDeg:F0}°) at {h.StrategicDrift.DistanceHex:F1} hexes/day.");
+                }
+                sb.AppendLine();
+                sb.AppendLine("HYPO ESTIMATE:");
+                sb.AppendLine("The enemy operational center of gravity shifts decisively along this vector. Reinforce destination outposts immediately.");
+            }
+            else // OPTEMPO
+            {
+                sb.AppendLine("OPERATIONAL TEMPO (OPTEMPO):");
+                sb.AppendLine("Combat report activity rates parsed across campaign operational days.");
+                sb.AppendLine();
+                sb.AppendLine("ASSESSMENT:");
+                sb.AppendLine("High OPTEMPO peaks precede logistical replenishment pauses. Plan counterstrikes during their turnaround window.");
+            }
+
+            return sb.ToString();
+        }
+
+        private string BuildIntelRochefortComment()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("CMDR. ROCHEFORT // OPERATIONAL INTELLIGENCE BRIEF");
+            sb.AppendLine("────────────────────────────────────────────────");
+            sb.AppendLine($"DOMAIN: {_popUpTitle}");
+            if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
+            {
+                sb.AppendLine($"TARGET: {_popUpBullets[_intelPopUpSel]}");
+            }
+            sb.AppendLine();
+            sb.AppendLine("STATION HYPO READOUT:");
+            sb.AppendLine("Cross-referencing SIGINT traffic analysis with coastwatcher reports. Enemy naval communication volume remains elevated.");
+            sb.AppendLine();
+            sb.AppendLine("INTERPRETATION:");
+            sb.AppendLine("Select item and press [ENTER] to drill down into decrypted raw telemetry sources.");
+            return sb.ToString();
+        }
+
+        private string BuildPredModelRochefortComment()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("CMDR. ROCHEFORT // PREDICTIVE MODEL INTERPRETATION");
+            sb.AppendLine("────────────────────────────────────────────────");
+            sb.AppendLine($"MODEL: {_popUpTitle}");
+            if (_popUpBullets.Count > 0 && _predPopUpSel < _popUpBullets.Count)
+            {
+                sb.AppendLine($"FORECAST ITEM: {_popUpBullets[_predPopUpSel]}");
+            }
+            sb.AppendLine();
+            sb.AppendLine("STRATEGIC SUMMARY:");
+            sb.AppendLine("Predictive algorithms project enemy intentions using historical movement vectors and supply capacities.");
+            sb.AppendLine();
+            sb.AppendLine("TACTICAL ADVICE:");
+            sb.AppendLine("Deploy scouting aircraft along the perimeter. Do not allow your strike groups to be caught out of position.");
+            return sb.ToString();
+        }
+
         // ── Width / layout helpers ────────────────────────────────────────────
         private const int W = 80;
         private static string Rule(char c = '═') =>

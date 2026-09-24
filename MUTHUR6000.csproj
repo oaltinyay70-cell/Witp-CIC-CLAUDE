@@ -36,6 +36,10 @@
 		<Resource Include="icon.ico" />
 	</ItemGroup>
 
+	<ItemGroup Condition="Exists('assets/rochefort_lowres.png')">
+		<Resource Include="assets/rochefort_lowres.png" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Update="text\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -299,6 +299,31 @@ namespace MUTHUR6000
                 _currentBuffer = buffer;
                 _textRun.Text = buffer;
                 TerminalOutputBox.ScrollToEnd();
+
+                // Check if Rochefort side panel should be shown (All analytical popups/modals)
+                bool showRochefort = _screenManager.CurrentState is
+                    ScreenState.ReasoningModal or
+                    ScreenState.HeuristicsPopUp or
+                    ScreenState.IntelDetailPopUp or
+                    ScreenState.PredModelPopUp;
+
+                if (RochefortPanel != null && RochefortColumn != null)
+                {
+                    if (showRochefort)
+                    {
+                        RochefortPanel.Visibility = Visibility.Visible;
+                        RochefortColumn.Width = new GridLength(0.40, GridUnitType.Star);
+                        RochefortSpeechText.Text = _screenManager.GetRochefortComment();
+                    }
+                    else
+                    {
+                        RochefortPanel.Visibility = Visibility.Collapsed;
+                        RochefortColumn.Width = new GridLength(0);
+                    }
+                }
+
+                // Trigger proportional font & chrome scaling reflecting current panel state
+                UpdateProportionalScaling(ActualWidth > 0 ? ActualWidth : Width, ActualHeight > 0 ? ActualHeight : Height);
             });
         }
 
@@ -706,6 +731,20 @@ namespace MUTHUR6000
             TextBloomEffect.Color = _currentPhosphorColor;
             TextBloomEffect.BlurRadius = _bloomEnabled ? _bloomIntensity : 0.0;
             TextBloomEffect.Opacity = (_bloomEnabled && _bloomIntensity > 0) ? 0.85 : 0.0;
+
+            // Rochefort Panel borders and bloom effects
+            if (RochefortPortraitBorder != null)
+            {
+                RochefortPortraitBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
+            }
+            if (RochefortSpeechBorder != null)
+            {
+                RochefortSpeechBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
+            }
+            if (PortraitBloomEffect != null)
+            {
+                PortraitBloomEffect.Color = _currentPhosphorColor;
+            }
 
             // Sliders status labels
             if (BackgroundOpacityValueText != null) BackgroundOpacityValueText.Text = $"{Math.Round(_backgroundOpacity * 100)}%";
@@ -1522,7 +1561,10 @@ namespace MUTHUR6000
             scale = Math.Clamp(scale, 0.85, 3.0);
 
             // 1. Terminal Font Size: 13pt base, scaling up to 32pt+
-            double computedTerminalFontSize = Math.Round(13.0 * scale, 1);
+            // Option C: When Rochefort panel is active, adjust terminal font factor so 78-col box maintains rigid straight margins
+            bool isRochefortActive = RochefortPanel != null && RochefortPanel.Visibility == Visibility.Visible;
+            double panelFontFactor = isRochefortActive ? 0.72 : 1.0;
+            double computedTerminalFontSize = Math.Round(13.0 * scale * panelFontFactor, 1);
             _currentFontSize = computedTerminalFontSize;
 
             if (TerminalOutputBox != null)
@@ -1535,6 +1577,19 @@ namespace MUTHUR6000
             if (_activeParagraph != null)
             {
                 _activeParagraph.LineHeight = computedLineHeight;
+            }
+
+            // 2b. Rochefort Speech & Portrait Proportional Scaling
+            if (RochefortSpeechText != null)
+            {
+                double speechFontSize = Math.Round(10.5 * scale * 0.90, 1);
+                RochefortSpeechText.FontSize = Math.Clamp(speechFontSize, 9.5, 20.0);
+                RochefortSpeechText.LineHeight = Math.Round(RochefortSpeechText.FontSize * 1.40, 1);
+            }
+            if (RochefortPortraitImage != null)
+            {
+                double portraitHeight = Math.Round(175.0 * scale, 0);
+                RochefortPortraitImage.Height = Math.Clamp(portraitHeight, 140.0, 360.0);
             }
 
             // 3. Header Chrome Proportional Scaling

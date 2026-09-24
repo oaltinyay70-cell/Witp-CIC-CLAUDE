@@ -9,12 +9,13 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 10)** (2026-09-24 23:55 UTC+3)  
-- Release Executable: `dist/witp-cic-muthur-alpha4-10.exe` (Single authoritative versioned binary; zero mirrors per ADR 63 / LL-049)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 11)** (2026-09-25 00:45 UTC+3)  
+- Release Executable: `dist/witp-cic-muthur-alpha4-11.exe` (Single authoritative versioned binary; zero mirrors per ADR 63 / LL-049)  
 - Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
-- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build10.zip` (986,609,442 bytes)  
+- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build11.zip` (1,050,079,536 bytes)  
+- Cmdr. Rochefort Intelligence Panel & Option C Dynamic Terminal Scaling (ADR 75, LL-058): Dual-box right side panel displaying Cmdr. Joseph Rochefort portrait ([BOX 1]) and live Station Hypo intelligence brief ([BOX 2]) wired across all analytical pop-up and reasoning modal screens (`ReasoningModal`, `HeuristicsPopUp`, `IntelDetailPopUp`, `PredModelPopUp`). Option C proportional scaling dynamically recalibrates terminal font size by `0.72x` while the panel is active, preserving 100% straight monospace box geometry (`boxWidth = 78`) with zero border wrapping.  
 - System Identity Rebranding & Diagnostic Boot Screen Redesign (ADR 74, LL-057): Rebranded system identity to **ROCHEFORT 6000** across UI window titles, system identity badges, baud-rate menu labels, context menus, tooltips, font selector windows, and automated test runners. Implemented redesigned Diagnostic Boot Screen featuring dynamic heuristic (`>> 6 HEURISTICS READY`) and graphics counts (`>> 10 GRAPHIC SCREENS READY`), removal of legacy telemetry harvest text, and high-impact 6-line block ASCII banner.  
 - Complete Graphics Sub-Menu TBD Standardization (ADR 73): All 10 slots `[1]` through `[10]` strictly rendered as `[ TBD ]` routing to standardized full-screen reserved partition screens with rigid straight borders (`boxWidth = 78`).
 - Proportional Dynamic Font & Chrome Scaling System (ADR 71): Terminal font size and line height scale dynamically with window resolution. Header bar badges, phosphor quick-switch buttons, padding, and footer telemetry status/resolution dropdown scale proportionally to maintain 100% visual balance across all resolutions (up to 2560x1440 QHD). Included window Maximize/Restore button `🗖`/`🗗` and `F11` fullscreen key handling.

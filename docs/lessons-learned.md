@@ -719,6 +719,16 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What NOT to Repeat:**
   - DO NOT leave stale naming references in subsidiary windows (e.g. font selectors, context menus, tooltips) when rebranding system identity.
 
+### LL-058: Option C Split-Terminal Layout & Synchronized Character Scaling
+- **Date:** 2026-09-25 00:40 UTC+3
+- **Context:** User requested adding two side boxes (Cmdr. Rochefort portrait and live intelligence interpretation speech box) alongside modal screens, approving Option C (split column with dynamic font scaling).
+- **What Was Learned:**
+  1. **Monospace Character Width Constraint in Split Columns:** When shrinking a monospace character terminal from full width to a partitioned column (`~60%`), rigid box lines (`boxWidth = 78`) will horizontally overflow or wrap if the base font size is preserved. Applying a calibrated reduction factor (`0.72x` for a `0.40*` side panel) maintains the rigid box aesthetics without clipping or horizontal scrollbars.
+  2. **Live Domain Analytics in Secondary Narratives:** Instead of static canned phrases, grounding commander commentary in the active analytical objects (`RegionalShifts`, `SubmarineCentroids`, `MineHitCoordinates`, `ReasoningTopics`, `Confidence`) creates an authentic wargame intelligence officer immersion.
+  3. **Resource Embedding for WPF Single-File Executables:** Assets referenced via `pack://application:,,,/` must be registered in the `.csproj` as `<Resource Include="assets/..." />` to ensure seamless unpacking inside self-extracting single-file binaries.
+- **What NOT to Repeat:**
+  - DO NOT open side panels without recalculating font scaling factor against the reduced terminal viewport.
+
 ---
 
 

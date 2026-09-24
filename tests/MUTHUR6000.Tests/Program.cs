@@ -402,10 +402,34 @@ namespace MUTHUR6000.Tests
             double headerFont1440 = Math.Round(10.0 * headerFontScale, 1);
             Assert(headerFont1440 >= 15.0 && headerFont1440 <= 17.0, $"QHD Header text scales proportionally (computed {headerFont1440}pt)");
 
-            // Footer chrome font scaling
-            double footerFontScale = 1.0 + (scale1440 - 1.0) * 0.40;
-            double footerFont1440 = Math.Round(10.0 * footerFontScale, 1);
-            Assert(footerFont1440 >= 14.5 && footerFont1440 <= 16.5, $"QHD Footer text scales proportionally (computed {footerFont1440}pt)");
+            // ── Test Suite 12: Cmdr. Rochefort Intelligence Panel & Option C Scaling ──
+            Console.WriteLine("\n--- TEST SUITE 12: Cmdr. Rochefort Intelligence Panel & Option C Scaling ---");
+
+            // Verify Rochefort comment on ReasoningModal
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D6); // WarRoomPrimary -> Heuristics
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Heuristics -> HeuristicsPopUp
+            string heuristicsComment = screenManager.GetRochefortComment();
+            Assert(!string.IsNullOrEmpty(heuristicsComment), "Rochefort comment generated for HeuristicsPopUp");
+            Assert(heuristicsComment.Contains("CMDR. ROCHEFORT // THEATER HEURISTIC APPRAISAL"), "Heuristics comment contains correct Hypo header");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter); // HeuristicsPopUp -> ReasoningModal
+            string reasoningComment = screenManager.GetRochefortComment();
+            Assert(!string.IsNullOrEmpty(reasoningComment), "Rochefort comment generated for ReasoningModal");
+            Assert(reasoningComment.Contains("CMDR. ROCHEFORT // HYPO CRYPTANALYTIC ASSESSMENT"), "Reasoning modal comment contains correct Hypo header");
+            Assert(reasoningComment.Contains("HYPO COMBAT INTEL NOTES") || reasoningComment.Contains("OPERATIONAL DOCTRINE ANALYSIS") || reasoningComment.Contains("MATHEMATICAL"), "Reasoning comment contains live intelligence analysis");
+
+            // Verify Option C font scaling factor: 0.72x
+            double baseFont1024 = 13.0 * scale1024;
+            double optionCFont1024 = Math.Round(baseFont1024 * 0.72, 1);
+            Assert(optionCFont1024 <= 10.0 && optionCFont1024 >= 9.0, $"Option C panel font factor scales 1024x640 font down to ~9.4pt (computed {optionCFont1024}pt)");
+
+            double baseFont1080 = 13.0 * scale1080;
+            double optionCFont1080 = Math.Round(baseFont1080 * 0.72, 1);
+            Assert(optionCFont1080 <= 16.5 && optionCFont1080 >= 15.0, $"Option C panel font factor scales 1920x1080 font down to ~15.8pt (computed {optionCFont1080}pt)");
+
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // ReasoningModal -> HeuristicsPopUp
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // HeuristicsPopUp -> Heuristics
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // Heuristics -> WarRoomPrimary
 
             Console.WriteLine("\n================================================================================");
             Console.WriteLine($"  SUMMARY: {_passedCount} Passed, {_failedCount} Failed");

@@ -10,6 +10,14 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-25 00:45 UTC+3: **Cmdr. Rochefort Intelligence Panel & Option C Dynamic Scaling (Ozgur):**
+  1. **Dual-Box Right Panel Layout:** Partitioned `TerminalGrid` into a primary terminal column and a secondary right-side intelligence console (`0.40*` width):
+     - `[BOX 1]`: Cmdr. Joseph Rochefort portrait frame with glowing phosphor border and identity ribbon.
+     - `[BOX 2]`: Station Hypo intelligence brief terminal with domain interpretations and amber/phosphor text glow.
+  2. **Screen Coverage:** Active across all analysis pop-up and modal views (`ReasoningModal`, `HeuristicsPopUp`, `IntelDetailPopUp`, `PredModelPopUp`).
+  3. **Live Analytical Speech Synthesis:** Ingests live telemetry models (`RegionalShifts`, `SubmarineCentroids`, `MineHitCoordinates`, `ReasoningTopics`, confidence ratings) into narrative tactical appraisals via `GetRochefortComment()`.
+  4. **Option C Proportional Scaling:** Recalibrates terminal font size by factor `0.72x` when the panel is active, preserving rigid 78-column monospace box borders (`boxWidth = 78`) with 100% straight vertical right margins and zero text clipping.
+
 - 2026-09-24 23:55 UTC+3: **ROCHEFORT 6000 Identity Rebranding & Boot Diagnostic Redesign (Ozgur):**
   1. **System Identity Rebranding:** System identity transitioned to **ROCHEFORT 6000** across UI window titles, system identity badges, baud-rate menu labels, context menus, tooltips, font selector windows, and automated test runners. Codebase namespaces (`namespace MUTHUR6000`) and git origin binding are preserved to avoid build or project breakage.
   2. **Diagnostic Boot Screen Redesign (Option 1):** Implemented Option 1 layout in `BuildBootScreen()`:

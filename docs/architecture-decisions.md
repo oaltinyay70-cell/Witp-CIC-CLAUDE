@@ -920,3 +920,34 @@ Following design review in `docs/boot-screen-redesign.md`, the user directed:
 
 **Source:** Ozgur directives in `docs/boot-screen-redesign.md` and chat (2026-09-24 23:40 UTC+3).
 
+## 75. Cmdr. Rochefort Intelligence Panel & Option C Dynamic Terminal Scaling (2026-09-25 00:40 UTC+3)
+
+**Context:**
+Following design directive (`media_1790284184114.png`), the user requested:
+> *"I want to add 2 boxes as I have demonstrated in the attached pic. THere will be a pic of Cmdr. Rochefort and the box below it will be a speech box where he interprets the results from the findings on the left of the screen."*
+User answered design questions:
+1. **Option C** (Split column layout with dynamic terminal font factor scaling 0.72x so rigid 78-col box margins remain 100% straight and avoid wrapping/overflow).
+2. **All** analysis screens (`ReasoningModal`, `HeuristicsPopUp`, `IntelDetailPopUp`, `PredModelPopUp`).
+3. **Wire in live analytics data** into speech text.
+
+**Decision:**
+1. **Layout & Visual Composition:**
+   - Partitioned `TerminalGrid` in `MainWindow.xaml` into two columns:
+     - Left (`TerminalColumn`, `*`): Houses character terminal `TerminalOutputBox`.
+     - Right (`RochefortColumn`, `0.40*`): Houses `RochefortPanel` (starts collapsed at `Width="0"`).
+   - `[BOX 1]` Portrait: Embedded high-resolution portrait from `assets/rochefort_lowres.png` inside glowing phosphor border with callout badge `[ CMDR. J. ROCHEFORT ]`.
+   - `[BOX 2]` Speech Box: In-terminal Station Hypo briefing console with subtitle `[ STATION HYPO DECRYPT & INTEL BRIEF ]`, glowing amber/phosphor text, and auto-scroll viewer.
+2. **Context-Sensitive Speech Intelligence:**
+   - Implemented `GetRochefortComment()` in `TerminalScreenManager.cs`, dynamically computing domain interpretations:
+     - `ReasoningModal`: Analyzes selected topic (Telemetry, Doctrine, Mathematics), item confidence level, and extracts raw SIGINT/coastwatcher evidence.
+     - `HeuristicsPopUp`: Computes regional 7-day power shift delta assessments, mine warfare caution, submarine patrol centroid tracking, intelligence blindspot radar silence warnings, and OPTEMPO replenishment pauses.
+     - `IntelDetailPopUp`: Cross-references SIGINT intercepts and target assets.
+     - `PredModelPopUp`: Synthesizes predictive vector forecasts and tactical disposition advice.
+3. **Option C Proportional Scaling System:**
+   - In `UpdateProportionalScaling()`, when `RochefortPanel` is visible, terminal font size scales down by factor `0.72x` (`panelFontFactor`), preserving monospace character geometry within the narrower column so that 78-character box borders (`boxWidth = 78`) never wrap or clip.
+   - Portrait height (140px-360px) and speech font size (9.5pt-20pt) scale proportionally with window resolution.
+   - Panel borders and bloom effects adapt dynamically to active phosphor theme (`Matrix Green`, `Solar Amber`, `Nostromo Cyan`, `Glitch Red`).
+
+**Source:** Ozgur directives (2026-09-25 00:25 UTC+3).
+
+
