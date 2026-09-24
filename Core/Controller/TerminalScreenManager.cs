@@ -3212,11 +3212,11 @@ namespace MUTHUR6000.Core.Controller
 
             string[] options =
             {
-                "[ TBD ]",
-                "[ TBD ]",
-                "[ TBD ]",
-                "[ TBD ]",
-                "[ TBD ]",
+                "Logistical & Attrition Telemetry",
+                "Strategic Vector Analysis",
+                "Intelligence & Anomaly Detection",
+                "Operational Tempo & Pivots",
+                "Predictive Forecasting",
                 "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
@@ -3245,9 +3245,323 @@ namespace MUTHUR6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  GRAPHICS DISPLAY SCREEN (TBD PLACEHOLDER SCREEN)
+        //  GRAPHICS DISPLAY SCREEN (DISPATCHER TO PAGES 1-5 OR TBD 6-10)
         // ─────────────────────────────────────────────────────────────────────
         private string BuildGraphicsDisplayScreen()
+        {
+            return _graphicsPageId switch
+            {
+                1 => BuildLogisticalAttritionScreen(),
+                2 => BuildStrategicVectorScreen(),
+                3 => BuildIntelligenceAnomalyScreen(),
+                4 => BuildOperationalTempoScreen(),
+                5 => BuildPredictiveForecastingScreen(),
+                _ => BuildGraphicsTbdScreen(_graphicsPageId)
+            };
+        }
+
+        private string BuildLogisticalAttritionScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : LOGISTICAL & ATTRITION TELEMETRY", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+            var vm = TelemetryAnalyticsEngine.ComputePage1ViewModel(Analytics, Analytics.Heuristics, Manifest);
+
+            string topTitle = "╔══ [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            string[] lines =
+            {
+                "",
+                " -- SECTION 1: ATTRITION & DRAIN METRICS ---------------------------------",
+                $" [K/L RATIO] : CURRENT: [ {vm.CurrentKLRatio:F1}:1 ]  SLOPE: [ {vm.KLSlopeTrend} ] [██████████████░░░░░░░░░░]",
+                $" [RES. DRAIN]: AIR LOSSES: [ {vm.AirLossesPerWeek}/WK ]  SHIP LOSSES: [ {vm.ShipLossesPerWeek}/WK ] [████████░░░░░░░░░░░░░]",
+                "",
+                " -- SECTION 2: OPERATIONAL TEMPO (OPTEMPO) TIME-SERIES -------------------",
+                " [LABEL: ROLLING AVERAGE OF EVENTS PER TURN (BRAILLE TIME-SERIES CURVE)  ]",
+                "",
+                "  EVENTS",
+                "    20 |                                            ⢠⣶",
+                "    15 |                                    ⢀⣴⡿⠋",
+                "    10 |                        ⢀⣠⡾⠟⠁",
+                "     5 |            ⢀⣀⣤⣴⣶⡶⠿⠿⠋⠁",
+                "     0 +------------------------------------------------------------------",
+                "        D01 D02 D03 D04 D05 D06 D07 D08 D09 D10 D11 D12 D13 D14 D15 D16",
+                "",
+                " -- SECTION 3: LOGISTICAL READINESS METERS -------------------------------",
+                $" [ESCORT DEN]: BASE SECTOR A: [ {vm.EscortDensity:F1} units/hex ] [RATE: -12% ↓] [██████░░░░░░░░░░]",
+                $" [FUEL LIMIT]: {vm.FuelLimitTfName} : [ MAX RANGE: {vm.FuelMaxRangeNM}NM ] [LIMIT: {vm.FuelLimitPercent}% ] [█████████░░░░░]",
+                $" [EXHAUSTION]: {vm.ExhaustionTfName}  : [ RETREAT DUE: {vm.RetreatDueDate} ] [CRITICAL: {vm.ExhaustionCriticalPercent}% ] [██░░░░░░░░░░░░]",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"{vm.TacticalAssessment}\"",
+                ""
+            };
+
+            foreach (var line in lines)
+            {
+                if (line.Length > innerWidth)
+                {
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                }
+                else
+                {
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+                }
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildStrategicVectorScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : STRATEGIC VECTOR ANALYSIS", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "ENEMY FORCE VECTORS & STRATEGIC MASS DISTRIBUTION");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+            var vm = TelemetryAnalyticsEngine.BuildStrategicVectorPage2ViewModel(Analytics, Analytics.Heuristics);
+
+            string topTitle = "╔══ [ ENEMY FORCE VECTORS & STRATEGIC MASS ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            string[] lines =
+            {
+                "",
+                " -- SECTION 1: STRATEGIC MASS DISTRIBUTION ---------------------------------",
+                $" [CONCENTRATION]: MAIN EFFORT: [ {vm.MainEffortPercent}% ] SECONDARY: [ {vm.SecondaryEffortPercent}% ] [██████████████░░░░░░]",
+                $" [POWER SHIFT]  : {vm.PrimarySectorName}: [ +{vm.PrimarySectorShiftPct:F0}% ]  {vm.SecondarySectorName}: [ {vm.SecondarySectorShiftPct:F0}% ]",
+                "",
+                " -- SECTION 2: CENTER OF GRAVITY (CoG) & AXIS OF ADVANCE --------------------",
+                " [LABEL: JAPANESE FORCE CENTROID MAPPING (10x10 REGIONAL GRID)            ]",
+                "",
+                "    Y",
+                "   10 | . . . . . . . . . .",
+                "    8 | . . . . . X . . . .",
+                $"    6 | . . . X X . . . . .     Vector: [{vm.VectorHeading}]",
+                $"    4 | . . X X . . . . . .     Magnitude: {vm.VectorMagnitude:F1} Hex/Day",
+                $"    2 | . . . . . . . . . .     Current CoG: ({vm.CurrentCoG.X}, {vm.CurrentCoG.Y})",
+                "    0 +----------------------",
+                "       0 2 4 6 8 10  X",
+                "",
+                " -- SECTION 3: LOGISTICAL RANGE PREDICTIONS ---------------------------------",
+                $" [LOG. SHADOW]: {vm.LogShadowTf1}",
+                $" [LOG. SHADOW]: {vm.LogShadowTf2}",
+                $" [LOG. SHADOW]: {vm.LogShadowTf3}",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"{vm.TacticalAssessment}\"",
+                ""
+            };
+
+            foreach (var line in lines)
+            {
+                if (line.Length > innerWidth)
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                else
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildIntelligenceAnomalyScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : INTELLIGENCE & ANOMALY DETECTION", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "SIGNAL ANOMALIES & INTELLIGENCE BLINDSPOTS");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+            var vm = TelemetryAnalyticsEngine.BuildIntelligenceAnomalyPage3ViewModel(Analytics, Analytics.Heuristics);
+
+            string topTitle = "╔══ [ SIGNAL ANOMALIES & INTELLIGENCE BLINDSPOTS ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            string[] lines =
+            {
+                "",
+                " -- SECTION 1: SIGHTING ANOMALIES ------------------------------------------",
+                $" [CLUSTERING]    : SECTOR {vm.ClusterSector} : [ HIGH DENSITY ] [SIGHTINGS: {vm.ClusterSightingsCount} ]",
+                $" [SIGHTING SPIKE]: SECTOR {vm.SpikeSector}    : [ +{vm.SightingSpikePercent:F0}% ] [STATUS: ALERT] [█████████████████████]",
+                $" [BLINDSPOT]     : SECTOR {vm.BlindspotSector}: [ ACTIVE/SILENT ] [RISK: {vm.BlindspotRiskTier}] [███████████████████]",
+                "",
+                " -- SECTION 2: TACTICAL ANOMALY LOG ----------------------------------------",
+                "  TIME  │ TYPE                  │ SECTOR │ CONFIDENCE │ STATUS",
+                "  ──────┼───────────────────────┼────────┼────────────┼───────────────────"
+            };
+
+            var allLines = new List<string>(lines);
+            foreach (var a in vm.AnomalyLog.Take(3))
+            {
+                string t = PadTo(a.TimeCode, 6);
+                string tp = PadTo(a.AnomalyType.Length > 21 ? a.AnomalyType.Substring(0, 21) : a.AnomalyType, 21);
+                string sec = PadTo(a.Sector, 6);
+                string conf = PadTo($"{a.Confidence}%", 10);
+                string st = a.Status;
+                allLines.Add($"  {t}│ {tp} │ {sec} │ {conf} │ {st}");
+            }
+
+            allLines.AddRange(new[]
+            {
+                "",
+                " -- SECTION 3: SECTOR SATURATION GAUGES ------------------------------------",
+                $" [{vm.SectorName1}]: [ DENSITY: {vm.SectorDensity1}% ████████████░░░░ ] [PHASE: {vm.SectorPhase1}]",
+                $" [{vm.SectorName2}]: [ DENSITY: {vm.SectorDensity2}% ██████░░░░░░░░░ ] [PHASE: {vm.SectorPhase2}]",
+                $" [{vm.SectorName3}]: [ DENSITY: {vm.SectorDensity3}% ███████████████ ] [PHASE: {vm.SectorPhase3}]",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"{vm.TacticalAssessment}\"",
+                ""
+            });
+
+            foreach (var line in allLines)
+            {
+                if (line.Length > innerWidth)
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                else
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildOperationalTempoScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : OPERATIONAL TEMPO & PIVOTS", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "THEATER RHYTHM & OFFENSIVE OSCILLATION");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+            var vm = TelemetryAnalyticsEngine.BuildOperationalTempoPage4ViewModel(Analytics, Analytics.Heuristics);
+
+            string topTitle = "╔══ [ THEATER RHYTHM & OFFENSIVE OSCILLATION ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            string[] lines =
+            {
+                "",
+                " -- SECTION 1: TEMPO VOLATILITY & BREATH -----------------------------------",
+                $" [VOLATILITY] : [ {vm.VolatilityStatus} ] [VAR: {vm.VolatilityVariance:F1} ] [████████████████░░░░]",
+                $" [OFF. BREATH]: [ {vm.OffensiveBreath} ] [HEXES: {vm.BreathHexCount} ] [████████████░░░░░░]",
+                "",
+                " -- SECTION 2: STRATEGIC PIVOT LATENCY -------------------------------------",
+                " [LABEL: TIME ELAPSED BETWEEN OFFENSIVE PHASES (DAYS)                      ]",
+                "",
+                "   DAYS",
+                "    10 |                                                     .::'",
+                "     8 |                                             .::'",
+                "     6 |                                     .::'",
+                "     4 |                            .::'",
+                "     2 |                    .::'",
+                "     0 +------------------------------------------------------------------",
+                "        PIVOT 1 PIVOT 2 PIVOT 3 PIVOT 4 PIVOT 5 PIVOT 6 PIVOT 7 PIVOT 8",
+                "",
+                " -- SECTION 3: COORDINATION SYMMETRY ---------------------------------------",
+                $" {vm.SymmetryPair1}",
+                $" {vm.SymmetryPair2}",
+                $" {vm.SymmetryPair3}",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"{vm.TacticalAssessment}\"",
+                ""
+            };
+
+            foreach (var line in lines)
+            {
+                if (line.Length > innerWidth)
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                else
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildPredictiveForecastingScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : PREDICTIVE FORECASTING", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "PROBABLE AXIS & GLOBAL TEMPO PROJECTION");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+            var vm = TelemetryAnalyticsEngine.BuildPredictiveForecastingPage5ViewModel(Analytics, Analytics.Heuristics);
+
+            string topTitle = "╔══ [ PROBABLE AXIS & GLOBAL TEMPO PROJECTION ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            string[] lines =
+            {
+                "",
+                " -- SECTION 1: GLOBAL TEMPO PHASE ------------------------------------------",
+                $" [CURRENT PHASE]   : [ {vm.CurrentPhase.ToString().ToUpperInvariant()} ] [CONFIDENCE: {vm.CurrentPhaseConfidence}% ] [██████████████████░░]",
+                $" [NEXT PHASE PRED] : [ {vm.NextPhase.ToString().ToUpperInvariant()} ] [PROBABILITY: {vm.NextPhaseProbability}%] [████████████░░░░░]",
+                "",
+                " -- SECTION 2: PREDICTIVE TARGETING & AXIS ---------------------------------",
+                " [LABEL: PROBABLE AXIS OF ADVANCE (VECTOR PROJECTION)                      ]",
+                "",
+                "    Y",
+                "   10 |",
+                "    8 |                                  (Target Cluster)",
+                $"    6 |                      (Now)  -->  [ ({vm.TargetCluster.X},{vm.TargetCluster.Y}) ]",
+                $"    4 |                        ({vm.CurrentCoG.X},{vm.CurrentCoG.Y})",
+                "    2 |",
+                "    0 +------------------------------------------------------------------",
+                "       0 2 4 6 8 10  X",
+                "",
+                " -- SECTION 3: NAVAL TRENDS & MIGRATION ------------------------------------",
+                $" [SUB MIGRATION] : {vm.SubMigrationStatus}",
+                $" [MINE PATHING]  : {vm.MinePathingStatus}",
+                $" [INT. BLINDSPOT]: {vm.BlindspotStatus}",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"{vm.TacticalAssessment}\"",
+                ""
+            };
+
+            foreach (var line in lines)
+            {
+                if (line.Length > innerWidth)
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                else
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string BuildGraphicsTbdScreen(int slot)
         {
             var sb = new StringBuilder();
             AppendHeader(sb, "WAR ROOM : GRAPHICS TELEMETRY SCREEN", TurnInfo());
@@ -3257,7 +3571,7 @@ namespace MUTHUR6000.Core.Controller
             const int bw = 78;
             const int innerWidth = 74;
 
-            string topTitle = $"╔══ [ VISUAL TELEMETRY MATRIX : OPTION {_graphicsPageId} (TBD) ] ";
+            string topTitle = $"╔══ [ VISUAL TELEMETRY MATRIX : OPTION {slot} (TBD) ] ";
             int rem = bw - topTitle.Length - 1;
             sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
 

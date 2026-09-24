@@ -322,23 +322,22 @@ namespace MUTHUR6000.Tests
             Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "WarRoomPrimary -> GraphicsMenu on [3]");
 
             string graphicsMenuScreen = screenManager.BuildCurrentScreen();
-            Assert(graphicsMenuScreen.Contains("[1]   [ TBD ]"), "Graphics Menu option [1] is '[ TBD ]'");
-            Assert(graphicsMenuScreen.Contains("[2]   [ TBD ]") && graphicsMenuScreen.Contains("[0]   [ TBD ]"),
-                "Graphics Menu options [1] through [10] strictly designated as [ TBD ]");
+            Assert(graphicsMenuScreen.Contains("[1]   Logistical & Attrition Telemetry"), "Graphics Menu option [1] is 'Logistical & Attrition Telemetry'");
+            Assert(graphicsMenuScreen.Contains("[2]   Strategic Vector Analysis"), "Graphics Menu option [2] is 'Strategic Vector Analysis'");
+            Assert(graphicsMenuScreen.Contains("[3]   Intelligence & Anomaly Detection"), "Graphics Menu option [3] is 'Intelligence & Anomaly Detection'");
+            Assert(graphicsMenuScreen.Contains("[4]   Operational Tempo & Pivots"), "Graphics Menu option [4] is 'Operational Tempo & Pivots'");
+            Assert(graphicsMenuScreen.Contains("[5]   Predictive Forecasting"), "Graphics Menu option [5] is 'Predictive Forecasting'");
+            Assert(graphicsMenuScreen.Contains("[6]   [ TBD ]") && graphicsMenuScreen.Contains("[0]   [ TBD ]"),
+                "Graphics Menu options [6] through [10] strictly designated as [ TBD ]");
 
-            // Press Enter on option [1] to open GraphicsDisplayScreen (TBD Placeholder)
-            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.CurrentState == ScreenState.GraphicsDisplayScreen, "GraphicsMenu -> GraphicsDisplayScreen on [ENTER]");
-
+            // Test Page 1 Display
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D1);
+            Assert(screenManager.CurrentState == ScreenState.GraphicsDisplayScreen, "GraphicsMenu -> Page 1 on [1]");
             string page1Buffer = screenManager.BuildCurrentScreen();
-            Assert(page1Buffer.Contains("VISUAL TELEMETRY MATRIX : OPTION 1 (TBD)"),
-                "Page 1 contains standardized TBD marker title");
-            Assert(page1Buffer.Contains("MODULE STATUS : RESERVED TELEMETRY PARTITION (TBD)"),
-                "Page 1 section header indicates reserved telemetry partition");
-            Assert(page1Buffer.Contains("This operational partition is designated as [ TBD ]"),
-                "Page 1 body describes pending wireframe specification");
+            Assert(page1Buffer.Contains("NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION)"), "Page 1 displays correct title");
+            Assert(page1Buffer.Contains("[K/L RATIO]") && page1Buffer.Contains("[RES. DRAIN]"), "Page 1 displays Section 1 metrics");
 
-            // Monospace straight border check for TBD Display Screen
+            // Monospace straight border check for Page 1 Screen
             var page1Lines = page1Buffer.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             bool allPage1BordersStraight = true;
             foreach (var line in page1Lines)
@@ -348,15 +347,47 @@ namespace MUTHUR6000.Tests
                     if (line.Length != 78)
                     {
                         allPage1BordersStraight = false;
-                        Console.WriteLine($"[FAIL] TBD box line length mismatch: {line.Length} expected 78: '{line}'");
+                        Console.WriteLine($"[FAIL] Page 1 box line length mismatch: {line.Length} expected 78: '{line}'");
                     }
                 }
             }
-            Assert(allPage1BordersStraight, "ADR 64 / ADR 70: Graphics TBD Screen right side is 100% straight (Length == 78)");
+            Assert(allPage1BordersStraight, "ADR 64: Page 1 Screen right side is 100% straight (Length == 78)");
 
             // ESC returns to GraphicsMenu
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
-            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "GraphicsDisplayScreen -> GraphicsMenu on [ESC]");
+            Assert(screenManager.CurrentState == ScreenState.GraphicsMenu, "Page 1 -> GraphicsMenu on [ESC]");
+
+            // Test Page 2 Display
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D2);
+            string page2Buffer = screenManager.BuildCurrentScreen();
+            Assert(page2Buffer.Contains("ENEMY FORCE VECTORS & STRATEGIC MASS"), "Page 2 displays Strategic Vector title");
+            Assert(page2Buffer.Contains("JAPANESE FORCE CENTROID MAPPING"), "Page 2 displays 10x10 CoG grid");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+
+            // Test Page 3 Display
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D3);
+            string page3Buffer = screenManager.BuildCurrentScreen();
+            Assert(page3Buffer.Contains("SIGNAL ANOMALIES & INTELLIGENCE BLINDSPOTS"), "Page 3 displays Anomaly Detection title");
+            Assert(page3Buffer.Contains("TACTICAL ANOMALY LOG"), "Page 3 displays anomaly table");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+
+            // Test Page 4 Display
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D4);
+            string page4Buffer = screenManager.BuildCurrentScreen();
+            Assert(page4Buffer.Contains("THEATER RHYTHM & OFFENSIVE OSCILLATION"), "Page 4 displays Tempo & Pivots title");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+
+            // Test Page 5 Display
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D5);
+            string page5Buffer = screenManager.BuildCurrentScreen();
+            Assert(page5Buffer.Contains("PROBABLE AXIS & GLOBAL TEMPO PROJECTION"), "Page 5 displays Predictive Forecasting title");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
+
+            // Test Option 6 (TBD placeholder)
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D6);
+            string page6Buffer = screenManager.BuildCurrentScreen();
+            Assert(page6Buffer.Contains("VISUAL TELEMETRY MATRIX : OPTION 6 (TBD)"), "Page 6 displays Option 6 TBD placeholder");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
 
             // ESC returns to WarRoomPrimary
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);

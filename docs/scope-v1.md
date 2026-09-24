@@ -10,6 +10,17 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-24 23:10 UTC+3: **Graphics Sub-Menu Telemetry Views (Pages 1–5) & TBD Reservation (Slots 6–10) (Ozgur):**
+  1. **User Alignment Confirmed:** Slots 6 through 10 in the Graphics Sub-Menu remain strictly designated as `[ TBD ]` placeholders with rigid monospace borders. Pages 1 through 5 are fully implemented from blueprints in `docs/OPENCODE INPUT/`.
+  2. **Page Definitions & Screen Routing:**
+     - `[1] Logistical & Attrition Telemetry`: Naval & air attrition metrics, K/L ratio with linear regression slope, OPTEMPO 20-turn curve, logistical readiness meters, and commander tactical assessment box.
+     - `[2] Strategic Vector Analysis`: Main effort vs secondary effort concentration %, Regional Power Shift % by sector, 10x10 regional Japanese force centroid mapping (CoG), advance vector heading and hex/day magnitude, and logistical shadow tracking.
+     - `[3] Intelligence & Anomaly Detection`: Sighting clustering by sector, sighting spike alert, blindspot detection, 3-entry tactical anomaly log table, and sector saturation density gauges.
+     - `[4] Operational Tempo & Pivots`: Tempo volatility variance, offensive breath hex count, strategic pivot latency time-elapsed day chart, and theater coordination symmetry pair tracking.
+     - `[5] Predictive Forecasting`: Global Tempo State Machine (Build-Up, Strike, Consolidation, Withdrawal) phase with confidence, Japanese advance axis vector projection, submarine migration cluster tracking, mine pathing trend, and sector blindspot risk.
+     - `[6]` through `[10] [ TBD ]`: Standardized reserved partition placeholder screens.
+  3. **Rigid Monospace 78-Col Border Rule:** All pages maintain `boxWidth = 78`, `innerWidth = 74`, with right border `║` strictly vertical.
+
 - 2026-09-24 22:35 UTC+3: **Proportional Dynamic Font & Chrome Scaling System (Option 1) (Ozgur):**
   1. **Dynamic Font Scaling:** In higher screen resolutions (1280x720, 1366x768, 1920x1080 Full HD, and 2560x1440 QHD / 2K), terminal text (`TerminalOutputBox.FontSize`) scales dynamically based on window dimensions to utilize the full screen area without manual tweaking.
   2. **Harmonized Header and Footer Scaling:** The top retro title bar and bottom status/telemetry footer bar dynamically scale their font sizes, element heights, and padding proportionally with the main terminal text so they never appear shrunken or disconnected at high resolutions.

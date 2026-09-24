@@ -454,6 +454,20 @@
 
                     <!-- Right-side Quick Action Controls -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <!-- Maximize / Restore Toggle Button -->
+                        <Button x:Name="MaximizeButton"
+                                Content="🗖"
+                                ToolTip="Toggle Full-Screen / Windowed (F11)"
+                                Style="{x:Null}"
+                                Background="Transparent"
+                                Foreground="#80FFFFFF"
+                                BorderThickness="0"
+                                Padding="6,2"
+                                Margin="0,0,4,0"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Cursor="Hand"
+                                Click="MaximizeButton_Click"/>
                         <!-- Close Button -->
                         <Button x:Name="CloseButton"
                                 Content="✕"

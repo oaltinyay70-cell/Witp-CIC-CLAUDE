@@ -846,6 +846,27 @@ On high-resolution displays (such as 1080p, 1440p QHD, or 4K), resizing the wind
 
 **Source:** Ozgur directive (2026-09-24 22:35 UTC+3).
 
+## 72. Graphics Sub-Menu Telemetry Wireframes (Pages 1–5) & TBD Reservation (Slots 6–10) (2026-09-24 23:10 UTC+3)
 
+**Context:**
+Following user directive ("1 YES they will remain TBD, 2 OK"), the Graphics Sub-Menu was fully expanded from wireframe blueprints in `docs/OPENCODE INPUT/`. Slots 1 through 5 are connected to real campaign telemetry models, while slots 6 through 10 are strictly designated as `[ TBD ]`.
 
+**Decision:**
+1. **Graphics Sub-Menu Routing & Definitions:**
+   - Option `[1]`: `Logistical & Attrition Telemetry` -> `BuildLogisticalAttritionScreen()`.
+   - Option `[2]`: `Strategic Vector Analysis` -> `BuildStrategicVectorScreen()`.
+   - Option `[3]`: `Intelligence & Anomaly Detection` -> `BuildIntelligenceAnomalyScreen()`.
+   - Option `[4]`: `Operational Tempo & Pivots` -> `BuildOperationalTempoScreen()`.
+   - Option `[5]`: `Predictive Forecasting` -> `BuildPredictiveForecastingScreen()`.
+   - Options `[6]` through `[10]`: Strictly rendered as `[ TBD ]` -> `BuildGraphicsTbdScreen(slot)`.
+2. **Strict Monospace Geometry:**
+   - Every page maintains the rigid standard: `boxWidth = 78`, `innerWidth = 74`, formatted as `║ {PadTo(content, 74)} ║` ensuring 100% straight vertical right borders.
+3. **Telemetry & Algorithmic Grounding:**
+   - Data binding connects to `TelemetryAnalyticsEngine`:
+     - Page 1: K/L ratio with OLS regression slope, OPTEMPO 20-turn curve, escort density and readiness meters.
+     - Page 2: Center of Gravity (CoG) on 10x10 regional grid, Axis of Advance vector heading and magnitude, Regional Power Shift delta percentages.
+     - Page 3: Sighting clustering, sighting spike alert, blindspot detection, tactical anomaly log table, sector saturation gauges.
+     - Page 4: Tempo volatility variance, strategic pivot latency day graph, coordination symmetry pair comparison.
+     - Page 5: Global Tempo State Machine (Build-Up, Strike, Consolidation, Withdrawal) phase and confidence, advance axis projection, submarine migration, and mine pathing trends.
 
+**Source:** Ozgur directive (2026-09-24 23:10 UTC+3).

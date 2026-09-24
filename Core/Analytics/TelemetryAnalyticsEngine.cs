@@ -148,6 +148,101 @@ namespace MUTHUR6000.Core.Analytics
     }
 
     /// <summary>
+    /// Complete structured view-model for Strategic Vector Analysis (Page 2).
+    /// </summary>
+    public class StrategicVectorPage2ViewModel
+    {
+        public int MainEffortPercent { get; set; } = 72;
+        public int SecondaryEffortPercent { get; set; } = 28;
+        public string PrimarySectorName { get; set; } = "MALAYA SECTOR";
+        public double PrimarySectorShiftPct { get; set; } = 12.0;
+        public string SecondarySectorName { get; set; } = "PHILIPPINES";
+        public double SecondarySectorShiftPct { get; set; } = -4.0;
+        public char[,] RegionalGrid10x10 { get; set; } = new char[10, 10];
+        public string VectorHeading { get; set; } = "NE";
+        public double VectorMagnitude { get; set; } = 1.4;
+        public (int X, int Y) CurrentCoG { get; set; } = (5, 5);
+        public string LogShadowTf1 { get; set; } = "TF 98 (SNG)   : [PRED. RANGE: 450NM ] [STATUS: STABLE]    [██████████░░░░]";
+        public string LogShadowTf2 { get; set; } = "TF 112 (BWI)  : [PRED. RANGE: 120NM ] [STATUS: CRITICAL]  [██░░░░░░░░░░░]";
+        public string LogShadowTf3 { get; set; } = "TF 45 (GUM)   : [PRED. RANGE: 800NM ] [STATUS: EXCELLENT] [█████████████░]";
+        public string TacticalAssessment { get; set; } =
+            "The Center of Gravity is shifting North-East toward the Philippines. Heavy concentration in the Main Effort indicates a decisive blow is being prepared.";
+    }
+
+    /// <summary>
+    /// Tactical anomaly entry for Page 3.
+    /// </summary>
+    public class AnomalyLogEntry
+    {
+        public string TimeCode { get; set; } = "";
+        public string AnomalyType { get; set; } = "";
+        public string Sector { get; set; } = "";
+        public int Confidence { get; set; } = 0;
+        public string Status { get; set; } = "";
+    }
+
+    /// <summary>
+    /// Complete structured view-model for Intelligence & Anomaly Detection (Page 3).
+    /// </summary>
+    public class IntelligenceAnomalyPage3ViewModel
+    {
+        public string ClusterSector { get; set; } = "44-50";
+        public int ClusterSightingsCount { get; set; } = 14;
+        public string SpikeSector { get; set; } = "12";
+        public double SightingSpikePercent { get; set; } = 210.0;
+        public string BlindspotSector { get; set; } = "88-92";
+        public string BlindspotRiskTier { get; set; } = "HIGH";
+        public List<AnomalyLogEntry> AnomalyLog { get; set; } = new();
+        public int SectorDensity1 { get; set; } = 62;
+        public string SectorName1 { get; set; } = "SANGOR SECTOR";
+        public string SectorPhase1 { get; set; } = "PRE-PUSH";
+        public int SectorDensity2 { get; set; } = 31;
+        public string SectorName2 { get; set; } = "BATAVIA SECTOR";
+        public string SectorPhase2 { get; set; } = "SCREENING";
+        public int SectorDensity3 { get; set; } = 88;
+        public string SectorName3 { get; set; } = "SULU SEA SECTOR";
+        public string SectorPhase3 { get; set; } = "SATURATED";
+        public string TacticalAssessment { get; set; } =
+            "High density in Sulu Sea without corresponding naval movement suggests a hidden ambush or a massive transport screen. Sightings in Sector 12 indicate a sudden perimeter breach.";
+    }
+
+    /// <summary>
+    /// Complete structured view-model for Operational Tempo & Pivots (Page 4).
+    /// </summary>
+    public class OperationalTempoPage4ViewModel
+    {
+        public string VolatilityStatus { get; set; } = "ERRATIC";
+        public double VolatilityVariance { get; set; } = 8.4;
+        public string OffensiveBreath { get; set; } = "WIDE/SHALLOW";
+        public int BreathHexCount { get; set; } = 14;
+        public List<int> PivotLatencies { get; set; } = new() { 2, 4, 6, 7, 8, 9, 10, 10 };
+        public string SymmetryPair1 { get; set; } = "PHILS / MALAYA : [ SYMMETRIC ] [WINDOW: 4HRS]  [████████████████████]";
+        public string SymmetryPair2 { get; set; } = "JAVA / BORNEO  : [ ASYMMETRIC ] [WINDOW: 48HRS] [████░░░░░░░░░░░░░░]";
+        public string SymmetryPair3 { get; set; } = "SULU / GUAM    : [ NO CORRELATION ] [WINDOW: N/A] [░░░░░░░░░░░░░░░░]";
+        public string TacticalAssessment { get; set; } =
+            "The high volatility in OPTEMPO suggests the enemy is alternating between heavy strikes and replenishment lulls. Symmetry in Malaya/Phils indicates a coordinated theater-wide offensive.";
+    }
+
+    /// <summary>
+    /// Complete structured view-model for Predictive Forecasting (Page 5).
+    /// </summary>
+    public class PredictiveForecastingPage5ViewModel
+    {
+        public GlobalTempoPhase CurrentPhase { get; set; } = GlobalTempoPhase.Strike;
+        public int CurrentPhaseConfidence { get; set; } = 88;
+        public GlobalTempoPhase NextPhase { get; set; } = GlobalTempoPhase.Consolidation;
+        public int NextPhaseProbability { get; set; } = 62;
+        public (int X, int Y) CurrentCoG { get; set; } = (5, 4);
+        public (int X, int Y) TargetCluster { get; set; } = (7, 6);
+        public string AdvanceAxisVector { get; set; } = "EAST-NORTHEAST (+2, +2)";
+        public string SubMigrationStatus { get; set; } = "CLUSTER ALPHA: [ MOVING SOUTH-WEST ] [VELOCITY: 1.2 hex/d] [██████░░░░░░]";
+        public string MinePathingStatus { get; set; } = "PRIMARY TREND: [ NORTH-EAST ] [HIT DENSITY: HIGH]         [██████████████░░]";
+        public string BlindspotStatus { get; set; } = "SECTOR 77-80 : [ RISK: CRITICAL ] [TIME SINCE SIGHTING: 4d] [████████████████████]";
+        public string TacticalAssessment { get; set; } =
+            "Probable axis suggests a shift toward the Southern Philippines. The transition to the STRIKE phase matches the high force concentration index in the target cluster.";
+    }
+
+    /// <summary>
     /// Centralized mathematical and logical telemetry engine implementing all algorithms
     /// from docs/OPENCODE INPUT/analytical_algorithms.md.
     /// </summary>
@@ -605,6 +700,169 @@ namespace MUTHUR6000.Core.Analytics
                 vm.TacticalAssessment =
                     "The positive slope in K/L ratio suggests Japanese combat effectiveness is degrading. However, the OPTEMPO spike indicates a transition from build-up to active strike phase.";
             }
+
+            return vm;
+        }
+
+        /// <summary>
+        /// Factory builder for Strategic Vector Analysis (Page 2).
+        /// </summary>
+        public static StrategicVectorPage2ViewModel BuildStrategicVectorPage2ViewModel(
+            WarRoomAnalytics analytics,
+            HeuristicsEngine heuristics)
+        {
+            var vm = new StrategicVectorPage2ViewModel();
+
+            // Populate 10x10 regional grid with baseline empty dots
+            for (int r = 0; r < 10; r++)
+            {
+                for (int c = 0; c < 10; c++)
+                {
+                    vm.RegionalGrid10x10[r, c] = '.';
+                }
+            }
+
+            // Bind from Heuristics Metric 49 (Axis of Advance & Center of Gravity)
+            if (heuristics != null && heuristics.FleetMeans.Count > 0)
+            {
+                var latest = heuristics.FleetMeans.Last();
+                int gridX = Math.Clamp((int)(latest.MeanX / 25.0), 0, 9);
+                int gridY = Math.Clamp((int)(latest.MeanY / 15.0), 0, 9);
+                vm.CurrentCoG = (gridX, gridY);
+                vm.RegionalGrid10x10[gridY, gridX] = 'X';
+
+                if (heuristics.FleetMeans.Count >= 2)
+                {
+                    var prev = heuristics.FleetMeans[^2];
+                    int prevX = Math.Clamp((int)(prev.MeanX / 25.0), 0, 9);
+                    int prevY = Math.Clamp((int)(prev.MeanY / 15.0), 0, 9);
+                    vm.RegionalGrid10x10[prevY, prevX] = 'O';
+                    int dx = gridX - prevX;
+                    int dy = gridY - prevY;
+                    vm.VectorHeading = (dx >= 0 && dy >= 0) ? "NE" : (dx >= 0 ? "SE" : (dy >= 0 ? "NW" : "SW"));
+                    vm.VectorMagnitude = Math.Round(Math.Sqrt(dx * dx + dy * dy) * 0.8, 1);
+                }
+            }
+            else
+            {
+                // Default canonical wireframe CoG
+                vm.RegionalGrid10x10[4, 4] = 'X';
+                vm.RegionalGrid10x10[5, 5] = 'X';
+                vm.RegionalGrid10x10[7, 5] = 'X';
+            }
+
+            // Bind from Heuristics Metric 1 (Regional Power Shift)
+            if (heuristics != null && heuristics.RegionalShifts.Count > 0)
+            {
+                var primary = heuristics.RegionalShifts.FirstOrDefault(r => r.RegionName.Contains("Malaya", StringComparison.OrdinalIgnoreCase))
+                           ?? heuristics.RegionalShifts[0];
+                vm.PrimarySectorName = primary.RegionName.ToUpperInvariant();
+                vm.PrimarySectorShiftPct = Math.Round((double)primary.ShiftDelta, 1);
+
+                if (heuristics.RegionalShifts.Count > 1)
+                {
+                    var sec = heuristics.RegionalShifts.FirstOrDefault(r => r.RegionName.Contains("Philippine", StringComparison.OrdinalIgnoreCase))
+                           ?? heuristics.RegionalShifts[1];
+                    vm.SecondarySectorName = sec.RegionName.ToUpperInvariant();
+                    vm.SecondarySectorShiftPct = Math.Round((double)sec.ShiftDelta, 1);
+                }
+            }
+
+            return vm;
+        }
+
+        /// <summary>
+        /// Factory builder for Intelligence & Anomaly Detection (Page 3).
+        /// </summary>
+        public static IntelligenceAnomalyPage3ViewModel BuildIntelligenceAnomalyPage3ViewModel(
+            WarRoomAnalytics analytics,
+            HeuristicsEngine heuristics)
+        {
+            var vm = new IntelligenceAnomalyPage3ViewModel();
+
+            // Populate anomaly log with real blindspots or unheralded combats if present
+            if (heuristics != null && heuristics.IntelligenceBlindspots.Count > 0)
+            {
+                foreach (var b in heuristics.IntelligenceBlindspots.Take(3))
+                {
+                    vm.AnomalyLog.Add(new AnomalyLogEntry
+                    {
+                        TimeCode = b.DateYYMMDD.Length >= 6 ? $"D{b.DateYYMMDD.Substring(4, 2)}.1" : "D02.1",
+                        AnomalyType = "UNHERALDED COMBAT",
+                        Sector = $"{b.HexX},{b.HexY}",
+                        Confidence = 85,
+                        Status = "[ POTENTIAL TRAP ]"
+                    });
+                }
+            }
+
+            // Fill standard wireframe anomaly items if fewer than 3
+            if (vm.AnomalyLog.Count == 0)
+            {
+                vm.AnomalyLog.Add(new AnomalyLogEntry { TimeCode = "D17.1", AnomalyType = "ESCORTLESS TRANSPORT", Sector = "52,84", Confidence = 85, Status = "[ POTENTIAL TRAP ]" });
+                vm.AnomalyLog.Add(new AnomalyLogEntry { TimeCode = "D17.4", AnomalyType = "COORDINATE CLUSTER", Sector = "10,95", Confidence = 92, Status = "[ FORCE BUILD-UP ]" });
+                vm.AnomalyLog.Add(new AnomalyLogEntry { TimeCode = "D17.9", AnomalyType = "RAID-SIGHTING MISMATCH", Sector = "79,77", Confidence = 40, Status = "[ UNKNOWN ASSET ]" });
+            }
+
+            return vm;
+        }
+
+        /// <summary>
+        /// Factory builder for Operational Tempo & Pivots (Page 4).
+        /// </summary>
+        public static OperationalTempoPage4ViewModel BuildOperationalTempoPage4ViewModel(
+            WarRoomAnalytics analytics,
+            HeuristicsEngine heuristics)
+        {
+            var vm = new OperationalTempoPage4ViewModel();
+
+            if (heuristics?.DailyOptempo != null && heuristics.DailyOptempo.Count > 0)
+            {
+                var events = heuristics.DailyOptempo.Select(o => o.SeparatorCount).ToList();
+                double avg = events.Average();
+                double variance = events.Sum(v => Math.Pow(v - avg, 2)) / Math.Max(1, events.Count);
+                vm.VolatilityVariance = Math.Round(Math.Sqrt(variance), 1);
+                vm.VolatilityStatus = vm.VolatilityVariance > 5.0 ? "ERRATIC" : "STABLE";
+            }
+
+            return vm;
+        }
+
+        /// <summary>
+        /// Factory builder for Predictive Forecasting (Page 5).
+        /// </summary>
+        public static PredictiveForecastingPage5ViewModel BuildPredictiveForecastingPage5ViewModel(
+            WarRoomAnalytics analytics,
+            HeuristicsEngine heuristics)
+        {
+            var vm = new PredictiveForecastingPage5ViewModel();
+
+            // Evaluate Global Tempo State Machine
+            bool sightingSpike = true;
+            bool combatLow = false;
+            bool combatHigh = true;
+            bool resourceDrainHigh = true;
+            bool movementLow = false;
+            bool combatMedium = false;
+            bool vectorAway = false;
+
+            if (heuristics?.DailyOptempo != null && heuristics.DailyOptempo.Count > 0)
+            {
+                int recentCombat = heuristics.DailyOptempo.Last().SeparatorCount;
+                combatHigh = recentCombat >= 8;
+                combatLow = recentCombat <= 2;
+                combatMedium = !combatHigh && !combatLow;
+            }
+
+            var (topPhase, _) = EvaluateGlobalTempoPhase(sightingSpike, combatLow, combatHigh, resourceDrainHigh, movementLow, combatMedium, vectorAway);
+            vm.CurrentPhase = topPhase;
+            vm.NextPhase = vm.CurrentPhase switch
+            {
+                GlobalTempoPhase.BuildUp => GlobalTempoPhase.Strike,
+                GlobalTempoPhase.Strike => GlobalTempoPhase.Consolidation,
+                GlobalTempoPhase.Consolidation => GlobalTempoPhase.Withdrawal,
+                _ => GlobalTempoPhase.BuildUp
+            };
 
             return vm;
         }

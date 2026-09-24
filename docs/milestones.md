@@ -9,17 +9,20 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 7)** (2026-09-24 22:35 UTC+3)  
-- Release Executable: `dist/witp-cic-muthur-alpha4-7.exe` (Single authoritative versioned binary; zero mirrors)  
-- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-7.exe`; build counter increments by 1 on each new compilation)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 8)** (2026-09-24 23:10 UTC+3)  
+- Release Executable: `dist/witp-cic-muthur-alpha4-8.exe` (Single authoritative versioned binary; zero mirrors per ADR 63 / LL-049)  
+- Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
-- Clean Baseline Recovery Branch: `recovery-point-clean-baseline`  
-- Checkpoint Release Tag: `checkpoint-pre-major-addition-clean-baseline`  
-- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-clean-baseline.zip` (88,791,871 bytes)  
-- Recovery & Rollback Guide: [`docs/recovery-point-clean-baseline.md`](recovery-point-clean-baseline.md)  
-- Proportional Dynamic Font & Chrome Scaling System (ADR 71): Terminal font size and line height scale dynamically with window resolution. Header bar badges, phosphor quick-switch buttons, padding, and footer telemetry status/resolution dropdown scale proportionally to maintain 100% visual balance across all resolutions (up to 2560x1440 QHD) (2026-09-24 22:35 UTC+3).
-- Graphics Sub-Menu TBD Marker (ADR 70): Replaced `Logistical & Attrition Telemetry` with `[ TBD ]` marker for option [1], establishing a unified 10-item `[ TBD ]` sub-menu and standardized reserved telemetry placeholder screen with straight borders (`boxWidth = 78`) (2026-09-24 09:14 UTC+3).
+- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build8.zip` (863,551,544 bytes)  
+- Graphics Sub-Menu Telemetry Views (ADR 72):
+  - Option [1]: `Logistical & Attrition Telemetry` (NAVAL & AIR ATTRITION METRICS, K/L OLS slope, OPTEMPO curve, readiness gauges, tactical assessment).
+  - Option [2]: `Strategic Vector Analysis` (Strategic Mass concentration, 10x10 Center of Gravity grid, Logistical Shadow range).
+  - Option [3]: `Intelligence & Anomaly Detection` (Sighting anomalies, 3-entry tactical anomaly log, sector saturation gauges).
+  - Option [4]: `Operational Tempo & Pivots` (Tempo volatility, strategic pivot latency time-elapsed graph, coordination symmetry pairs).
+  - Option [5]: `Predictive Forecasting` (Global tempo state machine phase, sub migration status, mine pathing, blindspot risk).
+  - Options [6] through [10]: Strictly maintained as `[ TBD ]` placeholders with rigid monospace straight borders (`boxWidth = 78`).
+- Proportional Dynamic Font & Chrome Scaling System (ADR 71): Terminal font size and line height scale dynamically with window resolution. Header bar badges, phosphor quick-switch buttons, padding, and footer telemetry status/resolution dropdown scale proportionally to maintain 100% visual balance across all resolutions (up to 2560x1440 QHD). Included window Maximize/Restore button `🗖`/`🗗` and `F11` fullscreen key handling.
 - In-Terminal Unicode Character Graphing (ADR 64): Monospace delta bars `[►████░░░░]`, hit markers `──■──`, contact density meters `[■■■···]`, drift vector velocity arrows `[==►  ]`, gap sensors `[░░░░░░ GAP 0%]`, and OPTEMPO histograms `[████░░░░░░░░░░░░]`.
 - Rigid Box Monospace Alignment: 100% straight right border guarantee with zero line wobbling or bending.
 - Header Phosphor Relocation: Phosphor quick-switch buttons positioned in top draggable window header adjacent to CIC matrix badge.

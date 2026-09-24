@@ -324,6 +324,13 @@ namespace MUTHUR6000
                 return;
             }
 
+            if (e.Key == Key.F11)
+            {
+                ToggleFullScreen();
+                e.Handled = true;
+                return;
+            }
+
             _screenManager.HandleKeyDown(e.Key);
             e.Handled = true;
         }
@@ -1586,6 +1593,51 @@ namespace MUTHUR6000
             WindowDropShadow.Opacity = ShadowMenuItem.IsChecked ? 0.35 : 0.0;
             _settings.WindowShadow = ShadowMenuItem.IsChecked;
             SaveCurrentSettings();
+        }
+
+        private bool _isFullScreen = false;
+        private double _preFullScreenWidth = 1024;
+        private double _preFullScreenHeight = 640;
+        private double _preFullScreenLeft = 0;
+        private double _preFullScreenTop = 0;
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleFullScreen();
+        }
+
+        private void ToggleFullScreen()
+        {
+            if (!_isFullScreen)
+            {
+                // Save previous window geometry
+                _preFullScreenWidth = Width;
+                _preFullScreenHeight = Height;
+                _preFullScreenLeft = Left;
+                _preFullScreenTop = Top;
+
+                // Maximize across primary work area
+                Left = 0;
+                Top = 0;
+                Width = SystemParameters.WorkArea.Width;
+                Height = SystemParameters.WorkArea.Height;
+
+                _isFullScreen = true;
+                if (MaximizeButton != null) MaximizeButton.Content = "🗗";
+                UpdateProportionalScaling(Width, Height);
+            }
+            else
+            {
+                // Restore previous window geometry
+                Width = _preFullScreenWidth;
+                Height = _preFullScreenHeight;
+                Left = _preFullScreenLeft;
+                Top = _preFullScreenTop;
+
+                _isFullScreen = false;
+                if (MaximizeButton != null) MaximizeButton.Content = "🗖";
+                UpdateProportionalScaling(Width, Height);
+            }
         }
 
         private void CloseWidget_Click(object sender, RoutedEventArgs e)

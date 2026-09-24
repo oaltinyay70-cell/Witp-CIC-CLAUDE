@@ -683,8 +683,19 @@ The following documentation suite constitutes the governing **Core Docs** of the
   3. **Aspect-Ratio-Safe Font Scaling Factor:** Using $S = \min(\text{Width} / W_{\text{base}}, \text{Height} / H_{\text{base}})$ prevents vertical clipping on wide monitors and horizontal clipping on tall displays.
 - **What NOT to Repeat:**
   - DO NOT present technical choices without explicit structured Pros and Cons.
-  - DO NOT scale body fonts while leaving header/footer chrome tiny and fixed.
-
+### LL-055: Graphics Sub-Menu Telemetry Integration & Strict Reservation Architecture
+- **Date:** 2026-09-24 23:10 UTC+3
+- **Context:** User commanded:
+  > *"all of these 4"*
+  > *"1 YES they will remain TBD"*
+  > *"2 OK"*
+- **What Was Learned:**
+  1. **Strict Preservation of Unassigned Slots:** When user confirms that slots 6 through 10 remain TBD, never attempt to fill or speculatively title them. Render them strictly as `[ TBD ]` routing to the standardized reserved placeholder.
+  2. **Comprehensive Algorithmic Wiring for Defined Pages:** For pages 1 through 5, ensure full integration between raw campaign event logs, analytical models (`WarRoomAnalytics`), heuristics metrics (`HeuristicsEngine`), and the specialized mathematical engine (`TelemetryAnalyticsEngine`).
+  3. **Strict Monospace Border Formatting:** Standardized box rendering with `boxWidth = 78` and `innerWidth = 74` (`║ {PadTo(line, 74)} ║`) guarantees that text tables, histograms, ASCII coordinate grids, and Braille curves never disrupt right border alignment.
+- **What NOT to Repeat:**
+  - DO NOT assign labels to slots 6 through 10 when user instructed they remain TBD.
+  - DO NOT omit data bindings between live campaign ingestion and graphics viewmodels.
 
 ---
 
