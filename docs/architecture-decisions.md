@@ -890,3 +890,33 @@ Following review of the Graphics Sub-Menu (`media_1790281139697.png`), the user 
    - The underlying mathematical models in `TelemetryAnalyticsEngine.cs` remain fully functional for background campaign processing and future user specifications.
 
 **Source:** Ozgur directive (2026-09-24 23:20 UTC+3).
+
+## 74. ROCHEFORT 6000 Identity Rebranding & Diagnostic Boot Screen Layout (Option 1) (2026-09-24 23:55 UTC+3)
+
+**Context:**
+Following design review in `docs/boot-screen-redesign.md`, the user directed:
+> *"from now on REPLACE EVERY REFERENCE TO MUTHUR 6000 TO ROCHEFORT 6000"*  
+> *"USING THE SAME AS THIS BLOCK WROTE ROCHEFORT here in big blok ascii"*  
+> *"add the following: >> XX HEURISTICS READY, >>YY GRAPHIC SCREENS READY"*  
+> *"delete this block entirely [PACIFIC CAMPAIGN TELEMETRY HARVEST & 5 sub-lines]"*  
+> *"option 1 is good ! go ahead"*
+
+**Decision:**
+1. **System Identity Rebranding:**
+   - All user-visible terminal references, badges, headers, and UI chrome transitioned from `MUTHUR 6000` to `ROCHEFORT 6000`:
+     - Window Title: `ROCHEFORT 6000 // PACIFIC CIC`
+     - System Identity Badge: `[ ROCHEFORT 6000 // PACIFIC CIC ]`
+     - Context Menu & Button Tooltips: `Close ROCHEFORT Console`, `1200 Baud (ROCHEFORT Default)`
+     - Font Selector Window: `ROCHEFORT 6000 // SYSTEM FONT SELECTOR` and preview matrix text
+     - Test Suite Runner: `ROCHEFORT 6000 // PACIFIC WAR ROOM AUTOMATED ANALYTICS TEST SUITE`
+     - Codebase namespaces (`namespace MUTHUR6000`) and git origin binding are preserved to avoid build or project breakage.
+2. **Boot Screen Redesign (Option 1):**
+   - Implemented Option 1 layout in `BuildBootScreen()`:
+     - Header: `AppendHeader(sb, "ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC");`
+     - Dynamic Counts: Added `>> 6 HEURISTICS READY` and `>> 10 GRAPHIC SCREENS READY`.
+     - Removed obsolete telemetry harvest block.
+     - Centered 6-line high-impact block ASCII art banner for `ROCHEFORT`.
+     - Standardized `[ SYSTEM READY ]` bottom banner and prompt: `PRESS ANY KEY OR [ENTER] TO ACCESS OPERATIONAL THEATER DECK`.
+
+**Source:** Ozgur directives in `docs/boot-screen-redesign.md` and chat (2026-09-24 23:40 UTC+3).
+

@@ -45,7 +45,7 @@
                         FontWeight="Bold"
                         Cursor="Hand"
                         Click="Cancel_Click"/>
-                <TextBlock Text="MUTHUR 6000 // SYSTEM FONT SELECTOR"
+                <TextBlock Text="ROCHEFORT 6000 // SYSTEM FONT SELECTOR"
                            FontWeight="Bold"
                            FontSize="13"
                            Foreground="#00FF66"
@@ -146,7 +146,7 @@
                                Foreground="#60FFFFFF"
                                Margin="0,0,0,4"/>
                     <TextBlock x:Name="PreviewTextBlock"
-                               Text="WEYLAND-YUTANI CORP // 2122 NOSTROMO MUTHUR 6000 TELEMETRY"
+                               Text="ROCHEFORT 6000 // PACIFIC WAR ROOM TELEMETRY MATRIX"
                                Foreground="#00FF66"
                                FontSize="13"
                                TextWrapping="Wrap"/>

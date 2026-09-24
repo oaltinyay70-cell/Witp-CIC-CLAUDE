@@ -10,6 +10,15 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-24 23:55 UTC+3: **ROCHEFORT 6000 Identity Rebranding & Boot Diagnostic Redesign (Ozgur):**
+  1. **System Identity Rebranding:** System identity transitioned to **ROCHEFORT 6000** across UI window titles, system identity badges, baud-rate menu labels, context menus, tooltips, font selector windows, and automated test runners. Codebase namespaces (`namespace MUTHUR6000`) and git origin binding are preserved to avoid build or project breakage.
+  2. **Diagnostic Boot Screen Redesign (Option 1):** Implemented Option 1 layout in `BuildBootScreen()`:
+     - Header: `AppendHeader(sb, "ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC");`
+     - Added dynamic heuristic (`>> 6 HEURISTICS READY`) and graphics counts (`>> 10 GRAPHIC SCREENS READY`).
+     - Removed legacy `PACIFIC CAMPAIGN TELEMETRY HARVEST` block.
+     - Centered 6-line high-impact block ASCII art banner for `ROCHEFORT`.
+     - Standardized `[ SYSTEM READY ]` bottom banner and prompt: `PRESS ANY KEY OR [ENTER] TO ACCESS OPERATIONAL THEATER DECK`.
+
 - 2026-09-24 23:20 UTC+3: **Complete TBD Standardization Across Graphics Sub-Menu (Ozgur):**
   1. **All 10 Items Replaced with TBD:** At user direction (*"delete all of these pages and replace menu items with TBD"*), all 10 slots `[1]` through `[10]` in the Graphics Sub-Menu are rendered as `[ TBD ]`.
   2. **Standardized TBD Placeholder Routing:** Selecting any item routes to `BuildGraphicsTbdScreen(_graphicsPageId)`, rendering the clean reserved partition monospace box (`boxWidth = 78`, `innerWidth = 74`).

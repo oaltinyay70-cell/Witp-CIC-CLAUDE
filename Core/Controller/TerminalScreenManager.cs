@@ -2858,21 +2858,21 @@ namespace MUTHUR6000.Core.Controller
         private string BuildBootScreen()
         {
             var sb = new StringBuilder();
-            AppendHeader(sb, "MUTHUR 6000 // SYSTEM BOOT DIAGNOSTIC");
+            AppendHeader(sb, "ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC");
             sb.AppendLine();
             sb.AppendLine(">> SYSTEM INITIALIZATION: OK");
-            sb.AppendLine(">> COLD-START DIAGNOSTICS COMPLETE. ARCHITECTURE: 2.028-ALPHA-MUTHUR");
+            sb.AppendLine(">> COLD-START DIAGNOSTICS COMPLETE. ARCHITECTURE: 2.028-ALPHA-ROCHEFORT");
             sb.AppendLine($">> AUTHORITATIVE BASE REGISTRY: {BaseLocationRegistry.Instance.Count:N0} BASES LOADED");
             sb.AppendLine(">> NAVAL DOCTRINE HULL TYPES: 60 CLASSES COMPILED");
+            sb.AppendLine(">> 6 HEURISTICS READY");
+            sb.AppendLine(">> 10 GRAPHIC SCREENS READY");
             sb.AppendLine();
-            sb.AppendLine(Rule('-'));
-            sb.AppendLine("  PACIFIC CAMPAIGN TELEMETRY HARVEST");
-            sb.AppendLine(Rule('-'));
-            sb.AppendLine($"  CURRENT CAMPAIGN DATE : {Manifest.FormattedDate} (TURN CODE: {Manifest.LatestDate})");
-            sb.AppendLine($"  INGESTED GAME FILES   : {Manifest.Files.Count} FILES ACROSS {Manifest.DaysProcessed} CAMPAIGN DAYS");
-            sb.AppendLine($"  SIGINT INTERCEPTS     : {Analytics.GeospatialLog.Count} CONTACTS TRACKED");
-            sb.AppendLine($"  ACTIVE STRIKE FORCES  : {Analytics.ModelFConcentrations.Count} CONCENTRATIONS IDENTIFIED");
-            sb.AppendLine($"  UNLOCALIZED CAPITALS  : {Analytics.ModelEClaims.GhostFleetCount} GHOST FLEET THREATS");
+            sb.AppendLine(@"  ██████╗  ██████╗  ██████╗██╗  ██╗███████╗███████╗ ██████╗ ██████╗ ████████╗");
+            sb.AppendLine(@"  ██╔══██╗██╔═══██╗██╔════╝██║  ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗╚══██╔══╝");
+            sb.AppendLine(@"  ██████╔╝██║   ██║██║     ███████║█████╗  █████╗  ██║   ██║██████╔╝   ██║   ");
+            sb.AppendLine(@"  ██╔══██╗██║   ██║██║     ██╔══██║██╔══╝  ██╔══╝  ██║   ██║██╔══██╗   ██║   ");
+            sb.AppendLine(@"  ██║  ██║╚██████╔╝╚██████╗██║  ██║███████╗██║     ╚██████╔╝██║  ██║   ██║   ");
+            sb.AppendLine(@"  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ");
             sb.AppendLine();
             sb.AppendLine(Rule());
             sb.AppendLine("  [ SYSTEM READY ]");

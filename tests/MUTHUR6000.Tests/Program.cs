@@ -35,7 +35,7 @@ namespace MUTHUR6000.Tests
         private static int Main(string[] args)
         {
             Console.WriteLine("================================================================================");
-            Console.WriteLine("  MUTHUR 6000 // PACIFIC WAR ROOM AUTOMATED ANALYTICS TEST SUITE");
+            Console.WriteLine("  ROCHEFORT 6000 // PACIFIC WAR ROOM AUTOMATED ANALYTICS TEST SUITE");
             Console.WriteLine("================================================================================\n");
 
             string rootDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -138,6 +138,10 @@ namespace MUTHUR6000.Tests
             var screenManager = new TerminalScreenManager();
             screenManager.InitializeData(searchPaths);
             Assert(screenManager.CurrentState == ScreenState.Boot, "ScreenManager starts in Boot state");
+            string bootScreenText = screenManager.BuildCurrentScreen();
+            Assert(bootScreenText.Contains("ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC"), "Boot screen contains ROCHEFORT 6000 header");
+            Assert(bootScreenText.Contains("6 HEURISTICS READY"), "Boot screen contains 6 HEURISTICS READY");
+            Assert(bootScreenText.Contains("10 GRAPHIC SCREENS READY"), "Boot screen contains 10 GRAPHIC SCREENS READY");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.StartScreen, "Boot -> StartScreen on Enter");

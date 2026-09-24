@@ -704,6 +704,21 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What NOT to Repeat:**
   - DO NOT retain any named titles in the Graphics Sub-Menu when user instructs to replace all with TBD.
 
+### LL-057: System Identity Rebranding & Boot Diagnostic Screen Refinement
+- **Date:** 2026-09-24 23:55 UTC+3
+- **Context:** User ordered:
+  > *"from now on REPLACE EVERY REFERENCE TO MUTHUR 6000 TO ROCHEFORT 6000"*  
+  > *"USING THE SAME AS THIS BLOCK WROTE ROCHEFORT here in big blok ascii"*  
+  > *"add the following: >> XX HEURISTICS READY, >>YY GRAPHIC SCREENS READY"*  
+  > *"delete this block entirely [PACIFIC CAMPAIGN TELEMETRY HARVEST & 5 sub-lines]"*  
+  > *"option 1 is good ! go ahead"*
+- **What Was Learned:**
+  1. **Thorough User-Facing Rebranding:** When rebranding the primary system identity, perform a sweeping check across window titles, system badges, context menu items, button tooltips, font selector windows, test runner banners, and diagnostic boot text.
+  2. **Namespace & Binary Integrity:** Preserve internal project assembly and namespace references (`namespace MUTHUR6000`) and git remote origins to avoid breaking build configurations, while completely transforming the user experience to the new brand (`ROCHEFORT 6000`).
+  3. **Ascii Art Font Selection:** High-contrast 6-line block ASCII fonts provide an authentic retro terminal presence without horizontal wrapping or line overflow.
+- **What NOT to Repeat:**
+  - DO NOT leave stale naming references in subsidiary windows (e.g. font selectors, context menus, tooltips) when rebranding system identity.
+
 ---
 
 
