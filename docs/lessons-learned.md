@@ -731,6 +731,20 @@ The following documentation suite constitutes the governing **Core Docs** of the
 
 ---
 
+### LL-059: Box Boundary Clamping, Proportional Width Expansion, and Faction-Specific Intelligence Personas
+- **Date:** 2026-09-25 16:25 UTC+3
+- **Context:** User provided screenshot showing broken borders in analytical popups, requested ~1.5x width expansion and eliminating dead space, and mandated that Rochefort only appear for Allies while Japanese players receive Vice Admiral Ugaki.
+- **What Was Learned:**
+  1. **Strict Line Invariant for Terminal Frames:** Box borders cannot rely on implicit padding or unconstrained string templates. In `BuildNavigablePopUp` and `BuildHeuristicsPopUp`, titles must be clamped so `rem >= 1` always, and text lines inside must be clamped to `innerWidth` with trailing spaces to ensure the right border `║` lands at exact position `78`.
+  2. **Proportional Viewport Utilization:** Excessive margins and under-scaled fonts leave empty gaps in CRT displays. Tuning `RochefortColumn` to `0.48*` and elevating `panelFontFactor` from `0.72` to `0.88` enlarges the text boxes ~1.5x in visual width while maintaining rigid box alignment.
+  3. **Faction Immersion & Historical Personas:** Pacific War PBEM players demand authentic intelligence perspectives tailored to their faction. Showing US Navy Station Hypo (Cmdr. Rochefort) to an Imperial Japanese player breaks immersion; routing Japanese campaigns to Vice Admiral Matome Ugaki (Combined Fleet Chief of Staff, *Senkoroku* war diary, *Kantoku* doctrine) preserves narrative verisimilitude.
+- **What NOT to Repeat:**
+  - DO NOT display Allied intelligence advisors to Japanese faction players.
+  - DO NOT construct box header borders with unbounded title interpolations that risk negative character padding.
+
+---
+
+
 
 ## 3. Checklist for Future Corrections
 Whenever Ozgur provides feedback or a correction:

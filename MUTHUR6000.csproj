@@ -40,6 +40,10 @@
 		<Resource Include="assets/rochefort_lowres.png" />
 	</ItemGroup>
 
+	<ItemGroup Condition="Exists('assets/ugaki_lowres.png')">
+		<Resource Include="assets/ugaki_lowres.png" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Update="text\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

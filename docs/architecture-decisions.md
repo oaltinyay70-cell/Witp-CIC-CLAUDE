@@ -918,8 +918,6 @@ Following design review in `docs/boot-screen-redesign.md`, the user directed:
      - Centered 6-line high-impact block ASCII art banner for `ROCHEFORT`.
      - Standardized `[ SYSTEM READY ]` bottom banner and prompt: `PRESS ANY KEY OR [ENTER] TO ACCESS OPERATIONAL THEATER DECK`.
 
-**Source:** Ozgur directives in `docs/boot-screen-redesign.md` and chat (2026-09-24 23:40 UTC+3).
-
 ## 75. Cmdr. Rochefort Intelligence Panel & Option C Dynamic Terminal Scaling (2026-09-25 00:40 UTC+3)
 
 **Context:**
@@ -949,5 +947,38 @@ User answered design questions:
    - Panel borders and bloom effects adapt dynamically to active phosphor theme (`Matrix Green`, `Solar Amber`, `Nostromo Cyan`, `Glitch Red`).
 
 **Source:** Ozgur directives (2026-09-25 00:25 UTC+3).
+
+## 76. Box Boundary Rigidity, Proportional Width Expansion, and Faction-Specific Intelligence Advisor (2026-09-25 16:25 UTC+3)
+
+**Context:**
+User reported general errors and improvements based on runtime screenshot (`media_1790340932906.png`):
+1. *"Fix general error : text is broken across the window boxes. fix this in all cases"*
+2. *"improve : the windows are too small and there is a huge gap between the main text body and the rochefort menu. Make the text boxes occupy around 1.5 more space in width"*
+3. *"Also : Rochefort Window Appears only in the Allied side. NEver for a japanese player. Japanese Player will have an Ugaki Window"*
+
+**Decision:**
+1. **Box Boundary Rigidity & Invariant Verification:**
+   - In `TerminalScreenManager.cs`, all modal and navigable popup screens (`BuildNavigablePopUp`, `BuildHeuristicsPopUp`, `BuildReasoningModal`) enforce a strict line length invariant (`Length == 78`). Top borders clamp title lengths (`shortTitle.Length <= 59`) so remaining padding `rem >= 1` always. Text strings inside boxes are sanitized and clamped via `PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth)` with right border `║`.
+2. **Proportional Width Expansion (~1.5x) & Gap Elimination:**
+   - In `MainWindow.xaml`:
+     - Adjusted `RochefortColumn` from `0.40*` to `0.48*` and minimized margin to `8,8,10,8` to eliminate the horizontal dead space between the main terminal output box and the advisor panel.
+   - In `MainWindow.xaml.cs`:
+     - Calibrated `panelFontFactor` in `UpdateProportionalScaling()` from `0.72` to `0.88`, expanding terminal monospace character width and height across 1366x768, 1920x1080, and 2560x1440 displays so text boxes occupy ~1.5x more visual width without soft-wrapping.
+3. **Faction-Specific Advisor (Rochefort vs Vice Admiral Ugaki):**
+   - Allied Side (`_screenManager.IsAllied == true`):
+     - Badge: `CMDR. J. ROCHEFORT`
+     - Briefing Header: `[ STATION HYPO DECRYPT & INTEL BRIEF ]`
+     - Portrait: `assets/rochefort_lowres.png` (Station Hypo cryptanalyst)
+     - Commentary: Station Hypo radio intelligence, JN-25 decrypt assessments, coastwatcher corroboration.
+   - Japanese Side (`_screenManager.IsAllied == false`):
+     - Badge: `V.ADM. M. UGAKI`
+     - Briefing Header: `[ COMBINED FLEET INTEL & WAR DIARY BRIEF ]`
+     - Portrait: `assets/ugaki_lowres.png` (Dithered authentic portrait of Vice Admiral Matome Ugaki, Combined Fleet Chief of Staff)
+     - Commentary: *Senkoroku* war diary estimates, Combined Fleet staff directives, *Kantoku* decisive battle doctrine, and Imperial Navy Type 97 flying boat / submarine recon notes.
+   - Both portraits are registered as embedded resources in `MUTHUR6000.csproj`.
+
+**Source:** Ozgur directives (2026-09-25 15:55 UTC+3).
+
+
 
 

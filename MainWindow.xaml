@@ -610,7 +610,8 @@
                                     CornerRadius="2"
                                     Margin="4,4,0,0"
                                     Padding="4,1">
-                                <TextBlock Text="CMDR. J. ROCHEFORT"
+                                <TextBlock x:Name="AdvisorBadgeText"
+                                           Text="CMDR. J. ROCHEFORT"
                                            FontSize="8.5"
                                            FontWeight="Bold"
                                            Foreground="#00FF66"
@@ -638,7 +639,8 @@
                                     BorderThickness="0,0,0,1"
                                     Margin="0,0,0,4"
                                     Padding="0,0,0,3">
-                                <TextBlock Text="[ STATION HYPO DECRYPT &amp; INTEL BRIEF ]"
+                                <TextBlock x:Name="AdvisorBriefingHeader"
+                                           Text="[ STATION HYPO DECRYPT &amp; INTEL BRIEF ]"
                                            FontSize="9"
                                            FontWeight="Bold"
                                            Foreground="#80FFFFFF"

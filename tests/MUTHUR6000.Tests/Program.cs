@@ -431,6 +431,34 @@ namespace MUTHUR6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // HeuristicsPopUp -> Heuristics
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // Heuristics -> WarRoomPrimary
 
+            // Verify Japanese Side (Vice Admiral Ugaki) Advisor Comments
+            var jpnManager = new TerminalScreenManager();
+            jpnManager.InitializeData(searchPaths);
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Boot -> StartScreen
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.N);     // StartScreen -> NewCampaignWizard
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Down);  // Toggle side to Japanese
+            Assert(jpnManager.IsAllied == false, "Japanese faction selected in wizard (IsAllied == false)");
+            Assert(jpnManager.CampaignSide == "Japanese", "Campaign side is Japanese");
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 1 -> Step 2
+            jpnManager.HandleCharInput('P'); jpnManager.HandleCharInput('A'); jpnManager.HandleCharInput('S'); jpnManager.HandleCharInput('S');
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 2 -> Step 3
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 3 -> Step 4
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 4 -> VaultIngestion
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // VaultIngestion -> MasterMenu
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.A);     // MasterMenu -> WarRoomPrimary
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.D6);    // WarRoomPrimary -> Heuristics
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Heuristics -> HeuristicsPopUp
+
+            string jpnHeuristicsComment = jpnManager.GetRochefortComment();
+            Assert(!string.IsNullOrEmpty(jpnHeuristicsComment), "Ugaki comment generated for Japanese HeuristicsPopUp");
+            Assert(jpnHeuristicsComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET THEATER APPRAISAL"), "Japanese advisor is Vice Admiral Ugaki");
+
+            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // HeuristicsPopUp -> ReasoningModal
+            string jpnReasoningComment = jpnManager.GetRochefortComment();
+            Assert(!string.IsNullOrEmpty(jpnReasoningComment), "Ugaki comment generated for Japanese ReasoningModal");
+            Assert(jpnReasoningComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET CHIEF OF STAFF"), "Japanese reasoning comment contains Ugaki header");
+            Assert(jpnReasoningComment.Contains("SENKUN") || jpnReasoningComment.Contains("KANTOKU") || jpnReasoningComment.Contains("SENKOROKU"), "Japanese reasoning contains authentic IJN doctrine/diary terms");
+
             Console.WriteLine("\n================================================================================");
             Console.WriteLine($"  SUMMARY: {_passedCount} Passed, {_failedCount} Failed");
             Console.WriteLine("================================================================================\n");

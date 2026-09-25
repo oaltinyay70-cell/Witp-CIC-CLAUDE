@@ -300,8 +300,8 @@ namespace MUTHUR6000
                 _textRun.Text = buffer;
                 TerminalOutputBox.ScrollToEnd();
 
-                // Check if Rochefort side panel should be shown (All analytical popups/modals)
-                bool showRochefort = _screenManager.CurrentState is
+                // Check if Advisor side panel should be shown (All analytical popups/modals)
+                bool showAdvisor = _screenManager.CurrentState is
                     ScreenState.ReasoningModal or
                     ScreenState.HeuristicsPopUp or
                     ScreenState.IntelDetailPopUp or
@@ -309,11 +309,36 @@ namespace MUTHUR6000
 
                 if (RochefortPanel != null && RochefortColumn != null)
                 {
-                    if (showRochefort)
+                    if (showAdvisor)
                     {
                         RochefortPanel.Visibility = Visibility.Visible;
-                        RochefortColumn.Width = new GridLength(0.40, GridUnitType.Star);
+                        RochefortColumn.Width = new GridLength(0.48, GridUnitType.Star);
                         RochefortSpeechText.Text = _screenManager.GetRochefortComment();
+
+                        bool isAllied = _screenManager.IsAllied;
+                        if (AdvisorBadgeText != null)
+                        {
+                            AdvisorBadgeText.Text = isAllied ? "CMDR. J. ROCHEFORT" : "V.ADM. M. UGAKI";
+                        }
+                        if (AdvisorBriefingHeader != null)
+                        {
+                            AdvisorBriefingHeader.Text = isAllied
+                                ? "[ STATION HYPO DECRYPT & INTEL BRIEF ]"
+                                : "[ COMBINED FLEET INTEL & WAR DIARY BRIEF ]";
+                        }
+                        if (RochefortPortraitImage != null)
+                        {
+                            string assetPath = isAllied ? "assets/rochefort_lowres.png" : "assets/ugaki_lowres.png";
+                            try
+                            {
+                                RochefortPortraitImage.Source = new System.Windows.Media.Imaging.BitmapImage(
+                                    new Uri($"pack://application:,,,/{assetPath}", UriKind.Absolute));
+                            }
+                            catch
+                            {
+                                // Fallback to current source if resource loading encounters issue
+                            }
+                        }
                     }
                     else
                     {

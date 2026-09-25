@@ -10,6 +10,16 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-25 16:30 UTC+3: **Box Boundary Clamping, Proportional Width Expansion (~1.5x) & Faction-Specific Advisor (Ugaki vs Rochefort) (Ozgur):**
+  1. **Strict Line Length Invariant for Box Frames:** Clamped box title header strings in `BuildNavigablePopUp` and `BuildHeuristicsPopUp` (`shortTitle.Length <= 59`) so padding `rem >= 1` always, eliminating line-breaks or negative width wraps. Enforced exact string length invariant `Length == 78` with vertical right border `║` across all popup lines.
+  2. **Proportional Width Expansion (~1.5x) & Gap Elimination:**
+     - Increased `RochefortColumn` from `0.40*` to `0.48*` and tightened margins to eliminate empty dead space between the main text terminal and the advisor window.
+     - Elevating `panelFontFactor` in `UpdateProportionalScaling()` from `0.72` to `0.88`, expanding terminal text boxes ~1.5x in visual width across 1366x768, 1080p, and 1440p resolutions without soft-wrapping.
+  3. **Faction-Specific Advisor (Rochefort vs Vice Admiral Ugaki):**
+     - **Allied Player:** Retains Station Hypo Cmdr. Joseph Rochefort, displaying `[ CMDR. J. ROCHEFORT ]`, `[ STATION HYPO DECRYPT & INTEL BRIEF ]`, Station Hypo portrait, and Allied SIGINT/traffic analysis interpretations.
+     - **Japanese Player:** Never shows Rochefort. Instead displays Combined Fleet Chief of Staff Vice Admiral Matome Ugaki (`[ V.ADM. M. UGAKI ]`), `[ COMBINED FLEET INTEL & WAR DIARY BRIEF ]`, authentic dithered Ugaki portrait (`assets/ugaki_lowres.png`), and authentic Imperial Japanese Navy commentary grounded in *Senkoroku* war diary entries, *Kantoku* decisive battle doctrine, and Combined Fleet staff directives.
+     - Both portraits embedded as WPF application resources in `MUTHUR6000.csproj`.
+
 - 2026-09-25 00:45 UTC+3: **Cmdr. Rochefort Intelligence Panel & Option C Dynamic Scaling (Ozgur):**
   1. **Dual-Box Right Panel Layout:** Partitioned `TerminalGrid` into a primary terminal column and a secondary right-side intelligence console (`0.40*` width):
      - `[BOX 1]`: Cmdr. Joseph Rochefort portrait frame with glowing phosphor border and identity ribbon.
