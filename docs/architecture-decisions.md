@@ -979,6 +979,36 @@ User reported general errors and improvements based on runtime screenshot (`medi
 
 **Source:** Ozgur directives (2026-09-25 15:55 UTC+3).
 
+## 77. 106-Column Box Expansion, Gap Elimination, and Live Analytics Wiring (2026-09-26 18:45 UTC+3)
+
+**Context:**
+Following up on border cutoff and window size feedback, inspection of high-resolution and standard widescreen displays revealed:
+1. Long intelligence bullet lines (e.g. `> [TF] Major Surface TF (7 ships) at Batan Island (85,70) [411207] - Main Strike Force`) reach 85–95 characters. In a 78-character box (`boxWidth = 78`, `innerWidth = 74`), strings were truncated abruptly right before the right border `║`.
+2. On 1366x768 and 1920x1080 displays with `panelFontFactor = 0.72`, the 78-column box only occupied ~440px of width in `TerminalColumn`, leaving a ~410px empty gap between the main text body and the advisor panel.
+3. The advisor comments required live campaign telemetry data rather than generic template strings.
+
+**Decision:**
+1. **106-Column Monospace Box Expansion:**
+   - Expanded modal and pop-up box widths in `Core/Controller/TerminalScreenManager.cs`:
+     - `BuildHeuristicsPopUp`: `boxWidth = 106; innerWidth = 102;`
+     - `BuildNavigablePopUp`: `boxWidth = 106; innerWidth = 102;`
+     - `BuildReasoningModal`: `width = 106; innerWidth = 102;`
+   - Clamped header titles at 90 characters so borders and margins align consistently.
+   - Updated layout helpers (`Rule`, `AppendHeader`, `AppendSectionHeader`, `AppendFooterCustom`) to support 106 columns without line-wrapping.
+2. **Gap Elimination & Monospace Scaling Calibration:**
+   - In `MainWindow.xaml.cs`:
+     - Calibrated `RochefortColumn.Width = new GridLength(0.44, GridUnitType.Star);`
+     - Raised `panelFontFactor` in `UpdateProportionalScaling()` from `0.72` to `0.90`.
+     - With 106 columns at factor `0.90`, the main terminal box spans the full visual width of `TerminalColumn`, perfectly abutting the advisor panel with zero empty gap.
+3. **Live Analytics Grounding in Advisor Speech:**
+   - In `BuildIntelAdvisorComment()`: dynamically extracts target line, confidence percentage (`[RADAR/RDF CORROBORATED]` or `[IMPERIAL AIR RECON VERIFIED]`), and up to 4 live signal telemetry bullets from `_popUpReasonings`.
+   - In `BuildPredModelAdvisorComment()`: dynamically outputs model projection telemetry notes, movement vectors, and Combined Fleet war plan estimates.
+4. **Faction-Specific Advisor Isolation Preserved:**
+   - Allied player views Cmdr. Rochefort (`CMDR. J. ROCHEFORT`, Station Hypo portrait, decrypt telemetry).
+   - Japanese player views Vice Admiral Ugaki (`V.ADM. M. UGAKI`, authentic dithered Ugaki portrait, *Senkoroku* war diary notes). Rochefort panel never appears for Japanese campaigns.
+
+**Source:** Ozgur directives (2026-09-26 18:45 UTC+3).
+
 
 
 

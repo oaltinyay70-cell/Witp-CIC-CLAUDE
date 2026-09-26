@@ -218,14 +218,14 @@ namespace MUTHUR6000.Tests
             {
                 if (line.StartsWith("║") && line.EndsWith("║"))
                 {
-                    if (line.Length != 78)
+                    if (line.Length != 106)
                     {
                         allPopUpBordersStraight = false;
-                        Console.WriteLine($"[FAIL] Box line length mismatch: {line.Length} expected 78: '{line}'");
+                        Console.WriteLine($"[FAIL] Box line length mismatch: {line.Length} expected 106: '{line}'");
                     }
                 }
             }
-            Assert(allPopUpBordersStraight, "ADR 64: In-Terminal Unicode Graph Box right side is 100% straight (Length == 78)");
+            Assert(allPopUpBordersStraight, "ADR 64: In-Terminal Unicode Graph Box right side is 100% straight (Length == 106)");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.ReasoningModal, "HeuristicsPopUp -> ReasoningModal (Raw Evidence) on [ENTER]");
@@ -237,14 +237,14 @@ namespace MUTHUR6000.Tests
             {
                 if (line.StartsWith("║") && line.EndsWith("║"))
                 {
-                    if (line.Length != 78)
+                    if (line.Length != 106)
                     {
                         allModalBordersStraight = false;
-                        Console.WriteLine($"[FAIL] Modal line length mismatch: {line.Length} expected 78: '{line}'");
+                        Console.WriteLine($"[FAIL] Modal line length mismatch: {line.Length} expected 106: '{line}'");
                     }
                 }
             }
-            Assert(allModalBordersStraight, "ADR 64: Reasoning & Evidence Modal Box right side is 100% straight (Length == 78)");
+            Assert(allModalBordersStraight, "ADR 64: Reasoning & Evidence Modal Box right side is 100% straight (Length == 106)");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape);
             Assert(screenManager.CurrentState == ScreenState.HeuristicsPopUp, "ReasoningModal -> HeuristicsPopUp on [ESC]");
@@ -418,14 +418,14 @@ namespace MUTHUR6000.Tests
             Assert(reasoningComment.Contains("CMDR. ROCHEFORT // HYPO CRYPTANALYTIC ASSESSMENT"), "Reasoning modal comment contains correct Hypo header");
             Assert(reasoningComment.Contains("HYPO COMBAT INTEL NOTES") || reasoningComment.Contains("OPERATIONAL DOCTRINE ANALYSIS") || reasoningComment.Contains("MATHEMATICAL"), "Reasoning comment contains live intelligence analysis");
 
-            // Verify Option C font scaling factor: 0.72x
+            // Verify Panel font scaling factor: 0.90x
             double baseFont1024 = 13.0 * scale1024;
-            double optionCFont1024 = Math.Round(baseFont1024 * 0.72, 1);
-            Assert(optionCFont1024 <= 10.0 && optionCFont1024 >= 9.0, $"Option C panel font factor scales 1024x640 font down to ~9.4pt (computed {optionCFont1024}pt)");
+            double optionCFont1024 = Math.Round(baseFont1024 * 0.90, 1);
+            Assert(optionCFont1024 <= 12.0 && optionCFont1024 >= 11.0, $"Option C panel font factor scales 1024x640 font to ~11.7pt (computed {optionCFont1024}pt)");
 
             double baseFont1080 = 13.0 * scale1080;
-            double optionCFont1080 = Math.Round(baseFont1080 * 0.72, 1);
-            Assert(optionCFont1080 <= 16.5 && optionCFont1080 >= 15.0, $"Option C panel font factor scales 1920x1080 font down to ~15.8pt (computed {optionCFont1080}pt)");
+            double optionCFont1080 = Math.Round(baseFont1080 * 0.90, 1);
+            Assert(optionCFont1080 <= 20.0 && optionCFont1080 >= 19.0, $"Option C panel font factor scales 1920x1080 font to ~19.7pt (computed {optionCFont1080}pt)");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // ReasoningModal -> HeuristicsPopUp
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // HeuristicsPopUp -> Heuristics

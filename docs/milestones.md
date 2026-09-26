@@ -9,12 +9,17 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 12)** (2026-09-25 16:30 UTC+3)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 12)** (2026-09-26 18:45 UTC+3)  
 - Release Executable: `dist/witp-cic-muthur-alpha4-12.exe` (Single authoritative versioned binary; zero mirrors per ADR 63 / LL-049)  
 - Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
 - Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build12.zip` (86.48 MB)  
+- 106-Column Box Expansion, Gap Elimination, and Live Analytics Wiring (ADR 77, LL-060):
+  1. 106-Column Monospace Box Expansion: Expanded modal and pop-up box widths in `BuildHeuristicsPopUp`, `BuildNavigablePopUp`, and `BuildReasoningModal` from 78 to 106 columns (`boxWidth = 106`, `innerWidth = 102`). Long intelligence sighting strings up to 102 characters display without truncation or clipping. Header titles clamped at 90 characters.
+  2. Gap Elimination & Visual Scaling: Adjusted `RochefortColumn.Width = 0.44*` and elevated `panelFontFactor` to `0.90`, making text boxes occupy ~1.5x more visual width and completely eliminating the empty dead space between the main text body and the advisor panel.
+  3. Live Analytics Grounding in Advisor Speech: Dynamic ingestion of live target line, confidence percentage (`[RADAR/RDF CORROBORATED]` or `[IMPERIAL AIR RECON VERIFIED]`), and signal evidence bullets from `_popUpReasonings`.
+  4. Faction-Specific Intelligence Advisor: Allied player views Station Hypo Cmdr. Joseph Rochefort (`CMDR. J. ROCHEFORT`, Station Hypo portrait, decrypt telemetry); Japanese player views Combined Fleet Chief of Staff Vice Admiral Matome Ugaki (`V.ADM. M. UGAKI`, authentic dithered Ugaki portrait, *Senkoroku* war diary notes, *Kantoku* decisive battle doctrine). Rochefort window never appears for a Japanese player.
 - Box Boundary Invariant Rigidity, Proportional Width Expansion (~1.5x) & Faction-Specific Intelligence Advisor (ADR 76, LL-059):
   1. Box Boundary Invariant: Strict character cell clamping on popup header titles (`shortTitle.Length <= 59`) so padding `rem >= 1` always; inner bullet rows clamped to `innerWidth` with vertical right border `║` strictly at column 78 across all screens.
   2. Proportional Width Expansion & Gap Elimination: Expanded `RochefortColumn` to `0.48*` and increased `panelFontFactor` to `0.88`, enlarging terminal text boxes by ~1.5x in visual width and eliminating the horizontal dead space gap between the terminal and advisor panels without soft-wrapping.

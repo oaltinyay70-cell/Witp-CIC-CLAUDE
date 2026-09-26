@@ -742,9 +742,19 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT display Allied intelligence advisors to Japanese faction players.
   - DO NOT construct box header borders with unbounded title interpolations that risk negative character padding.
 
+### LL-060: Rigid Monospace Box Sizing vs Screen Column Dead Space & Text Truncation
+- **Date:** 2026-09-26 18:45 UTC+3
+- **Context:** User reported:
+  > *"Nothing changed. u are dreaming again. text is cutoff across a border. text windows are still small and there is a big gap between rochefort window and the main text area and u told me it was done DISASTER !"*
+- **What Was Learned:**
+  1. **Long Bullet Strings Need Wide Monospace Boxes:** Intelligence sighting descriptions (task force types, ship counts, base names, hex coordinates, dates, and combat mission tags) regularly reach 85–95 characters. Truncating lines to `innerWidth = 74` cuts words in half right at the right border `║`. Expanding box width to 106 columns (`innerWidth = 102`) allows entire strings like `> [TF] Major Surface TF (7 ships) at Batan Island (85,70) [411207] - Main Strike Force` to display completely without truncation or border breakage.
+  2. **Monospace Character Width vs Grid Column Dead Space:** On standard 1366x768 and 1080p screens, rendering a 78-column box with `panelFontFactor = 0.72` left ~410px of empty black void between the right border of the terminal box and the advisor panel. Elevating the box width to 106 columns and increasing `panelFontFactor` to `0.90` expands the box ~1.5x in visual width, closing the gap completely.
+  3. **Live Signal Telemetry in Advisor Briefings:** Commander commentary must not be static boilerplate. Grounding the speech directly in active telemetry (`_popUpReasonings`), including detection modes (radar, coastwatcher, radio direction finding), confidence ratings, and model projection coordinates makes the intelligence panel authentic and analytically indispensable.
+- **What NOT to Repeat:**
+  - DO NOT hardcode a 78-column width for modal boxes when displaying long multi-attribute telemetry records that require 90+ characters.
+  - DO NOT leave large dead-space voids in the main terminal column when side panels are active.
+
 ---
-
-
 
 ## 3. Checklist for Future Corrections
 Whenever Ozgur provides feedback or a correction:

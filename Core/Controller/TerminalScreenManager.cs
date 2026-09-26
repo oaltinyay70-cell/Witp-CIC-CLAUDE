@@ -1898,8 +1898,8 @@ namespace MUTHUR6000.Core.Controller
 
         private string BuildHeuristicsPopUp()
         {
-            const int boxWidth = 78;
-            const int innerWidth = 74;
+            const int boxWidth = 106;
+            const int innerWidth = 102;
             const int maxVisible = 11;
 
             var sb = new StringBuilder();
@@ -1908,15 +1908,15 @@ namespace MUTHUR6000.Core.Controller
                 ? $"ITEMS: {_popUpBullets.Count}"
                 : $"{turnInfo} | ITEMS: {_popUpBullets.Count}";
 
-            AppendHeader(sb, _popUpTitle, rightHeader);
+            AppendHeader(sb, _popUpTitle, rightHeader, boxWidth);
             sb.AppendLine();
-            AppendSectionHeader(sb, "TRAVERSE FINDINGS WITH ARROW KEYS | PRESS [ENTER] TO VERIFY RAW TELEMETRY");
+            AppendSectionHeader(sb, "TRAVERSE FINDINGS WITH ARROW KEYS | PRESS [ENTER] TO VERIFY RAW TELEMETRY", boxWidth);
 
             int total = _popUpBullets.Count;
             int sel = _heuristicsPopUpSel;
             int startIdx = sel >= maxVisible ? sel - maxVisible + 1 : 0;
 
-            string shortTitle = _popUpTitle.Length > 62 ? _popUpTitle.Substring(0, 59) + "..." : _popUpTitle;
+            string shortTitle = _popUpTitle.Length > 90 ? _popUpTitle.Substring(0, 87) + "..." : _popUpTitle;
             string topPrefix = $"╔══ [ {shortTitle} ] ";
             int rem = boxWidth - topPrefix.Length - 1;
             sb.AppendLine(topPrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
@@ -1940,7 +1940,7 @@ namespace MUTHUR6000.Core.Controller
             sb.AppendLine("╚" + new string('═', boxWidth - 2) + "╝");
             sb.AppendLine();
             sb.AppendLine("    >> Press [ENTER] to view granular telemetry evidence & reasoning for this finding.");
-            AppendFooter(sb, "[UP/DOWN] Traverse Findings", "[ENTER] View Raw Evidence", "PRESS ESC TO RETURN");
+            AppendFooterCustom(sb, boxWidth, "[UP/DOWN] Traverse Findings", "[ENTER] View Raw Evidence", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
@@ -2832,10 +2832,23 @@ namespace MUTHUR6000.Core.Controller
                 if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
                 {
                     sb.AppendLine($"TARGET: {_popUpBullets[_intelPopUpSel]}");
+                    if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
+                    {
+                        sb.AppendLine($"CONFIDENCE: {_popUpConfidences[_intelPopUpSel]}% [RADAR/RDF CORROBORATED]");
+                    }
                 }
                 sb.AppendLine();
                 sb.AppendLine("STATION HYPO READOUT:");
                 sb.AppendLine("Cross-referencing SIGINT traffic analysis with coastwatcher reports. Enemy naval communication volume remains elevated.");
+                if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("CORROBORATED SIGNALS TELEMETRY:");
+                    foreach (var note in _popUpReasonings[_intelPopUpSel].Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
                 sb.AppendLine();
                 sb.AppendLine("INTERPRETATION:");
                 sb.AppendLine("Select item and press [ENTER] to drill down into decrypted raw telemetry sources.");
@@ -2848,10 +2861,23 @@ namespace MUTHUR6000.Core.Controller
                 if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
                 {
                     sb.AppendLine($"SIGHTING/OBJECTIVE: {_popUpBullets[_intelPopUpSel]}");
+                    if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
+                    {
+                        sb.AppendLine($"RECON CERTAINTY: {_popUpConfidences[_intelPopUpSel]}% [IMPERIAL AIR RECON VERIFIED]");
+                    }
                 }
                 sb.AppendLine();
                 sb.AppendLine("COMBINED FLEET DISPATCH:");
                 sb.AppendLine("Imperial Navy air reconnaissance and naval telegraph intercepts processed from Southern Area command.");
+                if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("STAFF LOG TELEMETRY (SENKUN):");
+                    foreach (var note in _popUpReasonings[_intelPopUpSel].Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
                 sb.AppendLine();
                 sb.AppendLine("STAFF ORDER:");
                 sb.AppendLine("Select item and press [ENTER] to review granular recon details and mission verification.");
@@ -2874,6 +2900,15 @@ namespace MUTHUR6000.Core.Controller
                 sb.AppendLine();
                 sb.AppendLine("STRATEGIC SUMMARY:");
                 sb.AppendLine("Predictive algorithms project enemy intentions using historical movement vectors and supply capacities.");
+                if (_predPopUpSel < _popUpReasonings.Count && _popUpReasonings[_predPopUpSel].Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("MODEL PROJECTION TELEMETRY:");
+                    foreach (var note in _popUpReasonings[_predPopUpSel].Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
                 sb.AppendLine();
                 sb.AppendLine("TACTICAL ADVICE:");
                 sb.AppendLine("Deploy scouting aircraft along the perimeter. Do not allow your strike groups to be caught out of position.");
@@ -2890,6 +2925,15 @@ namespace MUTHUR6000.Core.Controller
                 sb.AppendLine();
                 sb.AppendLine("CHIEF OF STAFF FORECAST:");
                 sb.AppendLine("Combined Fleet predictive analytics evaluate probable Allied resistance lines and carrier strike probabilities.");
+                if (_predPopUpSel < _popUpReasonings.Count && _popUpReasonings[_predPopUpSel].Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("COMBINED FLEET WAR PLAN ESTIMATE:");
+                    foreach (var note in _popUpReasonings[_predPopUpSel].Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
                 sb.AppendLine();
                 sb.AppendLine("DIRECTIVE:");
                 sb.AppendLine("Maintain aggressive reconnaissance screens. Strike swiftly when Allied surface assets sortie.");
@@ -2899,8 +2943,8 @@ namespace MUTHUR6000.Core.Controller
 
         // ── Width / layout helpers ────────────────────────────────────────────
         private const int W = 80;
-        private static string Rule(char c = '═') =>
-            (c == '-' || c == '─') ? new string('─', W) : new string('═', W);
+        private static string Rule(char c = '═', int width = W) =>
+            (c == '-' || c == '─') ? new string('─', width) : new string('═', width);
         private static string PadTo(string s, int width) =>
             s.Length >= width ? s.Substring(0, width) : s + new string(' ', width - s.Length);
 
@@ -2912,9 +2956,9 @@ namespace MUTHUR6000.Core.Controller
             return s;
         }
 
-        private void AppendHeader(StringBuilder sb, string title, string right = "")
+        private void AppendHeader(StringBuilder sb, string title, string right = "", int width = W)
         {
-            sb.AppendLine(Rule('═'));
+            sb.AppendLine(Rule('═', width));
             string titleStr = $"[ {title} ]";
             if (!string.IsNullOrEmpty(right))
             {
@@ -2923,26 +2967,33 @@ namespace MUTHUR6000.Core.Controller
                     !rightStr.Contains("ITEMS:") && !rightStr.Contains("MATCHES:") &&
                     !rightStr.Contains("ALL ") && !rightStr.Contains("STRATEGIC"))
                     rightStr = "Turn: " + rightStr;
-                int spaces = Math.Max(1, W - titleStr.Length - rightStr.Length);
+                int spaces = Math.Max(1, width - titleStr.Length - rightStr.Length);
                 sb.AppendLine(titleStr + new string(' ', spaces) + rightStr);
             }
             else
             {
                 sb.AppendLine(titleStr);
             }
-            sb.AppendLine(Rule('═'));
+            sb.AppendLine(Rule('═', width));
         }
 
-        private void AppendSectionHeader(StringBuilder sb, string title)
+        private void AppendSectionHeader(StringBuilder sb, string title, int width = W)
         {
             sb.AppendLine($"[ {title} ]");
-            sb.AppendLine(Rule('─'));
+            sb.AppendLine(Rule('─', width));
         }
 
         private void AppendFooter(StringBuilder sb, params string[] hotkeys)
         {
             sb.AppendLine();
             sb.AppendLine(Rule('═'));
+            sb.AppendLine(string.Join("  │  ", hotkeys));
+        }
+
+        private void AppendFooterCustom(StringBuilder sb, int width, params string[] hotkeys)
+        {
+            sb.AppendLine();
+            sb.AppendLine(Rule('═', width));
             sb.AppendLine(string.Join("  │  ", hotkeys));
         }
 
@@ -3391,8 +3442,8 @@ namespace MUTHUR6000.Core.Controller
         // ─────────────────────────────────────────────────────────────────────
         private string BuildNavigablePopUp()
         {
-            const int boxWidth = 78;
-            const int innerWidth = 74;
+            const int boxWidth = 106;
+            const int innerWidth = 102;
             const int maxVisible = 11;
 
             var sb = new StringBuilder();
@@ -3402,15 +3453,15 @@ namespace MUTHUR6000.Core.Controller
                 ? $"ITEMS: {_popUpBullets.Count}"
                 : $"{turnInfo} | ITEMS: {_popUpBullets.Count}";
 
-            AppendHeader(sb, _popUpTitle, rightHeader);
+            AppendHeader(sb, _popUpTitle, rightHeader, boxWidth);
             sb.AppendLine();
-            AppendSectionHeader(sb, "TRAVERSE BULLETS WITH ARROW KEYS | PRESS [ENTER] TO DISCLOSE REASONING");
+            AppendSectionHeader(sb, "TRAVERSE BULLETS WITH ARROW KEYS | PRESS [ENTER] TO DISCLOSE REASONING", boxWidth);
 
             int total = _popUpBullets.Count;
             int sel = _state == ScreenState.IntelDetailPopUp ? _intelPopUpSel : _predPopUpSel;
             int startIdx = sel >= maxVisible ? sel - maxVisible + 1 : 0;
 
-            string shortTitle = _popUpTitle.Length > 62 ? _popUpTitle.Substring(0, 59) + "..." : _popUpTitle;
+            string shortTitle = _popUpTitle.Length > 90 ? _popUpTitle.Substring(0, 87) + "..." : _popUpTitle;
             string topPrefix = $"╔══ [ {shortTitle} ] ";
             int rem = boxWidth - topPrefix.Length - 1;
             sb.AppendLine(topPrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
@@ -3434,7 +3485,7 @@ namespace MUTHUR6000.Core.Controller
             sb.AppendLine("╚" + new string('═', boxWidth - 2) + "╝");
             sb.AppendLine();
             sb.AppendLine("    >> Press [ENTER] to view granular telemetry evidence & reasoning for this line.");
-            AppendFooter(sb, "[UP/DOWN] Traverse Bullets", "[ENTER] View Reasoning", "PRESS ESC TO RETURN");
+            AppendFooterCustom(sb, boxWidth, "[UP/DOWN] Traverse Bullets", "[ENTER] View Reasoning", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
@@ -4065,8 +4116,8 @@ namespace MUTHUR6000.Core.Controller
         // ─────────────────────────────────────────────────────────────────────
         private string BuildReasoningModal()
         {
-            const int width = 78;
-            const int innerWidth = 74;
+            const int width = 106;
+            const int innerWidth = 102;
             var sb = new StringBuilder();
 
             string titlePrefix = "╔══ [ REASONING & TELEMETRY EVIDENCE ] ";

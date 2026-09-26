@@ -312,7 +312,7 @@ namespace MUTHUR6000
                     if (showAdvisor)
                     {
                         RochefortPanel.Visibility = Visibility.Visible;
-                        RochefortColumn.Width = new GridLength(0.48, GridUnitType.Star);
+                        RochefortColumn.Width = new GridLength(0.44, GridUnitType.Star);
                         RochefortSpeechText.Text = _screenManager.GetRochefortComment();
 
                         bool isAllied = _screenManager.IsAllied;
@@ -1586,9 +1586,9 @@ namespace MUTHUR6000
             scale = Math.Clamp(scale, 0.85, 3.0);
 
             // 1. Terminal Font Size: 13pt base, scaling up to 32pt+
-            // Option C: When Rochefort panel is active, adjust terminal font factor so 78-col box maintains rigid straight margins
+            // When Rochefort/Ugaki panel is active, adjust terminal font factor (0.90) so expanded 106-col box fills width without line overflow
             bool isRochefortActive = RochefortPanel != null && RochefortPanel.Visibility == Visibility.Visible;
-            double panelFontFactor = isRochefortActive ? 0.72 : 1.0;
+            double panelFontFactor = isRochefortActive ? 0.90 : 1.0;
             double computedTerminalFontSize = Math.Round(13.0 * scale * panelFontFactor, 1);
             _currentFontSize = computedTerminalFontSize;
 
