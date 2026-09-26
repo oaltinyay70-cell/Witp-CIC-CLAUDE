@@ -10,6 +10,11 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-26 19:02 UTC+3: **Absolute Prohibition of MUTHUR6000.exe & Secondary Binaries (Ozgur):**
+  1. **Strict Single-Binary Mandate:** User explicitly mandated *"no need to produce MUTHUR6000.exe dont make this mistake again"*.
+  2. `dist/MUTHUR6000.exe` deleted immediately.
+  3. The sole authorized executable artifact in `dist/` is the active versioned binary (`dist/witp-cic-muthur-alpha4-12.exe`). No duplicate aliases or mirrors permitted (ADR 63, LL-049, LL-061).
+
 - 2026-09-26 18:45 UTC+3: **106-Column Box Expansion, Gap Elimination & Live Analytics Wiring (Ozgur):**
   1. **106-Column Monospace Box Expansion:** Expanded modal/popup box widths across `BuildHeuristicsPopUp`, `BuildNavigablePopUp`, and `BuildReasoningModal` from 78 to 106 columns (`boxWidth = 106`, `innerWidth = 102`). Long sighting strings (e.g. `> [TF] Major Surface TF (7 ships) at Batan Island (85,70) [411207] - Main Strike Force`) now fit completely with zero text truncation or cutoff against the right border `║`. Header titles clamped at 90 characters. Layout rules and section headers standardized to 106 width.
   2. **Gap Elimination & Proportional Scaling:** Adjusted `RochefortColumn.Width` to `0.44*` and elevated `panelFontFactor` in `UpdateProportionalScaling()` from `0.72` to `0.90`. This expands the text boxes ~1.5x in visual width, closing the dead space gap between the main text body and the advisor panel completely across 1366x768 and 1080p resolutions.

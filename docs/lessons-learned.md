@@ -754,6 +754,18 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT hardcode a 78-column width for modal boxes when displaying long multi-attribute telemetry records that require 90+ characters.
   - DO NOT leave large dead-space voids in the main terminal column when side panels are active.
 
+### LL-061: Absolute Prohibition of MUTHUR6000.exe and Secondary Binary Artifacts
+- **Date:** 2026-09-26 19:02 UTC+3
+- **Context:** User explicitly ordered:
+  > *"no need to produce MUTHUR6000.exe dont make this mistake again"*
+- **What Was Learned:**
+  1. **Strict Single-Binary Discipline:** Do NOT produce `dist/MUTHUR6000.exe` or any other alias/mirror binaries under any circumstances.
+  2. **Sole Executable Deliverable:** The only executable artifact that may exist in `dist/` is the single, authoritative, versioned binary for the active milestone: `dist/witp-cic-muthur-alpha4-[build#].exe` (currently `dist/witp-cic-muthur-alpha4-12.exe`).
+  3. **Immediate Removal of Stale Artifacts:** Any build scripts, commands, or intermediate outputs producing `MUTHUR6000.exe` must immediately move/rename the output directly to the versioned executable without leaving a copy behind.
+- **What NOT to Repeat:**
+  - NEVER leave `MUTHUR6000.exe` in `dist/`.
+  - NEVER copy or mirror the release build to `MUTHUR6000.exe`.
+
 ---
 
 ## 3. Checklist for Future Corrections
