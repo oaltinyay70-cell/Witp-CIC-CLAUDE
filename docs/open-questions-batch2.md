@@ -1,4 +1,4 @@
-# WITP-CIC-MUTHUR — Open Spec Questions (Batch 2) — [ALL ANSWERED]
+# WITP-CIC-ROCHEFORT — Open Spec Questions (Batch 2) — [ALL ANSWERED]
 
 **Rule:** Every answer Ozgur provides here is immediately recorded in `docs/scope-v1.md` changelog (date-stamped) and mirrored into `docs/architecture-decisions.md` before any code implementation begins.
 
@@ -73,13 +73,13 @@
 
 ---
 
-## E — Toolchain & Alien MU/TH/UR UI Architecture
+## E — Toolchain & Retro Phosphor Terminal UI Architecture
 
 ### E1. Toolchain & UI Theme — [ANSWERED 2026-09-19 19:24 UTC+3]
 - **Spec ref:** §8, `docs/architecture-decisions.md` §3
 - **Question:** Toolchain and aesthetic requirements.
 - **Answer (Ozgur):**
-  - **Aesthetic:** Alien movie style computer terminal interface (**MU/TH/UR** / Nostromo / Weyland-Yutani computer terminal theme). Green monochrome phosphor palette (Win32 Console attributes 2, 10, 160), crisp scanline/typewriter pacing feel, box framing (`=`, `-`, `+`), blinking status markers, uppercase teletype typography. Reference: [Weyland Uplink MU/TH/UR Terminal](https://weylanduplink.com/news/whats-story-muthur-new-alien-viral-website-launched).
+  - **Aesthetic:** Retro computer terminal interface (vintage mainframe / CRT green phosphor console theme). Green monochrome phosphor palette (Win32 Console attributes 2, 10, 160), crisp scanline/typewriter pacing feel, box framing (`=`, `-`, `+`), blinking status markers, uppercase teletype typography.
   - **Toolchain:** Developer decision. **C++17 with MinGW-w64 (GCC)** compiling to a standalone, zero-dependency static Windows console executable (`WitP-CIC.exe`) targeting Windows console (`cmd.exe` / Windows Terminal).
 
 ---

@@ -9,10 +9,10 @@
 		<ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
 
 		<!-- Assembly & Package Metadata -->
-		<AssemblyTitle>MUTHUR 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM</AssemblyTitle>
-		<Product>WITP-CIC-MUTHUR</Product>
-		<Description>MUTHUR 6000 Pacific War Room Combat Information Center and Intelligence Engine for War in the Pacific: Admiral's Edition.</Description>
-		<Company>Weyland-Yutani // WitP-CIC</Company>
+		<AssemblyTitle>ROCHEFORT 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM</AssemblyTitle>
+		<Product>WITP-CIC-ROCHEFORT</Product>
+		<Description>ROCHEFORT 6000 Pacific War Room Combat Information Center and Intelligence Engine for War in the Pacific: Admiral's Edition.</Description>
+		<Company>Station Hypo // WitP-CIC</Company>
 		<Authors>WitP-CIC Team</Authors>
 		<Version>0.03.0</Version>
 		<AssemblyVersion>0.03.0.0</AssemblyVersion>

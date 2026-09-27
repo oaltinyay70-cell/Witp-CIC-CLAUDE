@@ -1,4 +1,4 @@
-# MUTHUR 6000 // GRAPHICS PRESENTATION BLUEPRINT
+# ROCHEFORT 6000 // GRAPHICS PRESENTATION BLUEPRINT
 # Page: Intelligence & Anomaly Detection_page3
 
 ================================================================================================================
@@ -7,7 +7,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: SIGNAL ANOMALIES & INTELLIGENCE BLINDSPOTS ]                                       |
+| ROCHEFORT 6000 // [ TITLE: SIGNAL ANOMALIES & INTELLIGENCE BLINDSPOTS ]                                       |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: SIGHTING ANOMALIES --------------------------------------------------------------------------- |

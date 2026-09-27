@@ -46,10 +46,19 @@ namespace MUTHUR6000.Settings
         private static string GetSettingsFilePath()
         {
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string folder = Path.Combine(appData, "MUTHUR6000");
+            string folder = Path.Combine(appData, "ROCHEFORT6000");
+            string legacyFolder = Path.Combine(appData, "MUTHUR6000");
+
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
+                // Migrate legacy settings if available
+                string legacyFile = Path.Combine(legacyFolder, "settings.json");
+                string targetFile = Path.Combine(folder, "settings.json");
+                if (File.Exists(legacyFile) && !File.Exists(targetFile))
+                {
+                    try { File.Copy(legacyFile, targetFile); } catch { }
+                }
             }
             return Path.Combine(folder, "settings.json");
         }

@@ -34,11 +34,11 @@ Recorded **2026-09-15 15:37 UTC** from Ozgur’s answers and two “U decide” 
 
 **Decision:** The **implementable TUI specification** for Version 1 is **`docs/scope-v1.md` §8** (Win32 console attributes codes **2**, **10**, **160**; header/body/footer topography; §8.3 interaction rules; §8.4 modal overlays). The v1 **aesthetic target** is the **MU/TH/UR / Alien ship-computer green phosphor** look already described in §8 — not a separate undocumented layout.
 
-**Not permitted as sources:** **Film frames** and **pixel-perfect reproduction of copyrighted film interface screens** are **not** asset sources, layout authorities, or licenses to copy proprietary movie UI text or branding. Ozgur’s “perfect copy of MUTHUR” is recorded as a **product aesthetic requirement**; engineering implements §8 toward that look without treating the film as deliverable art or spec.
+**Not permitted as sources:** **Film frames** and **pixel-perfect reproduction of copyrighted film interface screens** are **not** asset sources, layout authorities, or licenses to copy proprietary movie UI text or branding. Ozgur’s “perfect copy of ROCHEFORT” is recorded as a **product aesthetic requirement**; engineering implements §8 toward that look without treating the film as deliverable art or spec.
 
-**Ozgur (2026-09-15 ~15:44 UTC):** “the UI must be a perfect copy of the MUTHUR from the ALien movie.”
+**Ozgur (2026-09-15 ~15:44 UTC):** “the UI must be a perfect copy of the ROCHEFORT from the ALien movie.”
 
-**On-screen name (2026-09-15 ~15:47 UTC):** Display **WU/TH/UR** (slashes as shown) in splash, headers, and titles. Closes the former OPEN between spec §8 heading **“W.U.T.H.U.R.”** and user **“MUTHUR”**; the §8 heading text in `docs/scope-v1.md` is retained for traceability.
+**On-screen name (2026-09-15 ~15:47 UTC):** Display **WU/TH/UR** (slashes as shown) in splash, headers, and titles. Closes the former OPEN between spec §8 heading **“W.U.T.H.U.R.”** and user **“ROCHEFORT”**; the §8 heading text in `docs/scope-v1.md` is retained for traceability.
 
 **Layout authority:** §8.2–§8.4 header/body/footer blocks stay as written in the scope document until the scope document changes them.
 
@@ -163,7 +163,7 @@ A manual folder browse dialog is provided if the user has an alternative install
 
 **Decision:**
 - Permanently decommission and purge all Cursor git remotes (`origin.cursor.com` and `WITP-CIC-CURSOR`) and Cursor local branches.
-- The project's active, authoritative Git repository is **`https://github.com/TheZenHippie/MUTHUR6000.git`** mapped as canonical **`origin`** on branch **`main`** for `witp-cic-muthur`. Upstream repository `https://github.com/oaltinyay70-cell/WITP-CIC2.git` is preserved as an immutable reference archive.
+- The project's active, authoritative Git repository is **`https://github.com/oaltinyay70-cell/witp-cic-rochefort.git`** mapped as canonical **`origin`** on branch **`main`** for `witp-cic-rochefort`. Upstream repository `https://github.com/oaltinyay70-cell/WITP-CIC2.git` is preserved as an immutable reference archive.
 - All commits and pushes are strictly and exclusively made to `origin main` (GitHub). Never push to or pull from Cursor repositories.
 
 **Source:** Ozgur directives (2026-09-19 20:25 UTC+3 & 2026-09-21 23:32 UTC+3).
@@ -668,12 +668,12 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 
 **Source:** Ozgur directives (2026-09-21 20:53 UTC+3).
 
-## 61. Project Switch to Standalone `witp-cic-muthur` & Phase 4 Naming Convention (2026-09-21 23:32 UTC+3)
+## 61. Project Switch to Standalone `witp-cic-rochefort` & Phase 4 Naming Convention (2026-09-21 23:32 UTC+3)
 
 **Decision:**
-1. **Master Repository:** `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` is the active, canonical master repository. `Witp-CIC2` is read-only and immutable.
+1. **Master Repository:** `C:\Users\ozgur\Documents\witp-cic-rochefort` is the active, canonical master repository. `Witp-CIC2` is read-only and immutable.
 2. **Phase Designation:** **Alpha 4** (`alpha4`).
-3. **Strict Binary Naming Convention:** All compiled executables follow `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-0.exe`).
+3. **Strict Binary Naming Convention:** All compiled executables follow `witp-cic-rochefort-alpha4-[build#].exe` (e.g. `witp-cic-rochefort-alpha4-0.exe`).
 
 **Source:** Ozgur directives (2026-09-21 22:20 & 23:32 UTC+3).
 
@@ -693,15 +693,15 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 ## 63. Single-Binary Output Mandate & Elimination of Redundant Mirrors (2026-09-21 23:58 UTC+3)
 
 **Decision:**
-1. **Single-Binary Output:** Each release compilation produces exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe`.
-2. **Prohibition of Mirrors:** Duplicate mirror copies (`WitP-CIC.exe`, `MUTHUR6000.exe`) are permanently eliminated and forbidden. Neither the test suite nor the application runtime requires aliases.
+1. **Single-Binary Output:** Each release compilation produces exclusively the single versioned executable matching `dist/witp-cic-rochefort-alpha4-[build#].exe`.
+2. **Prohibition of Mirrors:** Duplicate mirror copies (`WitP-CIC.exe`, `secondary alias binaries`) are permanently eliminated and forbidden. Neither the test suite nor the application runtime requires aliases.
 
 **Source:** Ozgur directives (2026-09-21 23:58 UTC+3).
 
 ## 64. In-Terminal Unicode & Character Graphing Standard (2026-09-22 18:16 UTC+3)
 
 **Decision:**
-1. **In-Terminal Native Rendering (Option 1):** All future telemetry and analytical graphs in MUTHUR 6000 will be constructed natively using monospace character formatting, Unicode block elements (` ▂▃▄▅▆▇█`, `░▒▓█`, `■`), Braille curves (`⣀⣤⣶⣿`), and continuous box-drawing frames.
+1. **In-Terminal Native Rendering (Option 1):** All future telemetry and analytical graphs in ROCHEFORT 6000 will be constructed natively using monospace character formatting, Unicode block elements (` ▂▃▄▅▆▇█`, `░▒▓█`, `■`), Braille curves (`⣀⣤⣶⣿`), and continuous box-drawing frames.
 2. **Prohibition of Heavy Third-Party Charting Libraries:** External plotting libraries (OxyPlot, LiveCharts, ScottPlot) and native C++ graphics backends (SkiaSharp) are excluded to prevent binary bloat, native DLL extraction friction in single-file executables, and aesthetic clashes with the 1979 CRT phosphor terminal.
 3. **Automatic Phosphor Theme & FX Integration:** In-terminal graphs automatically inherit CRT bloom glow, vintage scanlines, dynamic phosphor switching (Matrix Green, Solar Amber, Nostromo Cyan, Glitch Red), and teletype feed dynamics with zero overhead.
 4. **Scope Governance:** Graph implementations will be driven strictly by explicit data specifications provided by Ozgur.
@@ -759,7 +759,7 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
 3. **Monospace Box Straight Border Guarantee:**
    - Strict constraint enforced: The right border `║` of terminal modal boxes must always remain straight with zero displacement, bending, or line wobbling.
    - All modal rows are clamped and padded to `innerWidth = 74` using single-width UTF-8 code points, guaranteeing `boxWidth = 78` throughout `BuildHeuristicsPopUp` and `BuildReasoningModal`.
-   - Verified via automated unit tests in `tests/MUTHUR6000.Tests/Program.cs`.
+   - Verified via automated unit tests in `tests/ROCHEFORT6000.Tests/Program.cs`.
 
 ## 68. War Room Graphics Domain & ASCII Wireframe Specification Architecture (2026-09-22 22:15 UTC+3)
 
@@ -803,7 +803,7 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
      - Global Tempo State Machine: Weighted multi-signal evaluation producing discrete states (Build-up, Strike, Consolidation, Withdrawal).
 4. **Page 1 In-Terminal Presentation Display (`Logistical_Attrition_Telemetry_page1.md`):**
    - Implemented as full-screen native monospace view:
-     - Header: `MUTHUR 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
+     - Header: `ROCHEFORT 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
      - Section 1: Attrition & Drain metrics (K/L ratio with OLS regression slope `[ IMPROVING ]` or `[ DEGRADING ]`, Air losses / Ship losses rate bars).
      - Section 2: Operational Tempo (OPTEMPO) 20-turn time-series curve with Braille/character curve plot (`⢠⣶`, `⢀⣴⡿⠋`, etc.) and X/Y axes (`EVENTS` 0..20 vs `TURNS` D01..D20).
      - Section 3: Logistical readiness meters (`[ESCORT DEN]`, `[FUEL LIMIT]`, `[EXHAUSTION]`).
@@ -817,7 +817,7 @@ The Gary Grigsby's War in the Pacific: Admiral's Edition master theater hex map 
    - In the War Room Graphics Sub-Menu, option `[1]` label is changed from `Logistical & Attrition Telemetry` to `[ TBD ]`. All 10 sub-menu options are now consistently presented as `[ TBD ]`.
 2. **Unified TBD Placeholder Presentation:**
    - When the user selects option `[1]` (or any slot `1` through `10`), the display routes to `BuildGraphicsDisplayScreen()`, rendering a standardized full-screen monospace placeholder:
-     - Header: `MUTHUR 6000 // GRAPHICS TELEMETRY SCREEN`
+     - Header: `ROCHEFORT 6000 // GRAPHICS TELEMETRY SCREEN`
      - Box Title: `╔══ [ RESERVED TELEMETRY PARTITION (TBD) ] ═...═╗`
      - Body: Explicitly states that this partition is reserved for upcoming wireframe specifications.
      - Strict straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
@@ -882,7 +882,7 @@ Following review of the Graphics Sub-Menu (`media_1790281139697.png`), the user 
    - All 10 slots `[1]` through `[10]` (`[0]`) in the Graphics Sub-Menu are rendered strictly as `[ TBD ]`.
 2. **Unified Display Screen Routing:**
    - Selecting any option (`[1]` through `[0]`) in the sub-menu routes to the standardized reserved partition placeholder `BuildGraphicsTbdScreen(_graphicsPageId)`:
-     - Header: `MUTHUR 6000 // WAR ROOM : GRAPHICS TELEMETRY SCREEN`
+     - Header: `ROCHEFORT 6000 // WAR ROOM : GRAPHICS TELEMETRY SCREEN`
      - Box Title: `╔══ [ VISUAL TELEMETRY MATRIX : OPTION {slot} (TBD) ] ═...═╗`
      - Body: Explains partition reservation and background telemetry integration.
      - Rigid straight border rule: `boxWidth = 78`, `innerWidth = 74`, right border `║` strictly vertical.
@@ -895,7 +895,7 @@ Following review of the Graphics Sub-Menu (`media_1790281139697.png`), the user 
 
 **Context:**
 Following design review in `docs/boot-screen-redesign.md`, the user directed:
-> *"from now on REPLACE EVERY REFERENCE TO MUTHUR 6000 TO ROCHEFORT 6000"*  
+> *"from now on REPLACE EVERY REFERENCE TO ROCHEFORT 6000 TO ROCHEFORT 6000"*  
 > *"USING THE SAME AS THIS BLOCK WROTE ROCHEFORT here in big blok ascii"*  
 > *"add the following: >> XX HEURISTICS READY, >>YY GRAPHIC SCREENS READY"*  
 > *"delete this block entirely [PACIFIC CAMPAIGN TELEMETRY HARVEST & 5 sub-lines]"*  
@@ -903,13 +903,13 @@ Following design review in `docs/boot-screen-redesign.md`, the user directed:
 
 **Decision:**
 1. **System Identity Rebranding:**
-   - All user-visible terminal references, badges, headers, and UI chrome transitioned from `MUTHUR 6000` to `ROCHEFORT 6000`:
+   - All user-visible terminal references, badges, headers, and UI chrome transitioned from `ROCHEFORT 6000` to `ROCHEFORT 6000`:
      - Window Title: `ROCHEFORT 6000 // PACIFIC CIC`
      - System Identity Badge: `[ ROCHEFORT 6000 // PACIFIC CIC ]`
      - Context Menu & Button Tooltips: `Close ROCHEFORT Console`, `1200 Baud (ROCHEFORT Default)`
      - Font Selector Window: `ROCHEFORT 6000 // SYSTEM FONT SELECTOR` and preview matrix text
      - Test Suite Runner: `ROCHEFORT 6000 // PACIFIC WAR ROOM AUTOMATED ANALYTICS TEST SUITE`
-     - Codebase namespaces (`namespace MUTHUR6000`) and git origin binding are preserved to avoid build or project breakage.
+     - Codebase namespaces (`namespace ROCHEFORT6000`) and git origin binding are preserved to avoid build or project breakage.
 2. **Boot Screen Redesign (Option 1):**
    - Implemented Option 1 layout in `BuildBootScreen()`:
      - Header: `AppendHeader(sb, "ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC");`
@@ -975,7 +975,7 @@ User reported general errors and improvements based on runtime screenshot (`medi
      - Briefing Header: `[ COMBINED FLEET INTEL & WAR DIARY BRIEF ]`
      - Portrait: `assets/ugaki_lowres.png` (Dithered authentic portrait of Vice Admiral Matome Ugaki, Combined Fleet Chief of Staff)
      - Commentary: *Senkoroku* war diary estimates, Combined Fleet staff directives, *Kantoku* decisive battle doctrine, and Imperial Navy Type 97 flying boat / submarine recon notes.
-   - Both portraits are registered as embedded resources in `MUTHUR6000.csproj`.
+   - Both portraits are registered as embedded resources in `ROCHEFORT6000.csproj`.
 
 **Source:** Ozgur directives (2026-09-25 15:55 UTC+3).
 

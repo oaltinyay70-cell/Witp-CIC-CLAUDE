@@ -1,20 +1,20 @@
-# WITP-CIC-MUTHUR — Project Context
+# witp-cic-rochefort — Project Context
 
 Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user message, it is unknown. Do not fill gaps.
 
 ## What this is
 
-- Product name: **MUTHUR 6000 // WITP-CIC Intelligence System**
+- Product name: **ROCHEFORT 6000 // WITP-CIC Intelligence System**
 - Active Milestone: **Alpha 4** (Active 2026-09-22 21:45 UTC+3)
-- Executable Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (e.g. `witp-cic-muthur-alpha4-4.exe`; build counter increments by 1 per compilation; zero mirrors/aliases)
-- Active Release Binary: `dist/witp-cic-muthur-alpha4-4.exe` (Single authoritative versioned binary; no mirrors)
-- Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`
+- Executable Naming Standard: `witp-cic-rochefort-alpha4-[build#].exe` (e.g. `witp-cic-rochefort-alpha4-13.exe`; build counter increments by 1 per compilation; zero mirrors/aliases)
+- Active Release Binary: `dist/witp-cic-rochefort-alpha4-13.exe` (Single authoritative versioned binary; no mirrors)
+- Active Workspace: `C:\Users\ozgur\Documents\witp-cic-rochefort`
 - Preserved Baseline: **Version 0.02 (Stable Alpha 1)** (Tagged `v0.02`, `v0.02-alpha.1`, branch `stable-alpha-1`, archive `backups/WITP-CIC2-v0.02-alpha1.zip`)
 - Rollback Guide: [`docs/how-to-rollback-to-alpha-1.md`](docs/how-to-rollback-to-alpha-1.md)
 - Mandatory Upgrade SOP: All future upgrades must execute the 6-step verification, docs sync, backup archive, tagging, GitHub push, and rollback guide maintenance cycle.
-- Working / install naming in spec: **witp-cic-muthur**, **MUTHUR 6000** (default install `C:\WitP-CIC`)
+- Working / install naming in spec: **witp-cic-rochefort**, **ROCHEFORT 6000** (default install `C:\WitP-CIC`)
 - Kind: Desktop PBEM intelligence helper for *War in the Pacific: Admiral's Edition* (Matrix Games); CRT phosphor hardware-accelerated read-only CIC-style intelligence dashboard
-- Git repository: **witp-cic-muthur** — https://github.com/TheZenHippie/MUTHUR6000.git (active `main` branch). Upstream reference archive: `WITP-CIC2` (https://github.com/oaltinyay70-cell/WITP-CIC2)
+- Git repository: **witp-cic-rochefort** — https://github.com/oaltinyay70-cell/witp-cic-rochefort.git (active `main` branch). Upstream reference archive: `WITP-CIC2` (https://github.com/oaltinyay70-cell/WITP-CIC2)
 - Design spec bible: `docs/scope-v1.md` (received 2026-09-15 from Ozgur; FAQ same date)
 - Architecture decisions (v1): `docs/architecture-decisions.md` (2026-09-15 15:37 UTC)
 - Comprehensive implementation checklist: `docs/todo.md` (derived from spec; check off only after writing and validating code)
@@ -50,7 +50,7 @@ Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user
 
 ## Version 1 UI aesthetic (2026-09-15 ~15:44 UTC; name decided ~15:47 UTC)
 
-- **Ozgur:** “the UI must be a perfect copy of the MUTHUR from the ALien movie” (ship-computer green phosphor look).
+- **Ozgur:** “the UI must be a perfect copy of the ROCHEFORT from the ALien movie” (ship-computer green phosphor look).
 - **On-screen display name (decided ~15:47 UTC):** **WU/TH/UR** (slashes as shown).
 - **Implementable spec:** `docs/scope-v1.md` §8 — Win32 console codes 2, 10, 160; header/body/footer (§8.2–§8.4) as written until scope changes them; interaction and modal rules unchanged there.
 - **Master Menu Header Instrumentation (2026-09-20 15:07 UTC+3):** Consolidate campaign and file/days telemetry into top header bar (`Files Processed : XX pws files | xx TXT files | Days Processed : xx`, partitioned by `|`).
@@ -97,19 +97,19 @@ Facts only. If it is not written here, in `docs/scope-v1.md`, or in a later user
 5. Implement, test against golden files and §11 gates only
 ## Working tree (Ozgur 2026-09-21)
 
-- **Sole workspace:** `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`. Edit, build, test, and git commit **only** here. See **`CANONICAL.txt`** at repo root.
+- **Sole workspace:** `C:\Users\ozgur\Documents\witp-cic-rochefort`. Edit, build, test, and git commit **only** here. See **`CANONICAL.txt`** at repo root.
 - **Upstream Baseline:** `Witp-CIC2` (`C:\Users\ozgur\Documents\Witp-CIC2`) is locked as an immutable reference archive.
 
-## Active Milestone: Alpha 4 (2026-09-21 23:32 UTC+3)
+## Active Milestone: Alpha 4 (2026-09-26 19:30 UTC+3)
 
-- **Active Milestone:** **Alpha 4** (`alpha4`)
-- **Binary Naming Format:** `witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`; single versioned binary; zero mirrors).
+- **Active Milestone:** **Alpha 4** (`alpha4` - Build 13)
+- **Binary Naming Format:** `witp-cic-rochefort-alpha4-[build#].exe` (e.g. `dist/witp-cic-rochefort-alpha4-13.exe`; single versioned binary; zero mirrors).
 - **Hierarchical Reasoning Modal Navigation:** 2-tier navigable modal; cursor traversal (`[UP/DOWN]`); unified Telemetry Source & Localization History drill-down; on-demand confidence computation drill-down; program-wide word-wrapping with zero text cutoff.
 - **Opponent-Only Intelligence Display:** War Room BDA and Model E claims register filter strictly for enemy assets; friendly losses excluded.
 - **Naval Unit Capabilities Baseline:** 7 functional classes & 40+ hull codes, plus Auxiliary / Tender Doctrine (AS, AD, AV/AVD/AVP, AR, ARD, AE/AKE, AO, APD, ACM, AKV, AMc). All predictive models (A, B, D, F, G) and tactical reasoning pop-ups must be grounded in these capabilities.
 - **Base Location Registry Baseline (§6.4):** 1,330 authentic theater base locations across 71 regions with $(X, Y)$ hex coordinates. Coastal bases can house ships (`isPort == true`); inland bases house ground/air units only. Dynamic controller tracking upon capture events. Predictive models (A, B, D), Tab 2 bearings, and Dossier searches grounded in this database.
-- **Sole Repository:** `https://github.com/TheZenHippie/MUTHUR6000.git` (canonical `origin main`). Upstream archive: `https://github.com/oaltinyay70-cell/WITP-CIC2.git`. All Cursor remotes and branches permanently purged.
-- **Workspace:** `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`.
+- **Sole Repository:** `https://github.com/oaltinyay70-cell/witp-cic-rochefort.git` (canonical `origin main`). Upstream archive: `https://github.com/oaltinyay70-cell/WITP-CIC2.git`. All Cursor remotes and branches permanently purged.
+- **Workspace:** `C:\Users\ozgur\Documents\witp-cic-rochefort`.
 
 
 

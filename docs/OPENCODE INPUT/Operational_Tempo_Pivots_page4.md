@@ -1,4 +1,4 @@
-# MUTHUR 6000 // GRAPHICS PRESENTATION BLUEPRINT
+# ROCHEFORT 6000 // GRAPHICS PRESENTATION BLUEPRINT
 # Page: Operational Tempo & Pivots_page4
 
 ================================================================================================================
@@ -7,7 +7,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: THEATER RHYTHM & OFFENSIVE OSCILLATION ]                                            |
+| ROCHEFORT 6000 // [ TITLE: THEATER RHYTHM & OFFENSIVE OSCILLATION ]                                            |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: TEMPO VOLATILITY & BREATH ------------------------------------------------------------------- |

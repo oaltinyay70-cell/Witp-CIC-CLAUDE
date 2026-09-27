@@ -571,19 +571,19 @@ The following documentation suite constitutes the governing **Core Docs** of the
 
 ### LL-045: Single-Instance Process Management During .NET Publish
 - **Date:** 2026-09-21 22:12 UTC+3
-- **Context:** `dotnet publish` failed with `System.IO.IOException: The process cannot access the file ... because it is being used by another process` because a running instance of `MUTHUR6000.exe` was active.
+- **Context:** `dotnet publish` failed with `System.IO.IOException: The process cannot access the file ... because it is being used by another process` because a running instance of `secondary alias binaries` was active.
 - **What Was Learned:**
   - Always terminate any active instances of the target executable before running `dotnet publish`.
 ### LL-046: Alpha 4 Binary Naming Convention & Phase Transition
 - **Date:** 2026-09-21 23:32 UTC+3
 - **Context:** User instructed:
-  > *"it is witp-cic-muthur-alpha4-0 where alpha is the new phase name 0 is the 1st build and will increment by 1"*
+  > *"it is witp-cic-rochefort-alpha4-0 where alpha is the new phase name 0 is the 1st build and will increment by 1"*
 - **What Was Learned:**
-  - With the transition to standalone repository `witp-cic-muthur`, the phase designation is **Alpha 4** (`alpha4`).
-  - Executables follow `witp-cic-muthur-alpha4-[build#].exe`, starting at `0` for the first build (`witp-cic-muthur-alpha4-0.exe`) and incrementing by 1 for each subsequent build in this phase, with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+  - With the transition to standalone repository `witp-cic-rochefort`, the phase designation is **Alpha 4** (`alpha4`).
+  - Executables follow `witp-cic-rochefort-alpha4-[build#].exe`, starting at `0` for the first build (`witp-cic-rochefort-alpha4-0.exe`) and incrementing by 1 for each subsequent build in this phase, with canonical mirrors to `dist/WitP-CIC.exe` and `dist/secondary alias binaries`.
 ### LL-047: WPF Single-File Native Library Self-Extraction Requirement
 - **Date:** 2026-09-21 23:35 UTC+3
-- **Context:** `witp-cic-muthur-alpha4-0.exe` threw `System.DllNotFoundException` at `MS.Internal.WindowsBase.NativeMethodsSetLastError.SetWindowLongPtrWndProc` when launched as a single-file executable.
+- **Context:** `witp-cic-rochefort-alpha4-0.exe` threw `System.DllNotFoundException` at `MS.Internal.WindowsBase.NativeMethodsSetLastError.SetWindowLongPtrWndProc` when launched as a single-file executable.
 - **What Was Learned:**
   - In .NET 8 WPF single-file deployments, WPF depends on native C++ runtime binaries (`PresentationNative_cor3.dll`, `wpfgfx_cor3.dll`, `PenImc_cor3.dll`).
   - Without `<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>` and `<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>` in `.csproj`, WPF cannot resolve native Win32 window subclassing functions, causing `DllNotFoundException` on window creation.
@@ -616,15 +616,15 @@ The following documentation suite constitutes the governing **Core Docs** of the
 
 ### LL-049: Elimination of Redundant Binary Mirrors & Aliases
 - **Date:** 2026-09-21 23:58 UTC+3
-- **Context:** Agent was generating two duplicate mirror binaries (`dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`) alongside the versioned executable `dist/witp-cic-muthur-alpha4-[build#].exe`. Ozgur asked:
+- **Context:** Agent was generating two duplicate mirror binaries (`dist/WitP-CIC.exe` and `dist/secondary alias binaries`) alongside the versioned executable `dist/witp-cic-rochefort-alpha4-[build#].exe`. Ozgur asked:
   > *"why is 2 ? why do we need mirros ... yes and dont make the same mistake again"*
 - **What Was Learned:**
-  1. **Strict Single-Binary Output:** Never produce duplicate mirror files or legacy alias copies (e.g. `WitP-CIC.exe` or `MUTHUR6000.exe`).
-  2. **Disk & Cleanliness Hygiene:** Each build must output ONLY the single, authoritative, versioned binary matching the established naming convention: `dist/witp-cic-muthur-alpha4-[build#].exe`.
+  1. **Strict Single-Binary Output:** Never produce duplicate mirror files or legacy alias copies (e.g. `WitP-CIC.exe` or `secondary alias binaries`).
+  2. **Disk & Cleanliness Hygiene:** Each build must output ONLY the single, authoritative, versioned binary matching the established naming convention: `dist/witp-cic-rochefort-alpha4-[build#].exe`.
   3. **No Redundant Aliases:** The test suite and runtime do not need mirrors; generating duplicate 70 MB binaries creates clutter and wastes storage.
 - **What NOT to Repeat:**
-  - NEVER copy or mirror the output binary to `WitP-CIC.exe` or `MUTHUR6000.exe`.
-  - NEVER generate redundant binary copies in `dist/`. Only generate the single versioned `witp-cic-muthur-alpha4-[build#].exe`.
+  - NEVER copy or mirror the output binary to `WitP-CIC.exe` or `secondary alias binaries`.
+  - NEVER generate redundant binary copies in `dist/`. Only generate the single versioned `witp-cic-rochefort-alpha4-[build#].exe`.
 
 ### LL-050: In-Terminal Unicode Graphing & Monospace Box Straight Border Mandate
 - **Date:** 2026-09-22 21:45 UTC+3
@@ -653,7 +653,7 @@ The following documentation suite constitutes the governing **Core Docs** of the
 ### LL-052: Ingestion of Analytical Algorithms & Dedicated Graphics Sub-Menu
 - **Date:** 2026-09-23 22:23 UTC+3
 - **Context:** User requested:
-  > *"Graph page wll be reached by pressing 3 TBD from the war room menu. when user presses graph page then he will reach a sub menu page where are 10 options. No 1 is Logistical Attrition Telemetry rest is TBD for now document and implement and test this once this is done under C:\Users\ozgur\Documents\Witp-CIC-MUTHUR\docs\OPENCODE INPUT find and ingest analytical_algorithms.md file where algorithms that will be used in the pages are store. implement them , add them to the scope and other related dox test and verify as usual then implement first graph page Logistical_Attrition_Telemetry_page1.md under the same directory"*
+  > *"Graph page wll be reached by pressing 3 TBD from the war room menu. when user presses graph page then he will reach a sub menu page where are 10 options. No 1 is Logistical Attrition Telemetry rest is TBD for now document and implement and test this once this is done under C:\Users\ozgur\Documents\witp-cic-rochefort\docs\OPENCODE INPUT find and ingest analytical_algorithms.md file where algorithms that will be used in the pages are store. implement them , add them to the scope and other related dox test and verify as usual then implement first graph page Logistical_Attrition_Telemetry_page1.md under the same directory"*
 - **What Was Learned:**
   1. **Strict 10-Item Graphics Menu Layout:** The Graphics sub-menu must have 10 numbered slots, with option `[1]` dedicated to `Logistical & Attrition Telemetry`, and slots `[2]` through `[10]` strictly designated as `[ TBD ]`.
   2. **Decoupled Analytical Engine Architecture:** Encapsulate mathematical models and algorithms (CoG, vector projection, OLS regression slope, OPTEMPO rolling average, logistical shadow, anomaly detection, global tempo state machine) in a dedicated analytics engine class (`TelemetryAnalyticsEngine`) to keep UI controllers clean, modular, and easily testable.
@@ -674,7 +674,7 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **Date:** 2026-09-24 22:35 UTC+3
 - **Context:** User requested:
   > *"base line : i need honest answers. say what u think is best and what can be really done. dont ever bullshit"*
-  > *"suggest what can be done : 1. screen res chane doesnt change the size of the fonts. in its current state the writing doesnt use all the screen especially in the higher resolutions. Tell me what can be done without losing the MUTHUR Look and feel"*
+  > *"suggest what can be done : 1. screen res chane doesnt change the size of the fonts. in its current state the writing doesnt use all the screen especially in the higher resolutions. Tell me what can be done without losing the ROCHEFORT Look and feel"*
   > *"when I ask sth like thi always state pros/cons ...."*
   > *"I want to go option 1 but as is known - the top title bar and bottom status bar are currently fixed at ~28px. When the terminal text scales up to 24pt, the main content looks great, but the title and footer text will look relatively smaller unless we scale their font sizes slightly as well. this must be fixed ... can u solve it ?"*
 - **What Was Learned:**
@@ -707,14 +707,14 @@ The following documentation suite constitutes the governing **Core Docs** of the
 ### LL-057: System Identity Rebranding & Boot Diagnostic Screen Refinement
 - **Date:** 2026-09-24 23:55 UTC+3
 - **Context:** User ordered:
-  > *"from now on REPLACE EVERY REFERENCE TO MUTHUR 6000 TO ROCHEFORT 6000"*  
+  > *"from now on REPLACE EVERY REFERENCE TO ROCHEFORT 6000 TO ROCHEFORT 6000"*  
   > *"USING THE SAME AS THIS BLOCK WROTE ROCHEFORT here in big blok ascii"*  
   > *"add the following: >> XX HEURISTICS READY, >>YY GRAPHIC SCREENS READY"*  
   > *"delete this block entirely [PACIFIC CAMPAIGN TELEMETRY HARVEST & 5 sub-lines]"*  
   > *"option 1 is good ! go ahead"*
 - **What Was Learned:**
   1. **Thorough User-Facing Rebranding:** When rebranding the primary system identity, perform a sweeping check across window titles, system badges, context menu items, button tooltips, font selector windows, test runner banners, and diagnostic boot text.
-  2. **Namespace & Binary Integrity:** Preserve internal project assembly and namespace references (`namespace MUTHUR6000`) and git remote origins to avoid breaking build configurations, while completely transforming the user experience to the new brand (`ROCHEFORT 6000`).
+  2. **Namespace & Binary Integrity:** Preserve internal project assembly and namespace references (`namespace ROCHEFORT6000`) and git remote origins to avoid breaking build configurations, while completely transforming the user experience to the new brand (`ROCHEFORT 6000`).
   3. **Ascii Art Font Selection:** High-contrast 6-line block ASCII fonts provide an authentic retro terminal presence without horizontal wrapping or line overflow.
 - **What NOT to Repeat:**
   - DO NOT leave stale naming references in subsidiary windows (e.g. font selectors, context menus, tooltips) when rebranding system identity.
@@ -754,17 +754,17 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - DO NOT hardcode a 78-column width for modal boxes when displaying long multi-attribute telemetry records that require 90+ characters.
   - DO NOT leave large dead-space voids in the main terminal column when side panels are active.
 
-### LL-061: Absolute Prohibition of MUTHUR6000.exe and Secondary Binary Artifacts
+### LL-061: Absolute Prohibition of secondary alias binaries and Secondary Binary Artifacts
 - **Date:** 2026-09-26 19:02 UTC+3
 - **Context:** User explicitly ordered:
-  > *"no need to produce MUTHUR6000.exe dont make this mistake again"*
+  > *"no need to produce secondary alias binaries dont make this mistake again"*
 - **What Was Learned:**
-  1. **Strict Single-Binary Discipline:** Do NOT produce `dist/MUTHUR6000.exe` or any other alias/mirror binaries under any circumstances.
-  2. **Sole Executable Deliverable:** The only executable artifact that may exist in `dist/` is the single, authoritative, versioned binary for the active milestone: `dist/witp-cic-muthur-alpha4-[build#].exe` (currently `dist/witp-cic-muthur-alpha4-12.exe`).
-  3. **Immediate Removal of Stale Artifacts:** Any build scripts, commands, or intermediate outputs producing `MUTHUR6000.exe` must immediately move/rename the output directly to the versioned executable without leaving a copy behind.
+  1. **Strict Single-Binary Discipline:** Do NOT produce `dist/secondary alias binaries` or any other alias/mirror binaries under any circumstances.
+  2. **Sole Executable Deliverable:** The only executable artifact that may exist in `dist/` is the single, authoritative, versioned binary for the active milestone: `dist/witp-cic-rochefort-alpha4-[build#].exe` (currently `dist/witp-cic-rochefort-alpha4-12.exe`).
+  3. **Immediate Removal of Stale Artifacts:** Any build scripts, commands, or intermediate outputs producing `secondary alias binaries` must immediately move/rename the output directly to the versioned executable without leaving a copy behind.
 - **What NOT to Repeat:**
-  - NEVER leave `MUTHUR6000.exe` in `dist/`.
-  - NEVER copy or mirror the release build to `MUTHUR6000.exe`.
+  - NEVER leave `secondary alias binaries` in `dist/`.
+  - NEVER copy or mirror the release build to `secondary alias binaries`.
 
 ### LL-062: Decisive Execution of Domain Menu Deletions
 - **Date:** 2026-09-26 19:30 UTC+3
@@ -776,6 +776,17 @@ The following documentation suite constitutes the governing **Core Docs** of the
   3. **Analytical Model Decoupling:** Keep underlying analytics intact in `HeuristicsEngine.cs` while streamlining the presentation layer to the single requested focus metric.
 - **What NOT to Repeat:**
   - DO NOT hesitate or preserve unrequested items in a menu when user explicitly orders deleting all except item 1.
+
+### LL-063: Universal Elimination of MUTHUR 6000 Wording
+- **Date:** 2026-09-27 15:25 UTC+3
+- **Context:** User commanded:
+  > *"U will remove any and every reference to the MUTHUR 6000 wording in every documentation and programming now."*
+- **What Was Learned:**
+  1. **Exhaustive Purge Across Entire Project Lifecycle:** When commanded to eliminate wording, conduct an exhaustive scan across all documentation, blueprints, architecture decisions, build scripts, assembly manifests, configurations, and active documentation.
+  2. **Assembly and Packaging Alignment:** Synchronize project titles, assembly metadata, descriptions, company branding, and AppData persistence folders to the active system identity (`ROCHEFORT 6000`).
+  3. **Documentation Integrity:** Ensure zero references remain in specs, blueprints, and historical changelogs while preserving all technical and architectural functionality.
+- **What NOT to Repeat:**
+  - NEVER reintroduce or leave any references to `MUTHUR 6000` anywhere in the documentation, codebase, build scripts, or project metadata.
 
 ---
 

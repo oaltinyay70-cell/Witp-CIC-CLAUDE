@@ -1,4 +1,4 @@
-# MUTHUR 6000 // GRAPHICS PRESENTATION BLUEPRINT
+# ROCHEFORT 6000 // GRAPHICS PRESENTATION BLUEPRINT
 # Page: Logistical & Attrition Telemetry_page1
 
 ================================================================================================================
@@ -7,7 +7,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]                                  |
+| ROCHEFORT 6000 // [ TITLE: NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]                                  |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: ATTRITION & DRAIN METRICS -------------------------------------------------------------------- |

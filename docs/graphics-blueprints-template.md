@@ -1,4 +1,4 @@
-# MUTHUR 6000 // GRAPHICS PRESENTATION BLUEPRINTS (ASCII WIREFRAME SPEC)
+# ROCHEFORT 6000 // GRAPHICS PRESENTATION BLUEPRINTS (ASCII WIREFRAME SPEC)
 # File: docs/graphics-blueprints-template.md
 # Instructions:
 # 1. Edit the bracketed fields [ ... ] below for each category.
@@ -11,7 +11,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: e.g. MODEL C AIR ATTRITION & SORTIE TELEMETRY (DEC 07 - DEC 20, 1941) ]           |
+| ROCHEFORT 6000 // [ TITLE: e.g. MODEL C AIR ATTRITION & SORTIE TELEMETRY (DEC 07 - DEC 20, 1941) ]           |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: HIGH-LEVEL METRICS / HORIZONTAL COMPARISON BARS -------------------------------------------- |
@@ -69,7 +69,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: e.g. STRIKE ABORT RATE VS DISTANCE & FLAK DENSITY ]                                |
+| ROCHEFORT 6000 // [ TITLE: e.g. STRIKE ABORT RATE VS DISTANCE & FLAK DENSITY ]                                |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: CORRELATION FACTORS / RATIO BARS ----------------------------------------------------------- |
@@ -121,7 +121,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: e.g. THEATER STRATEGIC FORCE RATIOS & REGIONAL BALANCE ]                           |
+| ROCHEFORT 6000 // [ TITLE: e.g. THEATER STRATEGIC FORCE RATIOS & REGIONAL BALANCE ]                           |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: THEATER FORCE BALANCE (ESTIMATED JAPANESE VS ALLIED CONFIRMED) ----------------------------- |
@@ -175,7 +175,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: e.g. COMBAT ENGAGEMENT RESOLUTION & SURFACE GUNNERY EFFECTIVENESS ]                |
+| ROCHEFORT 6000 // [ TITLE: e.g. COMBAT ENGAGEMENT RESOLUTION & SURFACE GUNNERY EFFECTIVENESS ]                |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: SURFACE GUNNERY HIT RATIOS & ORDNANCE CONSUMPTION ------------------------------------------ |
@@ -228,7 +228,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: TBD ]                                                                              |
+| ROCHEFORT 6000 // [ TITLE: TBD ]                                                                              |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: TOP METRIC BARS ---------------------------------------------------------------------------- |
@@ -265,7 +265,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: TBD ]                                                                              |
+| ROCHEFORT 6000 // [ TITLE: TBD ]                                                                              |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: TOP METRIC BARS ---------------------------------------------------------------------------- |

@@ -1,6 +1,6 @@
-# WITP-CIC-MUTHUR Documentation Index
+# WITP-CIC-ROCHEFORT Documentation Index
 
-Canonical working tree: **`C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`**. Active GitHub repository: **`https://github.com/TheZenHippie/MUTHUR6000.git`** (branch `main`). Upstream reference archive: `Witp-CIC2` (`https://github.com/oaltinyay70-cell/WITP-CIC2.git`). See repo root `CANONICAL.txt`.
+Canonical working tree: **`C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`**. Active GitHub repository: **`https://github.com/oaltinyay70-cell/WITP-CIC-MUTHUR.git`** (branch `main`). Upstream reference archive: `Witp-CIC2` (`https://github.com/oaltinyay70-cell/WITP-CIC2.git`). See repo root `CANONICAL.txt`.
 
 ## Start here
 

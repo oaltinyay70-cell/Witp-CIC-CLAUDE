@@ -11,7 +11,7 @@ using MUTHUR6000.Core.Ingestion;
 namespace MUTHUR6000.Core.Controller
 {
     // ──────────────────────────────────────────────────────────────────────────
-    //  Screen state machine — full C++ navigation tree (alpha-muthur / alpha3):
+    //  Screen state machine — full C++ navigation tree (alpha-rochefort / alpha3):
     //
     //  Boot  →  StartScreen (3 options: New / Continue / Exit)
     //               [N] NewCampaignWizard  (4 steps)
@@ -4856,8 +4856,8 @@ namespace MUTHUR6000.Core.Controller
                     "completed status exclusively upon explicit direction from Ozgur.",
                     "",
                     "3.2 GIT REPOSITORY EXCLUSIVITY",
-                    "The sole authoritative Git remote is origin -> https://github.com/TheZenHippie/MUTHUR6000.git",
-                    "for project witp-cic-muthur on branch main. Upstream Witp-CIC2 is preserved read-only.",
+                    "The sole authoritative Git remote is origin -> https://github.com/oaltinyay70-cell/WITP-CIC-MUTHUR.git",
+                    "for project witp-cic-rochefort on branch main. Upstream Witp-CIC2 is preserved read-only.",
                     "",
                     "3.3 CORE DOCS SOVEREIGNTY",
                     "Documentation covering Baseline Principles (docs/baseline_witp_cic.md), To-Do lists",

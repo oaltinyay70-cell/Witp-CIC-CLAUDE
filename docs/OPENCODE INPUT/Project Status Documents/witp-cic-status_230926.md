@@ -1,9 +1,9 @@
-# PROJECT STATUS: Witp-CIC-MUTHUR
+# PROJECT STATUS: Witp-CIC-ROCHEFORT
 # Date: 230926
 # Status: Technical Specifications Finalized
 
 ## 1. Project Goal
-Creation of a C# helper program (MUTHUR 6000) for "War in the Pacific Admiral's Edition" that parses game output text files to provide advanced statistical telemetry and predictive intelligence for the Allied side.
+Creation of a C# helper program (ROCHEFORT 6000) for "War in the Pacific Admiral's Edition" that parses game output text files to provide advanced statistical telemetry and predictive intelligence for the Allied side.
 
 ## 2. Finalized Metrics Set (22 Metrics)
 The system is designed to track and visualize the following:
@@ -39,7 +39,7 @@ The system is designed to track and visualize the following:
 22. Operational Tempo (Rolling average of events)
 
 ## 3. Delivered Documentation
-The following specification files have been created in `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR\docs\`:
+The following specification files have been created in `C:\Users\ozgur\Documents\Witp-CIC-ROCHEFORT\docs\`:
 
 - **Analytical Algorithms:** `analytical_algorithms.md` (The math and logic for all metrics).
 - **UI Blueprints:** 
@@ -51,6 +51,6 @@ The following specification files have been created in `C:\Users\ozgur\Documents
 
 ## 4. Technical Stack & Design
 - **Language:** C#
-- **UI Style:** MUTHUR 6000 (Monospace ASCII/Braille Terminal UI)
+- **UI Style:** ROCHEFORT 6000 (Monospace ASCII/Braille Terminal UI)
 - **Data Source:** Dated `.txt` output files (combatreport, asigint, aoperationsreport).
 - **Architecture:** Text Parsing $\rightarrow$ DailySnapshot Objects $\rightarrow$ Time-Series Analysis $\rightarrow$ ASCII Rendering.

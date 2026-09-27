@@ -1,8 +1,8 @@
-# MUTHUR 6000 // CORE ANALYTICAL ALGORITHMS SPECIFICATION
+# ROCHEFORT 6000 // CORE ANALYTICAL ALGORITHMS SPECIFICATION
 # File: docs/analytical_algorithms.md
-# Target: C# Implementation for Witp-CIC-MUTHUR
+# Target: C# Implementation for Witp-CIC-ROCHEFORT
 
-This document provides the centralized mathematical and logical specifications for the MUTHUR 6000 telemetry engine.
+This document provides the centralized mathematical and logical specifications for the ROCHEFORT 6000 telemetry engine.
 
 ================================================================================================================
 1. SPATIAL & VECTOR ALGORITHMS

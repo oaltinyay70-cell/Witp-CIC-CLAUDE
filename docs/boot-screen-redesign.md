@@ -63,7 +63,7 @@ If you prefer a 3-line or single-line stylized font:
 ## 3. Global System Directives Recorded
 
 1. **System Name Rebranding:**
-   - Every reference to `MUTHUR 6000` is being transitioned to **`ROCHEFORT 6000`**.
+   - The authoritative system name and identity is **`ROCHEFORT 6000`**.
    - Window Title: `ROCHEFORT 6000 // PACIFIC CIC`
    - Header Badge: `[ ROCHEFORT 6000 // PACIFIC CIC ]`
    - Boot Screen Header: `[ ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC ]`

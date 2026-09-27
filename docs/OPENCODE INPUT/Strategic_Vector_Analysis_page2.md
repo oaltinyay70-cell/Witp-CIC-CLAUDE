@@ -1,4 +1,4 @@
-# MUTHUR 6000 // GRAPHICS PRESENTATION BLUEPRINT
+# ROCHEFORT 6000 // GRAPHICS PRESENTATION BLUEPRINT
 # Page: Strategic Vector Analysis_page2
 
 ================================================================================================================
@@ -7,7 +7,7 @@
 
 [ ASCII MOCKUP // VISUAL WIREFRAME ]
 +------------------------------------------------------------------------------------------------------------+
-| MUTHUR 6000 // [ TITLE: ENEMY FORCE VECTORS & STRATEGIC MASS ]                                             |
+| ROCHEFORT 6000 // [ TITLE: ENEMY FORCE VECTORS & STRATEGIC MASS ]                                             |
 +------------------------------------------------------------------------------------------------------------+
 |                                                                                                            |
 | -- SECTION 1: STRATEGIC MASS DISTRIBUTION ---------------------------------------------------------------- |

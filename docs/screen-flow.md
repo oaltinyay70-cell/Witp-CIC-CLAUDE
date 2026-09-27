@@ -1,11 +1,11 @@
-# WITP-CIC-MUTHUR — Screen Navigation State Flow
+# WITP-CIC-ROCHEFORT — Screen Navigation State Flow
 
 ```mermaid
 stateDiagram-v2
     [*] --> SplashScreen: Launch Application
 
     state SplashScreen {
-        [*] --> DisplaySplash: Render Retro Alien MU/TH/UR Header & Boot Sequence
+        [*] --> DisplaySplash: Render Retro Alien ROCHEFORT Header & Boot Sequence
         DisplaySplash --> [*]: Automatic transition or any keypress
     }
 
@@ -67,7 +67,7 @@ stateDiagram-v2
         
         note right of ParseAndSync
             Title: [ VAULT INGESTION ]
-            Blinking 1.0 Hz MU/TH/UR status line
+            Blinking 1.0 Hz ROCHEFORT status line
         end note
     }
 

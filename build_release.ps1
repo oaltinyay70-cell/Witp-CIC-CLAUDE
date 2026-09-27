@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Builds, publishes, and packages releases for MUTHUR6000 for GitHub.
+    Builds, publishes, and packages releases for ROCHEFORT 6000 for GitHub.
 
 .DESCRIPTION
     Compiles both:
@@ -29,7 +29,7 @@ $frameworkDepPublishDir = Join-Path $publishDir "framework-dependent"
 $standalonePublishDir = Join-Path $publishDir "standalone"
 
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "  MUTHUR 6000 Release Builder - $tagName" -ForegroundColor Cyan
+Write-Host "  ROCHEFORT 6000 Release Builder - $tagName" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 # Clean previous directories
@@ -87,16 +87,17 @@ if (Test-Path $textSrc) {
 
 # 3. Create Zip Packages
 Write-Host "`n[5/5] Compressing Release Archives & Computing Checksums..." -ForegroundColor Green
-$frameworkDepZip = Join-Path $releaseDir "MUTHUR6000-$tagName-win-x64-FrameworkDependent.zip"
-$standaloneZip = Join-Path $releaseDir "MUTHUR6000-$tagName-win-x64-Standalone.zip"
+$frameworkDepZip = Join-Path $releaseDir "ROCHEFORT6000-$tagName-win-x64-FrameworkDependent.zip"
+$standaloneZip = Join-Path $releaseDir "ROCHEFORT6000-$tagName-win-x64-Standalone.zip"
 
 Compress-Archive -Path "$frameworkDepPublishDir\*" -DestinationPath $frameworkDepZip -Force
 Compress-Archive -Path "$standalonePublishDir\*" -DestinationPath $standaloneZip -Force
 
-# Copy standalone exe with official naming convention
-Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\MUTHUR6000.exe" -Force
-Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\witp-cic-muthur-alpha4-0.exe" -Force
-Copy-Item -Path "$standalonePublishDir\MUTHUR6000.exe" -Destination "$releaseDir\WitP-CIC.exe" -Force
+# Locate the published executable and copy to versioned build artifact
+$sourceExe = Get-ChildItem -Path $standalonePublishDir -Filter "*.exe" | Select-Object -First 1
+if ($sourceExe) {
+    Copy-Item -Path $sourceExe.FullName -Destination "$releaseDir\witp-cic-rochefort-alpha4-13.exe" -Force
+}
 if (Test-Path $textSrc) {
     Copy-Item -Path $textSrc -Destination $releaseDir -Recurse -Force
 }

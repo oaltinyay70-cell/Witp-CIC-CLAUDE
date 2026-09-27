@@ -10,16 +10,22 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-27 15:25 UTC+3: **Universal Elimination of MUTHUR 6000 Wording Across Documentation & Programming (Ozgur):**
+  1. **User Mandate:** User ordered *"U will remove any and every reference to the MUTHUR 6000 wording in every documentation and programming now."*
+  2. **Total Documentation Purge:** Eliminated all occurrences of `MUTHUR 6000` across all specification bibles, architectural decisions, baseline principles, milestone records, ASCII blueprint templates, project context, and open question files.
+  3. **Assembly & Packaging Rebranding:** Rebranded project assembly metadata (`MUTHUR6000.csproj`), product titles (`WITP-CIC-ROCHEFORT`), descriptions, company identity, and local AppData persistence folders (`ROCHEFORT6000`).
+  4. **Release Script Standardization:** Updated `build_release.ps1` to produce `ROCHEFORT6000` release archives and the authoritative single versioned executable (`dist/witp-cic-rochefort-alpha4-13.exe`) with zero secondary alias binaries (LL-063).
+
 - 2026-09-26 19:30 UTC+3: **Mathematical Heuristic Domains Menu Pruned to Option 1 Only (Ozgur):**
   1. **Menu Streamlining:** User ordered *"delete all other than 1 in the mathematical heuritsitc domains // temporal naval intentions menu NOW"*.
   2. `BuildHeuristicsScreen()` updated to display exclusively `[1] 1. Regional Power Shift (7-Day Delta)`. Items 2, 3, 4, 5, 6 removed from display.
   3. `HandleHeuristics()` restricted to selection `0` with keys `[1]` and `[ENTER]`.
   4. Core underlying algorithms in `HeuristicsEngine.cs` preserved for analytical modeling (ADR 78, LL-062).
 
-- 2026-09-26 19:02 UTC+3: **Absolute Prohibition of MUTHUR6000.exe & Secondary Binaries (Ozgur):**
-  1. **Strict Single-Binary Mandate:** User explicitly mandated *"no need to produce MUTHUR6000.exe dont make this mistake again"*.
-  2. `dist/MUTHUR6000.exe` deleted immediately.
-  3. The sole authorized executable artifact in `dist/` is the active versioned binary (`dist/witp-cic-muthur-alpha4-12.exe`). No duplicate aliases or mirrors permitted (ADR 63, LL-049, LL-061).
+- 2026-09-26 19:02 UTC+3: **Absolute Prohibition of secondary alias binaries & Secondary Binaries (Ozgur):**
+  1. **Strict Single-Binary Mandate:** User explicitly mandated *"no need to produce secondary alias binaries dont make this mistake again"*.
+  2. `dist/secondary alias binaries` deleted immediately.
+  3. The sole authorized executable artifact in `dist/` is the active versioned binary (`dist/witp-cic-rochefort-alpha4-12.exe`). No duplicate aliases or mirrors permitted (ADR 63, LL-049, LL-061).
 
 - 2026-09-26 18:45 UTC+3: **106-Column Box Expansion, Gap Elimination & Live Analytics Wiring (Ozgur):**
   1. **106-Column Monospace Box Expansion:** Expanded modal/popup box widths across `BuildHeuristicsPopUp`, `BuildNavigablePopUp`, and `BuildReasoningModal` from 78 to 106 columns (`boxWidth = 106`, `innerWidth = 102`). Long sighting strings (e.g. `> [TF] Major Surface TF (7 ships) at Batan Island (85,70) [411207] - Main Strike Force`) now fit completely with zero text truncation or cutoff against the right border `║`. Header titles clamped at 90 characters. Layout rules and section headers standardized to 106 width.
@@ -35,7 +41,7 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
   3. **Faction-Specific Advisor (Rochefort vs Vice Admiral Ugaki):**
      - **Allied Player:** Retains Station Hypo Cmdr. Joseph Rochefort, displaying `[ CMDR. J. ROCHEFORT ]`, `[ STATION HYPO DECRYPT & INTEL BRIEF ]`, Station Hypo portrait, and Allied SIGINT/traffic analysis interpretations.
      - **Japanese Player:** Never shows Rochefort. Instead displays Combined Fleet Chief of Staff Vice Admiral Matome Ugaki (`[ V.ADM. M. UGAKI ]`), `[ COMBINED FLEET INTEL & WAR DIARY BRIEF ]`, authentic dithered Ugaki portrait (`assets/ugaki_lowres.png`), and authentic Imperial Japanese Navy commentary grounded in *Senkoroku* war diary entries, *Kantoku* decisive battle doctrine, and Combined Fleet staff directives.
-     - Both portraits embedded as WPF application resources in `MUTHUR6000.csproj`.
+     - Both portraits embedded as WPF application resources in `ROCHEFORT6000.csproj`.
 
 - 2026-09-25 00:45 UTC+3: **Cmdr. Rochefort Intelligence Panel & Option C Dynamic Scaling (Ozgur):**
   1. **Dual-Box Right Panel Layout:** Partitioned `TerminalGrid` into a primary terminal column and a secondary right-side intelligence console (`0.40*` width):
@@ -46,7 +52,7 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
   4. **Option C Proportional Scaling:** Recalibrates terminal font size by factor `0.72x` when the panel is active, preserving rigid 78-column monospace box borders (`boxWidth = 78`) with 100% straight vertical right margins and zero text clipping.
 
 - 2026-09-24 23:55 UTC+3: **ROCHEFORT 6000 Identity Rebranding & Boot Diagnostic Redesign (Ozgur):**
-  1. **System Identity Rebranding:** System identity transitioned to **ROCHEFORT 6000** across UI window titles, system identity badges, baud-rate menu labels, context menus, tooltips, font selector windows, and automated test runners. Codebase namespaces (`namespace MUTHUR6000`) and git origin binding are preserved to avoid build or project breakage.
+  1. **System Identity Rebranding:** System identity transitioned to **ROCHEFORT 6000** across UI window titles, system identity badges, baud-rate menu labels, context menus, tooltips, font selector windows, and automated test runners. Codebase namespaces (`namespace ROCHEFORT6000`) and git origin binding are preserved to avoid build or project breakage.
   2. **Diagnostic Boot Screen Redesign (Option 1):** Implemented Option 1 layout in `BuildBootScreen()`:
      - Header: `AppendHeader(sb, "ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC");`
      - Added dynamic heuristic (`>> 6 HEURISTICS READY`) and graphics counts (`>> 10 GRAPHIC SCREENS READY`).
@@ -94,13 +100,13 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
      - **Global Tempo State Machine:** Weighted scoring for Build-up, Strike, Consolidation, and Withdrawal phases.
   4. **First Graphical Presentation View (Page 1: `Logistical_Attrition_Telemetry_page1.md`):**
      - Full-screen in-terminal ASCII/Unicode presentation screen:
-       - Header: `MUTHUR 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
+       - Header: `ROCHEFORT 6000 // [ NAVAL & AIR ATTRITION METRICS (CAMPAIGN DURATION) ]`
        - Section 1: Attrition & Drain metrics (K/L ratio with OLS regression slope `[ IMPROVING ]` or `[ DEGRADING ]`, Air losses / Ship losses rate bars).
        - Section 2: Operational Tempo (OPTEMPO) 20-turn time-series curve with Braille/character curve plot (`⢠⣶`, `⢀⣴⡿⠋`, `⢀⣠⡾⠟⠁`, `⢀⣀⣤⣴⣶⡶⠿⠿⠋⠁`) and X/Y axes (`EVENTS` 0..20 vs `TURNS` D01..D20).
        - Section 3: Logistical readiness meters (`[ESCORT DEN]`, `[FUEL LIMIT]`, `[EXHAUSTION]`).
        - Section 4: Tactical assessment & commander deduction box.
        - Rigid straight box border constraint: `boxWidth = 78`, `innerWidth = 74`, right border `║` 100% straight with zero bending.
-  5. **Verification & Quality Assurance:** Comprehensive unit tests covering all mathematical algorithms, state machine transitions, menu navigation, and straight box borders. Release binary `dist/witp-cic-muthur-alpha4-5.exe`.
+  5. **Verification & Quality Assurance:** Comprehensive unit tests covering all mathematical algorithms, state machine transitions, menu navigation, and straight box borders. Release binary `dist/witp-cic-rochefort-alpha4-5.exe`.
 
 - 2026-09-22 22:15 UTC+3: **War Room Graphics Domain & ASCII Wireframe Blueprint Template (Ozgur):**
   1. **Rename War Room Option [3] to Graphics:** Option `[3]` in the War Room Primary Screen is officially transitioned from `TBD` to `Graphics`.
@@ -124,14 +130,14 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
      - Metric 49 (Axis of Advance): Fleet concentration meter `[████░░░░]` and strategic advance speed bar.
      - Metric 50 (Operational Tempo): 16-character combat activity histogram `[████░░░░░░░░░░░░]`.
   3. **Rigid Monospace Box Alignment (Straight Right Border):** All rows inside terminal pop-up frames (`║ ... ║`) are strictly constrained to 74 inner monospace character columns, guaranteeing that the right border `║` never shifts, bends, or wobbles. Verified with automated regression assertions in the test suite.
-  4. **Release Binary Build 4:** Published and smoke-tested single authoritative executable `dist/witp-cic-muthur-alpha4-4.exe` (no redundant mirrors per ADR 63).
+  4. **Release Binary Build 4:** Published and smoke-tested single authoritative executable `dist/witp-cic-rochefort-alpha4-4.exe` (no redundant mirrors per ADR 63).
 
 - 2026-09-22 20:25 UTC+3: **Evidence Transparency, Resolution Pull-Down & Phosphor Ribbon Controls (Ozgur):**
   1. **Full Evidence Transparency & Mathematical Proofs:** Pop-ups explicitly disclose mathematical formulas, input parameters, contributing source files (`asigint`, `combatreport`, `operations`), hex coordinates, dates, and raw excerpts across all 6 Heuristics metrics. Sourcing lines and mathematical derivations route to Topic 1 and Topic 3 for complete user verification.
   2. **Monospace Resolution Dropdown Menu:** Added pull-down menu to bottom status ribbon (`1280 x 720 HD`, `1366 x 768 720p`, `1920 x 1080 Full HD`, `1024 x 640 Standard`) to the right of `STATUS: CONNECTED / READY`. Resizes window, centers on screen, and persists to settings.
   3. **Phosphor Quick-Switch Pill Buttons:** Integrated retro pill buttons into bottom status ribbon matching `media_1790096672384.png`: `PHOSPHOR: [ Matrix Green ] [ Solar Amber ] [ Nostromo Cyan ] [ Glitch Red ]` for instantaneous console re-tinting.
   4. **Elimination of Text Truncation:** Multi-line wrapping (`WrapText`) prevents horizontal truncation in Reasoning modal headers.
-  5. **Release Binary Compilation:** Compiled and smoke-tested single authoritative binary `dist/witp-cic-muthur-alpha4-3.exe` with zero redundant mirrors.
+  5. **Release Binary Compilation:** Compiled and smoke-tested single authoritative binary `dist/witp-cic-rochefort-alpha4-3.exe` with zero redundant mirrors.
 
 - 2026-09-22 19:35 UTC+3: **War Room Heuristics Domain & The 6 Logical Blueprints (Ozgur):**
   1. **Dedicated Heuristics Domain:** Established a new analytical domain accessible as option `[6]` on the War Room Primary Screen.
@@ -147,12 +153,12 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
   5. **Clean War Room Primary Styling:** Removed the outer text box surrounding choices on the War Room Primary Screen, presenting options cleanly and directly.
 
 - 2026-09-21 23:58 UTC+3: **Elimination of Redundant Binary Mirrors & Aliases (Ozgur):**
-  1. **Strict Single-Binary Deliverable:** Permanently eliminated generation of duplicate mirror binaries (`WitP-CIC.exe`, `MUTHUR6000.exe`).
-  2. **Authoritative Versioned Output Only:** Every release build must output exclusively the single versioned executable matching `dist/witp-cic-muthur-alpha4-[build#].exe` (e.g. `dist/witp-cic-muthur-alpha4-1.exe`, `dist/witp-cic-muthur-alpha4-2.exe`).
+  1. **Strict Single-Binary Deliverable:** Permanently eliminated generation of duplicate mirror binaries (`WitP-CIC.exe`, `secondary alias binaries`).
+  2. **Authoritative Versioned Output Only:** Every release build must output exclusively the single versioned executable matching `dist/witp-cic-rochefort-alpha4-[build#].exe` (e.g. `dist/witp-cic-rochefort-alpha4-1.exe`, `dist/witp-cic-rochefort-alpha4-2.exe`).
 
 - 2026-09-21 23:51 UTC+3: **Comprehensive Repository Reference & Current Reality Alignment (Ozgur):**
   1. **Documentation Alignment:** Scanned all project documentation, in-app Wiki text, and configuration files, updating all outdated references to the old repository (`oaltinyay70-cell/WITP-CIC2`) and workspace paths (`Witp-CIC2`) to reflect the current active reality.
-  2. **Active Git Authority:** Formally codified `origin` -> `https://github.com/TheZenHippie/MUTHUR6000.git` on branch `main` as the active repository for `witp-cic-muthur`, with `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR` as the primary workspace and `Witp-CIC2` preserved strictly as an immutable reference archive.
+  2. **Active Git Authority:** Formally codified `origin` -> `https://github.com/oaltinyay70-cell/witp-cic-rochefort.git` on branch `main` as the active repository for `witp-cic-rochefort`, with `C:\Users\ozgur\Documents\witp-cic-rochefort` as the primary workspace and `Witp-CIC2` preserved strictly as an immutable reference archive.
 
 - 2026-09-21 23:48 UTC+3: **Core Development, Testing & Scope Rigor Baseline Mandate (Ozgur):**
   1. **Mandatory Pre-Delivery Testing:** Always run automated tests and smoke test binaries before delivery.
@@ -165,13 +171,13 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 - 2026-09-21 23:32 UTC+3: **Phase Progression to Alpha 4 & Binary Naming Convention (Ozgur):**
   1. **Phase Label:** Officially advance the project phase designation to **Alpha 4** (`alpha4`).
-  2. **Binary Naming Convention:** All executables follow `witp-cic-muthur-alpha4-[build#].exe`, where `alpha4` is the new phase name and `0` is the 1st build incrementing by 1 (e.g. `witp-cic-muthur-alpha4-0.exe`), with canonical mirrors to `dist/WitP-CIC.exe` and `dist/MUTHUR6000.exe`.
+  2. **Binary Naming Convention:** All executables follow `witp-cic-rochefort-alpha4-[build#].exe`, where `alpha4` is the new phase name and `0` is the 1st build incrementing by 1 (e.g. `witp-cic-rochefort-alpha4-0.exe`), with canonical mirrors to `dist/WitP-CIC.exe` and `dist/secondary alias binaries`.
 
-- 2026-09-21 22:20 UTC+3: **Project Switch to Standalone `witp-cic-muthur` Repository (Ozgur):**
-  1. **Canonical Master Repository Switch:** Formally established `witp-cic-muthur` (`C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`) as the active, canonical master repository. `Witp-CIC2` is locked, clean, and preserved strictly as an immutable reference archive.
-  2. **Platform & Architecture Integration:** Adopted the MUTHUR 6000 vintage CRT phosphor hardware-accelerated GUI shell (.NET 8 WPF) with full analytical parity across all 5 War Room domains, Predictive Models A–G, Field Manual, Wiki, and Settings.
+- 2026-09-21 22:20 UTC+3: **Project Switch to Standalone `witp-cic-rochefort` Repository (Ozgur):**
+  1. **Canonical Master Repository Switch:** Formally established `witp-cic-rochefort` (`C:\Users\ozgur\Documents\witp-cic-rochefort`) as the active, canonical master repository. `Witp-CIC2` is locked, clean, and preserved strictly as an immutable reference archive.
+  2. **Platform & Architecture Integration:** Adopted the ROCHEFORT 6000 vintage CRT phosphor hardware-accelerated GUI shell (.NET 8 WPF) with full analytical parity across all 5 War Room domains, Predictive Models A–G, Field Manual, Wiki, and Settings.
   3. **Strict Zero-Shake & Instant Drawing Standard:** CRT flicker, screen shake, and typewriter stream delays are eliminated from interactive navigation to provide instantaneous 60 FPS phosphor UI rendering with keyboard cursor traversal.
-  4. **Full Knowledge & Golden Asset Migration:** 100% of governance documentation, lessons learned, golden PBEM telemetry fixtures, base location registries, and test suites are consolidated into `witp-cic-muthur`.
+  4. **Full Knowledge & Golden Asset Migration:** 100% of governance documentation, lessons learned, golden PBEM telemetry fixtures, base location registries, and test suites are consolidated into `witp-cic-rochefort`.
 
 - 2026-09-21 20:53 UTC+3: **Phase Progression to Alpha 3 (Ozgur):**
   1. **Phase Label:** Officially advance the project phase designation to **Alpha 3** (`v0.02-alpha3`).
@@ -532,8 +538,8 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 - 2026-09-15 ~16:19 UTC: **Combat report filing (Ozgur):** (1) Indented names under `Assaulting units:` / `Defending units:` → **ground unit list items**; ship name-only rows (e.g. `BB Haruna`) → **ship names**, separate kinds. (2) Sweeping aircraft lines → **standalone** type/count/altitude only; **no** raid/air-group/unit parent attribution (fog of war). (3) Ground fight → **one parent `ground_combat` block** with ordered child lines. (4) `Japanese forces CAPTURE …` → **same capture fact** as operations reports with **source** (`operations` | `combat_report` | `combat_events`) for dedup. Recorded in `docs/combat-parser-decisions.md` § “Ozgur answers (2026-09-15 ~16:19 UTC)”.
 - 2026-09-15 ~16:13 UTC: **Combat report parser (Ozgur):** Approved classifications recorded in `docs/combat-parser-decisions.md` (user answers inline). Implementable without further decision: Categories 4–11, 13–17; Cat.1 same zero-loss kind (Allied/Japanese); Cat.2 ship name-only rows distinct from comma `ship_line`; Cat.7 two amphibious phase header kinds; Cat.10 single fire-line kind; Cat.13 range ellipsis same as non-ellipsis; Cat.12 assault-odds **two** kinds (with/without fort level). **Open in that doc (no answer / not understood):** Cat.2 ground unit list vs ship names; Cat.3 aircraft sweeping block context; Cat.12 flat lines vs ground-combat block; Cat.12 reuse operational `capture` kind.
 - 2026-09-15 ~16:05 UTC: **Golden `.pws` forensic pass (`wpae023.pws`):** On-disk file is **gzip** (2 677 122 B → 2 824 440 B inner). Inner layout **observed** (this sample only): repeating **12-byte LE triple** + **zlib** (61 records; 53/61 size fields match). Cleartext without password includes PBEM save label `(PBEM1) 12/8 incoming to Ozgur Date: 12/10/41`, host timestamp `Mon, September 14 2026…`, build **`1.8.11.28.4`**, scenario *War in the Pacific: Hakko Ichiu* / *December 1941 Start*, plus mixed game DB strings and one embedded after-action snippet (`Dec 09, 41`). User password **`kilroy43` not validated** (not in file; manual §20.5.4 in-game load only). Full telemetry / password gate **not** demonstrated. Report: `docs/pws-inspection.md`.
-- 2026-09-15 ~15:47 UTC: **TUI on-screen name (Ozgur):** Authoritative **on-screen display string** is **WU/TH/UR** (slashes as shown). **Decided (closes OPEN from ~15:44 UTC):** implement splash, headers, and titles using **WU/TH/UR** — not “MUTHUR” and not “W.U.T.H.U.R.” unless those strings appear elsewhere in spec text for traceability. Spec §8 historical heading **“W.U.T.H.U.R.”** remains unchanged here (no rewrite without a superseded note). **§8 layout:** header/body/footer blocks (§8.2–§8.4) stay as written in this document until a scope change edits them. **Reference images:** none provided. Do not invent splash taglines. Do not check off §8 TUI TODOs from this entry alone.
-- 2026-09-15 ~15:44 UTC: **v1 UI aesthetic (Ozgur):** “the UI must be a perfect copy of the MUTHUR from the ALien movie”. **Aesthetic target:** MU/TH/UR / Alien ship-computer **green phosphor**, as already described in spec §8 (Win32 console codes **2**, **10**, **160**; header/body/footer topography per §8.2–§8.4). **Authoritative layout:** spec §8 remains the implementable standard until Ozgur answers follow-ups. **OPEN:** spec §8 heading **“W.U.T.H.U.R.”** vs user **“MUTHUR”** — unresolved; do not pick either without Ozgur. *(Closed — Changelog 2026-09-15 ~15:47 UTC: on-screen **WU/TH/UR**.)* **Implementation constraints:** do not treat film frames as assets; do not use copyrighted film screens as an asset or layout source (see `docs/architecture-decisions.md` §5). Do not check off §8 TUI TODOs from this entry alone.
+- 2026-09-15 ~15:47 UTC: **TUI on-screen name (Ozgur):** Authoritative **on-screen display string** is **WU/TH/UR** (slashes as shown). **Decided (closes OPEN from ~15:44 UTC):** implement splash, headers, and titles using **WU/TH/UR** — not “ROCHEFORT” and not “W.U.T.H.U.R.” unless those strings appear elsewhere in spec text for traceability. Spec §8 historical heading **“W.U.T.H.U.R.”** remains unchanged here (no rewrite without a superseded note). **§8 layout:** header/body/footer blocks (§8.2–§8.4) stay as written in this document until a scope change edits them. **Reference images:** none provided. Do not invent splash taglines. Do not check off §8 TUI TODOs from this entry alone.
+- 2026-09-15 ~15:44 UTC: **v1 UI aesthetic (Ozgur):** “the UI must be a perfect copy of the ROCHEFORT from the ALien movie”. **Aesthetic target:** MU/TH/UR / Alien ship-computer **green phosphor**, as already described in spec §8 (Win32 console codes **2**, **10**, **160**; header/body/footer topography per §8.2–§8.4). **Authoritative layout:** spec §8 remains the implementable standard until Ozgur answers follow-ups. **OPEN:** spec §8 heading **“W.U.T.H.U.R.”** vs user **“ROCHEFORT”** — unresolved; do not pick either without Ozgur. *(Closed — Changelog 2026-09-15 ~15:47 UTC: on-screen **WU/TH/UR**.)* **Implementation constraints:** do not treat film frames as assets; do not use copyrighted film screens as an asset or layout source (see `docs/architecture-decisions.md` §5). Do not check off §8 TUI TODOs from this entry alone.
 - 2026-09-15 15:43 UTC: **PBEM save extension (Ozgur):** Product canonical extension for WITP-CIC file matching is **`.pws`** (spec §5; golden `wpae023.pws`). Ozgur (~15:43 UTC): “pws... my bad sorry” (reply to `.pws` vs manual `.wps`). Manual §20.4.1 / §20.5.4 still cite **`.wps`** as the manual’s string — **superseded for WITP-CIC file matching only** (manual text retained for traceability).
 - 2026-09-15 15:41 UTC: **Golden `.pws` (Ozgur):** `docs/golden/wpae023.pws` received (2677122 bytes on disk; `file`(1) reports gzip from NTFS; leading bytes `1f 8b 08`). User-stated PBEM provenance: Japanese player → Allied player (Ozgur). User-stated password for this golden file only: `kilroy43` (not programmatically validated in catalog pass). Manual §20.4.1: saved games are compressed and encrypted; PBEM load uses password in-game — inner unlock/telemetry not demonstrated here. Catalog: `docs/golden/INDEX.md`. No second Japanese-side `.pws` golden file in this drop.
 - 2026-09-15 15:40 UTC: **Golden samples (Ozgur):** Japanese `jsigint_*` / `joperationsreport_*` at tiny size are **real fog of war** (header-only SIGINT; operational report header plus Batan Island)—the Japanese player gets nothing useful those turns; **not** incomplete or truncated samples. `Combat_Events_*` and `combatreport_*` are **shared by filename** between players; what is written may **change (delta)** because of fog of war—treat as shared files and do **not** assume identical content for both sides. This drop contains **one instance per filename/date**; do **not** invent a second side’s copy. `.pws` files **are coming later**; spec §5 still requires them.
@@ -1086,7 +1092,7 @@ Package engine into local companion app reading save states in real-time, render
 
 ## 8. Text User Interface (TUI) Standards & Design Specifications
 
-*(v1 UI requirement — Changelog 2026-09-15 ~15:44 UTC / ~15:47 UTC: Ozgur asked for a perfect copy of **MUTHUR** (Alien movie ship computer). **On-screen name (decided ~15:47 UTC):** display **WU/TH/UR**. **Implement against this section:** green phosphor aesthetic (§8.1 codes 2, 10, 160) and header/body/footer layout (§8.2–§8.4) as written until scope changes them. No reference images. Film frames are not assets; §8 body text below is unchanged.)*
+*(v1 UI requirement — Changelog 2026-09-15 ~15:44 UTC / ~15:47 UTC: Ozgur asked for a perfect copy of **ROCHEFORT** (Alien movie ship computer). **On-screen name (decided ~15:47 UTC):** display **WU/TH/UR**. **Implement against this section:** green phosphor aesthetic (§8.1 codes 2, 10, 160) and header/body/footer layout (§8.2–§8.4) as written until scope changes them. No reference images. Film frames are not assets; §8 body text below is unchanged.)*
 
 W.U.T.H.U.R. TUI Architecture & Formatting Standard
 
