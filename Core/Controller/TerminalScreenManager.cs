@@ -1488,26 +1488,17 @@ namespace MUTHUR6000.Core.Controller
                     break;
 
                 case System.Windows.Input.Key.Up:
-                    _heuristicsSel = (_heuristicsSel - 1 + 6) % 6;
-                    RenderCurrentScreen();
-                    break;
-
                 case System.Windows.Input.Key.Down:
                 case System.Windows.Input.Key.Tab:
-                    _heuristicsSel = (_heuristicsSel + 1) % 6;
+                    _heuristicsSel = 0;
                     RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Enter:
-                    OpenHeuristicsPopUp(_heuristicsSel);
+                case System.Windows.Input.Key.D1:
+                    _heuristicsSel = 0;
+                    OpenHeuristicsPopUp(0);
                     break;
-
-                case System.Windows.Input.Key.D1: OpenHeuristicsPopUp(0); break;
-                case System.Windows.Input.Key.D2: OpenHeuristicsPopUp(1); break;
-                case System.Windows.Input.Key.D3: OpenHeuristicsPopUp(2); break;
-                case System.Windows.Input.Key.D4: OpenHeuristicsPopUp(3); break;
-                case System.Windows.Input.Key.D5: OpenHeuristicsPopUp(4); break;
-                case System.Windows.Input.Key.D6: OpenHeuristicsPopUp(5); break;
             }
         }
 
@@ -1817,82 +1808,24 @@ namespace MUTHUR6000.Core.Controller
             bool enoughData = h.HasSufficientTemporalData;
             string earlyWarning = enoughData ? "" : " [!] DATA ACCUMULATING (< 4 DAYS)";
 
-            string[] titles =
-            {
-                "1. Regional Power Shift (7-Day Delta)",
-                "4. Minefield Mapping (Encounters & Path)",
-                "5. Submarine Migration (Centroid Vectors)",
-                "46. Intelligence Blindspots (Combat vs SIGINT)",
-                "49. Axis of Advance (Strategic Drift)",
-                "50. Operational Tempo (OPTEMPO 3D-Avg)"
-            };
-
-            string[] summaries = new string[6];
-
-            // Summary 1
+            string titleStr = "1. Regional Power Shift (7-Day Delta)";
+            string sumStr;
             if (!enoughData)
-                summaries[0] = "NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE";
+                sumStr = "NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE";
             else
             {
                 var topBuild = h.RegionalShifts.OrderByDescending(s => s.ShiftDelta).FirstOrDefault();
-                summaries[0] = topBuild != null && topBuild.ShiftDelta != 0
+                sumStr = topBuild != null && topBuild.ShiftDelta != 0
                     ? $"Primary Shift: {topBuild.RegionName} ({topBuild.Trend})"
                     : "Regional power distribution stable across all theaters";
             }
 
-            // Summary 4
-            summaries[1] = h.MineHitsChronological.Count > 0
-                ? $"{h.MineHitCoordinates.Count} minefield hexes mapped across {h.MineHitsChronological.Count} encounter events"
-                : "No minefield encounter coordinates logged in combat reports";
+            sb.AppendLine($"    > [1] {titleStr} <");
+            sb.AppendLine($"        STATUS: {sumStr}");
+            sb.AppendLine();
 
-            // Summary 5
-            summaries[2] = h.SubmarineCentroids.Count > 0
-                ? $"{h.SubmarineCentroids.Count} daily SS centroids computed across {h.SubmarineVectors.Count} migration vectors"
-                : "No submarine sightings logged for centroid vectorization";
-
-            // Summary 46
-            summaries[3] = h.IntelligenceBlindspots.Count > 0
-                ? $"{h.IntelligenceBlindspots.Count} combat engagements occurred with ZERO prior 3-day SIGINT/sightings"
-                : "All combat hexes had prior intelligence coverage (0 blindspots)";
-
-            // Summary 49
-            if (h.StrategicDrift.DistanceHex > 0.001)
-                summaries[4] = $"Strategic Drift: Heading {h.StrategicDrift.BearingDeg:000}° ({h.StrategicDrift.CompassHeading}) at {h.StrategicDrift.DistanceHex:F1} hexes/day";
-            else if (h.FleetMeans.Count > 0)
-                summaries[4] = $"Fleet mean localized at ({h.FleetMeans.Last().MeanX:F1},{h.FleetMeans.Last().MeanY:F1}); drift accumulating";
-            else
-                summaries[4] = "Insufficient vessel coordinates to calculate advance axis";
-
-            // Summary 50
-            if (h.DailyOptempo.Count > 0)
-            {
-                var latest = h.DailyOptempo.Last();
-                summaries[5] = $"Today: {latest.SeparatorCount} engagements | 3-Day Rolling OPTEMPO: {latest.Rolling3DayAvg:F1} events/day";
-            }
-            else
-                summaries[5] = "No combat reports found to compute operational tempo";
-
-            for (int i = 0; i < titles.Length; i++)
-            {
-                string numStr = $"[{i + 1}] ";
-                string titleStr = titles[i];
-                string sumStr = summaries[i];
-
-                if (i == _heuristicsSel)
-                {
-                    sb.AppendLine($"    > {numStr}{titleStr} <");
-                    sb.AppendLine($"        STATUS: {sumStr}");
-                }
-                else
-                {
-                    sb.AppendLine($"      {numStr}{titleStr}");
-                    sb.AppendLine($"        STATUS: {sumStr}");
-                }
-                sb.AppendLine();
-            }
-
-            sb.AppendLine("    >> Press [1-6] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
-            AppendFooter(sb, "[UP/DOWN] Select Metric", "[ENTER] Open Findings", "PRESS ESC TO RETURN");
+            sb.AppendLine("    >> Press [1] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
+            AppendFooter(sb, "[1/ENTER] Open Findings", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 

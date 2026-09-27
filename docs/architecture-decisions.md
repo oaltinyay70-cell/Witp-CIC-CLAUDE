@@ -1009,6 +1009,28 @@ Following up on border cutoff and window size feedback, inspection of high-resol
 
 **Source:** Ozgur directives (2026-09-26 18:45 UTC+3).
 
+## 78. Heuristics Menu Pruning: Exclusive Retention of Regional Power Shift (2026-09-26 19:30 UTC+3)
+
+**Context:**
+User uploaded screenshot (`media_1790439965456.png`) showing all 6 heuristic metrics in `[ MATHEMATICAL HEURISTIC DOMAINS // TEMPORAL NAVAL INTENTIONS ]` and commanded:
+> *"delete all other than 1 in the mathematical heuritsitc domains // temporal naval intentions menu NOW"*
+
+**Decision:**
+1. **Screen Presentation Layer:**
+   - In `Core/Controller/TerminalScreenManager.cs` -> `BuildHeuristicsScreen()`:
+     - Deleted items `[2] 4. Minefield Mapping (Encounters & Path)`, `[3] 5. Submarine Migration (Centroid Vectors)`, `[4] 46. Intelligence Blindspots (Combat vs SIGINT)`, `[5] 49. Axis of Advance (Strategic Drift)`, and `[6] 50. Operational Tempo (OPTEMPO 3D-Avg)` from the menu display.
+     - Strictly display only `[1] 1. Regional Power Shift (7-Day Delta)`.
+     - Updated prompt: `>> Press [1] or [ENTER] to open findings modal. Press [ESC] to return to War Room.`
+     - Updated footer: `[1/ENTER] Open Findings  │  PRESS ESC TO RETURN`.
+2. **Keyboard Traversal & Input Handling:**
+   - In `HandleHeuristics()`:
+     - Bound `[1]` and `[ENTER]` strictly to `OpenHeuristicsPopUp(0)`.
+     - Clamped cursor selection `_heuristicsSel = 0`. Keys `[2]` through `[6]` are deactivated on this menu.
+3. **Preservation of Analytics Domain Models:**
+   - The underlying mathematical engines (`RegionalShifts`, `MineHitCoordinates`, `SubmarineCentroids`, `IntelligenceBlindspots`, `StrategicDrift`, `DailyOptempo`) in `HeuristicsEngine.cs` remain intact for telemetry analysis and cross-domain reasoning.
+
+**Source:** Ozgur directives (2026-09-26 19:26 UTC+3).
+
 
 
 

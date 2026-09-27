@@ -10,6 +10,12 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-26 19:30 UTC+3: **Mathematical Heuristic Domains Menu Pruned to Option 1 Only (Ozgur):**
+  1. **Menu Streamlining:** User ordered *"delete all other than 1 in the mathematical heuritsitc domains // temporal naval intentions menu NOW"*.
+  2. `BuildHeuristicsScreen()` updated to display exclusively `[1] 1. Regional Power Shift (7-Day Delta)`. Items 2, 3, 4, 5, 6 removed from display.
+  3. `HandleHeuristics()` restricted to selection `0` with keys `[1]` and `[ENTER]`.
+  4. Core underlying algorithms in `HeuristicsEngine.cs` preserved for analytical modeling (ADR 78, LL-062).
+
 - 2026-09-26 19:02 UTC+3: **Absolute Prohibition of MUTHUR6000.exe & Secondary Binaries (Ozgur):**
   1. **Strict Single-Binary Mandate:** User explicitly mandated *"no need to produce MUTHUR6000.exe dont make this mistake again"*.
   2. `dist/MUTHUR6000.exe` deleted immediately.

@@ -9,12 +9,17 @@ Checked = in the running skeleton or validated parser tests. Unchecked = not in 
 - Parser ingest is in the `.wic` vault; War Room reads vault-derived rows (Tab 1–3 heuristics; full §7 TPIE engine still open).
 - Source of UI facts: scaffold on branch `cursor/witp-cic-scaffold-18a3` (`internal/scaffold-pass-ui-questions.md`). Source of parser facts: [todo](todo.md) §5 checkmarks + golden tests. This file was not re-diffed against `src/` from Origin in this pass (clone from the coordinator VM returned 403).
 
-**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 12)** (2026-09-26 18:45 UTC+3)  
-- Release Executable: `dist/witp-cic-muthur-alpha4-12.exe` (Single authoritative versioned binary; zero mirrors per ADR 63 / LL-049)  
+**Current Active Milestone:** **Alpha 4 (Phase `alpha4` - Build 13)** (2026-09-26 19:30 UTC+3)  
+- Release Executable: `dist/witp-cic-muthur-alpha4-13.exe` (Single authoritative versioned binary; zero mirrors or alias executables per ADR 63, LL-049, LL-061)  
 - Naming Standard: `witp-cic-muthur-alpha4-[build#].exe` (build counter increments by 1 on each new compilation)  
 - Active Workspace: `C:\Users\ozgur\Documents\Witp-CIC-MUTHUR`  
 - Active GitHub Remote: `https://github.com/TheZenHippie/MUTHUR6000.git` (branch `main`)  
-- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build12.zip` (86.48 MB)  
+- Standalone Recovery Archive: `backups/WITP-CIC2-RECOVERY-POINT-alpha4-build13.zip`  
+- Mathematical Heuristics Domains Menu Pruning (ADR 78, LL-062):
+  1. Pruned `[ MATHEMATICAL HEURISTIC DOMAINS // TEMPORAL NAVAL INTENTIONS ]` menu down to exclusively `[1] 1. Regional Power Shift (7-Day Delta)`.
+  2. Deleted items 2 through 6 from menu presentation and restricted keyboard entry strictly to `[1]` and `[ENTER]`.
+  3. Preserved core analytical modeling algorithms in `HeuristicsEngine.cs`.
+- Absolute Prohibition of `MUTHUR6000.exe` and Duplicate Binary Artifacts (ADR 63, LL-061): Strict single-binary discipline; only the active versioned executable is deployed to `dist/`.
 - 106-Column Box Expansion, Gap Elimination, and Live Analytics Wiring (ADR 77, LL-060):
   1. 106-Column Monospace Box Expansion: Expanded modal and pop-up box widths in `BuildHeuristicsPopUp`, `BuildNavigablePopUp`, and `BuildReasoningModal` from 78 to 106 columns (`boxWidth = 106`, `innerWidth = 102`). Long intelligence sighting strings up to 102 characters display without truncation or clipping. Header titles clamped at 90 characters.
   2. Gap Elimination & Visual Scaling: Adjusted `RochefortColumn.Width = 0.44*` and elevated `panelFontFactor` to `0.90`, making text boxes occupy ~1.5x more visual width and completely eliminating the empty dead space between the main text body and the advisor panel.

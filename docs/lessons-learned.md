@@ -766,6 +766,17 @@ The following documentation suite constitutes the governing **Core Docs** of the
   - NEVER leave `MUTHUR6000.exe` in `dist/`.
   - NEVER copy or mirror the release build to `MUTHUR6000.exe`.
 
+### LL-062: Decisive Execution of Domain Menu Deletions
+- **Date:** 2026-09-26 19:30 UTC+3
+- **Context:** User ordered:
+  > *"delete all other than 1 in the mathematical heuritsitc domains // temporal naval intentions menu NOW"*
+- **What Was Learned:**
+  1. **Immediate Execution of Presentation Truncation:** When the user commands deleting all items other than 1 from a sub-menu, immediately update the screen builder and keyboard navigation to show and accept only option `[1]`, removing options 2 through 6 cleanly.
+  2. **Keyboard Traversal Clamping:** Navigation keys (`[UP]`, `[DOWN]`, `[TAB]`) must clamp to `0`, and number keys for removed items (`[2]` through `[6]`) must be deactivated.
+  3. **Analytical Model Decoupling:** Keep underlying analytics intact in `HeuristicsEngine.cs` while streamlining the presentation layer to the single requested focus metric.
+- **What NOT to Repeat:**
+  - DO NOT hesitate or preserve unrequested items in a menu when user explicitly orders deleting all except item 1.
+
 ---
 
 ## 3. Checklist for Future Corrections
