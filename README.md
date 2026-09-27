@@ -1,133 +1,104 @@
-# ROCHEFORT 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM
+# WITP:AE Combat Information Center (WITP-CIC / ROCHEFORT 6000)
 
 <div align="center">
-  <strong>STATION HYPO • PACIFIC WAR ROOM COMBAT INFORMATION CENTER</strong>
-  <br>
-  <em>A vintage single-color phosphor CRT monitor terminal emulator for Windows with character streaming, baud rate emulation, and monochrome retro effects.</em>
+  <h3>PACIFIC THEATER COMBAT INFORMATION CENTER & PREDICTIVE INTELLIGENCE ASSISTANT</h3>
+  <p><em>An offline, zero-data-leakage intelligence helper and predictive analytics deck for Gary Grigsby's War in the Pacific: Admiral's Edition (PBEM).</em></p>
 </div>
 
 ---
 
-## Overview
+## 1. Executive Summary & Purpose
 
-**ROCHEFORT 6000** is a lightweight, frameless desktop application for Windows providing a dedicated combat information center and predictive intelligence engine for *War in the Pacific: Admiral's Edition*. It reads telemetry `.txt` files from a local directory and types them out character-by-character at authentic serial baud rates, complete with single-color phosphor bloom glow, vintage CRT scanlines, and an authentic monochrome glitch suite.
+**WITP-CIC** (operating under the **ROCHEFORT 6000** terminal interface) is a specialized desktop intelligence companion designed specifically for players of *War in the Pacific: Admiral's Edition* (WITP:AE) engaged in asynchronous Play-By-Email (PBEM) campaigns.
 
----
+In a standard PBEM campaign, each daily turn produces thousands of lines of dense, semi-structured plain-text reports (Signals Intelligence / SIGINT, Operational Summaries, Combat Reports, and Combat Event Logs) alongside binary save files (`.pws`). Manually reading, cross-referencing, and retaining these observations across months of real-world play leads to severe player fatigue, overlooked enemy task force build-ups, lost contacts, and uncorrected battle claims.
 
-## Telemetry File Ingestion & Boot Order Rules
-
-The application reads all `.txt` documents placed in the `text/` subdirectory adjacent to the application executable.
-
-### 🔴 The Boot Priority Rule (First File Played)
-- **Files beginning with `BOOT_`** (case-insensitive, e.g., `BOOT_nostromo_mother_mainframe_telemetry.txt`) will **ALWAYS** be the very first file streamed and typed out to the terminal screen whenever the application is launched or the boot sequence is restarted.
-- If multiple `BOOT_` files are present, the first alphabetical `BOOT_` file takes priority.
-
-### 🔄 Shuffled Playlist & Non-Repeating Playback
-- Once the initial `BOOT_` file has completed streaming:
-  1. The terminal holds for **3 seconds** at the end of the file.
-  2. The screen automatically clears.
-  3. The engine selects another `.txt` file at random from the remaining files in the `text/` folder.
-- **No text file will repeat** until **all** `.txt` files in the `text/` directory have been displayed at least once.
-- Once every file in the directory has been displayed, the playlist deck is automatically reshuffled and the continuous stream continues endlessly.
+WITP-CIC ingests and synthesizes these daily logs across the entire campaign lifetime, transforming raw data into an interactive, proactive Combat Information Center (CIC). It surfaces critical theater intelligence that human analysis easily misses:
+- **Amphibious invasion warnings & target probability ratings** 3–5 days prior to assault initialization.
+- **Task force trajectories, advance headings, and nautical dead reckoning**.
+- **Regional power shifts and operational tempo fluctuations**.
+- **Merchant convoy corridors, chokepoint interdiction opportunities, and submarine migration vectors**.
+- **Strict opponent-only tracking** under authentic Fog of War.
 
 ---
 
-## Features
+## 2. Core Architectural Principles & Sandboxing
 
-### ⚡ Baud Rate Character Emulation
-- Streams text character-by-character at true serial baud rates (8N1):
-  - **300 Baud**: Slow, vintage teletype cadence (~30 chars/s)
-  - **600 Baud**: Standard retro telecom cadence (~60 chars/s)
-  - **1200 Baud**: **Default ROCHEFORT speed** (~120 chars/s)
-  - **2400 Baud**: High-speed mainframe stream (~240 chars/s)
-  - **4800 Baud**: Fast serial terminal feed (~480 chars/s)
-  - **9600 Baud**: High-throughput bursts (~960 chars/s)
-- **Instant Mid-Stream Switching**: Seamlessly change speeds on the fly via the header baud badge or the right-click menu without freezing or buffering pauses.
-
-### 📺 Monochrome Single-Color Phosphor Effects
-- **Monochrome CRT Glitch**: Generates horizontal slice dropouts and frame jitter matching only the active phosphor and background colors (no chromatic RGB artifacts).
-- **Right-to-Left Beam Scan & Reverse-Video Highlight**: A horizontal beam shoots from the right side of the monitor across the screen, briefly illuminating a target character in **reverse-video** (solid phosphor background block with inverted dark text) before disappearing.
-- **Adjustable Phosphor Bloom Glow**: Phosphor bloom applied to the terminal text with a user-adjustable intensity slider (0px to 25px).
-- **Vintage CRT Scanlines**: Toggleable scanlines (1px to 20px thickness) with customizable density (Off by default).
-- **CRT Snow Static Noise**: Toggleable monochrome static noise overlay with adjustable intensity.
-
-### 🎨 Color & Transparency Customization
-- **Phosphor (Text) Colors**:
-  - Matrix / Nostromo Green (`#00FF66` - Default)
-  - Solar Amber / Alien Gold (`#FFB000`)
-  - Nostromo Cyan (`#00F0FF`)
-  - Phosphor White (`#F0F0F0`)
-  - Glitch Red (`#FF2244`)
-  - Night City Violet (`#A040FF`)
-  - Synthwave Magenta (`#FF007F`)
-  - Custom Hex Color dialog
-- **Background CRT Glass Colors**:
-  - Tinted CRT Dark Green (`#08140B` - Default)
-  - Pitch Black Void (`#000000`)
-  - Dark Charcoal (`#0E1116`)
-  - Deep Amber Dark (`#140B04`)
-  - Deep Space Navy (`#040812`)
-  - Custom Hex Color dialog
-- **Dual Opacity Sliders**:
-  - Independent **Background Opacity** slider (0% to 100%)
-  - Independent **Phosphor Text Opacity** slider (10% to 100%)
-
-### 🔤 Typography & Cursor
-- **Blinking Block Cursor**: Classic retro solid block cursor `█` rendered at the typing head.
-- **Font Selection**: Monospace quick-select presets (Cascadia Code, Consolas, Lucida Console, Courier New) plus a full **System Font Picker** browser.
-- **Font Sizes**: 10 pt to 24 pt.
-
-### 🖥️ Interactive Controls
-- **Header Bar**:
-  - Left: `[ ROCHEFORT 6000 ]` identity badge
-  - Center: `[ OVERMONITORING MATRIX ]` badge (dynamically matches phosphor color)
-  - Right: `[ 1200 BAUD ]` quick-cycle badge, `PAUSE/RESUME`, `SKIP`, `CLR`, and `✕` close button
-- **Footer Telemetry**: Displays current file feed name, streaming status, and playlist deck state.
-- **Persistence**: All settings (window position, dimensions, colors, baud rate, effects, opacities) are automatically saved to `%APPDATA%\ROCHEFORT6000\settings.json`.
-- **Zero-Footprint Clean Exit**: Complete process teardown ensuring no background threads or worker memory remain in Windows Task Manager upon closing.
+1. **Zero Data Leakage & Offline Execution:**
+   - The application executes strictly on the user's local Windows machine.
+   - It maintains an absolute zero-network-traffic footprint: no external telemetry, no background network calls, and no cloud leakage.
+   - All in-memory operational caches and analytical graphs are completely purged from RAM on application launch, campaign switching, and process exit.
+2. **Absolute Faction Isolation:**
+   - Intelligence belongs strictly to one player faction (Allies or Imperial Japanese Navy).
+   - Allied campaigns process files from the Allied perspective; Japanese campaigns process from the Japanese perspective.
+   - One campaign vault can never see, contaminate, or influence another.
+3. **Single Compressed Vault Storage (`.wic`):**
+   - All ingested logs, parsed contact tracks, entity histories, and analytical models are stored in a single compressed container file (`.wic`) under `C:\WitP-CIC\Campaigns\<CampaignName>.wic`.
+   - No external database services (PostGIS, Neo4j, InfluxDB) or orphaned on-disk files are used; all graph, time-series, and hex-spatial structures serialize directly into the `.wic` vault.
+4. **Absolute Read-Only Guarantee:**
+   - WITP-CIC is strictly a passive analytical helper. It never writes to, modifies, or intercepts game save files (`.pws`) or game executable memory.
 
 ---
 
-## Controls Summary
+## 3. Key Operational Modules
 
-| Action | Control |
-|---|---|
-| **Move Window** | Click & drag title bar or glass background |
-| **Resize Window** | Drag bottom-right corner grip |
-| **Cycle Baud Rate** | Click `[ 1200 BAUD ]` badge in header bar |
-| **Pause / Resume** | Click `PAUSE` button or right-click menu |
-| **Skip File** | Click `SKIP` button or right-click menu |
-| **Clear Screen** | Click `CLR` button or right-click menu |
-| **Open Settings** | Right-click anywhere on the widget |
-| **Close Application** | Click `✕` button or right-click `Close ROCHEFORT Console` |
-
----
-
-## Building & Packaging
-
-### Prerequisites
-- Windows 10/11 x64
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
-
-### Build Debug
-```powershell
-dotnet build
-dotnet run
-```
-
-### Build GitHub Release Packages
-Run the automated release script:
-```powershell
-pwsh -File .\build_release.ps1 -Version "1.0.0"
-```
-
-This compiles and packages:
-1. **Standalone (Self-Contained) Package**: Single `.exe` binary that runs out-of-the-box without requiring .NET runtime installed.
-2. **Framework-Dependent Package**: Compact single `.exe` binary for systems with .NET installed.
-3. Release `.zip` archives with SHA256 checksums in `release/`.
+### 🎖️ Combat Information Center (War Room)
+- **`[1] Intelligence Summary`**:
+  - **High-Value Targets (HVT):** Monitors spotted enemy carriers (CV/CVL/CVE), battleships (BB/BC), fleet oilers (AO), and amphibious assault transports (AP/APA/LST).
+  - **Strike Concentrations:** Identifies groups of 3+ capital warships operating within configurable strike radii (default 10 hexes).
+  - **Port Concentrations:** Tracks enemy naval and merchant tonnage anchored in forward bases.
+  - **Established Routes:** Reconstructs merchant transit corridors and supply lines from repeated sightings.
+  - **Opponent-Only Filter:** Strictly filters BDA and claims registers to opposing forces only; friendly losses are excluded.
+- **`[2] SIGINT Map & Geospatial Logs`**:
+  - Structured, tabular contact registers detailing localized hex coordinates $(X, Y)$, range, and sector bearings relative to friendly headquarters.
+  - **Unified Dossier Search:** $O(1)$ indexed partial-name search across all 1,330 historical bases, naval vessels, land units, and air groups.
+- **`[3] Graphics Telemetry Deck`**:
+  - Full-screen visual presentation modules providing historical trend lines, attrition regressions, and campaign telemetry views.
+- **`[4] TPIE Warning Dashboard`**:
+  - Theater Predictive Intelligence Engine surfacing high-priority invasion alerts, staging base activity, and tactical intercept windows.
+- **`[5] Predictive Models (Models A–G)`**:
+  - **Model A (Amphibious Assault Engine):** Weighted Bayesian scoring correlating radio volume spikes, transport movements, and embarkation manifests to forecast target landing beaches.
+  - **Model B (Fleet Trajectory & Intercept Projection):** Dead reckoning vector projection modeling course, speed, and candidate destination bases.
+  - **Model C (Air Superiority & Attrition):** Exponential Moving Average (EMA) pilot and airframe attrition modeling.
+  - **Model D (Logistical & Operational Pause Detector):** Task force turnaround and replenishment cycle estimation.
+  - **Model F (Strike Concentration Detector):** Hex grid spatial density clustering alerting to enemy carrier battlegroups.
+  - **Model G (Shipping Corridors & Chokepoints):** Transit corridor inference and submarine ambush positioning.
+- **`[6] Heuristics & Logical Blueprints`**:
+  - **Regional Power Shift (7-Day Delta):** Analyzes multi-theater naval and air mass migration across 10 strategic sectors (DEI, Malaya, Philippines, Solomons, New Guinea, Central Pacific, etc.).
 
 ---
 
-## License
+## 4. Faction-Specific Intelligence Personas
 
-This project is licensed under the [MIT License](LICENSE).
+The intelligence deck dynamically adapts its presentation and narrative analysis based on the player's commanded side:
+- **Allied Player Command (`CMDR. J. ROCHEFORT`)**:
+  - Features Station Hypo Commander Joseph Rochefort.
+  - Grounded in US Navy cryptanalysis, JN-25 radio traffic decryption, high-confidence SIGINT intercepts, and coastwatcher reporting.
+- **Japanese Player Command (`V.ADM. M. UGAKI`)**:
+  - Features Combined Fleet Chief of Staff Vice Admiral Matome Ugaki.
+  - Grounded in authentic Imperial Japanese Navy doctrine, *Senkoroku* war diary commentary, *Kantoku* decisive battle doctrine, and Type 97 flying boat / submarine scouting reconnaissance.
+  - *The Rochefort panel is strictly isolated and never appears for an Imperial Japanese player.*
+
+---
+
+## 5. Algorithmic Rigor & Numerical Confidence Engine
+
+- **Numerical Confidence Scoring (0%–100%):**
+  - Subjective speculation and placeholder strings are strictly forbidden.
+  - Evaluates explicit **Base Scores** (Radio Traffic = 30, Garrison Headcount = 50, Unit Moving = 65, Unit Located = 75, Direct Visual Recon = 80).
+  - Rewards **Corroboration Bonuses** (+15 for repeated entity citations, +10 for multi-source hex corroboration).
+  - Applies **Time Decay Multipliers** ($1.0\times$ for current turn, $0.8\times$ for $T-1$, $0.5\times$ for historical).
+  - Categorizes findings into verified tiers: `UNCONFIRMED`, `PROBABLE`, `CONFIRMED`, and `VERIFIED`.
+- **Full Evidence Transparency:**
+  - Every finding provides an interactive drill-down reasoning modal (`[ENTER]`) exposing raw telemetry sources, mathematical formulas, coordinate history, and analytical proofs.
+- **1,330-Base Geographic Hex Registry:**
+  - Grounded in an authoritative database of 1,330 historical bases across 71 theater regions with permanent $(X, Y)$ coordinate stability and dynamic faction ownership updates.
+
+---
+
+## 6. Deliverables & Deployment
+
+- **Single Self-Contained Binary:**
+  - Distributed exclusively as an authoritative, versioned single-file Windows executable:  
+    `dist/witp-cic-rochefort-alpha4-[build#].exe` (e.g. `witp-cic-rochefort-alpha4-13.exe`).
+  - No auxiliary runtimes, DLLs, database servers, or secondary binary aliases are generated.
