@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MUTHUR6000.Core.Database;
@@ -379,6 +380,9 @@ namespace MUTHUR6000.Core.Analytics
                     case "COMBAT_EVENTS":
                         ParseCombatEventsFile(file.FullPath, dateToPass);
                         break;
+                    case "PWS_SAVE":
+                        ParsePwsFile(file.FullPath, dateToPass);
+                        break;
                 }
             }
 
@@ -515,10 +519,133 @@ namespace MUTHUR6000.Core.Analytics
             });
         }
 
-        private void ParseSigintFile(string filePath, string dateYYMMDD)
+        private void ParsePwsFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
-            foreach (var rawLine in File.ReadLines(filePath))
+            try
+            {
+                using var fs = File.OpenRead(filePath);
+                using var gz = new GZipStream(fs, CompressionMode.Decompress);
+                using var ms = new MemoryStream();
+                gz.CopyTo(ms);
+                byte[] raw = ms.ToArray();
+
+                int pos = 0;
+                while (pos + 12 <= raw.Length)
+                {
+                    int a = BitConverter.ToInt32(raw, pos);
+                    int b = BitConverter.ToInt32(raw, pos + 4);
+                    int c = BitConverter.ToInt32(raw, pos + 8);
+                    byte recType = (byte)(a & 0xFF);
+
+                    if (c > 0 && pos + 12 + c <= raw.Length)
+                    {
+                        try
+                        {
+                            using var zMs = new MemoryStream(raw, pos + 12, c);
+                            using var zs = new ZLibStream(zMs, CompressionMode.Decompress);
+                            using var outMs = new MemoryStream();
+                            zs.CopyTo(outMs);
+                            byte[] decomp = outMs.ToArray();
+
+                            if (recType == 0x51)
+                            {
+                                ParsePwsRecord51(decomp, dateYYMMDD);
+                            }
+                            else if (recType == 0x08)
+                            {
+                                ParsePwsRecord08(decomp, dateYYMMDD);
+                            }
+                            pos += 12 + c;
+                            continue;
+                        }
+                        catch
+                        {
+                            // Skip on non-conforming or corrupted record chunk
+                        }
+                    }
+                    pos++;
+                }
+            }
+            catch
+            {
+                // Fallback gracefully on unreadable PWS save
+            }
+        }
+
+        private void ParsePwsRecord51(byte[] decomp, string dateYYMMDD)
+        {
+            int p = 0;
+            int sectionIdx = 0;
+            while (p + 4 <= decomp.Length)
+            {
+                int secLen = BitConverter.ToInt32(decomp, p);
+                p += 4;
+                if (secLen > 0 && p + secLen <= decomp.Length)
+                {
+                    string text = System.Text.Encoding.Latin1.GetString(decomp, p, secLen);
+                    var lines = text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                    switch (sectionIdx)
+                    {
+                        case 0: // AAR / Combat Report
+                            ParseCombatReportLines(lines, dateYYMMDD);
+                            break;
+                        case 1: // Combat Events
+                            ParseCombatEventsLines(lines, dateYYMMDD);
+                            break;
+                        case 2: // Operational Report
+                            ParseOperationsLines(lines, dateYYMMDD);
+                            break;
+                        case 3: // SIGINT
+                            ParseSigintLines(lines, dateYYMMDD);
+                            break;
+                    }
+                    p += secLen;
+                }
+                sectionIdx++;
+            }
+        }
+
+        private void ParsePwsRecord08(byte[] decomp, string dateYYMMDD)
+        {
+            const int rowSize = 464;
+            int numRows = decomp.Length / rowSize;
+            for (int i = 0; i < numRows; i++)
+            {
+                int offset = i * rowSize;
+                ushort status = BitConverter.ToUInt16(decomp, offset + 36);
+                if (status == 19999) // Sunk / Out of play
+                {
+                    int nameEnd = 0;
+                    while (nameEnd < 36 && decomp[offset + nameEnd] != 0) nameEnd++;
+                    string shipName = System.Text.Encoding.Latin1.GetString(decomp, offset, nameEnd).Trim();
+                    if (string.IsNullOrEmpty(shipName)) continue;
+
+                    ushort x = BitConverter.ToUInt16(decomp, offset + 352);
+                    ushort y = BitConverter.ToUInt16(decomp, offset + 354);
+                    bool isAllied = !NavalDoctrineRegistry.IsJapaneseVessel(shipName);
+
+                    if (!_battleClaimEvents.Any(bc => bc.ShipName.Equals(shipName, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        _battleClaimEvents.Add(new BattleClaimEvent
+                        {
+                            ShipName = shipName,
+                            ReportedSunk = true,
+                            IsAllied = isAllied,
+                            DateYYMMDD = dateYYMMDD,
+                            Assessment = "CONFIRMED SUNK",
+                            Reason = (x > 0 && y > 0) ? $"Verified sunk at hex ({x},{y})" : "Verified sunk in PBEM save state"
+                        });
+                        RegisterEntity(shipName, "VESSEL", x, y, dateYYMMDD, isAllied ? "Friendly vessel sunk (PWS Telemetry)" : "Hostile vessel sunk (PWS Telemetry)");
+                        _eventLog.Add($"[{dateYYMMDD}] LOSS: {shipName} sunk (Hex {x},{y}).");
+                    }
+                }
+            }
+        }
+
+        private void ParseSigintLines(IEnumerable<string> rawLines, string dateYYMMDD)
+        {
+            foreach (var rawLine in rawLines)
             {
                 string line = rawLine.Trim();
                 if (string.IsNullOrEmpty(line) || line.Contains("SIG INT REPORT")) continue;
@@ -604,10 +731,15 @@ namespace MUTHUR6000.Core.Analytics
             }
         }
 
-        private void ParseOperationsFile(string filePath, string dateYYMMDD)
+        private void ParseSigintFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
-            foreach (var rawLine in File.ReadLines(filePath))
+            ParseSigintLines(File.ReadLines(filePath), dateYYMMDD);
+        }
+
+        private void ParseOperationsLines(IEnumerable<string> rawLines, string dateYYMMDD)
+        {
+            foreach (var rawLine in rawLines)
             {
                 string line = rawLine.Trim();
                 if (string.IsNullOrEmpty(line) || line.Contains("OPERATIONAL REPORT")) continue;
@@ -764,15 +896,20 @@ namespace MUTHUR6000.Core.Analytics
             }
         }
 
-        private void ParseCombatReportFile(string filePath, string dateYYMMDD)
+        private void ParseOperationsFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
+            ParseOperationsLines(File.ReadLines(filePath), dateYYMMDD);
+        }
+
+        private void ParseCombatReportLines(IEnumerable<string> rawLines, string dateYYMMDD)
+        {
             bool inJapaneseAircraftLosses = false;
             bool inAlliedAircraftLosses = false;
             bool inAlliedShips = false;
             bool inJapaneseShips = false;
 
-            foreach (var rawLine in File.ReadLines(filePath))
+            foreach (var rawLine in rawLines)
             {
                 string line = rawLine.Trim();
                 if (string.IsNullOrEmpty(line)) continue;
@@ -861,10 +998,15 @@ namespace MUTHUR6000.Core.Analytics
             }
         }
 
-        private void ParseCombatEventsFile(string filePath, string dateYYMMDD)
+        private void ParseCombatReportFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
-            foreach (var rawLine in File.ReadLines(filePath))
+            ParseCombatReportLines(File.ReadLines(filePath), dateYYMMDD);
+        }
+
+        private void ParseCombatEventsLines(IEnumerable<string> rawLines, string dateYYMMDD)
+        {
+            foreach (var rawLine in rawLines)
             {
                 string line = rawLine.Trim();
                 if (string.IsNullOrEmpty(line)) continue;
@@ -952,6 +1094,12 @@ namespace MUTHUR6000.Core.Analytics
                     _eventLog.Add($"[{dateYYMMDD}] LOSS: {ship} sinks.");
                 }
             }
+        }
+
+        private void ParseCombatEventsFile(string filePath, string dateYYMMDD)
+        {
+            if (!File.Exists(filePath)) return;
+            ParseCombatEventsLines(File.ReadLines(filePath), dateYYMMDD);
         }
 
         private void ComputeNumericalConfidence(IngestionManifest manifest)

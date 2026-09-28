@@ -152,10 +152,9 @@ namespace MUTHUR6000
             // Generate monochrome glitch brushes matching active phosphor & background
             RebuildGlitchBrushes();
 
-            // Set up Cursor blinking timer (500ms rate)
+            // Set up Cursor blinking timer (kept stopped per Zero Blinking / Zero Flicker policy)
             _cursorTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
             _cursorTimer.Tick += CursorTimer_Tick;
-            _cursorTimer.Start();
 
             // Set up CRT glitch timer (120ms tick rate)
             _glitchTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(120) };

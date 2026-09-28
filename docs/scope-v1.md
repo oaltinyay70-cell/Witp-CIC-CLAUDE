@@ -10,6 +10,17 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 
 ## Changelog
 
+- 2026-09-28 15:50 UTC+3: **General Polish & Baseline 1.9 Enforcement (witp-cic-rochefort-alpha4-15) (Ozgur):**
+  1. **Selection Markers Standardized to `* `:** Eliminated all box border disruption caused by `> <` brackets displacing character column counts. Standardized selection pointers across all menus, tables, modals, and navigable pop-ups to a clean `* ` prefix for selected items and `  ` for unselected items, strictly preserving 106-column table boundaries with 100% straight vertical right margins.
+  2. **Elimination of Screen Flicker & Glitches:** Disabled cursor blinking and text redraw invalidation timers (`_cursorTimer` in `MainWindow.xaml.cs`) in accordance with Baseline 1.9 Zero-Blinking Policy. Removed unnecessary screen flicker and CRT glitch/snow invalidation cycles.
+  3. **Standardized Date Formatting (`DD - monthname - Last 2 digits of year`):** Enforced universal display format `$"{dd} - {mStr} - {yy}"` (e.g. `07 - Dec - 41`, `13 - Dec - 41`) across `FileScanner`, `WarRoomAnalytics`, and all UI screens. Chronological date lists now strictly present newer dates first.
+  4. **Native `.pws` Save File Ingestion Engine:** Added full decompression and extraction pipeline for PBEM `.pws` save turn files (e.g., `wpae023.pws`, turn file from Japanese player to US player). Implemented gzip decompression, header date parsing from record `0x26`, 4-section CRLF operational/combat reports extraction from record `0x51` (feeding AAR, Combat Events, Ops Report, and SIGINT line parsers), and 464-byte ship structure parsing from record `0x08` for sunk combatants (`status == 19999`) and coordinates `@352, @354`.
+  5. **Interactive Date Sliders for SIGINT & Intelligence Summaries:** Added date slider banners (`DATE FILTER: [< {filterLabel} >]`) to the SIGINT Geospatial Map and Theater Intelligence Summary menus. Users can cycle through available operational dates in descending chronological order (newest first) using `[LEFT/RIGHT]`, `[,] [.]`, or `[` / `]`.
+  6. **Heuristics Menu Readability:** Applied double-line spacing (`sb.AppendLine()`) to the Heuristics domain menu.
+  7. **Redundant Prompt Cleanups:** Eliminated superfluous `[PRESS ENTER]` prompts from detail modal views where lower split panels already render full telemetry analysis.
+  8. **Release Binary:** Published sole authorized executable `dist/witp-cic-rochefort-alpha4-15.exe`. All 103 automated analytical test suites passing.
+
+
 - 2026-09-27 15:25 UTC+3: **Universal Elimination of MUTHUR 6000 Wording Across Documentation & Programming (Ozgur):**
   1. **User Mandate:** User ordered *"U will remove any and every reference to the MUTHUR 6000 wording in every documentation and programming now."*
   2. **Total Documentation Purge:** Eliminated all occurrences of `MUTHUR 6000` across all specification bibles, architectural decisions, baseline principles, milestone records, ASCII blueprint templates, project context, and open question files.

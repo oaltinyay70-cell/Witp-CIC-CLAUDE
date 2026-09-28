@@ -19,7 +19,7 @@ namespace MUTHUR6000.Core.Ingestion
         public List<DiscoveredFile> Files { get; set; } = new List<DiscoveredFile>();
         public SortedSet<string> UniqueDates { get; set; } = new SortedSet<string>();
         public string LatestDate { get; set; } = "411207";
-        public string FormattedDate { get; set; } = "Dec 07, 1941";
+        public string FormattedDate { get; set; } = "07 - Dec - 41";
         public int DaysProcessed { get; set; } = 0;
     }
 
@@ -46,13 +46,13 @@ namespace MUTHUR6000.Core.Ingestion
             }
 
             string mStr = MonthNames[mIdx - 1];
-            string yStr = "19" + yy;
-            return $"{mStr} {dd}, {yStr}";
+            return $"{dd} - {mStr} - {yy}";
         }
 
         public static string FormatShortDate(string yymmdd)
         {
             if (string.IsNullOrEmpty(yymmdd) || yymmdd.Length != 6) return yymmdd ?? string.Empty;
+            string yy = yymmdd.Substring(0, 2);
             string mm = yymmdd.Substring(2, 2);
             string dd = yymmdd.Substring(4, 2);
 
@@ -62,7 +62,58 @@ namespace MUTHUR6000.Core.Ingestion
             }
 
             string mStr = MonthNames[mIdx - 1];
-            return $"{mStr} {dd}";
+            return $"{dd} - {mStr} - {yy}";
+        }
+
+        public static string ExtractDateFromPws(string filePath)
+        {
+            if (!File.Exists(filePath)) return string.Empty;
+            try
+            {
+                using var fs = File.OpenRead(filePath);
+                using var gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Decompress);
+                using var ms = new MemoryStream();
+                byte[] buf = new byte[8192];
+                int read = gz.Read(buf, 0, buf.Length);
+                if (read < 12) return string.Empty;
+                int c = BitConverter.ToInt32(buf, 8);
+                if (read < 12 + c)
+                {
+                    ms.Write(buf, 12, read - 12);
+                    int needed = (12 + c) - read;
+                    while (needed > 0)
+                    {
+                        int r = gz.Read(buf, 0, Math.Min(buf.Length, needed));
+                        if (r <= 0) break;
+                        ms.Write(buf, 0, r);
+                        needed -= r;
+                    }
+                    ms.Position = 0;
+                }
+                else
+                {
+                    ms.Write(buf, 12, c);
+                    ms.Position = 0;
+                }
+                using var zs = new System.IO.Compression.ZLibStream(ms, System.IO.Compression.CompressionMode.Decompress);
+                using var reader = new StreamReader(zs, System.Text.Encoding.Latin1);
+                char[] txtBuf = new char[500];
+                int txtRead = reader.Read(txtBuf, 0, txtBuf.Length);
+                string headerText = new string(txtBuf, 0, txtRead);
+                var m = Regex.Match(headerText, @"Date:\s*(\d{1,2})/(\d{1,2})/(\d{2})");
+                if (m.Success)
+                {
+                    int mm = int.Parse(m.Groups[1].Value);
+                    int dd = int.Parse(m.Groups[2].Value);
+                    int yy = int.Parse(m.Groups[3].Value);
+                    return $"{yy:D2}{mm:D2}{dd:D2}";
+                }
+            }
+            catch
+            {
+                // Fallback on corrupt or non-PWS file
+            }
+            return string.Empty;
         }
 
         public static string ExtractDateFromReportHeader(string filePath)
@@ -146,6 +197,10 @@ namespace MUTHUR6000.Core.Ingestion
                         {
                             dateCode = ExtractDateFromReportHeader(fpath);
                         }
+                        else if (string.IsNullOrEmpty(dateCode) && lowerName.EndsWith(".pws"))
+                        {
+                            dateCode = ExtractDateFromPws(fpath);
+                        }
 
                         if (lowerName.Contains("sigint"))
                         {
@@ -200,7 +255,7 @@ namespace MUTHUR6000.Core.Ingestion
             else
             {
                 manifest.LatestDate = "411207";
-                manifest.FormattedDate = "Dec 07, 1941";
+                manifest.FormattedDate = "07 - Dec - 41";
             }
 
             return manifest;

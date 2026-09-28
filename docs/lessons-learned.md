@@ -777,16 +777,26 @@ The following documentation suite constitutes the governing **Core Docs** of the
 - **What NOT to Repeat:**
   - DO NOT hesitate or preserve unrequested items in a menu when user explicitly orders deleting all except item 1.
 
-### LL-063: Universal Elimination of MUTHUR 6000 Wording
-- **Date:** 2026-09-27 15:25 UTC+3
-- **Context:** User commanded:
-  > *"U will remove any and every reference to the MUTHUR 6000 wording in every documentation and programming now."*
+### LL-064: Selection Marker Border Invariance, Zero Flicker & Save Decompression Architecture
+- **Date:** 2026-09-28 15:50 UTC+3
+- **Context:** User ordered:
+  > *"eliminiate errors when selection done by `> <` , disrupts the table border. use just `*`"*
+  > *"eliminiate screen flicker effect"*
+  > *"dates are must be presented as DD - monthname - Last 2 digits of the year"*
+  > *"pws file not being loaded and /or procesed . wpae023 is the file from Japanese player to US player in this campaign."*
+  > *"in SIGINT , theater intelligence summary menus , add a slider for selection of the dates. ALways use and list the newer ones first."*
+  > *"IN heuristic menu make lines double spaced"*
+  > *"eliminate PRESS ENTER message when there is no need for it."*
 - **What Was Learned:**
-  1. **Exhaustive Purge Across Entire Project Lifecycle:** When commanded to eliminate wording, conduct an exhaustive scan across all documentation, blueprints, architecture decisions, build scripts, assembly manifests, configurations, and active documentation.
-  2. **Assembly and Packaging Alignment:** Synchronize project titles, assembly metadata, descriptions, company branding, and AppData persistence folders to the active system identity (`ROCHEFORT 6000`).
-  3. **Documentation Integrity:** Ensure zero references remain in specs, blueprints, and historical changelogs while preserving all technical and architectural functionality.
+  1. **Strict Monospace Box Column Invariance:** Enclosing selections in `> <` disrupts rigid character grid alignments by expanding element string lengths and pushing right box borders (`║`) outward. Replacing selection indicators with a standard `* ` marker (for selected) versus `  ` (two spaces, for unselected) preserves absolute column counts and keeps vertical borders 100% straight.
+  2. **Baseline 1.9 Zero Flicker Mandate:** WPF invalidation cycles triggered by 500ms blinking cursor timers cause perceptible text flicker across large terminal screens. In accordance with Baseline 1.9, disable cursor blinking timers completely; static text renders crisply without constant repaints.
+  3. **Universal Date Format Standard:** All user-facing and telemetry dates must follow `$"{dd} - {mStr} - {yy}"` (e.g. `07 - Dec - 41`). All date lists, selectors, and manifests must order dates chronologically descending (newest first).
+  4. **Compound Decompression Pipeline for `.pws` Saves:** WITP:AE PBEM turn files (`.pws`) are composite files: an outer GZip envelope containing multiple zlib/raw binary records. Extracting operational intelligence requires parsing record `0x26` for turn date headers, record `0x51` for text reports (AAR, ops, sigint, combat), and record `0x08` for vessel casualty status.
+  5. **Contextual Date Filtering:** SIGINT maps and Intel summaries must provide interactive date sliders (`[LEFT/RIGHT]`, `[,] [.]`, `[` / `]`) to dynamically isolate single-turn sightings or view aggregate history (`ALL`), always defaulting to the latest turn date.
 - **What NOT to Repeat:**
-  - NEVER reintroduce or leave any references to `MUTHUR 6000` anywhere in the documentation, codebase, build scripts, or project metadata.
+  - NEVER use asymmetric or width-expanding brackets like `> <` that alter line lengths inside fixed-width box drawing borders.
+  - NEVER run background invalidation timers for cursor blinking or pseudo-CRT glitch animations.
+  - NEVER display raw 6-digit numeric dates (`YYMMDD`) directly to the user.
 
 ---
 

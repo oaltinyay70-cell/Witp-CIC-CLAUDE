@@ -437,6 +437,16 @@ All application errors must follow the standardized format **`[XXX]`**:
 ### 10.2 Single-Binary Output Mandate & Prohibition of Redundant Mirrors
 > **"why is 2 ? why do we need mirros ... yes and dont make the same mistake again" — Ozgur (2026-09-21 23:57 UTC+3)**
 
-- **Strict Single-Binary Output:** Each build must compile and output **exclusively** the single versioned executable matching the established naming format: `dist/witp-cic-rochefort-alpha4-[build#].exe` (e.g. `witp-cic-rochefort-alpha4-13.exe`).
+- **Strict Single-Binary Output:** Each build must compile and output **exclusively** the single versioned executable matching the established naming format: `dist/witp-cic-rochefort-alpha4-[build#].exe` (e.g. `witp-cic-rochefort-alpha4-15.exe`).
 - **Absolute Prohibition of Mirrors:** Never create redundant duplicate copies or legacy aliases in `dist/` (such as `WitP-CIC.exe` or secondary alias binaries). Neither the runtime nor the test suite requires duplicate mirrors. Generating extra copies is strictly forbidden.
+
+### 10.3 Selection Marker Column Stability, Date Standards & Zero-Flicker UX
+> **"eliminiate errors when selection done by `> <` , disrupts the table border. use just `*` | eliminiate screen flicker effect | dates are must be presented as DD - monthname - Last 2 digits of the year | pws file not being loaded and /or procesed | in SIGINT , theater intelligence summary menus , add a slider for selection of the dates. ALways use and list the newer ones first. | IN heuristic menu make lines double spaced" — Ozgur (2026-09-28 15:50 UTC+3)**
+
+1. **Selection Markers Standardized to `* `:** Discontinue all `> <` pointer styles that displace character counts and disrupt rigid vertical box-drawing borders (`║`). Use exclusively a clean `* ` marker for selected items and `  ` (two spaces) for unselected items across all menus and tables, preserving exact column width invariants.
+2. **Zero-Flicker Interface:** Strictly adhere to the zero-blinking policy (Baseline 1.9). Turn off high-frequency cursor blinking timers (`_cursorTimer`) and CRT flicker invalidation loops to provide rock-solid, static text rendering.
+3. **Universal Date Format Standard:** All operational and intelligence dates must be formatted as `$"{dd} - {mStr} - {yy}"` (e.g. `07 - Dec - 41`, `13 - Dec - 41`). All date listings and selectors must list newer turns first.
+4. **Binary PBEM `.pws` Save File Ingestion Pipeline:** Natively ingest `.pws` save files (such as `wpae023.pws`) via GZip decompression and embedded record parsers (`0x26` for turn header dates, `0x51` for 4-section text operational reports, and `0x08` for vessel casualty status).
+5. **Interactive Date Sliders:** Incorporate interactive date slider controls (`DATE FILTER: [< {filterLabel} >]`) in the SIGINT Map and Intelligence Summary menus, cycled via arrow keys `[LEFT/RIGHT]`, `[,] [.]`, or brackets `[` / `]`.
+6. **Double-Spaced Heuristic Menus:** Retain double spacing on heuristic menus for enhanced tactical legibility.
 

@@ -124,6 +124,16 @@ namespace MUTHUR6000.Core.Controller
         private int _heuristicsPopUpSel = 0;
         private int _graphicsMenuSel = 0;
         private int _graphicsPageId = 1;
+        private int _intelDateFilterIdx = 0;
+        private int _sigintDateFilterIdx = 0;
+
+        private List<string> GetAvailableDateFilterList()
+        {
+            var dates = Manifest.UniqueDates.OrderByDescending(d => d).ToList();
+            var list = new List<string> { "ALL" };
+            list.AddRange(dates);
+            return list;
+        }
 
         // ── Dossier Search ───────────────────────────────────────────────────
         private string _dossierQuery = "";
@@ -808,11 +818,34 @@ namespace MUTHUR6000.Core.Controller
         // ── Intelligence Summary Screen ──────────────────────────────────────
         private void HandleIntelligenceSummary(System.Windows.Input.Key key)
         {
+            var filterDates = GetAvailableDateFilterList();
+            int numDates = filterDates.Count;
+
             switch (key)
             {
                 case System.Windows.Input.Key.Escape:
                     _state = ScreenState.WarRoomPrimary;
                     RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Left:
+                case System.Windows.Input.Key.OemOpenBrackets:
+                case System.Windows.Input.Key.OemComma:
+                    if (numDates > 0)
+                    {
+                        _intelDateFilterIdx = (_intelDateFilterIdx - 1 + numDates) % numDates;
+                        RenderCurrentScreen();
+                    }
+                    break;
+
+                case System.Windows.Input.Key.Right:
+                case System.Windows.Input.Key.OemCloseBrackets:
+                case System.Windows.Input.Key.OemPeriod:
+                    if (numDates > 0)
+                    {
+                        _intelDateFilterIdx = (_intelDateFilterIdx + 1) % numDates;
+                        RenderCurrentScreen();
+                    }
                     break;
 
                 case System.Windows.Input.Key.Up:
@@ -845,31 +878,53 @@ namespace MUTHUR6000.Core.Controller
             _popUpReasonings.Clear();
             _popUpConfidences.Clear();
 
+            var filterDates = GetAvailableDateFilterList();
+            if (_intelDateFilterIdx >= filterDates.Count) _intelDateFilterIdx = 0;
+            string curFilterDate = filterDates[_intelDateFilterIdx];
+
             switch (category)
             {
                 case 0:
                     _popUpTitle = "HIGH-VALUE TARGET (HVT) LOCALIZATION MANIFEST";
-                    foreach (var h in Analytics.HighValueTargets)
+                    var hvts = curFilterDate == "ALL"
+                        ? Analytics.HighValueTargets
+                        : Analytics.HighValueTargets.Where(h => h.Date == curFilterDate || h.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
+
+                    if (hvts.Count == 0)
                     {
-                        _popUpBullets.Add($"[{h.Type}] {h.Name} at {h.Location} ({h.HexX},{h.HexY}) [{h.Date}] - {h.Status}");
-                        _popUpConfidences.Add(h.ConfidencePct);
-                        string datesStr = h.AllDates.Count > 0 ? string.Join(", ", h.AllDates) : h.Date;
-                        int freq = Math.Max(1, h.AllDates.Count);
-                        string freqStr = freq > 1
-                            ? $"OBSERVATION FREQUENCY: {freq} distinct sightings recorded across campaign turns."
-                            : "OBSERVATION FREQUENCY: Single verified sighting recorded.";
-                        string latestSeen = string.IsNullOrEmpty(h.LastSeenDate) ? h.Date : h.LastSeenDate;
-                        var r = new List<string> {
+                        _popUpBullets.Add("NO HIGH-VALUE TARGETS LOCALIZED FOR THIS TURN DATE.");
+                        _popUpReasonings.Add(new List<string> {
                             "TELEMETRY SOURCE: SIGINT Intercept Report & Radio Direction Finding",
-                            $"LOCALIZED POSITION: Hex {h.HexX},{h.HexY} ({h.Location})",
-                            freqStr,
-                            $"CHRONOLOGY / RECENCY: Tracked until {latestSeen} [Dates seen: {datesStr}]",
-                            $"CLASSIFICATION: Vessel designated High-Value Capital Asset ({h.Type}).",
-                            "TACTICAL REASONING: Highly prioritized for Allied submarine & naval air interdiction.",
-                            "INTERCEPT SIGNIFICANCE: Critical strategic asset monitored for battle group disposition."
-                        };
-                        r.AddRange(h.MathBreakdown);
-                        _popUpReasonings.Add(r);
+                            $"DATE FILTER: {(curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate))}",
+                            "OBSERVATION STATUS: No capital ship sightings matched the selected date window."
+                        });
+                        _popUpConfidences.Add(0);
+                    }
+                    else
+                    {
+                        foreach (var h in hvts)
+                        {
+                            string formattedDate = FileScanner.FormatShortDate(h.Date);
+                            _popUpBullets.Add($"[{h.Type}] {h.Name} at {h.Location} ({h.HexX},{h.HexY}) [{formattedDate}] - {h.Status}");
+                            _popUpConfidences.Add(h.ConfidencePct);
+                            string datesStr = h.AllDates.Count > 0 ? string.Join(", ", h.AllDates) : formattedDate;
+                            int freq = Math.Max(1, h.AllDates.Count);
+                            string freqStr = freq > 1
+                                ? $"OBSERVATION FREQUENCY: {freq} distinct sightings recorded across campaign turns."
+                                : "OBSERVATION FREQUENCY: Single verified sighting recorded.";
+                            string latestSeen = string.IsNullOrEmpty(h.LastSeenDate) ? formattedDate : h.LastSeenDate;
+                            var r = new List<string> {
+                                "TELEMETRY SOURCE: SIGINT Intercept Report & Radio Direction Finding",
+                                $"LOCALIZED POSITION: Hex {h.HexX},{h.HexY} ({h.Location})",
+                                freqStr,
+                                $"CHRONOLOGY / RECENCY: Tracked until {latestSeen} [Dates seen: {datesStr}]",
+                                $"CLASSIFICATION: Vessel designated High-Value Capital Asset ({h.Type}).",
+                                "TACTICAL REASONING: Highly prioritized for Allied submarine & naval air interdiction.",
+                                "INTERCEPT SIGNIFICANCE: Critical strategic asset monitored for battle group disposition."
+                            };
+                            r.AddRange(h.MathBreakdown);
+                            _popUpReasonings.Add(r);
+                        }
                     }
                     break;
 
@@ -930,12 +985,17 @@ namespace MUTHUR6000.Core.Controller
 
                 case 4:
                     _popUpTitle = "BATTLE DAMAGE ASSESSMENT & CLAIMS REVISION REGISTER";
-                    var claims = Analytics.ModelEClaims.Claims;
+                    var allClaims = Analytics.ModelEClaims.Claims;
+                    var claims = curFilterDate == "ALL"
+                        ? allClaims
+                        : allClaims.Where(c => c.DateYYMMDD == curFilterDate).ToList();
+
                     if (claims.Count == 0)
                     {
                         _popUpBullets.Add("NO HOSTILE COMBAT DAMAGE CLAIMS RECORDED FOR THIS TURN RANGE.");
                         _popUpReasonings.Add(new List<string> {
                             "INTELLIGENCE STATUS: No hostile vessels currently identified taking damage or sunk in verified combat reports.",
+                            $"DATE FILTER: {(curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate))}",
                             "ASSESSMENT CRITERIA: Fog-of-war claims register tracks enemy losses only.",
                             "FRIENDLY STATUS: Friendly unit casualties are managed exclusively through operational commands."
                         });
@@ -945,12 +1005,13 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var c in claims)
                         {
-                            _popUpBullets.Add($"{c.ShipName} : {c.Assessment} ({c.Reason}) [{c.DateYYMMDD}]");
+                            string formattedDate = FileScanner.FormatShortDate(c.DateYYMMDD);
+                            _popUpBullets.Add($"{c.ShipName} : {c.Assessment} ({c.Reason}) [{formattedDate}]");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: Combat Action Report Claims vs Operations Sighting Reconciliation",
                                 $"LOCALIZED POSITION: Target vessel {c.ShipName} ({(c.IsAllied ? "Allied Target" : "Hostile Japanese Target")})",
-                                $"OBSERVATION FREQUENCY: Single action report claim submitted on turn {c.DateYYMMDD}.",
-                                $"CHRONOLOGY / RECENCY: Action evaluated for turn {c.DateYYMMDD}.",
+                                $"OBSERVATION FREQUENCY: Single action report claim submitted on turn {formattedDate}.",
+                                $"CHRONOLOGY / RECENCY: Action evaluated for turn {formattedDate}.",
                                 $"ASSESSMENT REASONING: Initial action claim evaluated as {c.Assessment}.",
                                 $"EVIDENCE CRITERIA: {c.Reason}.",
                                 "GROUND TRUTH VERIFICATION: Entity reconciled against known vessel tracking register.",
@@ -1003,7 +1064,16 @@ namespace MUTHUR6000.Core.Controller
         // ── SIGINT Map Screen ────────────────────────────────────────────────
         private void HandleSigintMap(System.Windows.Input.Key key)
         {
-            var logs = Analytics.GeospatialLog;
+            var filterDates = GetAvailableDateFilterList();
+            int numDates = filterDates.Count;
+            if (_sigintDateFilterIdx >= numDates) _sigintDateFilterIdx = 0;
+            string curFilterDate = filterDates[_sigintDateFilterIdx];
+
+            var allLogs = Analytics.GeospatialLog;
+            var logs = curFilterDate == "ALL"
+                ? allLogs
+                : allLogs.Where(e => e.DateYYMMDD == curFilterDate || e.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
+
             int total = logs.Count;
 
             switch (key)
@@ -1011,6 +1081,28 @@ namespace MUTHUR6000.Core.Controller
                 case System.Windows.Input.Key.Escape:
                     _state = ScreenState.WarRoomPrimary;
                     RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Left:
+                case System.Windows.Input.Key.OemOpenBrackets:
+                case System.Windows.Input.Key.OemComma:
+                    if (numDates > 0)
+                    {
+                        _sigintDateFilterIdx = (_sigintDateFilterIdx - 1 + numDates) % numDates;
+                        _sigintMapSel = 0;
+                        RenderCurrentScreen();
+                    }
+                    break;
+
+                case System.Windows.Input.Key.Right:
+                case System.Windows.Input.Key.OemCloseBrackets:
+                case System.Windows.Input.Key.OemPeriod:
+                    if (numDates > 0)
+                    {
+                        _sigintDateFilterIdx = (_sigintDateFilterIdx + 1) % numDates;
+                        _sigintMapSel = 0;
+                        RenderCurrentScreen();
+                    }
                     break;
 
                 case System.Windows.Input.Key.D:
@@ -1820,11 +1912,13 @@ namespace MUTHUR6000.Core.Controller
                     : "Regional power distribution stable across all theaters";
             }
 
-            sb.AppendLine($"    > [1] {titleStr} <");
+            sb.AppendLine($"    * [1] {titleStr}");
+            sb.AppendLine();
             sb.AppendLine($"        STATUS: {sumStr}");
             sb.AppendLine();
 
             sb.AppendLine("    >> Press [1] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
+            sb.AppendLine();
             AppendFooter(sb, "[1/ENTER] Open Findings", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
@@ -1859,7 +1953,7 @@ namespace MUTHUR6000.Core.Controller
                 int idx = startIdx + i;
                 if (idx < total)
                 {
-                    string prefix = (idx == sel) ? "> " : "  ";
+                    string prefix = (idx == sel) ? "* " : "  ";
                     string content = prefix + _popUpBullets[idx];
                     content = PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth);
                     sb.AppendLine($"║ {content} ║");
@@ -3000,22 +3094,12 @@ namespace MUTHUR6000.Core.Controller
                     }
                     else
                     {
-                        if (item.IsSelected)
-                        {
-                            string selectedLabel = $"> {item.Label} <";
-                            int remaining = 42 - item.Prefix.Length;
-                            if (selectedLabel.Length < remaining)
-                                selectedLabel = selectedLabel.PadRight(remaining);
-                            leftStr = item.Prefix + selectedLabel;
-                        }
-                        else
-                        {
-                            int remaining = 42 - item.Prefix.Length;
-                            string lbl = item.Label;
-                            if (lbl.Length < remaining)
-                                lbl = lbl.PadRight(remaining);
-                            leftStr = item.Prefix + lbl;
-                        }
+                        string marker = item.IsSelected ? "* " : "  ";
+                        int remaining = 42 - item.Prefix.Length - marker.Length;
+                        string lbl = item.Label;
+                        if (lbl.Length < remaining)
+                            lbl = lbl.PadRight(remaining);
+                        leftStr = item.Prefix + marker + lbl;
                     }
                 }
                 else
@@ -3052,13 +3136,13 @@ namespace MUTHUR6000.Core.Controller
 
                 if (_wizardSideSel == 0)
                 {
-                    sb.AppendLine("    > [A] ALLIED FORCES (Default) <\n");
+                    sb.AppendLine("    * [A] ALLIED FORCES (Default)\n");
                     sb.AppendLine("      [J] EMPIRE OF JAPAN\n");
                 }
                 else
                 {
                     sb.AppendLine("      [A] ALLIED FORCES (Default)\n");
-                    sb.AppendLine("    > [J] EMPIRE OF JAPAN <\n");
+                    sb.AppendLine("    * [J] EMPIRE OF JAPAN\n");
                 }
 
                 AppendFooter(sb,
@@ -3150,7 +3234,7 @@ namespace MUTHUR6000.Core.Controller
                 {
                     if (i == _continueSel)
                     {
-                        sb.AppendLine($"    > [X] {_vaultFiles[i]} <");
+                        sb.AppendLine($"    * [X] {_vaultFiles[i]}");
                     }
                     else
                     {
@@ -3273,10 +3357,9 @@ namespace MUTHUR6000.Core.Controller
 
             for (int i = 0; i < menuLabels.Length; i++)
             {
-                string arrow = (i == _masterMenuSel) ? "> " : "  ";
                 string hk = hotkeys[i];
                 if (i == _masterMenuSel)
-                    sb.AppendLine($"    {hk}> {menuLabels[i]} <");
+                    sb.AppendLine($"    {hk}* {menuLabels[i]}");
                 else
                     sb.AppendLine($"    {hk}  {menuLabels[i]}");
                 sb.AppendLine();
@@ -3314,7 +3397,7 @@ namespace MUTHUR6000.Core.Controller
             {
                 string optText = $"[{i + 1}]  {menuLabels[i]}";
                 if (i == _warRoomSel)
-                    sb.AppendLine($"    > {optText} <");
+                    sb.AppendLine($"    * {optText}");
                 else
                     sb.AppendLine($"      {optText}");
                 sb.AppendLine();
@@ -3333,7 +3416,13 @@ namespace MUTHUR6000.Core.Controller
             var sb = new StringBuilder();
             AppendHeader(sb, "WAR ROOM : THEATER INTELLIGENCE SUMMARY & CONCENTRATIONS", TurnInfo());
             sb.AppendLine();
-            AppendSectionHeader(sb, "SELECT INTELLIGENCE DOMAIN TO DISCLOSE GRANULAR TARGET MANIFEST");
+            var filterDates = GetAvailableDateFilterList();
+            if (_intelDateFilterIdx >= filterDates.Count) _intelDateFilterIdx = 0;
+            string curFilterDate = filterDates[_intelDateFilterIdx];
+            string filterLabel = curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate);
+
+            sb.AppendLine($"    DATE FILTER: [< {filterLabel} >]  (USE [ / ] OR LEFT/RIGHT TO CYCLE DATES)");
+            sb.AppendLine();
 
             string[] options =
             {
@@ -3344,13 +3433,21 @@ namespace MUTHUR6000.Core.Controller
                 "Battle Claims & Revisions"
             };
 
+            int hvtCount = curFilterDate == "ALL" 
+                ? Analytics.HighValueTargets.Count 
+                : Analytics.HighValueTargets.Count(h => h.Date == curFilterDate || h.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate)));
+
+            int claimsCount = curFilterDate == "ALL"
+                ? Analytics.ModelEClaims.Claims.Count
+                : Analytics.ModelEClaims.Claims.Count(c => c.DateYYMMDD == curFilterDate);
+
             string[] counts =
             {
-                $"{Analytics.HighValueTargets.Count} localized capital units (CV, CA, AO oilers)",
+                $"{hvtCount} localized capital units (CV, CA, AO oilers)",
                 $"{Analytics.ModelFConcentrations.Count} active warship clusters (>threshold)",
                 $"{Analytics.PortConcentrations.Count} major staging ports monitored",
                 $"{Analytics.ModelGRoutes.Count} supply & invasion corridors mapped",
-                $"{Analytics.ModelEClaims.Claims.Count} hostile action assessments tracked"
+                $"{claimsCount} hostile action assessments tracked"
             };
 
             for (int i = 0; i < options.Length; i++)
@@ -3358,15 +3455,15 @@ namespace MUTHUR6000.Core.Controller
                 string desc = $"{options[i]} : {counts[i]}";
                 string lineOut;
                 if (i == _intelSumSel)
-                    lineOut = $"  [{i + 1}]  > {desc} <";
+                    lineOut = $"  [{i + 1}]  * {desc}";
                 else
-                    lineOut = $"  [{i + 1}]   {desc}";
+                    lineOut = $"  [{i + 1}]    {desc}";
                 sb.AppendLine(lineOut);
                 sb.AppendLine();
             }
 
             sb.AppendLine("      >> Use [UP/DOWN] to select domain, press [ENTER] to open navigable pop-up.");
-            AppendFooter(sb, "[UP/DOWN] Select Domain", "[ENTER] Open Pop-Up", "PRESS ESC TO RETURN");
+            AppendFooter(sb, "[LEFT/RIGHT] Cycle Date", "[UP/DOWN] Select Domain", "[ENTER] Open Pop-Up", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
@@ -3404,7 +3501,7 @@ namespace MUTHUR6000.Core.Controller
                 int idx = startIdx + i;
                 if (idx < total)
                 {
-                    string prefix = (idx == sel) ? "> " : "  ";
+                    string prefix = (idx == sel) ? "* " : "  ";
                     string content = prefix + _popUpBullets[idx];
                     content = PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth);
                     sb.AppendLine($"║ {content} ║");
@@ -3430,18 +3527,31 @@ namespace MUTHUR6000.Core.Controller
             var sb = new StringBuilder();
             AppendHeader(sb, "WAR ROOM : GEOSPATIAL SIGINT MAP & SECTOR BEARING LOG", TurnInfo());
             sb.AppendLine();
+
+            var filterDates = GetAvailableDateFilterList();
+            if (_sigintDateFilterIdx >= filterDates.Count) _sigintDateFilterIdx = 0;
+            string curFilterDate = filterDates[_sigintDateFilterIdx];
+            string filterLabel = curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate);
+
+            sb.AppendLine($"    DATE FILTER: [< {filterLabel} >]  (USE [ / ] OR LEFT/RIGHT TO CYCLE DATES)");
+            sb.AppendLine();
             AppendSectionHeader(sb, "DATE     TYPE     LOCALIZED POS   SECTOR BEARING FROM HQ       DETAILS / INTERCEPT");
 
-            var log = Analytics.GeospatialLog;
+            var allLogs = Analytics.GeospatialLog;
+            var log = curFilterDate == "ALL"
+                ? allLogs
+                : allLogs.Where(e => e.DateYYMMDD == curFilterDate || e.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
+
             if (log.Count == 0)
             {
                 sb.AppendLine();
-                sb.AppendLine("    NO GEOSPATIAL CONTACTS LOCALIZED FOR THIS TURN RANGE.");
+                sb.AppendLine("    NO GEOSPATIAL CONTACTS LOCALIZED FOR THIS TURN DATE.");
             }
             else
             {
                 const int maxVisible = 11;
                 int total = log.Count;
+                if (_sigintMapSel >= total) _sigintMapSel = Math.Max(0, total - 1);
                 int startIdx = _sigintMapSel >= maxVisible ? _sigintMapSel - maxVisible + 1 : 0;
                 int endIdx = Math.Min(total, startIdx + maxVisible);
 
@@ -3450,7 +3560,7 @@ namespace MUTHUR6000.Core.Controller
                     var entry = log[i];
                     string dStr = string.IsNullOrEmpty(entry.LastSeenDate) ? entry.DateYYMMDD : entry.LastSeenDate;
                     string posStr = $"{entry.HexX},{entry.HexY}";
-                    string pointer = (i == _sigintMapSel) ? "> " : "  ";
+                    string pointer = (i == _sigintMapSel) ? "* " : "  ";
                     string datePad = PadTo(dStr.Length > 8 ? dStr.Substring(0, 8) : dStr, 9);
                     string typePad = PadTo(entry.EventType.Length > 8 ? entry.EventType.Substring(0, 8) : entry.EventType, 9);
                     string posPad = PadTo(posStr.Length > 15 ? posStr.Substring(0, 15) : posStr, 16);
@@ -3462,7 +3572,7 @@ namespace MUTHUR6000.Core.Controller
 
             sb.AppendLine();
             sb.AppendLine("    >> Use [UP/DOWN] to traverse contacts. Press [ENTER] for reasoning. Press [D] for Dossier.");
-            AppendFooter(sb, "[UP/DOWN] Select Contact", "[ENTER] View Reasoning", "[D] Dossier Search", "PRESS ESC TO RETURN");
+            AppendFooter(sb, "[LEFT/RIGHT] Cycle Date", "[UP/DOWN] Select Contact", "[ENTER] View Reasoning", "[D] Dossier Search", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
@@ -3585,7 +3695,7 @@ namespace MUTHUR6000.Core.Controller
                 string optText = $"{numStr,-5} {options[i]}";
                 if (i == _graphicsMenuSel)
                 {
-                    sb.AppendLine($"    > {optText} <");
+                    sb.AppendLine($"    * {optText}");
                 }
                 else
                 {
@@ -3982,7 +4092,7 @@ namespace MUTHUR6000.Core.Controller
                     string threat = PadTo(t.ThreatLevel.Length > 16 ? t.ThreatLevel.Substring(0, 16) : t.ThreatLevel, 17);
                     string units = unitSummary.Length > 32 ? unitSummary.Substring(0, 32) : unitSummary;
 
-                    string marker = (i == _tpieSel) ? "> " : "  ";
+                    string marker = (i == _tpieSel) ? "* " : "  ";
                     sb.AppendLine($"{marker}{dest}{prob}{threat}{units}");
                 }
             }
@@ -4033,9 +4143,9 @@ namespace MUTHUR6000.Core.Controller
                 string letter = ((char)('A' + i)).ToString();
                 string title = modelTitles[i];
                 if (i == _predModelsSel)
-                    sb.AppendLine($"  [{letter}]  > {title} <");
+                    sb.AppendLine($"  [{letter}]  * {title}");
                 else
-                    sb.AppendLine($"  [{letter}]   {title}");
+                    sb.AppendLine($"  [{letter}]    {title}");
                 sb.AppendLine();
             }
 
@@ -4074,21 +4184,16 @@ namespace MUTHUR6000.Core.Controller
                 sb.AppendLine("╠" + new string('═', width - 2) + "╣");
             }
 
-            string prompt = "SELECT REASONING TOPIC & PRESS [ENTER] TO DISCLOSE EVIDENCE:";
+            string prompt = "REASONING TOPICS & EVIDENCE (USE ARROW KEYS TO NAVIGATE):";
             sb.AppendLine($"║ {PadTo(prompt, innerWidth)} ║");
             sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
 
             for (int i = 0; i < _reasoningTopics.Count; i++)
             {
-                string prefix = (i == _reasoningTopicSel) ? "> " : "  ";
+                string prefix = (i == _reasoningTopicSel) ? "* " : "  ";
                 string num = $"[{i + 1}] ";
                 string title = _reasoningTopics[i].Title;
-                string action = " [PRESS ENTER]";
-                string full = prefix + num + title;
-                if (full.Length + action.Length < innerWidth)
-                    full = full + new string(' ', innerWidth - full.Length - action.Length) + action;
-                else
-                    full = PadTo(full, innerWidth);
+                string full = PadTo(prefix + num + title, innerWidth);
                 sb.AppendLine($"║ {full} ║");
                 sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
             }
@@ -4110,7 +4215,7 @@ namespace MUTHUR6000.Core.Controller
             }
 
             sb.AppendLine("╠" + new string('═', width - 2) + "╣");
-            string footerText = "[UP/DOWN] Select Topic  │  [ENTER] Drill Down  │  PRESS ESC TO RETURN";
+            string footerText = "[UP/DOWN] Select Topic  │  PRESS ESC TO RETURN";
             sb.AppendLine($"║ {PadTo(footerText, innerWidth)} ║");
             sb.AppendLine("╚" + new string('═', width - 2) + "╝");
             return sb.ToString();
@@ -4179,20 +4284,11 @@ namespace MUTHUR6000.Core.Controller
                     }
                     else
                     {
-                        if (item.IsSelected)
-                        {
-                            string sel = $"> {item.Title} <";
-                            int remaining = 42 - item.Prefix.Length;
-                            if (sel.Length < remaining) sel = sel.PadRight(remaining);
-                            leftStr = item.Prefix + sel;
-                        }
-                        else
-                        {
-                            int remaining = 42 - item.Prefix.Length;
-                            string t = item.Title;
-                            if (t.Length < remaining) t = t.PadRight(remaining);
-                            leftStr = item.Prefix + t;
-                        }
+                        string marker = item.IsSelected ? "* " : "  ";
+                        int remaining = 42 - item.Prefix.Length - marker.Length;
+                        string t = item.Title;
+                        if (t.Length < remaining) t = t.PadRight(remaining);
+                        leftStr = item.Prefix + marker + t;
                     }
                 }
                 else
@@ -4322,20 +4418,11 @@ namespace MUTHUR6000.Core.Controller
                     }
                     else
                     {
-                        if (item.IsSelected)
-                        {
-                            string sel = $"> {item.Title} <";
-                            int remaining = 42 - item.Prefix.Length;
-                            if (sel.Length < remaining) sel = sel.PadRight(remaining);
-                            leftStr = item.Prefix + sel;
-                        }
-                        else
-                        {
-                            int remaining = 42 - item.Prefix.Length;
-                            string t = item.Title;
-                            if (t.Length < remaining) t = t.PadRight(remaining);
-                            leftStr = item.Prefix + t;
-                        }
+                        string marker = item.IsSelected ? "* " : "  ";
+                        int remaining = 42 - item.Prefix.Length - marker.Length;
+                        string t = item.Title;
+                        if (t.Length < remaining) t = t.PadRight(remaining);
+                        leftStr = item.Prefix + marker + t;
                     }
                 }
                 else
@@ -4436,9 +4523,9 @@ namespace MUTHUR6000.Core.Controller
             for (int i = 0; i < options.Length; i++)
             {
                 if (i == _settingsSel)
-                    sb.AppendLine($"  [{i + 1}]  > {options[i]} <");
+                    sb.AppendLine($"  [{i + 1}]  * {options[i]}");
                 else
-                    sb.AppendLine($"  [{i + 1}]   {options[i]}");
+                    sb.AppendLine($"  [{i + 1}]    {options[i]}");
                 sb.AppendLine();
             }
 
@@ -4481,9 +4568,9 @@ namespace MUTHUR6000.Core.Controller
             for (int i = 0; i < options.Length; i++)
             {
                 if (i == _aiConnSel)
-                    sb.AppendLine($"  [{i + 1}]  > {options[i]} <");
+                    sb.AppendLine($"  [{i + 1}]  * {options[i]}");
                 else
-                    sb.AppendLine($"  [{i + 1}]   {options[i]}");
+                    sb.AppendLine($"  [{i + 1}]    {options[i]}");
                 sb.AppendLine();
             }
 
