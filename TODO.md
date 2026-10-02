@@ -6,7 +6,7 @@
 ## Cleanup
 - [~] (implemented, awaiting Ozgur) Delete War Room items Intelligence Summary, SIGINT Map, TPIE, Predictive Models + dead code.
 - [ ] Decide: date-range filter modal (TemporalFilter/Calendar) now has no entry point; re-home or delete.
-- [ ] Remove AI-endpoint settings (offline rule).
+- [~] (implemented, awaiting Ozgur) Remove AI-endpoint settings (offline rule).
 - [ ] Prune/decide unused pillar services.
 ## Later
 - [ ] Re-home deleted functions on new pages (owner to specify).

@@ -548,6 +548,17 @@ namespace ROCHEFORT6000.Tests
             Assert(!wrScreen.Contains("Intelligence Summary"), "War Room menu does NOT contain Intelligence Summary");
             Assert(!wrScreen.Contains("SIGINT Map"), "War Room menu does NOT contain SIGINT Map");
 
+            // 13.1b Settings menu is offline-only (no AI endpoint options)
+            typeof(TerminalScreenManager).GetField("_state", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .SetValue(screenManager, ScreenState.SettingsMenu);
+            string settingsScreen = screenManager.BuildCurrentScreen();
+            Assert(!settingsScreen.Contains("AI MODEL") && !settingsScreen.Contains("AI Setup"), "Settings menu does NOT contain AI endpoint options");
+            Assert(settingsScreen.Contains("[1]  * ALLIED SIGINT CONFIDENCE THRESHOLD"), "Settings option [1] is SIGINT confidence threshold");
+            screenManager.HandleKeyDown(System.Windows.Input.Key.D1);
+            Assert(screenManager.CurrentState == ScreenState.SettingsMenu, "Settings [1] does not open an AI connection screen");
+            typeof(TerminalScreenManager).GetField("_state", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .SetValue(screenManager, ScreenState.WarRoomPrimary);
+
             // Select [1]
             screenManager.HandleKeyDown(System.Windows.Input.Key.D1);
             Assert(screenManager.CurrentState == ScreenState.TbdDomain, "War Room option [1] routes to TbdDomain screen");
