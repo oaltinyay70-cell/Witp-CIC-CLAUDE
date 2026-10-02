@@ -1,6 +1,6 @@
-CANONICAL REPOSITORY IDENTIFIER: witp-cic-muthur
-REPOSITORY PATH: C:\Users\ozgur\Documents\Witp-CIC-MUTHUR
+CANONICAL REPOSITORY IDENTIFIER: Witp-CIC-CLAUDE
+REPOSITORY PATH: C:\Users\ozgur\Documents\Witp-CIC-CLAUDE
 PRODUCT: ROCHEFORT 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM
-ACTIVE GITHUB REMOTE: https://github.com/oaltinyay70-cell/WITP-CIC-MUTHUR.git (branch main)
-UPSTREAM BASELINE: Witp-CIC2 (Alpha 3 locked baseline reference)
+GITHUB REMOTE: https://github.com/oaltinyay70-cell/Witp-CIC-CLAUDE.git (branch main)
+NOTE: the old repo/folder name Witp-CIC-MUTHUR is retired. Do not push there.
 STATUS: ACTIVE MASTER

@@ -39,10 +39,14 @@ Game folder: `C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE`
 - `wpae0NN.pws` saves (001–004, 021–023 present): gzip + 61 zlib records (see `docs/pws-knowledge-summary.md`,
   `docs/pws-field-map.md`). Ship rows 464 B; sunk = `19999` @36; hex @352/354. Live hex/fuel/arrival
   offsets are treated as verified (cross-checked via `assets/Allied_Fleet_25Dec41.xlsx`).
+- **Campaign save rule (owner, 2026-10-02):** only the one `.pws` that belongs to the campaign is used. For this
+  campaign it is `wpae021.pws`; for other campaigns it may be another number. `wpae001–004` are game-special files,
+  not saves; `wpae022/023` are not used. The wizard therefore asks which `.pws` is the campaign save, and the vault
+  remembers it. The game overwrites that file each turn, so each turn's decoded Allied snapshot is stored in the vault.
 - Ignore: `updateReport.txt`, `autosave\`, `SAFE ARCH\`, `archive.rar`, `placeholder.txt`.
 - Japanese-prefixed files (`j*`) are fog-of-war stubs; not used.
 
-## 5. Campaign vault (`.wic`) — PROPOSED, needs approval
+## 5. Campaign vault (`.wic`) — APPROVED 2026-10-02
 Single ZIP container (System.IO.Compression, no new dependency) at `C:\WitP-CIC\Campaigns\<name>.wic`:
 - `manifest.json` — campaign name, side (Allied), source folders, schema version, ingested-file ledger
   (name, type, date, size, hash) so Continue only ingests what is new.
@@ -66,8 +70,22 @@ Wizard: Japanese side option removed for v1; password step kept as reference-onl
 - 2026-10-02 Allied only for v1. Real campaigns never scan sample/golden data. Foundations (vault, scan hygiene) first.
 - 2026-10-02 Old backups/exes moved to `_archive/` (git-ignored); kept newest backup and build 33.
 
-## 8. Open questions
-1. Approve the vault layout in section 5?
-2. Real campaign start: first save is wpae001 (dated?) — which saves/days should the Allied history start from?
-3. Which of the 14 "pillar" services should be kept vs pruned as unused (e.g. EntityStateMachine is test-only)?
-4. Build workflow: do you build with `build_release.ps1` or Visual Studio?
+## 8. Parked analytics ("pillars") — kept as a list, no placement decided
+Streaming parser; temporal decay; hotspot clustering; entity resolution + state machine + event bus; hex geo-math;
+reactive world state; strategic rules engine; sensor reliability weighting; supply-network graph; air-denial heatmap;
+Bayesian corroboration; advance-momentum prediction; temporal-gap detection; hazard/minefield layer; semantic concept graph.
+Code stays in `Core/Analytics`; none is being extended until the owner assigns pages for them.
+
+## 9. Tooling findings (2026-10-02)
+- Cloud side: .NET 8 SDK installed; NuGet and the Windows desktop pack are blocked, so the WPF app cannot be built
+  there. The non-UI core (`Core/` minus `Controller`) compiles there with a stand-in for SharpZipLib, so new core
+  code (e.g. the vault) can be compile-checked and unit-tested before you build.
+- Your PC builds the real app (`build_release.ps1`). Exact commands are given with each change; paste back output.
+- GitHub: no account is linked to this session, so pushes are done by the owner (see CHANGELOG).
+
+## 10. Language / UI latitude
+Owner allows a new language and/or new UI at my discretion. Current position: keep C#/.NET (existing 20k lines,
+parsers and tests are reusable); the UI shell (WPF terminal text grid) may be replaced later once the data layer is solid.
+
+## 11. Open questions
+1. Which new pages should host the deleted Intelligence Summary / SIGINT Map / TPIE / Predictive functions? (owner, later)
