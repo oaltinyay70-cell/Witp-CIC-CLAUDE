@@ -56,6 +56,7 @@ namespace ROCHEFORT6000.Core.Vault
         public int Superseded { get; set; }
         public int Unchanged { get; set; }
         public int SkippedUndated { get; set; }
+        public Dictionary<string, int> NewByType { get; } = new();
         public List<string> Warnings { get; } = new();
         public int TotalNew => NewReports + NewSnapshots;
     }
@@ -241,6 +242,7 @@ namespace ROCHEFORT6000.Core.Vault
                     StoredAs = key
                 });
                 if (isPws) result.NewSnapshots++; else result.NewReports++;
+                result.NewByType[f.FileType] = result.NewByType.GetValueOrDefault(f.FileType) + 1;
             }
             return result;
         }
@@ -309,7 +311,12 @@ namespace ROCHEFORT6000.Core.Vault
                 manifest.Files.Add(new DiscoveredFile { FileName = name, FullPath = full, FileType = type, DateYYMMDD = date });
                 manifest.UniqueDates.Add(date);
             }
-            foreach (var d in SnapshotDates) manifest.UniqueDates.Add(d);
+            foreach (var d in SnapshotDates)
+            {
+                // Snapshots are restored from the vault, not from a file: FullPath stays empty.
+                manifest.Files.Add(new DiscoveredFile { FileName = $"{d}.json", FullPath = string.Empty, FileType = "PWS_SAVE", DateYYMMDD = d });
+                manifest.UniqueDates.Add(d);
+            }
 
             manifest.DaysProcessed = manifest.UniqueDates.Count;
             if (manifest.UniqueDates.Count > 0)

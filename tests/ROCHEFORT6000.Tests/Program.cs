@@ -161,8 +161,9 @@ namespace ROCHEFORT6000.Tests
 
             // ── Test Suite 7: Terminal Screen Manager Flow & Navigation ─────────────
             Console.WriteLine("\n--- TEST SUITE 7: Terminal Screen Manager Flow ---");
-            var screenManager = new TerminalScreenManager { ScanOptionsOverride = ScanOptions.TestMode };
-            screenManager.InitializeData(searchPaths);
+            string wizVaultDir = Path.Combine(Path.GetTempPath(), "r6k_wiz_" + Guid.NewGuid().ToString("N"));
+            var screenManager = new TerminalScreenManager { ScanOptionsOverride = ScanOptions.TestMode, VaultDirectory = wizVaultDir };
+            screenManager.SetWizardFolders(searchPaths);
             Assert(screenManager.CurrentState == ScreenState.Boot, "ScreenManager starts in Boot state");
             string bootScreenText = screenManager.BuildCurrentScreen();
             Assert(bootScreenText.Contains("ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC"), "Boot screen contains ROCHEFORT 6000 header");
@@ -174,23 +175,22 @@ namespace ROCHEFORT6000.Tests
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.N);
             Assert(screenManager.CurrentState == ScreenState.NewCampaignWizard, "StartScreen -> NewCampaignWizard on [N]");
-            Assert(screenManager.IsAwaitingTextInput == false, "Step 1 awaiting side toggle (not text input)");
-
-            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == true, "Step 2 awaiting password text input");
+            Assert(screenManager.IsAwaitingTextInput == true, "Step 1 awaiting campaign name text input");
 
             screenManager.HandleCharInput('T');
             screenManager.HandleCharInput('E');
             screenManager.HandleCharInput('S');
             screenManager.HandleCharInput('T');
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == false, "Step 3 folder list active");
+            Assert(screenManager.IsAwaitingTextInput == false, "Step 2 folder list active");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == true, "Step 4 campaign name text input active");
+            Assert(screenManager.CurrentState == ScreenState.NewCampaignWizard && screenManager.BuildCurrentScreen().Contains("STEP 3/3"), "Step 3 campaign .pws picker shown");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.CurrentState == ScreenState.VaultIngestion, "Step 4 -> VaultIngestion on Enter");
+            Assert(screenManager.CurrentState == ScreenState.VaultIngestion, "Step 3 -> VaultIngestion on Enter (vault created)");
+            Assert(File.Exists(Path.Combine(wizVaultDir, "TEST.wic")), "Wizard wrote TEST.wic into the vault folder");
+            Assert(screenManager.CampaignName == "TEST", "Active campaign name is TEST");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.MasterMenu, "VaultIngestion -> MasterMenu on Enter");
@@ -505,33 +505,8 @@ namespace ROCHEFORT6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // HeuristicsPopUp -> Heuristics
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // Heuristics -> WarRoomPrimary
 
-            // Verify Japanese Side (Vice Admiral Ugaki) Advisor Comments
-            var jpnManager = new TerminalScreenManager();
-            jpnManager.InitializeData(searchPaths);
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Boot -> StartScreen
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.N);     // StartScreen -> NewCampaignWizard
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Down);  // Toggle side to Japanese
-            Assert(jpnManager.IsAllied == false, "Japanese faction selected in wizard (IsAllied == false)");
-            Assert(jpnManager.CampaignSide == "Japanese", "Campaign side is Japanese");
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 1 -> Step 2
-            jpnManager.HandleCharInput('P'); jpnManager.HandleCharInput('A'); jpnManager.HandleCharInput('S'); jpnManager.HandleCharInput('S');
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 2 -> Step 3
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 3 -> Step 4
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 4 -> VaultIngestion
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // VaultIngestion -> MasterMenu
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.A);     // MasterMenu -> WarRoomPrimary
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.D6);    // WarRoomPrimary -> Heuristics
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Heuristics -> HeuristicsPopUp
-
-            string jpnHeuristicsComment = jpnManager.GetRochefortComment();
-            Assert(!string.IsNullOrEmpty(jpnHeuristicsComment), "Ugaki comment generated for Japanese HeuristicsPopUp");
-            Assert(jpnHeuristicsComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET THEATER APPRAISAL"), "Japanese advisor is Vice Admiral Ugaki");
-
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // HeuristicsPopUp -> ReasoningModal
-            string jpnReasoningComment = jpnManager.GetRochefortComment();
-            Assert(!string.IsNullOrEmpty(jpnReasoningComment), "Ugaki comment generated for Japanese ReasoningModal");
-            Assert(jpnReasoningComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET CHIEF OF STAFF"), "Japanese reasoning comment contains Ugaki header");
-            Assert(jpnReasoningComment.Contains("SENKUN") || jpnReasoningComment.Contains("KANTOKU") || jpnReasoningComment.Contains("SENKOROKU"), "Japanese reasoning contains authentic IJN doctrine/diary terms");
+            // v1 is Allied-only: the campaign side is fixed, no Japanese advisor path.
+            Assert(screenManager.IsAllied && screenManager.CampaignSide == "Allied", "Campaign side is fixed to Allied (v1)");
 
             // ── Test Suite 13: Interactive Calendar Picker & TBD Domain Retirement ────
             Console.WriteLine("\n--- TEST SUITE 13: Interactive Calendar Picker & TBD Domain Retirement ---");
@@ -871,7 +846,8 @@ namespace ROCHEFORT6000.Tests
 
                 var cache = Path.Combine(vdir, "cache");
                 var mat = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic).MaterializeManifest(cache);
-                Assert(mat.Files.Count == 2 && mat.Files.All(f => File.Exists(f.FullPath)), "Vault materialises reports for the parsers");
+                Assert(mat.Files.Count(f => f.FileType != "PWS_SAVE") == 2 && mat.Files.Where(f => f.FileType != "PWS_SAVE").All(f => File.Exists(f.FullPath)), "Vault materialises reports for the parsers");
+                if (havePws) Assert(mat.Files.Count(f => f.FileType == "PWS_SAVE") == 1, "Vault manifest lists the stored save snapshot");
 
                 var fromVault = new WarRoomAnalytics();
                 var vv = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic);

@@ -185,6 +185,7 @@ namespace ROCHEFORT6000.Core.Ingestion
         }
 
         private static readonly string[] IgnoredDirNames = { "autosave", "safe arch", "_to_delete", "_archive" };
+        private static readonly Regex JapaneseSideFile = new Regex(@"^j(sigint|operationsreport|combatreport|combat_events|combatevents)", RegexOptions.Compiled);
         private static readonly string[] IgnoredFileNames = { "updatereport.txt", "archive.rar", "placeholder.txt" };
 
         /// <summary>True for game-folder clutter that must never be ingested.</summary>
@@ -192,6 +193,8 @@ namespace ROCHEFORT6000.Core.Ingestion
         {
             string name = Path.GetFileName(filePath).ToLowerInvariant();
             if (Array.IndexOf(IgnoredFileNames, name) >= 0) return true;
+            // j* reports (jsigint, joperationsreport, ...) are the Japanese side's files - Allied-only v1 never ingests them.
+            if (JapaneseSideFile.IsMatch(name)) return true;
 
             string rel;
             try { rel = Path.GetRelativePath(scanRoot, Path.GetDirectoryName(filePath) ?? scanRoot); }

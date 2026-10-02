@@ -8,6 +8,7 @@ using ROCHEFORT6000.Core.Analytics;
 using ROCHEFORT6000.Core.Common;
 using ROCHEFORT6000.Core.Database;
 using ROCHEFORT6000.Core.Ingestion;
+using ROCHEFORT6000.Core.Vault;
 
 namespace ROCHEFORT6000.Core.Controller
 {
@@ -88,29 +89,33 @@ namespace ROCHEFORT6000.Core.Controller
         // ── Start Screen ─────────────────────────────────────────────────────
         private int _startScreenSel = 0;           // 0=New 1=Continue 2=Exit
 
-        // ── New Campaign Wizard ──────────────────────────────────────────────
-        private int _wizardStep = 1;               // 1-4
-        private string _wizardSide = "Allied";     // "Allied" | "Japanese"
-        private int _wizardSideSel = 0;            // 0=Allied 1=Japanese
-        private string _wizardPassword = "";
+        // ── New Campaign Wizard (Allied only, v1) ────────────────────────────
+        private int _wizardStep = 1;               // 1 = name, 2 = game folders, 3 = campaign .pws
+        private const string _wizardSide = "Allied";
         private readonly List<string> _wizardDirs = new()
         {
             @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE",
-            @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive",
-            @"sample_data",
-            @"docs\golden",
-            @"archive"
+            @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive"
         };
-        private string _wizardCampaignName = "WITP_CAMPAIGN";
+        private string _wizardCampaignName = "";
         private string _wizardDirInput = "";
         private string _wizardNameInput = "";
         private bool _wizardAwaitingDirInput = false;
-        private string _wizardPwdInput = "";
+        private string _wizardError = "";
+        private readonly List<(string Path, string Date, long Size)> _wizardPwsCandidates = new();
+        private int _wizardPwsSel = 0;
+
+        // ── Campaign vault (.wic) ────────────────────────────────────────────
+        private CampaignVault? _vault;
+        private VaultIngestResult? _lastIngest;
 
         // ── Continue Campaign ────────────────────────────────────────────────
         private readonly List<string> _vaultFiles = new();
         private int _continueSel = 0;
-        private const string VaultDir = @"C:\WitP-CIC\Campaigns";
+        private string _continueError = "";
+
+        /// <summary>Folder holding the .wic campaign vaults. Tests point this at a temp folder.</summary>
+        public string VaultDirectory { get; set; } = @"C:\WitP-CIC\Campaigns";
 
         // ── Master Menu Selection ────────────────────────────────────────────
         private int _masterMenuSel = 0;
@@ -476,7 +481,7 @@ namespace ROCHEFORT6000.Core.Controller
 
         public ScreenState CurrentState => _state;
         public string CampaignSide => _wizardSide;
-        public bool IsAllied => _wizardSideSel == 0;
+        public bool IsAllied => true;   // v1 is Allied-only
 
         public event Action<string, bool>? ScreenRenderRequested;
         public event Action? ShutdownRequested;
@@ -485,8 +490,7 @@ namespace ROCHEFORT6000.Core.Controller
         public TerminalScreenManager()
         {
             InitializeWikiTree();
-            InitializeFieldManual();
-            InitializeData();
+            InitializeFieldManual();   // data is loaded only when a campaign vault is created or continued
         }
 
         private static string FindProjectRootDir()
@@ -704,14 +708,13 @@ namespace ROCHEFORT6000.Core.Controller
         private void LaunchNewCampaignWizard()
         {
             _wizardStep = 1;
-            _wizardSide = "Allied";
-            _wizardSideSel = 0;
-            _wizardPassword = "";
-            _wizardCampaignName = "WITP_CAMPAIGN";
+            _wizardCampaignName = "";
             _wizardDirInput = "";
             _wizardNameInput = "";
-            _wizardPwdInput = "";
+            _wizardError = "";
             _wizardAwaitingDirInput = false;
+            _wizardPwsCandidates.Clear();
+            _wizardPwsSel = 0;
             _state = ScreenState.NewCampaignWizard;
             RenderCurrentScreen();
         }
@@ -720,10 +723,11 @@ namespace ROCHEFORT6000.Core.Controller
         {
             _vaultFiles.Clear();
             _continueSel = 0;
+            _continueError = "";
             try
             {
-                Directory.CreateDirectory(VaultDir);
-                foreach (var f in Directory.GetFiles(VaultDir, "*.wic"))
+                Directory.CreateDirectory(VaultDirectory);
+                foreach (var f in Directory.GetFiles(VaultDirectory, "*" + CampaignVault.Extension).OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
                     _vaultFiles.Add(System.IO.Path.GetFileName(f));
             }
             catch { }
@@ -732,89 +736,58 @@ namespace ROCHEFORT6000.Core.Controller
         }
 
         public bool IsAwaitingTextInput =>
-            (_state == ScreenState.NewCampaignWizard && (_wizardStep == 2 || (_wizardStep == 3 && _wizardAwaitingDirInput) || _wizardStep == 4))
+            (_state == ScreenState.NewCampaignWizard && (_wizardStep == 1 || (_wizardStep == 2 && _wizardAwaitingDirInput)))
             || (_state == ScreenState.DossierSearch && _dossierSearching)
             || (_state == ScreenState.TemporalFilterModal && _filterTextEntryActive);
 
-        // ── New Campaign Wizard ──────────────────────────────────────────────
+        // ── New Campaign Wizard (Allied only) ────────────────────────────────
         private void HandleNewCampaignWizard(System.Windows.Input.Key key)
         {
             switch (_wizardStep)
             {
-                case 1: HandleWizardStep1(key); break;
-                case 2: HandleWizardStep2(key); break;
-                case 3: HandleWizardStep3(key); break;
-                case 4: HandleWizardStep4(key); break;
+                case 1: HandleWizardStepName(key); break;
+                case 2: HandleWizardStepFolders(key); break;
+                case 3: HandleWizardStepSave(key); break;
             }
         }
 
-        private void HandleWizardStep1(System.Windows.Input.Key key)
-        {
-            switch (key)
-            {
-                case System.Windows.Input.Key.A:
-                    _wizardSide = "Allied"; _wizardSideSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.J:
-                    _wizardSide = "Japanese"; _wizardSideSel = 1;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    _wizardSideSel = (_wizardSideSel - 1 + 2) % 2;
-                    _wizardSide = _wizardSideSel == 0 ? "Allied" : "Japanese";
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                case System.Windows.Input.Key.Tab:
-                    _wizardSideSel = (_wizardSideSel + 1) % 2;
-                    _wizardSide = _wizardSideSel == 0 ? "Allied" : "Japanese";
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    _wizardStep = 2;
-                    _wizardPwdInput = "";
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.StartScreen;
-                    RenderCurrentScreen();
-                    break;
-            }
-        }
-
-        private void HandleWizardStep2(System.Windows.Input.Key key)
+        private void HandleWizardStepName(System.Windows.Input.Key key)
         {
             if (key == System.Windows.Input.Key.Escape)
             {
-                _wizardStep = 1;
+                _state = ScreenState.StartScreen;
                 RenderCurrentScreen();
                 return;
             }
             if (key == System.Windows.Input.Key.Enter)
             {
-                _wizardPassword = _wizardPwdInput;
-                _wizardStep = 3;
+                string name = _wizardNameInput.Trim();
+                if (name.Length == 0)
+                {
+                    _wizardError = "Enter a campaign name.";
+                }
+                else if (File.Exists(CampaignVault.PathFor(VaultDirectory, name)))
+                {
+                    _wizardError = $"A campaign named '{name}' already exists. Pick another name, or use Continue.";
+                }
+                else
+                {
+                    _wizardCampaignName = name;
+                    _wizardError = "";
+                    _wizardStep = 2;
+                }
                 RenderCurrentScreen();
                 return;
             }
-            if (key == System.Windows.Input.Key.Back)
+            if (key == System.Windows.Input.Key.Back && _wizardNameInput.Length > 0)
             {
-                if (_wizardPwdInput.Length > 0)
-                {
-                    _wizardPwdInput = _wizardPwdInput.Substring(0, _wizardPwdInput.Length - 1);
-                    RenderCurrentScreen();
-                }
-                return;
+                _wizardNameInput = _wizardNameInput.Substring(0, _wizardNameInput.Length - 1);
+                _wizardError = "";
+                RenderCurrentScreen();
             }
         }
 
-        private void HandleWizardStep3(System.Windows.Input.Key key)
+        private void HandleWizardStepFolders(System.Windows.Input.Key key)
         {
             if (_wizardAwaitingDirInput)
             {
@@ -823,24 +796,18 @@ namespace ROCHEFORT6000.Core.Controller
                     _wizardAwaitingDirInput = false;
                     _wizardDirInput = "";
                     RenderCurrentScreen();
-                    return;
                 }
-                if (key == System.Windows.Input.Key.Enter)
+                else if (key == System.Windows.Input.Key.Enter)
                 {
                     if (!string.IsNullOrWhiteSpace(_wizardDirInput)) _wizardDirs.Add(_wizardDirInput.Trim());
                     _wizardDirInput = "";
                     _wizardAwaitingDirInput = false;
                     RenderCurrentScreen();
-                    return;
                 }
-                if (key == System.Windows.Input.Key.Back)
+                else if (key == System.Windows.Input.Key.Back && _wizardDirInput.Length > 0)
                 {
-                    if (_wizardDirInput.Length > 0)
-                    {
-                        _wizardDirInput = _wizardDirInput.Substring(0, _wizardDirInput.Length - 1);
-                        RenderCurrentScreen();
-                    }
-                    return;
+                    _wizardDirInput = _wizardDirInput.Substring(0, _wizardDirInput.Length - 1);
+                    RenderCurrentScreen();
                 }
                 return;
             }
@@ -848,9 +815,8 @@ namespace ROCHEFORT6000.Core.Controller
             switch (key)
             {
                 case System.Windows.Input.Key.Enter:
-                    InitializeData(_wizardDirs);
-                    _wizardStep = 4;
-                    _wizardNameInput = "";
+                    RefreshPwsCandidates();
+                    _wizardStep = 3;
                     RenderCurrentScreen();
                     break;
 
@@ -861,37 +827,151 @@ namespace ROCHEFORT6000.Core.Controller
                     break;
 
                 case System.Windows.Input.Key.Escape:
+                    _wizardStep = 1;
+                    RenderCurrentScreen();
+                    break;
+            }
+        }
+
+        private void HandleWizardStepSave(System.Windows.Input.Key key)
+        {
+            int total = _wizardPwsCandidates.Count;
+            switch (key)
+            {
+                case System.Windows.Input.Key.Up when total > 0:
+                    _wizardPwsSel = (_wizardPwsSel - 1 + total) % total;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Down when total > 0:
+                case System.Windows.Input.Key.Tab when total > 0:
+                    _wizardPwsSel = (_wizardPwsSel + 1) % total;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    CreateCampaignFromWizard(total > 0 ? _wizardPwsCandidates[_wizardPwsSel].Path : null);
+                    break;
+
+                case System.Windows.Input.Key.S:
+                    CreateCampaignFromWizard(null);
+                    break;
+
+                case System.Windows.Input.Key.Escape:
                     _wizardStep = 2;
                     RenderCurrentScreen();
                     break;
             }
         }
 
-        private void HandleWizardStep4(System.Windows.Input.Key key)
+        // ── Campaign vault orchestration ─────────────────────────────────────
+
+        /// <summary>Tests only: replaces the wizard's game-folder list.</summary>
+        public void SetWizardFolders(IEnumerable<string> dirs)
         {
-            if (key == System.Windows.Input.Key.Escape)
+            _wizardDirs.Clear();
+            _wizardDirs.AddRange(dirs);
+        }
+
+        public string CampaignName => _vault?.Manifest.CampaignName ?? string.Empty;
+
+        private List<string> ExistingWizardDirs()
+        {
+            string root = FindProjectRootDir();
+            var result = new List<string>();
+            foreach (var d in _wizardDirs)
             {
-                _wizardStep = 3;
-                RenderCurrentScreen();
-                return;
-            }
-            if (key == System.Windows.Input.Key.Enter)
-            {
-                if (!string.IsNullOrWhiteSpace(_wizardNameInput))
-                    _wizardCampaignName = _wizardNameInput.Trim();
-                _state = ScreenState.VaultIngestion;
-                RenderCurrentScreen();
-                return;
-            }
-            if (key == System.Windows.Input.Key.Back)
-            {
-                if (_wizardNameInput.Length > 0)
+                var candidates = System.IO.Path.IsPathRooted(d)
+                    ? new[] { d }
+                    : new[] { System.IO.Path.Combine(root, d), System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, d) };
+                foreach (var c in candidates)
                 {
-                    _wizardNameInput = _wizardNameInput.Substring(0, _wizardNameInput.Length - 1);
-                    RenderCurrentScreen();
+                    if (Directory.Exists(c) && !result.Contains(c, StringComparer.OrdinalIgnoreCase)) { result.Add(c); break; }
                 }
-                return;
             }
+            return result;
+        }
+
+        private void RefreshPwsCandidates()
+        {
+            _wizardPwsCandidates.Clear();
+            _wizardPwsSel = 0;
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var dir in ExistingWizardDirs())
+            {
+                try
+                {
+                    foreach (var f in Directory.GetFiles(dir, "*.pws").OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+                    {
+                        string full = System.IO.Path.GetFullPath(f);
+                        if (!seen.Add(full)) continue;
+                        _wizardPwsCandidates.Add((full, FileScanner.ExtractDateFromPws(full), new FileInfo(full).Length));
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private ScanOptions MakeScanOptions(string? campaignPws)
+            => ScanOptionsOverride ?? new ScanOptions { CampaignPwsPath = string.IsNullOrWhiteSpace(campaignPws) ? null : campaignPws };
+
+        private static string CacheDirFor(string campaignName)
+        {
+            string stem = System.IO.Path.GetFileNameWithoutExtension(CampaignVault.PathFor("x", campaignName));
+            return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WitP-CIC", "cache", stem);
+        }
+
+        private void CreateCampaignFromWizard(string? campaignPws)
+        {
+            try
+            {
+                Directory.CreateDirectory(VaultDirectory);
+                var dirs = ExistingWizardDirs();
+                string path = CampaignVault.PathFor(VaultDirectory, _wizardCampaignName);
+                var vault = CampaignVault.Create(path, _wizardCampaignName, dirs, campaignPws);
+                CampaignPwsPath = campaignPws;
+                var scanned = FileScanner.ScanDirectories(dirs, MakeScanOptions(campaignPws));
+                var result = vault.Ingest(scanned);
+                vault.Save();
+                FinishVaultLoad(vault, result);
+            }
+            catch (Exception ex)
+            {
+                _wizardError = $"Could not create campaign vault: {ex.Message}";
+                _wizardStep = 1;
+                RenderCurrentScreen();
+            }
+        }
+
+        private void LoadExistingCampaign(string wicPath)
+        {
+            try
+            {
+                var vault = CampaignVault.Open(wicPath);
+                string? pws = string.IsNullOrWhiteSpace(vault.Manifest.CampaignPws) ? null : vault.Manifest.CampaignPws;
+                CampaignPwsPath = pws;
+                var dirs = vault.Manifest.SourceFolders.Where(Directory.Exists).ToList();
+                var result = vault.Ingest(FileScanner.ScanDirectories(dirs, MakeScanOptions(pws)));
+                if (result.TotalNew > 0 || result.Superseded > 0) vault.Save();
+                FinishVaultLoad(vault, result);
+            }
+            catch (Exception ex)
+            {
+                _continueError = $"Could not load {System.IO.Path.GetFileName(wicPath)}: {ex.Message}";
+                RenderCurrentScreen();
+            }
+        }
+
+        /// <summary>Purges memory and rebuilds all analytics from the vault contents.</summary>
+        private void FinishVaultLoad(CampaignVault vault, VaultIngestResult result)
+        {
+            _vault = vault;
+            _lastIngest = result;
+            _wizardCampaignName = vault.Manifest.CampaignName;
+            Manifest = vault.MaterializeManifest(CacheDirFor(vault.Manifest.CampaignName));
+            Analytics.AnalyzeCampaign(Manifest, vault.LoadSnapshots());
+            _state = ScreenState.VaultIngestion;
+            RenderCurrentScreen();
         }
 
         // ── Text character input (called from MainWindow) ────────────────────
@@ -901,15 +981,7 @@ namespace ROCHEFORT6000.Core.Controller
 
             if (_state == ScreenState.NewCampaignWizard)
             {
-                if (_wizardStep == 2)
-                {
-                    if (_wizardPwdInput.Length < 40)
-                    {
-                        _wizardPwdInput += c;
-                        RenderCurrentScreen();
-                    }
-                }
-                else if (_wizardStep == 3 && _wizardAwaitingDirInput)
+                if (_wizardStep == 2 && _wizardAwaitingDirInput)
                 {
                     if (_wizardDirInput.Length < 120)
                     {
@@ -917,11 +989,12 @@ namespace ROCHEFORT6000.Core.Controller
                         RenderCurrentScreen();
                     }
                 }
-                else if (_wizardStep == 4)
+                else if (_wizardStep == 1)
                 {
                     if (_wizardNameInput.Length < 40)
                     {
                         _wizardNameInput += c;
+                        _wizardError = "";
                         RenderCurrentScreen();
                     }
                 }
@@ -978,10 +1051,7 @@ namespace ROCHEFORT6000.Core.Controller
                     break;
 
                 case System.Windows.Input.Key.Enter:
-                    InitializeData();
-                    _wizardCampaignName = System.IO.Path.GetFileNameWithoutExtension(_vaultFiles[_continueSel]);
-                    _state = ScreenState.VaultIngestion;
-                    RenderCurrentScreen();
+                    LoadExistingCampaign(System.IO.Path.Combine(VaultDirectory, _vaultFiles[_continueSel]));
                     break;
             }
         }
@@ -3633,42 +3703,20 @@ namespace ROCHEFORT6000.Core.Controller
 
             if (_wizardStep == 1)
             {
-                AppendSectionHeader(sb, "STEP 1/4: SELECT THEATER COMMAND SIDE");
-                sb.AppendLine("  Which forces do you command in this campaign?\n");
-
-                if (_wizardSideSel == 0)
-                {
-                    sb.AppendLine("    * [A] ALLIED FORCES (Default)\n");
-                    sb.AppendLine("      [J] EMPIRE OF JAPAN\n");
-                }
-                else
-                {
-                    sb.AppendLine("      [A] ALLIED FORCES (Default)\n");
-                    sb.AppendLine("    * [J] EMPIRE OF JAPAN\n");
-                }
+                AppendSectionHeader(sb, "STEP 1/3: CAMPAIGN NAME");
+                sb.AppendLine("  Allied command. The campaign is stored as one vault file:");
+                sb.AppendLine($"  {VaultDirectory}\\<name>{CampaignVault.Extension}\n");
+                sb.AppendLine($"  Campaign Name > {_wizardNameInput}_\n");
+                if (!string.IsNullOrEmpty(_wizardError)) sb.AppendLine($"  ! {_wizardError}\n");
 
                 AppendFooter(sb,
-                    "[A] Allied",
-                    "[J] Japanese",
-                    "[UP/DOWN] Toggle",
-                    "[ENTER] Confirm",
+                    "[ENTER] Next",
                     "[ESC] Return to Start");
             }
             else if (_wizardStep == 2)
             {
-                AppendSectionHeader(sb, "STEP 2/4: PBEM GAME-UI PASSWORD");
-                sb.AppendLine("  Enter your PBEM password (e.g. for Dave's game file).");
-                sb.AppendLine("  NOTE: Stored in vault for reference only; not required for file decryption.\n");
-                sb.AppendLine($"  Password > {_wizardPwdInput}_\n");
-
-                AppendFooter(sb,
-                    "[ENTER] Confirm Password",
-                    "[ESC] Previous Step");
-            }
-            else if (_wizardStep == 3)
-            {
-                AppendSectionHeader(sb, "STEP 3/4: GAME REPORTS & SAVE FOLDERS");
-                sb.AppendLine("  Active Scanned Directories (Press [B] to add more):\n");
+                AppendSectionHeader(sb, "STEP 2/3: GAME REPORTS & SAVE FOLDERS");
+                sb.AppendLine("  Folders scanned for reports and the campaign save (Press [B] to add more):\n");
 
                 for (int i = 0; i < _wizardDirs.Count; i++)
                 {
@@ -3681,29 +3729,42 @@ namespace ROCHEFORT6000.Core.Controller
                 }
 
                 if (_wizardAwaitingDirInput)
-                {
                     sb.AppendLine($"\n  Enter Extra Directory Path > {_wizardDirInput}_");
-                }
                 else
-                {
-                    sb.AppendLine("\n  Press [ENTER] to process files or [B] to add another folder.");
-                }
+                    sb.AppendLine("\n  Press [ENTER] to continue or [B] to add another folder.");
 
                 AppendFooter(sb,
-                    "[ENTER] Process Folders",
+                    "[ENTER] Next",
                     "[B] Add Extra Directory",
                     "[ESC] Previous Step");
             }
-            else if (_wizardStep == 4)
+            else
             {
-                AppendSectionHeader(sb, "STEP 4/4: CAMPAIGN VAULT NAME");
-                sb.AppendLine("  Enter a name for the new campaign vault container.");
-                sb.AppendLine($"  File will be saved to: C:\\WitP-CIC\\Campaigns\\{_wizardCampaignName}.wic\n");
-                string displayName = string.IsNullOrEmpty(_wizardNameInput) ? _wizardCampaignName : _wizardNameInput;
-                sb.AppendLine($"  Campaign Name [Default: {_wizardCampaignName}] > {displayName}_\n");
+                AppendSectionHeader(sb, "STEP 3/3: CAMPAIGN SAVE FILE (.pws)");
+                sb.AppendLine("  Pick the ONE .pws that belongs to this campaign - the game overwrites it each turn.");
+                sb.AppendLine("  Every other .pws is ignored.\n");
+
+                if (_wizardPwsCandidates.Count == 0)
+                {
+                    sb.AppendLine("  No .pws files found in the folders above.");
+                    sb.AppendLine("  [ENTER] creates the campaign from the text reports only.\n");
+                }
+                else
+                {
+                    for (int i = 0; i < _wizardPwsCandidates.Count; i++)
+                    {
+                        var c = _wizardPwsCandidates[i];
+                        string date = string.IsNullOrEmpty(c.Date) ? "??/??/??" : FileScanner.FormatYYMMDD(c.Date);
+                        string mark = i == _wizardPwsSel ? "* [X]" : "  [ ]";
+                        sb.AppendLine($"    {mark} {System.IO.Path.GetFileName(c.Path),-16} game date {date}   {c.Size / 1024.0 / 1024.0,5:F1} MB");
+                    }
+                    sb.AppendLine();
+                }
 
                 AppendFooter(sb,
-                    "[ENTER] Finalize & Ingest",
+                    "[UP/DOWN] Select",
+                    "[ENTER] Create Campaign",
+                    "[S] Reports Only (no save)",
                     "[ESC] Previous Step");
             }
 
@@ -3722,9 +3783,8 @@ namespace ROCHEFORT6000.Core.Controller
 
             if (_vaultFiles.Count == 0)
             {
-                sb.AppendLine($"  NO SAVED CAMPAIGN VAULTS (.wic) FOUND IN {VaultDir}\n");
-                sb.AppendLine("  Please create a new campaign using [N] Start New Campaign.");
-                sb.AppendLine("  Sample telemetry will be automatically ingested.\n");
+                sb.AppendLine($"  NO SAVED CAMPAIGN VAULTS (.wic) FOUND IN {VaultDirectory}\n");
+                sb.AppendLine("  Please create a new campaign using [N] Start New Campaign.\n");
 
                 AppendFooter(sb,
                     "[N] Start New Campaign",
@@ -3744,6 +3804,7 @@ namespace ROCHEFORT6000.Core.Controller
                     }
                     sb.AppendLine();
                 }
+                if (!string.IsNullOrEmpty(_continueError)) sb.AppendLine($"  ! {_continueError}\n");
 
                 AppendFooter(sb,
                     "[UP/DOWN] Select",
@@ -3786,7 +3847,7 @@ namespace ROCHEFORT6000.Core.Controller
                 {
                     string fType = group.Key;
                     int fileCount = group.Count();
-                    int newCount = fileCount; // Ingestion scan detects active batch additions
+                    int newCount = _lastIngest == null ? fileCount : (_lastIngest.NewByType.TryGetValue(fType, out var nn) ? nn : 0);
 
                     var sortedDates = group
                         .Where(f => !string.IsNullOrEmpty(f.DateYYMMDD) && TryParseYYMMDD(f.DateYYMMDD, out _))
@@ -3829,9 +3890,20 @@ namespace ROCHEFORT6000.Core.Controller
                 sb.AppendLine($"  Latest Campaign Date               : --/--/--\n");
             }
 
+            if (_vault != null)
+            {
+                sb.AppendLine($"  Vault : {_vault.FilePath}");
+                if (_lastIngest != null)
+                {
+                    sb.AppendLine($"  This load : +{_lastIngest.NewReports} reports, +{_lastIngest.NewSnapshots} save snapshot(s), {_lastIngest.Unchanged} unchanged, {_lastIngest.Superseded} updated");
+                    foreach (var w in _lastIngest.Warnings.Take(3)) sb.AppendLine($"  ! {w}");
+                }
+                sb.AppendLine();
+            }
+
             AppendSectionHeader(sb, "F I L E   I N V E N T O R Y   ( P W S   &   T X T )");
             int displayCount = 0;
-            foreach (var file in Manifest.Files)
+            foreach (var file in Manifest.Files.OrderByDescending(f => f.DateYYMMDD, StringComparer.Ordinal))
             {
                 string dateInfo = string.IsNullOrEmpty(file.DateYYMMDD) ? "SAVE" : FileScanner.FormatYYMMDD(file.DateYYMMDD);
                 sb.AppendLine($"    [{file.FileType,-14}] {file.FileName,-35} (Date: {dateInfo})");
@@ -3892,7 +3964,7 @@ namespace ROCHEFORT6000.Core.Controller
 
             sb.AppendLine(Rule());
             string titleStr = "[ MASTER MENU ]";
-            string campaignName = Manifest.Files.Count > 0 ? "WITP:AE PBEM CAMPAIGN" : "NO CAMPAIGN LOADED";
+            string campaignName = _vault != null ? _vault.Manifest.CampaignName : (Manifest.Files.Count > 0 ? "WITP:AE PBEM CAMPAIGN" : "NO CAMPAIGN LOADED");
             string rightStr = $"Active Campaign: {campaignName} (Allied Command)";
             int sp = Math.Max(1, W - titleStr.Length - rightStr.Length);
             sb.AppendLine(titleStr + new string(' ', sp) + rightStr);
