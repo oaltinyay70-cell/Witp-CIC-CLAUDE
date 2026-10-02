@@ -399,7 +399,7 @@ namespace ROCHEFORT6000.Core.Analytics
             }
         }
 
-        public bool AnalyzeCampaign(IngestionManifest manifest)
+        public bool AnalyzeCampaign(IngestionManifest manifest, IEnumerable<PwsSnapshot>? vaultSnapshots = null)
         {
             _sightings.Clear();
             _radioIntercepts.Clear();
@@ -460,6 +460,12 @@ namespace ROCHEFORT6000.Core.Analytics
                         ParsePwsFile(file.FullPath, dateToPass);
                         break;
                 }
+            }
+
+            if (vaultSnapshots != null)
+            {
+                foreach (var vs in vaultSnapshots.OrderBy(x => x.Meta.DateYYMMDD, StringComparer.Ordinal))
+                    IngestVaultSnapshot(vs);
             }
 
             ComputeNumericalConfidence(manifest);
@@ -699,12 +705,30 @@ namespace ROCHEFORT6000.Core.Analytics
         private void ParsePwsFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
+            // Ingest via PwsRepository - applies SharpZipLib block scanner,
+            // faction isolation, and full binary field decoding.
+            PwsSnapshot? snapshot;
+            try { snapshot = PwsTimeline.IngestFile(filePath, string.IsNullOrEmpty(dateYYMMDD) ? null : dateYYMMDD); }
+            catch (Exception ex)
+            {
+                _eventLog.Add($"[PWS] Error parsing {System.IO.Path.GetFileName(filePath)}: {ex.Message}");
+                return;
+            }
+            if (snapshot == null) return;
+            ApplyPwsSnapshot(snapshot, dateYYMMDD, System.IO.Path.GetFileName(filePath));
+        }
+
+        /// <summary>Ingests a snapshot restored from the campaign vault (no raw .pws involved).</summary>
+        private void IngestVaultSnapshot(PwsSnapshot snapshot)
+        {
+            PwsTimeline.Ingest(snapshot);
+            ApplyPwsSnapshot(snapshot, snapshot.Meta.DateYYMMDD, $"vault:{snapshot.Meta.DateYYMMDD}");
+        }
+
+        private void ApplyPwsSnapshot(PwsSnapshot snapshot, string dateYYMMDD, string sourceLabel)
+        {
             try
             {
-                // Ingest via PwsRepository — applies SharpZipLib block scanner,
-                // faction isolation, and full binary field decoding.
-                var snapshot = PwsTimeline.IngestFile(filePath, string.IsNullOrEmpty(dateYYMMDD) ? null : dateYYMMDD);
-                if (snapshot == null) return;
 
                 // ── Master System Blueprint: ETL into time-series store ──
                 // Transforms PwsSnapshot → ShipDailyState, TaskForceDailyState,
@@ -789,7 +813,7 @@ namespace ROCHEFORT6000.Core.Analytics
             catch (Exception ex)
             {
                 // Non-fatal — log and continue with other files
-                _eventLog.Add($"[PWS] Error parsing {System.IO.Path.GetFileName(filePath)}: {ex.Message}");
+                _eventLog.Add($"[PWS] Error parsing {sourceLabel}: {ex.Message}");
             }
         }
 

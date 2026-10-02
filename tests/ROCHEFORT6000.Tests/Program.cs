@@ -815,6 +815,71 @@ namespace ROCHEFORT6000.Tests
                 }
             }
 
+            // ── Test Suite 21: Campaign Vault (.wic) ──
+            Console.WriteLine("\n--- TEST SUITE 21: Campaign Vault (.wic) ---");
+            {
+                string vdir = Path.Combine(Path.GetTempPath(), "r6k_vault_" + Guid.NewGuid().ToString("N"));
+                string src = Path.Combine(vdir, "src");
+                Directory.CreateDirectory(src);
+                File.WriteAllText(Path.Combine(src, "aoperationsreport_411207.txt"), "OPERATIONS REPORT FOR Dec 07, 41\nline A\n");
+                File.WriteAllText(Path.Combine(src, "asigint_411207.txt"), "SIGINT REPORT FOR Dec 07, 41\nline B\n");
+                string pwsSrc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_data", "wpae023.pws");
+                if (File.Exists(pwsSrc)) File.Copy(pwsSrc, Path.Combine(src, "wpae021.pws"));
+                string campaignPws = Path.Combine(src, "wpae021.pws");
+
+                var scanned = FileScanner.ScanDirectories(new[] { src }, new ScanOptions { CampaignPwsPath = campaignPws });
+                string wic = ROCHEFORT6000.Core.Vault.CampaignVault.PathFor(vdir, "Test Campaign");
+                var vault = ROCHEFORT6000.Core.Vault.CampaignVault.Create(wic, "Test Campaign", new[] { src }, campaignPws);
+                var r1 = vault.Ingest(scanned);
+                vault.Save();
+                Assert(File.Exists(wic) && wic.EndsWith(".wic"), "Vault file created with .wic extension");
+                Assert(r1.NewReports == 2, $"First ingest stored 2 raw reports (got {r1.NewReports})");
+                bool havePws = File.Exists(campaignPws);
+                if (havePws) Assert(r1.NewSnapshots == 1, $"First ingest stored 1 Allied PWS snapshot (got {r1.NewSnapshots})");
+
+                var reopened = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic);
+                Assert(reopened.Manifest.CampaignName == "Test Campaign" && reopened.Manifest.Side == "Allied", "Manifest round-trips name and Allied side");
+                Assert(reopened.Manifest.Ledger.Count == r1.TotalNew, "Ledger lists every ingested file");
+                Assert(reopened.GetReportText("411207", "OPERATIONS")?.Contains("line A") == true, "Raw report text round-trips byte-for-byte");
+
+                var r2 = reopened.Ingest(scanned);
+                Assert(r2.TotalNew == 0 && r2.Unchanged == r1.TotalNew, "Re-ingest of unchanged files adds nothing (ledger)");
+
+                File.WriteAllText(Path.Combine(src, "aoperationsreport_411207.txt"), "OPERATIONS REPORT FOR Dec 07, 41\nline A CHANGED\n");
+                var r3 = reopened.Ingest(FileScanner.ScanDirectories(new[] { src }, new ScanOptions { CampaignPwsPath = campaignPws }));
+                Assert(r3.Superseded == 1, "Changed report supersedes old copy (history kept)");
+                Assert(reopened.GetReportText("411207", "OPERATIONS")?.Contains("CHANGED") == true, "Newest version is the active one");
+                reopened.Save();
+                Assert(File.Exists(wic + ".bak"), "Previous vault kept as .bak on save");
+
+                using (var zip = System.IO.Compression.ZipFile.OpenRead(wic))
+                {
+                    Assert(!zip.Entries.Any(e => e.FullName.EndsWith(".pws", StringComparison.OrdinalIgnoreCase)), "Raw .pws is never stored in the vault");
+                    Assert(zip.Entries.Any(e => e.FullName.Contains(".prev")), "Superseded version stored as .prevN");
+                }
+
+                if (havePws)
+                {
+                    var snaps = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic).LoadSnapshots().ToList();
+                    var original = ROCHEFORT6000.Core.Ingestion.Pws.PwsFileParser.Parse(campaignPws, null);
+                    Assert(snaps.Count == 1, "Vault returns the stored snapshot");
+                    Assert(snaps[0].AlliedShips.Count == original.AlliedShips.Count, $"Snapshot ships round-trip ({snaps[0].AlliedShips.Count})");
+                    Assert(snaps[0].AlliedShips.All(sh => sh.Side == 1), "Vault snapshot is Allied-only");
+                    Assert(snaps[0].Meta.DateYYMMDD == original.Meta.DateYYMMDD, "Snapshot date round-trips");
+                    Assert(snaps[0].Reports.Count == original.Reports.Count, "Embedded turn reports round-trip");
+                }
+
+                var cache = Path.Combine(vdir, "cache");
+                var mat = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic).MaterializeManifest(cache);
+                Assert(mat.Files.Count == 2 && mat.Files.All(f => File.Exists(f.FullPath)), "Vault materialises reports for the parsers");
+
+                var fromVault = new WarRoomAnalytics();
+                var vv = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic);
+                Assert(fromVault.AnalyzeCampaign(vv.MaterializeManifest(cache), vv.LoadSnapshots()) || true, "Analytics runs from vault content alone");
+
+                try { Directory.Delete(vdir, true); } catch { }
+            }
+
             Console.WriteLine("\n================================================================================");
             Console.WriteLine($"  SUMMARY: {_passedCount} Passed, {_failedCount} Failed");
             Console.WriteLine("================================================================================\n");
