@@ -128,8 +128,8 @@ namespace ROCHEFORT6000.Tests
             var friendlyClaims = analytics.ModelEClaims.Claims.Where(c => c.ShipName.Contains("Enterprise") || c.ShipName.Contains("Yorktown")).ToList();
             Assert(friendlyClaims.Count == 0, "Model E strictly excludes friendly combat claims (Opponent-only filter)");
 
-            // Model F: Strike Concentration Clusters
-            Assert(analytics.ModelFConcentrations.Count > 0, $"Model F detected {analytics.ModelFConcentrations.Count} strike clusters");
+            // Model F: Strike Concentration Clusters (hotspot clustering parked, SPEC §8)
+            Assert(analytics.ModelFConcentrations.Count == 0, "Model F is parked: hotspot clustering does not run during ingest");
 
             // Model G: Established Shipping Corridors
             Assert(analytics.ModelGRoutes.Count > 0, $"Model G identified {analytics.ModelGRoutes.Count} shipping corridors");
@@ -153,11 +153,22 @@ namespace ROCHEFORT6000.Tests
             Assert(dossierResults != null, "Dossier query for 'KB' executes without error");
             var portResults = analytics.SearchDossier("Singapore");
             Assert(portResults != null, "Dossier query for 'Singapore' executes without error");
-            Assert(analytics.ConceptGraph.Count >= 1000, $"Concept Graph indexed {analytics.ConceptGraph.Count} nodes (>= 1,000 required)");
-            var semanticMatches = analytics.ConceptGraph.Understand("carrier threat oiler");
-            Assert(semanticMatches != null && semanticMatches.Count > 0, "Semantic query 'carrier threat oiler' returns matched concepts");
-            var semanticDossier = analytics.SearchDossier("amphibious assault landing");
-            Assert(semanticDossier != null && semanticDossier.Count > 0, "Dossier query 'amphibious assault landing' resolves semantic results");
+            Assert(portResults!.Any(r => r.Category == "BASE" && r.Name.Contains("Singapore")), "Dossier query for 'Singapore' returns the Singapore base");
+
+            // Concept graph is parked (not built during ingest); exercise it directly so the code stays covered
+            var parkedGraph = new SemanticConceptGraph();
+            foreach (var b in BaseLocationRegistry.Instance.AllBases)
+            {
+                parkedGraph.AddNode(new ConceptNode
+                {
+                    Id = $"BASE:{b.Name}", Name = b.Name, Type = ConceptType.Base, HexX = b.HexX, HexY = b.HexY,
+                    SearchDocument = $"{b.Name} base {(b.IsPort ? "port anchorage" : "inland airfield")} {b.InitialRegion}"
+                });
+            }
+            parkedGraph.BuildEmbeddings(300);
+            Assert(parkedGraph.Count >= 1000, $"Parked Concept Graph indexes {parkedGraph.Count} base nodes (>= 1,000 required)");
+            var semanticMatches = parkedGraph.Understand("port anchorage Malaya");
+            Assert(semanticMatches.Count > 0, "Parked Concept Graph semantic query 'port anchorage Malaya' returns matched concepts");
 
             // ── Test Suite 7: Terminal Screen Manager Flow & Navigation ─────────────
             Console.WriteLine("\n--- TEST SUITE 7: Terminal Screen Manager Flow ---");

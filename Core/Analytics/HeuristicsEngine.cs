@@ -121,7 +121,6 @@ namespace ROCHEFORT6000.Core.Analytics
         public List<DailyOptempoRecord> DailyOptempo { get; } = new();
 
         // Strategic Rules Engine Alerts & Recommendations
-        public List<RuleEvaluationResult> RulesEngineAlerts { get; } = new();
 
         public static string ResolveRegion(int hexX, int hexY, string baseName)
         {
@@ -240,7 +239,6 @@ namespace ROCHEFORT6000.Core.Analytics
             // ─────────────────────────────────────────────────────────────────
             // 51. Strategic Rules Engine (Actionable Decision Support Alerts)
             // ─────────────────────────────────────────────────────────────────
-            ComputeStrategicRules(sightings, latestDate);
         }
 
         private void ClearAll()
@@ -255,21 +253,6 @@ namespace ROCHEFORT6000.Core.Analytics
             AxisStepVectors.Clear();
             StrategicDrift = new StepVector();
             DailyOptempo.Clear();
-            RulesEngineAlerts.Clear();
-        }
-
-        private void ComputeStrategicRules(IReadOnlyList<SightingEvent> sightings, string latestDate)
-        {
-            RulesEngineAlerts.Clear();
-            var repo = new WorldStateRepository();
-            foreach (var s in sightings)
-            {
-                repo.GetOrAddUnit(Guid.NewGuid(), s.Description, EntityType.SurfaceShip, new HexCoordinate(s.HexX, s.HexY));
-            }
-            var snapshot = repo.CreateSnapshot(DateOnly.MinValue);
-            var engine = new StrategicRulesEngine();
-            var results = engine.EvaluateAllAsync(snapshot).GetAwaiter().GetResult();
-            RulesEngineAlerts.AddRange(results);
         }
 
         private void ComputeRegionalPowerShift(

@@ -75,6 +75,8 @@ Streaming parser; temporal decay; hotspot clustering; entity resolution + state 
 reactive world state; strategic rules engine; sensor reliability weighting; supply-network graph; air-denial heatmap;
 Bayesian corroboration; advance-momentum prediction; temporal-gap detection; hazard/minefield layer; semantic concept graph.
 Code stays in `Core/Analytics`; none is being extended until the owner assigns pages for them.
+2026-10-02 decision: parked pillars do not run during ingest (code + unit tests kept). Exceptions still running:
+sensor reliability weighting and temporal decay (confidence on retained data); hex geo-math and hazard types are core infrastructure.
 
 ## 9. Tooling findings (2026-10-02)
 - Cloud side: .NET 8 SDK installed; NuGet and the Windows desktop pack are blocked, so the WPF app cannot be built

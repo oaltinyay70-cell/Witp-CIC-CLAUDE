@@ -1,6 +1,12 @@
 # Changelog
 Newest first. History before 2026-10-02 lives in `docs/archive/scope-v1.md` (changelog section).
 
+## 2026-10-02 — Cleanup: pillar services parked (awaiting owner confirmation)
+- Owner decision: stop running unused pillar services, keep code and tests. None of their output reached a screen.
+- No longer run during ingest: concept graph, hotspot clustering (Model F now empty), supply-network graph (Model D status is a fixed line), entity resolution, air-denial heatmap, hazard repository, Bayesian corroboration, advance-momentum predictor, PWS world-state wiring, strategic rules engine.
+- Still running: sensor weighting + time decay (they set confidence on retained HVT/location data); hex geometry and hazard types (used by parsers and the vault).
+- Dossier search keeps name/base matching; semantic fallback removed. Concept graph now tested directly.
+
 ## 2026-10-02 — Cleanup: AI-endpoint settings removed (awaiting owner confirmation)
 - Settings no longer offers "Connect to predictive AI model"; the AI connection screen (provider/endpoint/model/test) is gone. It never made network calls. Settings is now 5 options: SIGINT confidence, strike warship count, strike radius, amphibious sensitivity, save to vault.
 - Tests: Settings has no AI options and `[1]` no longer opens an AI screen.
