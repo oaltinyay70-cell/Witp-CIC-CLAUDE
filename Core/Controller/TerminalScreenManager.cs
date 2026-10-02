@@ -65,7 +65,6 @@ namespace ROCHEFORT6000.Core.Controller
 
         // ── Settings Module ───────────────────────────────────────────────────
         SettingsMenu,
-        AiConnectionMenu,
 
         // ── Exit Confirmation ─────────────────────────────────────────────────
         ExitConfirmModal,
@@ -450,15 +449,10 @@ namespace ROCHEFORT6000.Core.Controller
 
         // ── Settings Module State ────────────────────────────────────────────
         private int _settingsSel = 0;
-        private int _aiConnSel = 0;
-        private int _aiModelProvider = 1;          // 1=Local Heuristics, 2=Ollama, 3=Gemini, 4=Custom
         private string _sigintConfidence = "HIGH"; // "HIGH" | "PROBABLE"
         private int _strikeCruiserThreshold = 3;   // 2 - 6
         private int _strikeHexRadius = 10;         // 5, 10, 15, 20, 25
         private int _invasionSensitivity = 80;     // 60, 70, 80, 90
-        private string _aiEndpointUrl = "in-process://heuristics";
-        private string _aiModelName = "rochefort-heuristics-v1";
-        private bool _aiConnected = true;
 
         public IngestionManifest Manifest { get; private set; } = new();
         public WarRoomAnalytics Analytics { get; private set; } = new();
@@ -609,10 +603,6 @@ namespace ROCHEFORT6000.Core.Controller
 
                 case ScreenState.SettingsMenu:
                     HandleSettingsMenu(key);
-                    break;
-
-                case ScreenState.AiConnectionMenu:
-                    HandleAiConnectionMenu(key);
                     break;
 
                 case ScreenState.ExitConfirmModal:
@@ -2126,17 +2116,11 @@ namespace ROCHEFORT6000.Core.Controller
         // ── Settings Handlers ────────────────────────────────────────────────
         private void HandleSettingsMenu(System.Windows.Input.Key key)
         {
-            const int totalOptions = 6;
+            const int totalOptions = 5;
             switch (key)
             {
                 case System.Windows.Input.Key.Escape:
                     _state = ScreenState.MasterMenu;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D1:
-                    _aiConnSel = 0;
-                    _state = ScreenState.AiConnectionMenu;
                     RenderCurrentScreen();
                     break;
 
@@ -2160,83 +2144,23 @@ namespace ROCHEFORT6000.Core.Controller
                 case System.Windows.Input.Key.Space:
                     if (_settingsSel == 0)
                     {
-                        _aiConnSel = 0;
-                        _state = ScreenState.AiConnectionMenu;
+                        _sigintConfidence = _sigintConfidence == "HIGH" ? "PROBABLE" : "HIGH";
                     }
                     else if (_settingsSel == 1)
                     {
-                        _sigintConfidence = _sigintConfidence == "HIGH" ? "PROBABLE" : "HIGH";
+                        _strikeCruiserThreshold = _strikeCruiserThreshold >= 6 ? 2 : _strikeCruiserThreshold + 1;
                     }
                     else if (_settingsSel == 2)
                     {
-                        _strikeCruiserThreshold = _strikeCruiserThreshold >= 6 ? 2 : _strikeCruiserThreshold + 1;
+                        _strikeHexRadius = _strikeHexRadius >= 25 ? 5 : _strikeHexRadius + 5;
                     }
                     else if (_settingsSel == 3)
                     {
-                        _strikeHexRadius = _strikeHexRadius >= 25 ? 5 : _strikeHexRadius + 5;
+                        _invasionSensitivity = _invasionSensitivity >= 90 ? 60 : _invasionSensitivity + 10;
                     }
                     else if (_settingsSel == 4)
                     {
-                        _invasionSensitivity = _invasionSensitivity >= 90 ? 60 : _invasionSensitivity + 10;
-                    }
-                    else if (_settingsSel == 5)
-                    {
                         // Save to vault
-                    }
-                    RenderCurrentScreen();
-                    break;
-            }
-        }
-
-        private void HandleAiConnectionMenu(System.Windows.Input.Key key)
-        {
-            const int totalOptions = 4;
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.SettingsMenu;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    _aiConnSel = (_aiConnSel - 1 + totalOptions) % totalOptions;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                case System.Windows.Input.Key.Tab:
-                    _aiConnSel = (_aiConnSel + 1) % totalOptions;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.T:
-                    _aiConnected = true;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                case System.Windows.Input.Key.Space:
-                    if (_aiConnSel == 0)
-                    {
-                        _aiModelProvider = (_aiModelProvider % 4) + 1;
-                        if (_aiModelProvider == 1) { _aiEndpointUrl = "in-process://heuristics"; _aiModelName = "rochefort-heuristics-v1"; }
-                        else if (_aiModelProvider == 2) { _aiEndpointUrl = "http://localhost:11434"; _aiModelName = "mistral:latest"; }
-                        else if (_aiModelProvider == 3) { _aiEndpointUrl = "https://generativelanguage.googleapis.com"; _aiModelName = "gemini-1.5-pro"; }
-                        else { _aiEndpointUrl = "http://127.0.0.1:8080/v1"; _aiModelName = "custom-llm"; }
-                    }
-                    else if (_aiConnSel == 1)
-                    {
-                        _aiEndpointUrl = _aiEndpointUrl.Contains("11434") ? "http://127.0.0.1:8000/v1" : "http://localhost:11434";
-                    }
-                    else if (_aiConnSel == 2)
-                    {
-                        if (_aiModelName == "mistral:latest") _aiModelName = "llama3:latest";
-                        else if (_aiModelName == "llama3:latest") _aiModelName = "gemini-1.5-pro";
-                        else _aiModelName = "mistral:latest";
-                    }
-                    else if (_aiConnSel == 3)
-                    {
-                        _aiConnected = true;
                     }
                     RenderCurrentScreen();
                     break;
@@ -2611,7 +2535,6 @@ namespace ROCHEFORT6000.Core.Controller
                 ScreenState.FieldManualMenu         => BuildFieldManualMenuScreen(),
                 ScreenState.FieldManualArticleView  => BuildFieldManualArticleViewScreen(),
                 ScreenState.SettingsMenu            => BuildSettingsMenuScreen(),
-                ScreenState.AiConnectionMenu        => BuildAiConnectionMenuScreen(),
                 ScreenState.ExitConfirmModal        => BuildExitConfirmModal(),
                 ScreenState.TemporalFilterModal     => BuildTemporalFilterModalScreen(),
                 ScreenState.CalendarPickerModal     => BuildCalendarPickerModalScreen(),
@@ -4502,17 +4425,8 @@ namespace ROCHEFORT6000.Core.Controller
             sb.AppendLine();
             AppendSectionHeader(sb, "OPERATIONAL INTELLIGENCE PARAMETERS");
 
-            string aiSummary = _aiModelProvider switch
-            {
-                1 => "Built-in Heuristics",
-                2 => "Ollama Bridge",
-                3 => "Gemini API",
-                _ => "Custom Endpoint"
-            };
-
             string[] options =
             {
-                $"CONNECT TO PREDICTIVE AI MODEL       : [{aiSummary}]",
                 $"ALLIED SIGINT CONFIDENCE THRESHOLD   : [{_sigintConfidence}]",
                 $"STRIKE CONCENTRATION: WARSHIP COUNT  : [{_strikeCruiserThreshold} CRUISERS+]",
                 $"STRIKE CONCENTRATION: SEARCH RADIUS  : [{_strikeHexRadius} HEXES ({_strikeHexRadius * 40} NM)]",
@@ -4532,52 +4446,7 @@ namespace ROCHEFORT6000.Core.Controller
             AppendFooter(sb,
                 "[UP/DOWN] Select",
                 "[ENTER] Open / Toggle",
-                "[1] AI Setup",
                 "[S] Save",
-                "[ESC] Return");
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  AI CONNECTION MENU
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildAiConnectionMenuScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "SYSTEM SETTINGS : PREDICTIVE AI MODEL CONNECTION", TurnInfo());
-            sb.AppendLine();
-            AppendSectionHeader(sb, "AI MODEL INFERENCE BACKEND CONFIGURATION");
-
-            string providerStr = _aiModelProvider switch
-            {
-                1 => "Local Analytical Heuristics Engine [BUILT-IN]",
-                2 => "Local LLM / Ollama Bridge [http://localhost:11434]",
-                3 => "Google Gemini API Strategic Synthesis Engine",
-                _ => "Custom Local Inference Endpoint"
-            };
-            string statusStr = _aiConnected ? "[ CONNECTED : PIPELINE READY ]" : "[ STANDBY / OFFLINE ]";
-
-            string[] options =
-            {
-                "ACTIVE PROVIDER : " + providerStr,
-                "ENDPOINT URL    : " + _aiEndpointUrl,
-                "MODEL NAME      : " + _aiModelName,
-                "STATUS MONITOR  : " + statusStr + " (Press [T] to Test)"
-            };
-
-            for (int i = 0; i < options.Length; i++)
-            {
-                if (i == _aiConnSel)
-                    sb.AppendLine($"  [{i + 1}]  * {options[i]}");
-                else
-                    sb.AppendLine($"  [{i + 1}]    {options[i]}");
-                sb.AppendLine();
-            }
-
-            AppendFooter(sb,
-                "[UP/DOWN] Select",
-                "[ENTER] Change / Toggle",
-                "[T] Test Handshake",
                 "[ESC] Return");
             return sb.ToString();
         }

@@ -1,6 +1,10 @@
 # Changelog
 Newest first. History before 2026-10-02 lives in `docs/archive/scope-v1.md` (changelog section).
 
+## 2026-10-02 — Cleanup: AI-endpoint settings removed (awaiting owner confirmation)
+- Settings no longer offers "Connect to predictive AI model"; the AI connection screen (provider/endpoint/model/test) is gone. It never made network calls. Settings is now 5 options: SIGINT confidence, strike warship count, strike radius, amphibious sensitivity, save to vault.
+- Tests: Settings has no AI options and `[1]` no longer opens an AI screen.
+
 ## 2026-10-02 — Cleanup: War Room dead screens (awaiting owner confirmation)
 - Removed unreachable screens Intelligence Summary (+ detail pop-up and its advisor panel), SIGINT Map, Dossier Search and Predictive Forecasting, plus the Page 5 view-model; ~890 lines. TPIE had no code left.
 - Kept the analytics behind them (HVTs, geospatial log, `SearchDossier`, etc.) for re-homing, and the split-pane components (own tests).
