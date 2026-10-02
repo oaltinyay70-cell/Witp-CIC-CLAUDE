@@ -15,6 +15,20 @@ namespace ROCHEFORT6000.Core.Ingestion
         public string DateYYMMDD { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Scan options. Real campaigns ingest exactly one .pws (the campaign save, e.g. wpae021.pws);
+    /// tests may allow any .pws found under the scanned directories.
+    /// </summary>
+    public sealed class ScanOptions
+    {
+        /// <summary>Full path of the one .pws belonging to the campaign. Null = no .pws is ingested.</summary>
+        public string? CampaignPwsPath { get; set; }
+        /// <summary>Tests only: ingest every .pws under the scanned directories.</summary>
+        public bool AllowAnyPws { get; set; }
+
+        public static ScanOptions TestMode => new ScanOptions { AllowAnyPws = true };
+    }
+
     public class IngestionManifest
     {
         public List<DiscoveredFile> Files { get; set; } = new List<DiscoveredFile>();
@@ -32,6 +46,8 @@ namespace ROCHEFORT6000.Core.Ingestion
         };
 
         private static readonly Regex HeaderDateRegex = new Regex(@"([A-Za-z]{3})\s+(\d{1,2}),\s+(\d{2})", RegexOptions.Compiled);
+        // CombatEvents.txt header: "COMBAT EVENTS FOR 12/27/41" (MM/DD/YY, stamped with the NEXT day).
+        private static readonly Regex NumericHeaderDateRegex = new Regex(@"FOR\s+(\d{1,2})/(\d{1,2})/(\d{2})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex DateCodeRegex = new Regex(@"(\d{6})", RegexOptions.Compiled);
 
         public static string FormatYYMMDD(string yymmdd)
@@ -113,6 +129,20 @@ namespace ROCHEFORT6000.Core.Ingestion
                     string? line = reader.ReadLine();
                     if (line == null) break;
 
+                    var numeric = NumericHeaderDateRegex.Match(line);
+                    if (numeric.Success && line.IndexOf("COMBAT EVENTS", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        int nm = int.Parse(numeric.Groups[1].Value);
+                        int nd = int.Parse(numeric.Groups[2].Value);
+                        int ny = int.Parse(numeric.Groups[3].Value);
+                        try
+                        {
+                            var stamped = new DateTime(1900 + ny, nm, nd).AddDays(-1);
+                            return $"{stamped.Year % 100:D2}{stamped.Month:D2}{stamped.Day:D2}";
+                        }
+                        catch { /* fall through to other formats */ }
+                    }
+
                     int forPos = line.IndexOf("FOR ", StringComparison.OrdinalIgnoreCase);
                     if (forPos != -1)
                     {
@@ -154,8 +184,54 @@ namespace ROCHEFORT6000.Core.Ingestion
             return string.Empty;
         }
 
-        public static IngestionManifest ScanDirectories(IEnumerable<string> directories)
+        private static readonly string[] IgnoredDirNames = { "autosave", "safe arch", "_to_delete", "_archive" };
+        private static readonly Regex JapaneseSideFile = new Regex(@"^j(sigint|operationsreport|combatreport|combat_events|combatevents)", RegexOptions.Compiled);
+        private static readonly string[] IgnoredFileNames = { "updatereport.txt", "archive.rar", "placeholder.txt" };
+
+        /// <summary>True for game-folder clutter that must never be ingested.</summary>
+        internal static bool IsIgnoredPath(string scanRoot, string filePath)
         {
+            string name = Path.GetFileName(filePath).ToLowerInvariant();
+            if (Array.IndexOf(IgnoredFileNames, name) >= 0) return true;
+            // j* reports (jsigint, joperationsreport, ...) are the Japanese side's files - Allied-only v1 never ingests them.
+            if (JapaneseSideFile.IsMatch(name)) return true;
+
+            string rel;
+            try { rel = Path.GetRelativePath(scanRoot, Path.GetDirectoryName(filePath) ?? scanRoot); }
+            catch { return false; }
+            foreach (var seg in rel.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries))
+                if (Array.IndexOf(IgnoredDirNames, seg.ToLowerInvariant()) >= 0) return true;
+            return false;
+        }
+
+        /// <summary>
+        /// The game writes undated live files at the SAVE root that are identical to the newest archived day.
+        /// For every (type, date) keep a single file, preferring the one with the date in its file name (archive).
+        /// </summary>
+        private static void DeduplicateLiveVsArchive(IngestionManifest manifest)
+        {
+            var keep = new List<DiscoveredFile>();
+            foreach (var group in manifest.Files.GroupBy(f => (f.FileType, f.DateYYMMDD)))
+            {
+                var list = group.ToList();
+                if (list.Count == 1 || string.IsNullOrEmpty(group.Key.DateYYMMDD) || group.Key.FileType == "PWS_SAVE")
+                {
+                    keep.AddRange(list);
+                    continue;
+                }
+                var dated = list.FirstOrDefault(f => DateCodeRegex.IsMatch(f.FileName)) ?? list[0];
+                keep.Add(dated);
+            }
+            manifest.Files = keep
+                .OrderBy(f => f.DateYYMMDD, StringComparer.Ordinal)
+                .ThenBy(f => f.FileType, StringComparer.Ordinal)
+                .ToList();
+        }
+
+        public static IngestionManifest ScanDirectories(IEnumerable<string> directories, ScanOptions? options = null)
+        {
+            options ??= new ScanOptions();
+            string? campaignPws = string.IsNullOrWhiteSpace(options.CampaignPwsPath) ? null : Path.GetFullPath(options.CampaignPwsPath);
             var manifest = new IngestionManifest();
             var visitedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var seenFileSignatures = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -180,6 +256,7 @@ namespace ROCHEFORT6000.Core.Ingestion
 
                     foreach (var fpath in filePaths)
                     {
+                        if (IsIgnoredPath(dir, fpath)) continue;
                         string canonicalPath = Path.GetFullPath(fpath);
                         if (!visitedFiles.Add(canonicalPath)) continue;
 
@@ -208,21 +285,17 @@ namespace ROCHEFORT6000.Core.Ingestion
                         {
                             dateCode = ExtractDateFromReportHeader(fpath);
                         }
-                        // User rule: Only process .pws save files located under the canonical SAVE directory
-                        // (e.g. C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE) or test/sample directories.
+                        // Rule: only the ONE .pws that belongs to the campaign is ingested
+                        // (the game overwrites it each turn). Other wpae*.pws are game-special or unused.
                         bool isEligiblePws = false;
                         if (lowerName.EndsWith(".pws"))
                         {
-                            string dirOfFile = Path.GetDirectoryName(canonicalPath) ?? string.Empty;
-                            isEligiblePws = dirOfFile.EndsWith(@"\SAVE", StringComparison.OrdinalIgnoreCase) ||
-                                            dirOfFile.EndsWith(@"/SAVE", StringComparison.OrdinalIgnoreCase) ||
-                                            dirOfFile.IndexOf(@"\SAVE\", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                            dirOfFile.IndexOf(@"/SAVE/", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                            canonicalPath.IndexOf("sample_data", StringComparison.OrdinalIgnoreCase) >= 0;
+                            isEligiblePws = options.AllowAnyPws ||
+                                (campaignPws != null && string.Equals(canonicalPath, campaignPws, StringComparison.OrdinalIgnoreCase));
 
-                            if (isEligiblePws && string.IsNullOrEmpty(dateCode))
+                            if (isEligiblePws)
                             {
-                                dateCode = ExtractDateFromPws(fpath);
+                                dateCode = ExtractDateFromPws(fpath);   // never trust digits in a .pws file name
                             }
                         }
 
@@ -269,6 +342,12 @@ namespace ROCHEFORT6000.Core.Ingestion
                     // Ignore unreadable paths gracefully
                 }
             }
+
+            DeduplicateLiveVsArchive(manifest);
+
+            manifest.UniqueDates.Clear();
+            foreach (var f in manifest.Files)
+                if (!string.IsNullOrEmpty(f.DateYYMMDD)) manifest.UniqueDates.Add(f.DateYYMMDD);
 
             manifest.DaysProcessed = manifest.UniqueDates.Count;
             if (manifest.UniqueDates.Count > 0)

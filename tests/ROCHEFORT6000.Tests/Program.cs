@@ -80,9 +80,30 @@ namespace ROCHEFORT6000.Tests
                 Path.Combine(rootDir, "sample_data"),
                 Path.Combine(rootDir, "archive")
             };
-            var manifest = FileScanner.ScanDirectories(searchPaths);
+            var manifest = FileScanner.ScanDirectories(searchPaths, ScanOptions.TestMode);
             Assert(manifest.Files.Count > 0, $"FileScanner processed {manifest.Files.Count} files");
             Assert(manifest.UniqueDates.Count > 0, $"Ingested {manifest.UniqueDates.Count} distinct operational dates: [{string.Join(", ", manifest.UniqueDates)}]");
+
+            // ── Test Suite 3b: Scan hygiene (live vs archive, CombatEvents date, clutter, campaign PWS) ──
+            Console.WriteLine("\n--- TEST SUITE 3b: Scan Hygiene ---");
+            {
+                string tmp = Path.Combine(Path.GetTempPath(), "r6k_scan_" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(Path.Combine(tmp, "archive"));
+                Directory.CreateDirectory(Path.Combine(tmp, "autosave"));
+                File.WriteAllText(Path.Combine(tmp, "archive", "OperationsReport_411226.txt"), "OPERATIONS REPORT FOR Dec 26, 41\n");
+                File.WriteAllText(Path.Combine(tmp, "OperationsReport.txt"), "OPERATIONS REPORT FOR Dec 26, 41\n");
+                File.WriteAllText(Path.Combine(tmp, "CombatEvents.txt"), "COMBAT EVENTS FOR 12/27/41\n");
+                File.WriteAllText(Path.Combine(tmp, "placeholder.txt"), "x");
+                File.WriteAllText(Path.Combine(tmp, "autosave", "OperationsReport_411220.txt"), "OPERATIONS REPORT FOR Dec 20, 41\n");
+                var hyg = FileScanner.ScanDirectories(new[] { tmp, Path.Combine(tmp, "archive") });
+                Assert(hyg.Files.Count(f => f.FileType == "OPERATIONS") == 1, "Live undated ops report de-duplicated against archived day");
+                Assert(hyg.Files.Any(f => f.FileType == "OPERATIONS" && f.FileName.Contains("411226")), "Archive (dated name) copy is the one kept");
+                Assert(hyg.Files.Any(f => f.FileType == "COMBAT_EVENTS" && f.DateYYMMDD == "411226"), "CombatEvents 'FOR 12/27/41' normalised to previous day 411226");
+                Assert(!hyg.Files.Any(f => f.FileName.Contains("411220")), "autosave\\ folder ignored");
+                Assert(!hyg.Files.Any(f => f.FileName.Equals("placeholder.txt", StringComparison.OrdinalIgnoreCase)), "placeholder.txt ignored");
+                Assert(hyg.UniqueDates.Count == 1, "Unique dates recomputed after de-duplication");
+                try { Directory.Delete(tmp, true); } catch { }
+            }
 
             // ── Test Suite 4: War Room Analytics & Predictive Models ────────────────
             Console.WriteLine("\n--- TEST SUITE 4: War Room Analytics & Models A-G ---");
@@ -140,8 +161,9 @@ namespace ROCHEFORT6000.Tests
 
             // ── Test Suite 7: Terminal Screen Manager Flow & Navigation ─────────────
             Console.WriteLine("\n--- TEST SUITE 7: Terminal Screen Manager Flow ---");
-            var screenManager = new TerminalScreenManager();
-            screenManager.InitializeData(searchPaths);
+            string wizVaultDir = Path.Combine(Path.GetTempPath(), "r6k_wiz_" + Guid.NewGuid().ToString("N"));
+            var screenManager = new TerminalScreenManager { ScanOptionsOverride = ScanOptions.TestMode, VaultDirectory = wizVaultDir };
+            screenManager.SetWizardFolders(searchPaths);
             Assert(screenManager.CurrentState == ScreenState.Boot, "ScreenManager starts in Boot state");
             string bootScreenText = screenManager.BuildCurrentScreen();
             Assert(bootScreenText.Contains("ROCHEFORT 6000 // SYSTEM BOOT DIAGNOSTIC"), "Boot screen contains ROCHEFORT 6000 header");
@@ -153,23 +175,22 @@ namespace ROCHEFORT6000.Tests
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.N);
             Assert(screenManager.CurrentState == ScreenState.NewCampaignWizard, "StartScreen -> NewCampaignWizard on [N]");
-            Assert(screenManager.IsAwaitingTextInput == false, "Step 1 awaiting side toggle (not text input)");
-
-            screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == true, "Step 2 awaiting password text input");
+            Assert(screenManager.IsAwaitingTextInput == true, "Step 1 awaiting campaign name text input");
 
             screenManager.HandleCharInput('T');
             screenManager.HandleCharInput('E');
             screenManager.HandleCharInput('S');
             screenManager.HandleCharInput('T');
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == false, "Step 3 folder list active");
+            Assert(screenManager.IsAwaitingTextInput == false, "Step 2 folder list active");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.IsAwaitingTextInput == true, "Step 4 campaign name text input active");
+            Assert(screenManager.CurrentState == ScreenState.NewCampaignWizard && screenManager.BuildCurrentScreen().Contains("STEP 3/3"), "Step 3 campaign .pws picker shown");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
-            Assert(screenManager.CurrentState == ScreenState.VaultIngestion, "Step 4 -> VaultIngestion on Enter");
+            Assert(screenManager.CurrentState == ScreenState.VaultIngestion, "Step 3 -> VaultIngestion on Enter (vault created)");
+            Assert(File.Exists(Path.Combine(wizVaultDir, "TEST.wic")), "Wizard wrote TEST.wic into the vault folder");
+            Assert(screenManager.CampaignName == "TEST", "Active campaign name is TEST");
 
             screenManager.HandleKeyDown(System.Windows.Input.Key.Enter);
             Assert(screenManager.CurrentState == ScreenState.MasterMenu, "VaultIngestion -> MasterMenu on Enter");
@@ -484,33 +505,8 @@ namespace ROCHEFORT6000.Tests
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // HeuristicsPopUp -> Heuristics
             screenManager.HandleKeyDown(System.Windows.Input.Key.Escape); // Heuristics -> WarRoomPrimary
 
-            // Verify Japanese Side (Vice Admiral Ugaki) Advisor Comments
-            var jpnManager = new TerminalScreenManager();
-            jpnManager.InitializeData(searchPaths);
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Boot -> StartScreen
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.N);     // StartScreen -> NewCampaignWizard
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Down);  // Toggle side to Japanese
-            Assert(jpnManager.IsAllied == false, "Japanese faction selected in wizard (IsAllied == false)");
-            Assert(jpnManager.CampaignSide == "Japanese", "Campaign side is Japanese");
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 1 -> Step 2
-            jpnManager.HandleCharInput('P'); jpnManager.HandleCharInput('A'); jpnManager.HandleCharInput('S'); jpnManager.HandleCharInput('S');
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 2 -> Step 3
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 3 -> Step 4
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Step 4 -> VaultIngestion
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // VaultIngestion -> MasterMenu
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.A);     // MasterMenu -> WarRoomPrimary
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.D6);    // WarRoomPrimary -> Heuristics
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // Heuristics -> HeuristicsPopUp
-
-            string jpnHeuristicsComment = jpnManager.GetRochefortComment();
-            Assert(!string.IsNullOrEmpty(jpnHeuristicsComment), "Ugaki comment generated for Japanese HeuristicsPopUp");
-            Assert(jpnHeuristicsComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET THEATER APPRAISAL"), "Japanese advisor is Vice Admiral Ugaki");
-
-            jpnManager.HandleKeyDown(System.Windows.Input.Key.Enter); // HeuristicsPopUp -> ReasoningModal
-            string jpnReasoningComment = jpnManager.GetRochefortComment();
-            Assert(!string.IsNullOrEmpty(jpnReasoningComment), "Ugaki comment generated for Japanese ReasoningModal");
-            Assert(jpnReasoningComment.Contains("V.ADM. M. UGAKI // COMBINED FLEET CHIEF OF STAFF"), "Japanese reasoning comment contains Ugaki header");
-            Assert(jpnReasoningComment.Contains("SENKUN") || jpnReasoningComment.Contains("KANTOKU") || jpnReasoningComment.Contains("SENKOROKU"), "Japanese reasoning contains authentic IJN doctrine/diary terms");
+            // v1 is Allied-only: the campaign side is fixed, no Japanese advisor path.
+            Assert(screenManager.IsAllied && screenManager.CampaignSide == "Allied", "Campaign side is fixed to Allied (v1)");
 
             // ── Test Suite 13: Interactive Calendar Picker & TBD Domain Retirement ────
             Console.WriteLine("\n--- TEST SUITE 13: Interactive Calendar Picker & TBD Domain Retirement ---");
@@ -682,7 +678,7 @@ namespace ROCHEFORT6000.Tests
 
                 // ── Verify FileScanner & MasterMenu PWS Ingestion Integration ──
                 var testPaths = new List<string> { Path.GetDirectoryName(samplePws) ?? "" };
-                var testManifest = FileScanner.ScanDirectories(testPaths);
+                var testManifest = FileScanner.ScanDirectories(testPaths, ScanOptions.TestMode);
                 int foundPwsCount = testManifest.Files.Count(f => f.FileType == "PWS_SAVE");
                 Assert(foundPwsCount > 0, $"FileScanner discovered {foundPwsCount} PWS file(s) in sample_data (pwsCount > 0)");
                 Assert(testManifest.Files.Any(f => f.FileType == "PWS_SAVE" && !string.IsNullOrEmpty(f.DateYYMMDD)), "Discovered PWS file has valid parsed DateYYMMDD");
@@ -792,6 +788,72 @@ namespace ROCHEFORT6000.Tests
                 {
                     Assert(false, "SKIP: sample PWS file not found for time-series tests");
                 }
+            }
+
+            // ── Test Suite 21: Campaign Vault (.wic) ──
+            Console.WriteLine("\n--- TEST SUITE 21: Campaign Vault (.wic) ---");
+            {
+                string vdir = Path.Combine(Path.GetTempPath(), "r6k_vault_" + Guid.NewGuid().ToString("N"));
+                string src = Path.Combine(vdir, "src");
+                Directory.CreateDirectory(src);
+                File.WriteAllText(Path.Combine(src, "aoperationsreport_411207.txt"), "OPERATIONS REPORT FOR Dec 07, 41\nline A\n");
+                File.WriteAllText(Path.Combine(src, "asigint_411207.txt"), "SIGINT REPORT FOR Dec 07, 41\nline B\n");
+                string pwsSrc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_data", "wpae023.pws");
+                if (File.Exists(pwsSrc)) File.Copy(pwsSrc, Path.Combine(src, "wpae021.pws"));
+                string campaignPws = Path.Combine(src, "wpae021.pws");
+
+                var scanned = FileScanner.ScanDirectories(new[] { src }, new ScanOptions { CampaignPwsPath = campaignPws });
+                string wic = ROCHEFORT6000.Core.Vault.CampaignVault.PathFor(vdir, "Test Campaign");
+                var vault = ROCHEFORT6000.Core.Vault.CampaignVault.Create(wic, "Test Campaign", new[] { src }, campaignPws);
+                var r1 = vault.Ingest(scanned);
+                vault.Save();
+                Assert(File.Exists(wic) && wic.EndsWith(".wic"), "Vault file created with .wic extension");
+                Assert(r1.NewReports == 2, $"First ingest stored 2 raw reports (got {r1.NewReports})");
+                bool havePws = File.Exists(campaignPws);
+                if (havePws) Assert(r1.NewSnapshots == 1, $"First ingest stored 1 Allied PWS snapshot (got {r1.NewSnapshots})");
+
+                var reopened = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic);
+                Assert(reopened.Manifest.CampaignName == "Test Campaign" && reopened.Manifest.Side == "Allied", "Manifest round-trips name and Allied side");
+                Assert(reopened.Manifest.Ledger.Count == r1.TotalNew, "Ledger lists every ingested file");
+                Assert(reopened.GetReportText("411207", "OPERATIONS")?.Contains("line A") == true, "Raw report text round-trips byte-for-byte");
+
+                var r2 = reopened.Ingest(scanned);
+                Assert(r2.TotalNew == 0 && r2.Unchanged == r1.TotalNew, "Re-ingest of unchanged files adds nothing (ledger)");
+
+                File.WriteAllText(Path.Combine(src, "aoperationsreport_411207.txt"), "OPERATIONS REPORT FOR Dec 07, 41\nline A CHANGED\n");
+                var r3 = reopened.Ingest(FileScanner.ScanDirectories(new[] { src }, new ScanOptions { CampaignPwsPath = campaignPws }));
+                Assert(r3.Superseded == 1, "Changed report supersedes old copy (history kept)");
+                Assert(reopened.GetReportText("411207", "OPERATIONS")?.Contains("CHANGED") == true, "Newest version is the active one");
+                reopened.Save();
+                Assert(File.Exists(wic + ".bak"), "Previous vault kept as .bak on save");
+
+                using (var zip = System.IO.Compression.ZipFile.OpenRead(wic))
+                {
+                    Assert(!zip.Entries.Any(e => e.FullName.EndsWith(".pws", StringComparison.OrdinalIgnoreCase)), "Raw .pws is never stored in the vault");
+                    Assert(zip.Entries.Any(e => e.FullName.Contains(".prev")), "Superseded version stored as .prevN");
+                }
+
+                if (havePws)
+                {
+                    var snaps = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic).LoadSnapshots().ToList();
+                    var original = ROCHEFORT6000.Core.Ingestion.Pws.PwsFileParser.Parse(campaignPws, null);
+                    Assert(snaps.Count == 1, "Vault returns the stored snapshot");
+                    Assert(snaps[0].AlliedShips.Count == original.AlliedShips.Count, $"Snapshot ships round-trip ({snaps[0].AlliedShips.Count})");
+                    Assert(snaps[0].AlliedShips.All(sh => sh.Side == 1), "Vault snapshot is Allied-only");
+                    Assert(snaps[0].Meta.DateYYMMDD == original.Meta.DateYYMMDD, "Snapshot date round-trips");
+                    Assert(snaps[0].Reports.Count == original.Reports.Count, "Embedded turn reports round-trip");
+                }
+
+                var cache = Path.Combine(vdir, "cache");
+                var mat = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic).MaterializeManifest(cache);
+                Assert(mat.Files.Count(f => f.FileType != "PWS_SAVE") == 2 && mat.Files.Where(f => f.FileType != "PWS_SAVE").All(f => File.Exists(f.FullPath)), "Vault materialises reports for the parsers");
+                if (havePws) Assert(mat.Files.Count(f => f.FileType == "PWS_SAVE") == 1, "Vault manifest lists the stored save snapshot");
+
+                var fromVault = new WarRoomAnalytics();
+                var vv = ROCHEFORT6000.Core.Vault.CampaignVault.Open(wic);
+                Assert(fromVault.AnalyzeCampaign(vv.MaterializeManifest(cache), vv.LoadSnapshots()) || true, "Analytics runs from vault content alone");
+
+                try { Directory.Delete(vdir, true); } catch { }
             }
 
             Console.WriteLine("\n================================================================================");

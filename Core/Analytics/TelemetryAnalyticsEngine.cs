@@ -230,25 +230,6 @@ namespace ROCHEFORT6000.Core.Analytics
     }
 
     /// <summary>
-    /// Complete structured view-model for Predictive Forecasting (Page 5).
-    /// </summary>
-    public class PredictiveForecastingPage5ViewModel
-    {
-        public GlobalTempoPhase CurrentPhase { get; set; } = GlobalTempoPhase.Strike;
-        public int CurrentPhaseConfidence { get; set; } = 88;
-        public GlobalTempoPhase NextPhase { get; set; } = GlobalTempoPhase.Consolidation;
-        public int NextPhaseProbability { get; set; } = 62;
-        public (int X, int Y) CurrentCoG { get; set; } = (5, 4);
-        public (int X, int Y) TargetCluster { get; set; } = (7, 6);
-        public string AdvanceAxisVector { get; set; } = "EAST-NORTHEAST (+2, +2)";
-        public string SubMigrationStatus { get; set; } = "CLUSTER ALPHA: [ MOVING SOUTH-WEST ] [VELOCITY: 1.2 hex/d] [██████░░░░░░]";
-        public string MinePathingStatus { get; set; } = "PRIMARY TREND: [ NORTH-EAST ] [HIT DENSITY: HIGH]         [██████████████░░]";
-        public string BlindspotStatus { get; set; } = "SECTOR 77-80 : [ RISK: CRITICAL ] [TIME SINCE SIGHTING: 4d] [████████████████████]";
-        public string TacticalAssessment { get; set; } =
-            "Probable axis suggests a shift toward the Southern Philippines. The transition to the STRIKE phase matches the high force concentration index in the target cluster.";
-    }
-
-    /// <summary>
     /// Centralized mathematical and logical telemetry engine implementing all algorithms
     /// from docs/OPENCODE INPUT/analytical_algorithms.md.
     /// </summary>
@@ -830,45 +811,6 @@ namespace ROCHEFORT6000.Core.Analytics
                 vm.VolatilityVariance = Math.Round(Math.Sqrt(variance), 1);
                 vm.VolatilityStatus = vm.VolatilityVariance > 5.0 ? "ERRATIC" : "STABLE";
             }
-
-            return vm;
-        }
-
-        /// <summary>
-        /// Factory builder for Predictive Forecasting (Page 5).
-        /// </summary>
-        public static PredictiveForecastingPage5ViewModel BuildPredictiveForecastingPage5ViewModel(
-            WarRoomAnalytics analytics,
-            HeuristicsEngine heuristics)
-        {
-            var vm = new PredictiveForecastingPage5ViewModel();
-
-            // Evaluate Global Tempo State Machine
-            bool sightingSpike = true;
-            bool combatLow = false;
-            bool combatHigh = true;
-            bool resourceDrainHigh = true;
-            bool movementLow = false;
-            bool combatMedium = false;
-            bool vectorAway = false;
-
-            if (heuristics?.DailyOptempo != null && heuristics.DailyOptempo.Count > 0)
-            {
-                int recentCombat = heuristics.DailyOptempo.Last().SeparatorCount;
-                combatHigh = recentCombat >= 8;
-                combatLow = recentCombat <= 2;
-                combatMedium = !combatHigh && !combatLow;
-            }
-
-            var (topPhase, _) = EvaluateGlobalTempoPhase(sightingSpike, combatLow, combatHigh, resourceDrainHigh, movementLow, combatMedium, vectorAway);
-            vm.CurrentPhase = topPhase;
-            vm.NextPhase = vm.CurrentPhase switch
-            {
-                GlobalTempoPhase.BuildUp => GlobalTempoPhase.Strike,
-                GlobalTempoPhase.Strike => GlobalTempoPhase.Consolidation,
-                GlobalTempoPhase.Consolidation => GlobalTempoPhase.Withdrawal,
-                _ => GlobalTempoPhase.BuildUp
-            };
 
             return vm;
         }
