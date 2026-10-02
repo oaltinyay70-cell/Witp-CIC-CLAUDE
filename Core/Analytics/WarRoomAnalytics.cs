@@ -347,7 +347,6 @@ namespace ROCHEFORT6000.Core.Analytics
         public IReadOnlyList<string> AlertFeed => _alertFeed;
         public IReadOnlyList<string> EventLog => _eventLog;
         public IReadOnlyList<DiscoveredEntity> DiscoveredEntities => _discoveredEntities;
-        public SemanticConceptGraph ConceptGraph { get; } = new();
         public HeuristicsEngine Heuristics { get; } = new();
 
         /// <summary>
@@ -373,30 +372,14 @@ namespace ROCHEFORT6000.Core.Analytics
         /// </summary>
         public TimeSeriesIngestionService TimeSeriesETL { get; }
 
-        // 14 Foundational Architectural Baseline Services
+        // Parked pillar services (SPEC §8) are not run during ingest; only sensor
+        // weighting stays, because retained confidence scores depend on it.
         public SensorReliabilityService SensorService { get; } = new();
-        public SupplyNetworkGraph SupplyGraph { get; } = new();
-        public AirDenialHeatmapService AirDenialService { get; } = new();
-        public EntityResolutionService EntityResolver { get; } = new();
-        public AdvanceMomentumPredictor MomentumPredictor { get; } = new();
-        public TemporalContinuityChecker ContinuityChecker { get; } = new();
-        public HazardStateRepository HazardRepository { get; } = new();
-        public BayesianCorroborationEngine BayesianEngine { get; }
 
         public WarRoomAnalytics()
         {
-            BayesianEngine = new BayesianCorroborationEngine(EntityResolver);
             TimeSeriesETL = new TimeSeriesIngestionService(TimeSeries);
-            // PwsRepository wired to live architectural services (Pillars 4 + 6)
-            PwsTimeline = new PwsRepository
-            {
-                EntityResolver = EntityResolver,
-                WorldState     = new WitpCic.Core.State.WorldStateRepository()
-            };
-            foreach (var b in BaseLocationRegistry.Instance.AllBases)
-            {
-                MomentumPredictor.RegisterTargetBase(b.Name, new HexCoordinate(b.HexX, b.HexY), b.IsPort ? 3 : 1);
-            }
+            PwsTimeline = new PwsRepository();
         }
 
         public bool AnalyzeCampaign(IngestionManifest manifest, IEnumerable<PwsSnapshot>? vaultSnapshots = null)
@@ -474,101 +457,11 @@ namespace ROCHEFORT6000.Core.Analytics
             ComputeModelC();
             ComputeModelD();
             ComputeModelE();
-            ComputeModelF();
             ComputeModelG();
             BuildGeospatialAndDossier(manifest);
-            BuildConceptGraph();
             Heuristics.Analyze(manifest, _unitLoadouts, _sightings, _radioIntercepts, _confidenceReports);
 
             return true;
-        }
-
-        private void BuildConceptGraph()
-        {
-            // Reset concept graph for new campaign run
-            // 1. Populate from Base Registry (Strategic Bases & Regions)
-            foreach (var b in BaseLocationRegistry.Instance.AllBases)
-            {
-                ConceptGraph.AddNode(new ConceptNode
-                {
-                    Id = $"BASE:{b.Name}",
-                    Name = b.Name,
-                    Type = ConceptType.Base,
-                    HexX = b.HexX,
-                    HexY = b.HexY,
-                    Details = (b.IsPort ? "Port / Anchorage" : "Inland Airfield") + $" | Region: {b.InitialRegion} | Controller: {b.CurrentController}",
-                    SearchDocument = $"{b.Name} base port airfield anchorage {b.InitialRegion} {b.InitialNation} {b.CurrentController} hex {b.HexX} {b.HexY}"
-                });
-            }
-
-            // 2. Populate Discovered Entities (Units, Vessels, Air Groups)
-            foreach (var e in _discoveredEntities)
-            {
-                var cType = e.Category switch
-                {
-                    "VESSEL" => ConceptType.Vessel,
-                    "AIR_GROUP" => ConceptType.AirGroup,
-                    "UNIT" => ConceptType.Unit,
-                    _ => ConceptType.Base
-                };
-
-                ConceptGraph.AddNode(new ConceptNode
-                {
-                    Id = $"ENTITY:{e.Category}:{e.Name}",
-                    Name = e.Name,
-                    Type = cType,
-                    HexX = e.LastHexX,
-                    HexY = e.LastHexY,
-                    Details = e.Details,
-                    SearchDocument = $"{e.Name} {e.Category} {e.Details} last seen {e.LastDate} events {e.EventCount}"
-                });
-            }
-
-            // 3. Populate High Value Targets (Carriers, Battleships, Oilers)
-            foreach (var h in _highValueTargets)
-            {
-                ConceptGraph.AddNode(new ConceptNode
-                {
-                    Id = $"HVT:{h.Name}:{h.Location}",
-                    Name = h.Name,
-                    Type = ConceptType.CarrierThreat,
-                    HexX = h.HexX,
-                    HexY = h.HexY,
-                    Details = $"HVT {h.Type} | Loc: {h.Location} | Status: {h.Status} | Confidence: {h.ConfidencePct}%",
-                    SearchDocument = $"{h.Name} carrier threat strike group {h.Type} oiler cruiser warship {h.Location} {h.Status} {h.ConfidenceTier}"
-                });
-            }
-
-            // 4. Populate Model A Invasion Targets
-            foreach (var a in _amphibiousTargets)
-            {
-                ConceptGraph.AddNode(new ConceptNode
-                {
-                    Id = $"INVASION:{a.Destination}",
-                    Name = $"Invasion: {a.Destination}",
-                    Type = ConceptType.InvasionTarget,
-                    HexX = a.BaseHexX,
-                    HexY = a.BaseHexY,
-                    Details = $"Assessment: {a.Assessment} | Probability: {a.Probability * 100:F0}% | Threat: {a.ThreatLevel}",
-                    SearchDocument = $"amphibious assault invasion landing operation {a.Destination} {a.Assessment} threat {a.ThreatLevel}"
-                });
-            }
-
-            // 5. Populate Model G Logistics Routes
-            foreach (var r in _establishedRoutes)
-            {
-                ConceptGraph.AddNode(new ConceptNode
-                {
-                    Id = $"CORRIDOR:{r.CorridorName}",
-                    Name = r.CorridorName,
-                    Type = ConceptType.LogisticsCorridor,
-                    Details = $"From {r.DeparturePoint} -> {r.DestinationPoint} | Vessels: {r.VesselTypes}",
-                    SearchDocument = $"logistics corridor shipping convoy supply route {r.CorridorName} {r.DeparturePoint} {r.DestinationPoint} {r.VesselTypes} {r.Confidence}"
-                });
-            }
-
-            // 6. Build TF-IDF Vocabulary and Node Vectors
-            ConceptGraph.BuildEmbeddings(300);
         }
 
         public static bool ParseCoords(string text, out int outX, out int outY)
@@ -662,9 +555,7 @@ namespace ROCHEFORT6000.Core.Analytics
                 _ => EntityType.Base
             };
 
-            Guid canonicalId = EntityResolver.ResolveOrCreate(cleanName, entityType);
-            var resolved = EntityResolver.GetEntity(canonicalId);
-            string canonicalName = resolved?.CanonicalName ?? cleanName;
+            string canonicalName = cleanName;
 
             if (category == "BASE" && (hexX <= 0 || hexY <= 0))
             {
@@ -799,16 +690,6 @@ namespace ROCHEFORT6000.Core.Analytics
                         $"Allied reinforcement, ETA {ship.ArrivalDays} days");
                 }
 
-                // ── 4. Supply graph: update TF positions (Pillar 9) ──
-                foreach (var tf in snapshot.AlliedTaskForces)
-                {
-                    if (tf.HexX > 0 && tf.HexY > 0)
-                    {
-                        var tfCoord = new WitpCic.Core.Geospatial.HexCoordinate(tf.HexX, tf.HexY);
-                        // Register TF current position as a transient node in the supply network
-                        SupplyGraph.RegisterBase($"TF-{tf.Index}", tfCoord);
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -1068,69 +949,26 @@ namespace ROCHEFORT6000.Core.Analytics
                     _eventLog.Add($"[{dateYYMMDD}] {line}");
                     RegisterEntity(baseName, "BASE", 0, 0, dateYYMMDD, "Captured by Japanese Forces");
                     BaseLocationRegistry.Instance.UpdateBaseController(baseName, "Japanese");
-
-                    // Mark severed node in supply network graph
-                    var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(baseName);
-                    if (baseLoc != null)
-                    {
-                        SupplyGraph.MarkNodeSevered(new HexCoordinate(baseLoc.HexX, baseLoc.HexY));
-                    }
                     continue;
                 }
 
-                // 6. Minefield Deployment (Pillar 14)
+                // 6. Minefield Deployment (hazard layer parked, SPEC §8)
                 if (line.Contains("lays minefield") || line.Contains("lays defensive minefield"))
                 {
                     ParseCoords(line, out int mx, out int my);
-                    var hazardCoord = new HexCoordinate(mx, my);
-                    var hazard = new HazardState(
-                        Guid.NewGuid(),
-                        hazardCoord,
-                        line,
-                        HazardType.MinefieldDefensive,
-                        Faction.Allied,
-                        100,
-                        "Minelayer TF",
-                        DateTime.UtcNow
-                    );
-                    HazardRepository.AddOrUpdateHazard(hazard);
                     _eventLog.Add($"[{dateYYMMDD}] HAZARD DEPLOYED: Minefield active at ({mx},{my}).");
                     continue;
                 }
 
-                // 7. Air Overflights & Reconnaissance (Pillar 10)
+                // 7. Air Overflights & Reconnaissance (air-denial heatmap parked; line consumed)
                 if (line.Contains("sighted over") || line.Contains("observes") || line.Contains("snooped by"))
                 {
-                    ParseCoords(line, out int ax, out int ay);
-                    var threatClass = line.Contains("Bomber") ? AircraftThreatClass.TorpedoOrDiveBomber :
-                                      line.Contains("Fighter") ? AircraftThreatClass.FighterOrCap : AircraftThreatClass.ReconOrFloatPlane;
-
-                    AirDenialService.RecordOverflight(new AirOverflightEvent(
-                        new HexCoordinate(ax, ay),
-                        threatClass,
-                        line,
-                        DateTime.UtcNow
-                    ));
                     continue;
                 }
 
-                // 8. Supply Transport Mission (Pillar 9)
+                // 8. Supply Transport Mission (supply graph parked; line consumed)
                 if (line.Contains("transporting supplies to"))
                 {
-                    int toIdx = line.IndexOf("transporting supplies to ");
-                    string dest = (toIdx != -1) ? line.Substring(toIdx + 25).Trim().TrimEnd('.') : string.Empty;
-                    var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(dest);
-                    if (baseLoc != null)
-                    {
-                        SupplyGraph.AddOrUpdateRoute(
-                            "Origin Base",
-                            new HexCoordinate(baseLoc.HexX - 5, baseLoc.HexY - 5),
-                            dest,
-                            new HexCoordinate(baseLoc.HexX, baseLoc.HexY),
-                            TransportVesselType.AirTransport_Hudson_C47,
-                            500
-                        );
-                    }
                     continue;
                 }
             }
@@ -1791,12 +1629,7 @@ namespace ROCHEFORT6000.Core.Analytics
 
         private void ComputeModelD()
         {
-            var health = SupplyGraph.EvaluateNetworkHealth();
-            var starvedBases = health.Where(n => n.IsStarved).Select(n => n.BaseName).ToList();
-
-            string status = starvedBases.Count > 0 
-                ? $"CRITICAL SUPPLY DEFICIT: {starvedBases.Count} forward base(s) starved ({string.Join(", ", starvedBases)})"
-                : "SUPPLY FLOW STABLE / MONITORING FLEET SUSTAINMENT & TURNAROUND CYCLES";
+            const string status = "SUPPLY FLOW STABLE / MONITORING FLEET SUSTAINMENT & TURNAROUND CYCLES";
 
             _logisticalPause = new ModelD_LogisticalPause
             {
@@ -1841,51 +1674,6 @@ namespace ROCHEFORT6000.Core.Analytics
             }
 
             _battleClaims.GhostFleetCount = _battleClaims.UnlocalizedCapitalShips.Count;
-        }
-
-        private void ComputeModelF()
-        {
-            _strikeConcentrations.Clear();
-
-            // Convert sightings to SightingRecord list for the clustering engine
-            var sightingRecords = _sightings.Select(s => new SightingRecord(
-                DateOnly.MinValue,
-                DateTime.UtcNow,
-                new HexCoordinate(s.HexX, s.HexY),
-                s.NearLocation,
-                TargetClassification.SurfaceShip,
-                s.Description,
-                s.ShipCount,
-                s.Speed,
-                s.Heading,
-                s.Observer,
-                1,
-                s.Description,
-                Array.Empty<string>()
-            )).ToList();
-
-            var clusteringEngine = new HotspotClusteringEngine();
-            var hotspots = clusteringEngine.AnalyzeHotspots(sightingRecords, spatialRadius: 2);
-
-            foreach (var hs in hotspots.Where(h => h.MaxReportedShips >= 3 || h.TotalReports >= 3))
-            {
-                _strikeConcentrations.Add(new ModelF_StrikeConcentration
-                {
-                    ClusterName = hs.Description,
-                    CenterHexX = hs.PrimaryHex.X,
-                    CenterHexY = hs.PrimaryHex.Y,
-                    WarshipCount = hs.MaxReportedShips,
-                    RadiusHexes = 2,
-                    ConstituentSightings = hs.Sightings.Select(st => st.TargetDescription).ToList(),
-                    ThreatLevel = hs.ThreatLevel switch
-                    {
-                        HotspotThreatLevel.Critical => "CRITICAL: Major Naval Buildup / Strike Force",
-                        HotspotThreatLevel.High => "HIGH: Active Strike Assembly",
-                        HotspotThreatLevel.Moderate => "MODERATE: Concentrated Surface Formation",
-                        _ => "ELEVATED: Multi-contact cluster"
-                    }
-                });
-            }
         }
 
         private void ComputeModelG()
@@ -2107,39 +1895,6 @@ namespace ROCHEFORT6000.Core.Analytics
                                   $" | Region: {b.InitialRegion} | Controller: {b.CurrentController}",
                         EventCount = 0
                     });
-                }
-            }
-
-            // Semantic Concept Graph fallback (when results are sparse or conceptual match is requested)
-            if (results.Count < 5 && ConceptGraph.Count > 0)
-            {
-                var semanticMatches = ConceptGraph.Understand(query, maxResults: 8);
-                foreach (var (node, score) in semanticMatches)
-                {
-                    string categoryStr = node.Type switch
-                    {
-                        ConceptType.Base => "BASE",
-                        ConceptType.Vessel => "VESSEL",
-                        ConceptType.Unit => "UNIT",
-                        ConceptType.AirGroup => "AIR_GROUP",
-                        ConceptType.InvasionTarget => "INVASION",
-                        ConceptType.CarrierThreat => "STRIKE_TF",
-                        ConceptType.LogisticsCorridor => "LOGISTICS",
-                        _ => "CONCEPT"
-                    };
-
-                    if (!results.Any(r => r.Name.Equals(node.Name, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        results.Add(new DiscoveredEntity
-                        {
-                            Name = node.Name,
-                            Category = categoryStr,
-                            LastHexX = node.HexX,
-                            LastHexY = node.HexY,
-                            Details = $"[SEMANTIC: {Math.Round(score * 100)}%] {node.Details}",
-                            EventCount = 1
-                        });
-                    }
                 }
             }
 
