@@ -4,7 +4,8 @@
 - [~] (implemented, awaiting Ozgur) Implement `.wic` vault write/read per SPEC §5; wire wizard + Continue.
 - [~] (implemented, awaiting Ozgur) Allied-only: remove Japanese option from wizard; header shows real campaign name/side.
 ## Cleanup
-- [ ] Delete War Room items Intelligence Summary, SIGINT Map, TPIE, Predictive Models + dead code.
+- [~] (implemented, awaiting Ozgur) Delete War Room items Intelligence Summary, SIGINT Map, TPIE, Predictive Models + dead code.
+- [ ] Decide: date-range filter modal (TemporalFilter/Calendar) now has no entry point; re-home or delete.
 - [ ] Remove AI-endpoint settings (offline rule).
 - [ ] Prune/decide unused pillar services.
 ## Later

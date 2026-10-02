@@ -303,8 +303,7 @@ namespace ROCHEFORT6000
                 // Check if Advisor side panel should be shown (All analytical popups/modals)
                 bool showAdvisor = _screenManager.CurrentState is
                     ScreenState.ReasoningModal or
-                    ScreenState.HeuristicsPopUp or
-                    ScreenState.IntelDetailPopUp;
+                    ScreenState.HeuristicsPopUp;
 
                 if (RochefortPanel != null && RochefortColumn != null)
                 {

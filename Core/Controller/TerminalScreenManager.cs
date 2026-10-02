@@ -48,10 +48,6 @@ namespace ROCHEFORT6000.Core.Controller
 
         // ── War Room ──────────────────────────────────────────────────────────
         WarRoomPrimary,
-        IntelligenceSummary,
-        IntelDetailPopUp,
-        SigintMap,
-        DossierSearch,
         TbdDomain,
         GraphicsMenu,
         GraphicsDisplayScreen,
@@ -122,9 +118,6 @@ namespace ROCHEFORT6000.Core.Controller
 
         // ── War Room Selections ──────────────────────────────────────────────
         private int _warRoomSel = 0;
-        private int _intelSumSel = 0;
-        private int _intelPopUpSel = 0;
-        private int _sigintMapSel = 0;
         private int _reasoningTopicSel = 0;
         private int _heuristicsSel = 0;
         private int _heuristicsPopUpSel = 0;
@@ -147,7 +140,7 @@ namespace ROCHEFORT6000.Core.Controller
         private TemporalFilterMode _filterMode = TemporalFilterMode.Last7Days;
         private DateTime _filterStartDate = DateTime.MinValue;
         private DateTime _filterEndDate = DateTime.MaxValue;
-        private ScreenState _filterReturnState = ScreenState.IntelligenceSummary;
+        private ScreenState _filterReturnState = ScreenState.WarRoomPrimary;
         private bool _filterTextEntryActive = false;
         private string _filterTextInput = "";
         private string _filterInputError = "";
@@ -428,11 +421,6 @@ namespace ROCHEFORT6000.Core.Controller
             return sb.ToString().TrimEnd();
         }
 
-        // ── Dossier Search ───────────────────────────────────────────────────
-        private string _dossierQuery = "";
-        private bool _dossierSearching = true;     // true=entering query, false=showing results
-        private List<DiscoveredEntity> _dossierResults = new();
-
         // ── Pop-up / reasoning data ──────────────────────────────────────────
         private readonly List<string> _popUpBullets = new();
         private readonly List<List<string>> _popUpReasonings = new();
@@ -442,10 +430,6 @@ namespace ROCHEFORT6000.Core.Controller
         private string _reasoningBulletTitle = "";
         private int _reasoningConfPct = 0;
         private readonly List<ReasoningTopic> _reasoningTopics = new();
-
-        // ── Split-Pane Controller & Layout Engine ───────────────────────────
-        private readonly SplitPaneViewState _splitPaneViewState = new();
-        private readonly SplitPaneLayoutEngine _splitPaneLayoutEngine = SplitPaneLayoutEngine.CreateForResolution(1024, 640);
 
         // ── Wiki Module State ────────────────────────────────────────────────
         private WikiNode _wikiRoot = new();
@@ -581,22 +565,6 @@ namespace ROCHEFORT6000.Core.Controller
 
                 case ScreenState.WarRoomPrimary:
                     HandleWarRoomPrimary(key);
-                    break;
-
-                case ScreenState.IntelligenceSummary:
-                    HandleIntelligenceSummary(key);
-                    break;
-
-                case ScreenState.IntelDetailPopUp:
-                    HandleIntelDetailPopUp(key);
-                    break;
-
-                case ScreenState.SigintMap:
-                    HandleSigintMap(key);
-                    break;
-
-                case ScreenState.DossierSearch:
-                    HandleDossierSearch(key);
                     break;
 
                 case ScreenState.TbdDomain:
@@ -737,7 +705,6 @@ namespace ROCHEFORT6000.Core.Controller
 
         public bool IsAwaitingTextInput =>
             (_state == ScreenState.NewCampaignWizard && (_wizardStep == 1 || (_wizardStep == 2 && _wizardAwaitingDirInput)))
-            || (_state == ScreenState.DossierSearch && _dossierSearching)
             || (_state == ScreenState.TemporalFilterModal && _filterTextEntryActive);
 
         // ── New Campaign Wizard (Allied only) ────────────────────────────────
@@ -999,14 +966,6 @@ namespace ROCHEFORT6000.Core.Controller
                     }
                 }
             }
-            else if (_state == ScreenState.DossierSearch && _dossierSearching)
-            {
-                if (_dossierQuery.Length < 30)
-                {
-                    _dossierQuery += c;
-                    RenderCurrentScreen();
-                }
-            }
             else if (_state == ScreenState.TemporalFilterModal && _filterTextEntryActive)
             {
                 if (_filterTextInput.Length < 40)
@@ -1218,473 +1177,6 @@ namespace ROCHEFORT6000.Core.Controller
                     break;
             }
             RenderCurrentScreen();
-        }
-
-        // ── Intelligence Summary Screen ──────────────────────────────────────
-        private void HandleIntelligenceSummary(System.Windows.Input.Key key)
-        {
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.WarRoomPrimary;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Left:
-                case System.Windows.Input.Key.OemOpenBrackets:
-                case System.Windows.Input.Key.OemComma:
-                    StepTurnDate(-1);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Right:
-                case System.Windows.Input.Key.OemCloseBrackets:
-                case System.Windows.Input.Key.OemPeriod:
-                    StepTurnDate(1);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D1:
-                    ApplyFilterPreset(TemporalFilterMode.LatestTurn);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D2:
-                    ApplyFilterPreset(TemporalFilterMode.Last7Days);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D3:
-                    ApplyFilterPreset(TemporalFilterMode.Last15Days);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D4:
-                    ApplyFilterPreset(TemporalFilterMode.Last30Days);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D5:
-                    ApplyFilterPreset(TemporalFilterMode.AllCampaign);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.R:
-                case System.Windows.Input.Key.F:
-                    _filterReturnState = ScreenState.IntelligenceSummary;
-                    _filterTextEntryActive = false;
-                    _filterTextInput = "";
-                    _filterInputError = "";
-                    _state = ScreenState.TemporalFilterModal;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    _intelSumSel = (_intelSumSel - 1 + 5) % 5;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                case System.Windows.Input.Key.Tab:
-                    _intelSumSel = (_intelSumSel + 1) % 5;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    OpenIntelDetailPopUp(_intelSumSel);
-                    break;
-            }
-        }
-
-        private void OpenIntelDetailPopUp(int category)
-        {
-            _intelSumSel = category;
-            _popUpBullets.Clear();
-            _popUpReasonings.Clear();
-            _popUpConfidences.Clear();
-
-            switch (category)
-            {
-                case 0:
-                    _popUpTitle = "HIGH-VALUE TARGET (HVT) LOCALIZATION MANIFEST";
-                    var hvts = Analytics.HighValueTargets
-                        .Where(h => IsDateInActiveFilter(h.Date, h.AllDates))
-                        .OrderByDescending(h => h.Date)
-                        .ToList();
-
-                    if (hvts.Count == 0)
-                    {
-                        _popUpBullets.Add("NO HIGH-VALUE TARGETS LOCALIZED FOR THIS TURN DATE.");
-                        _popUpReasonings.Add(new List<string> {
-                            "TELEMETRY SOURCE: SIGINT Intercept Report & Radio Direction Finding",
-                            $"DATE FILTER: {GetActiveFilterDescription()}",
-                            "OBSERVATION STATUS: No capital ship sightings matched the selected date window."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    else
-                    {
-                        foreach (var h in hvts)
-                        {
-                            string formattedDate = FileScanner.FormatShortDate(h.Date);
-                            _popUpBullets.Add($"[{h.Type}] {h.Name} at {h.Location} ({h.HexX},{h.HexY}) [{formattedDate}] - {h.Status}");
-                            _popUpConfidences.Add(h.ConfidencePct);
-                            string datesStr = h.AllDates.Count > 0 ? string.Join(", ", h.AllDates) : formattedDate;
-                            int freq = Math.Max(1, h.AllDates.Count);
-                            string freqStr = freq > 1
-                                ? $"OBSERVATION FREQUENCY: {freq} distinct sightings recorded across campaign turns."
-                                : "OBSERVATION FREQUENCY: Single verified sighting recorded.";
-                            string latestSeen = string.IsNullOrEmpty(h.LastSeenDate) ? formattedDate : h.LastSeenDate;
-                            var r = new List<string> {
-                                "TELEMETRY SOURCE: SIGINT Intercept Report & Radio Direction Finding",
-                                $"LOCALIZED POSITION: Hex {h.HexX},{h.HexY} ({h.Location})",
-                                freqStr,
-                                $"CHRONOLOGY / RECENCY: Tracked until {latestSeen} [Dates seen: {datesStr}]",
-                                $"CLASSIFICATION: Vessel designated High-Value Capital Asset ({h.Type}).",
-                                "TACTICAL REASONING: Highly prioritized for Allied submarine & naval air interdiction.",
-                                "INTERCEPT SIGNIFICANCE: Critical strategic asset monitored for battle group disposition."
-                            };
-                            r.AddRange(h.MathBreakdown);
-                            _popUpReasonings.Add(r);
-                        }
-                    }
-                    break;
-
-                case 1:
-                    _popUpTitle = "NAVAL STRIKE CONCENTRATION CLUSTERS";
-                    foreach (var sc in Analytics.ModelFConcentrations)
-                    {
-                        _popUpBullets.Add($"{sc.ClusterName} [Hex {sc.CenterHexX},{sc.CenterHexY}] : {sc.WarshipCount} Warships | Threat: {sc.ThreatLevel}");
-                        _popUpReasonings.Add(new List<string> {
-                            "TELEMETRY SOURCE: Sighting Reports, Combat Events & Hex Grid Spatial Cluster Scan",
-                            $"LOCALIZED POSITION: Center Hex {sc.CenterHexX},{sc.CenterHexY} ({sc.ClusterName}) [Radius: 10 hexes]",
-                            $"OBSERVATION FREQUENCY: Spatial cluster aggregated from {sc.ConstituentSightings.Count} contact sightings.",
-                            "CHRONOLOGY / RECENCY: Active battle group evaluated for current operational turn.",
-                            $"FORCE COMPOSITION: {sc.WarshipCount} confirmed surface warships with cruiser/carrier screen.",
-                            $"THREAT ASSESSMENT: {sc.ThreatLevel} threat level indicating active offensive surface battle group.",
-                            "OPERATIONAL TARGET: Primary screening force for amphibious landings in adjacent theater.",
-                            "SPATIAL REASONING: Warship concentration exceeds threshold within 10-hex radius."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 2:
-                    _popUpTitle = "PORT & ANCHORAGE REPLENISHMENT CONCENTRATIONS";
-                    foreach (var p in Analytics.PortConcentrations)
-                    {
-                        _popUpBullets.Add($"{p.PortName} (Hex {p.HexX},{p.HexY}): {p.WarshipCount} Warships, {p.MerchantCount} Transports");
-                        _popUpReasonings.Add(new List<string> {
-                            "TELEMETRY SOURCE: Operational Naval Reconnaissance & Harbor Sightings",
-                            $"LOCALIZED POSITION: Anchorage facility at Hex {p.HexX},{p.HexY} ({p.PortName})",
-                            "OBSERVATION FREQUENCY: Verified harbor reconnaissance scan.",
-                            "CHRONOLOGY / RECENCY: Active staging base in current operational theater.",
-                            $"LOGISTICAL REASONING: High ratio of merchant/transport hulls ({p.MerchantCount}) indicates forward supply/troop embarkation.",
-                            $"WARSHIP PROTECTION: Screened by {p.WarshipCount} combatants.",
-                            "ACTIONABLE ADVICE: Target with long-range air strikes or deploy submarine barrier lines."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 3:
-                    _popUpTitle = "ESTABLISHED ENEMY LOGISTICAL & INVASION CORRIDORS";
-                    foreach (var r in Analytics.ModelGRoutes)
-                    {
-                        _popUpBullets.Add($"{r.CorridorName} : {r.DeparturePoint} -> {r.DestinationPoint} ({r.VesselTypes}) | {r.Confidence}");
-                        _popUpReasonings.Add(new List<string> {
-                            "TELEMETRY SOURCE: Model G Repeated Waypoint Graph Analysis",
-                            $"LOCALIZED POSITION: Shipping vector {r.DeparturePoint} -> {r.DestinationPoint}",
-                            $"OBSERVATION FREQUENCY: {r.ObservationCount} repeated waypoint sightings along maritime channel.",
-                            "CHRONOLOGY / RECENCY: Persistent logistical highway active across campaign history.",
-                            $"TRAFFIC PROFILE: Utilized primarily by {r.VesselTypes} hulls.",
-                            $"CONFIDENCE RATING: {r.Confidence} based on multi-turn sighting frequencies.",
-                            "INTERDICTION REASONING: Prime ambush route for Allied submarine warfare & carrier strike ops."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 4:
-                    _popUpTitle = "BATTLE DAMAGE ASSESSMENT & CLAIMS REVISION REGISTER";
-                    var claims = Analytics.ModelEClaims.Claims
-                        .Where(c => IsDateInActiveFilter(c.DateYYMMDD))
-                        .OrderByDescending(c => c.DateYYMMDD)
-                        .ToList();
-
-                    if (claims.Count == 0)
-                    {
-                        _popUpBullets.Add("NO HOSTILE COMBAT DAMAGE CLAIMS RECORDED FOR THIS TURN RANGE.");
-                        _popUpReasonings.Add(new List<string> {
-                            "INTELLIGENCE STATUS: No hostile vessels currently identified taking damage or sunk in verified combat reports.",
-                            $"DATE FILTER: {GetActiveFilterDescription()}",
-                            "ASSESSMENT CRITERIA: Fog-of-war claims register tracks enemy losses only.",
-                            "FRIENDLY STATUS: Friendly unit casualties are managed exclusively through operational commands."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    else
-                    {
-                        foreach (var c in claims)
-                        {
-                            string formattedDate = FileScanner.FormatShortDate(c.DateYYMMDD);
-                            _popUpBullets.Add($"{c.ShipName} : {c.Assessment} ({c.Reason}) [{formattedDate}]");
-                            _popUpReasonings.Add(new List<string> {
-                                "TELEMETRY SOURCE: Combat Action Report Claims vs Operations Sighting Reconciliation",
-                                $"LOCALIZED POSITION: Target vessel {c.ShipName} ({(c.IsAllied ? "Allied Target" : "Hostile Japanese Target")})",
-                                $"OBSERVATION FREQUENCY: Single action report claim submitted on turn {formattedDate}.",
-                                $"CHRONOLOGY / RECENCY: Action evaluated for turn {formattedDate}.",
-                                $"ASSESSMENT REASONING: Initial action claim evaluated as {c.Assessment}.",
-                                $"EVIDENCE CRITERIA: {c.Reason}.",
-                                "GROUND TRUTH VERIFICATION: Entity reconciled against known vessel tracking register.",
-                                "DEDUCTION: Overclaim adjusted to prevent misleading strategic planning."
-                            });
-                            _popUpConfidences.Add(0);
-                        }
-                    }
-                    break;
-            }
-
-            var splitItems = new List<SplitPaneItem>();
-            for (int i = 0; i < _popUpBullets.Count; i++)
-            {
-                string bTitle = _popUpBullets[i];
-                int conf = i < _popUpConfidences.Count ? _popUpConfidences[i] : 0;
-                var rawReasoning = i < _popUpReasonings.Count ? _popUpReasonings[i] : null;
-                splitItems.Add(SplitPaneItem.FromRawTelemetry(bTitle, conf, rawReasoning));
-            }
-            _splitPaneViewState.LoadItems(splitItems, _popUpTitle);
-
-            _state = ScreenState.IntelDetailPopUp;
-            _intelPopUpSel = 0;
-            RenderCurrentScreen();
-        }
-
-        private void HandleIntelDetailPopUp(System.Windows.Input.Key key)
-        {
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    if (_splitPaneViewState.ActivePane == PaneFocus.Lower)
-                    {
-                        _splitPaneViewState.FocusUpper();
-                        RenderCurrentScreen();
-                    }
-                    else
-                    {
-                        _state = ScreenState.IntelligenceSummary;
-                        RenderCurrentScreen();
-                    }
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    _splitPaneViewState.MoveUp();
-                    _intelPopUpSel = _splitPaneViewState.SelectedItemIndex;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    _splitPaneViewState.MoveDown();
-                    _intelPopUpSel = _splitPaneViewState.SelectedItemIndex;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Tab:
-                    _splitPaneViewState.ToggleFocus();
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    if (_splitPaneViewState.ActivePane == PaneFocus.Upper)
-                    {
-                        _splitPaneViewState.FocusLower();
-                        RenderCurrentScreen();
-                    }
-                    else
-                    {
-                        var curItem = _splitPaneViewState.SelectedItem;
-                        if (curItem != null)
-                        {
-                            var allRaw = new List<string>();
-                            foreach (var topic in curItem.Topics)
-                            {
-                                allRaw.AddRange(topic.Lines);
-                            }
-                            int targetTopicIdx = _splitPaneViewState.SelectedTopicIndex;
-                            OpenReasoningModal(curItem.Title, allRaw, curItem.ConfidencePct, ScreenState.IntelDetailPopUp);
-                            _reasoningTopicSel = Math.Max(0, Math.Min(targetTopicIdx, _reasoningTopics.Count - 1));
-                        }
-                    }
-                    break;
-
-                case System.Windows.Input.Key.Left:
-                    _splitPaneViewState.FocusUpper();
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Right:
-                    _splitPaneViewState.FocusLower();
-                    RenderCurrentScreen();
-                    break;
-            }
-        }
-
-        // ── SIGINT Map Screen ────────────────────────────────────────────────
-        private void HandleSigintMap(System.Windows.Input.Key key)
-        {
-            var logs = Analytics.GeospatialLog
-                .Where(e => IsDateInActiveFilter(e.DateYYMMDD, e.AllDates))
-                .OrderByDescending(e => e.DateYYMMDD)
-                .ToList();
-
-            int total = logs.Count;
-
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.WarRoomPrimary;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Left:
-                case System.Windows.Input.Key.OemOpenBrackets:
-                case System.Windows.Input.Key.OemComma:
-                    StepTurnDate(-1);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Right:
-                case System.Windows.Input.Key.OemCloseBrackets:
-                case System.Windows.Input.Key.OemPeriod:
-                    StepTurnDate(1);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D1:
-                    ApplyFilterPreset(TemporalFilterMode.LatestTurn);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D2:
-                    ApplyFilterPreset(TemporalFilterMode.Last7Days);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D3:
-                    ApplyFilterPreset(TemporalFilterMode.Last15Days);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D4:
-                    ApplyFilterPreset(TemporalFilterMode.Last30Days);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D5:
-                    ApplyFilterPreset(TemporalFilterMode.AllCampaign);
-                    _sigintMapSel = 0;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.R:
-                case System.Windows.Input.Key.F:
-                    _filterReturnState = ScreenState.SigintMap;
-                    _filterTextEntryActive = false;
-                    _filterTextInput = "";
-                    _filterInputError = "";
-                    _state = ScreenState.TemporalFilterModal;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.D:
-                    _dossierQuery = "";
-                    _dossierSearching = true;
-                    _dossierResults.Clear();
-                    _state = ScreenState.DossierSearch;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    if (total > 0) { _sigintMapSel = Math.Max(0, _sigintMapSel - 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    if (total > 0) { _sigintMapSel = Math.Min(total - 1, _sigintMapSel + 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Tab:
-                    if (total > 0) { _sigintMapSel = (_sigintMapSel + 1) % total; RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    if (total > 0 && _sigintMapSel < total)
-                    {
-                        var ent = logs[_sigintMapSel];
-                        string dStr = !string.IsNullOrEmpty(ent.LastSeenDate) ? ent.LastSeenDate : FileScanner.FormatYYMMDD(ent.DateYYMMDD);
-                        string datesStr = ent.AllDates.Count > 0 ? string.Join(", ", ent.AllDates) : dStr;
-                        int freq = Math.Max(1, ent.AllDates.Count);
-                        string freqStr = freq > 1
-                            ? $"OBSERVATION FREQUENCY: {freq} distinct sightings recorded across campaign turns."
-                            : "OBSERVATION FREQUENCY: Single verified sighting recorded.";
-                        string bulletTitle = $"{dStr} {ent.EventType} Hex {ent.HexX},{ent.HexY}";
-                        var r = new List<string> {
-                            "TELEMETRY SOURCE: Operational Sighting & Decrypted Log",
-                            $"LOCALIZED POSITION: Hex {ent.HexX},{ent.HexY} ({ent.LocationName}) | Range/Bearing: {ent.BearingFromHQ}",
-                            freqStr,
-                            $"CHRONOLOGY / RECENCY: Tracked until {dStr} [Dates seen: {datesStr}]",
-                            $"OPERATIONAL DETAILS: {ent.Details}",
-                            "TACTICAL REASONING: High priority geospatial intercept logged in naval sector.",
-                            "INTERCEPT SIGNIFICANCE: Cross-referenced with active enemy task force trajectories."
-                        };
-                        r.AddRange(ent.MathBreakdown);
-                        OpenReasoningModal(bulletTitle, r, ent.ConfidencePct, ScreenState.SigintMap);
-                    }
-                    break;
-            }
-        }
-
-        // ── Dossier Search Modal ─────────────────────────────────────────────
-        private void HandleDossierSearch(System.Windows.Input.Key key)
-        {
-            if (_dossierSearching)
-            {
-                if (key == System.Windows.Input.Key.Escape)
-                {
-                    _state = ScreenState.SigintMap;
-                    RenderCurrentScreen();
-                    return;
-                }
-                if (key == System.Windows.Input.Key.Back)
-                {
-                    if (_dossierQuery.Length > 0)
-                    {
-                        _dossierQuery = _dossierQuery.Substring(0, _dossierQuery.Length - 1);
-                        RenderCurrentScreen();
-                    }
-                    return;
-                }
-                if (key == System.Windows.Input.Key.Enter)
-                {
-                    _dossierResults = Analytics.SearchDossier(_dossierQuery);
-                    _dossierSearching = false;
-                    RenderCurrentScreen();
-                    return;
-                }
-            }
-            else
-            {
-                if (key == System.Windows.Input.Key.Escape || key == System.Windows.Input.Key.Enter)
-                {
-                    _state = ScreenState.SigintMap;
-                    RenderCurrentScreen();
-                }
-            }
         }
 
         // ── TBD Domain Screen ────────────────────────────────────────────────
@@ -3108,10 +2600,6 @@ namespace ROCHEFORT6000.Core.Controller
                 ScreenState.VaultIngestion         => BuildVaultIngestionScreen(),
                 ScreenState.MasterMenu             => BuildMasterMenuScreen(),
                 ScreenState.WarRoomPrimary          => BuildWarRoomPrimaryScreen(),
-                ScreenState.IntelligenceSummary     => BuildIntelligenceSummaryScreen(),
-                ScreenState.IntelDetailPopUp        => BuildNavigablePopUp(),
-                ScreenState.SigintMap               => BuildSigintMapScreen(),
-                ScreenState.DossierSearch           => BuildDossierSearchScreen(),
                 ScreenState.TbdDomain               => BuildTbdDomainScreen(),
                 ScreenState.GraphicsMenu            => BuildGraphicsMenuScreen(),
                 ScreenState.GraphicsDisplayScreen   => BuildGraphicsDisplayScreen(),
@@ -3135,7 +2623,6 @@ namespace ROCHEFORT6000.Core.Controller
         {
             string buffer = BuildCurrentScreen();
             bool isInstant = _state is ScreenState.ReasoningModal
-                                    or ScreenState.IntelDetailPopUp
                                     or ScreenState.VaultIngestion
                                     or ScreenState.ExitConfirmModal
                                     or ScreenState.TemporalFilterModal
@@ -3149,7 +2636,6 @@ namespace ROCHEFORT6000.Core.Controller
             {
                 ScreenState.ReasoningModal   => BuildReasoningAdvisorComment(),
                 ScreenState.HeuristicsPopUp  => BuildHeuristicsAdvisorComment(),
-                ScreenState.IntelDetailPopUp => BuildIntelAdvisorComment(),
                 _                            => string.Empty
             };
         }
@@ -3432,109 +2918,6 @@ namespace ROCHEFORT6000.Core.Controller
                 }
             }
 
-            return sb.ToString();
-        }
-
-        private string BuildIntelAdvisorComment()
-        {
-            var sb = new StringBuilder();
-            var curItem = _splitPaneViewState.SelectedItem;
-            var curTopic = _splitPaneViewState.SelectedTopic;
-
-            if (IsAllied)
-            {
-                sb.AppendLine("CMDR. ROCHEFORT // OPERATIONAL INTELLIGENCE BRIEF");
-                sb.AppendLine("────────────────────────────────────────────────");
-                sb.AppendLine($"DOMAIN: {_popUpTitle}");
-                if (curItem != null)
-                {
-                    sb.AppendLine($"TARGET: {curItem.Title}");
-                    if (curItem.ConfidencePct > 0)
-                    {
-                        sb.AppendLine($"CONFIDENCE: {curItem.ConfidencePct}% [RADAR/RDF CORROBORATED]");
-                    }
-                }
-                else if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
-                {
-                    sb.AppendLine($"TARGET: {_popUpBullets[_intelPopUpSel]}");
-                    if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
-                    {
-                        sb.AppendLine($"CONFIDENCE: {_popUpConfidences[_intelPopUpSel]}% [RADAR/RDF CORROBORATED]");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("STATION HYPO READOUT:");
-                sb.AppendLine("Cross-referencing SIGINT traffic analysis with coastwatcher reports. Enemy naval communication volume remains elevated.");
-
-                if (curTopic != null)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"ACTIVE REASONING: {curTopic.Title}");
-                    foreach (var note in curTopic.Lines.Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                else if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("CORROBORATED SIGNALS TELEMETRY:");
-                    foreach (var note in _popUpReasonings[_intelPopUpSel].Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("INTERPRETATION:");
-                sb.AppendLine("Live telemetry displayed in Lower Pane. Use [UP/DOWN] to inspect, [TAB/ENTER] to switch panes.");
-            }
-            else
-            {
-                sb.AppendLine("V.ADM. M. UGAKI // COMBINED FLEET INTEL BRIEF");
-                sb.AppendLine("────────────────────────────────────────────────");
-                sb.AppendLine($"CATEGORY: {_popUpTitle}");
-                if (curItem != null)
-                {
-                    sb.AppendLine($"SIGHTING/OBJECTIVE: {curItem.Title}");
-                    if (curItem.ConfidencePct > 0)
-                    {
-                        sb.AppendLine($"RECON CERTAINTY: {curItem.ConfidencePct}% [IMPERIAL AIR RECON VERIFIED]");
-                    }
-                }
-                else if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
-                {
-                    sb.AppendLine($"SIGHTING/OBJECTIVE: {_popUpBullets[_intelPopUpSel]}");
-                    if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
-                    {
-                        sb.AppendLine($"RECON CERTAINTY: {_popUpConfidences[_intelPopUpSel]}% [IMPERIAL AIR RECON VERIFIED]");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("COMBINED FLEET DISPATCH:");
-                sb.AppendLine("Imperial Navy air reconnaissance and naval telegraph intercepts processed from Southern Area command.");
-
-                if (curTopic != null)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"SECTOR EMPHASIS: {curTopic.Title}");
-                    foreach (var note in curTopic.Lines.Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                else if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("STAFF LOG TELEMETRY (SENKUN):");
-                    foreach (var note in _popUpReasonings[_intelPopUpSel].Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("STAFF ORDER:");
-                sb.AppendLine("Live recon analysis displayed in Lower Pane. Use [UP/DOWN] to inspect, [TAB/ENTER] to switch panes.");
-            }
             return sb.ToString();
         }
 
@@ -4044,162 +3427,6 @@ namespace ROCHEFORT6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  INTELLIGENCE SUMMARY
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildIntelligenceSummaryScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "WAR ROOM : THEATER INTELLIGENCE SUMMARY & CONCENTRATIONS", TurnInfo());
-            sb.AppendLine();
-
-            int hvtCount = Analytics.HighValueTargets.Count(h => IsDateInActiveFilter(h.Date, h.AllDates));
-            int claimsCount = Analytics.ModelEClaims.Claims.Count(c => IsDateInActiveFilter(c.DateYYMMDD));
-
-            sb.AppendLine(RenderTemporalCommandStrip());
-            sb.AppendLine();
-
-            string[] options =
-            {
-                "High-Value Target Tracker",
-                "Strike Concentrations",
-                "Port & Anchorage Concentrations",
-                "Established Shipping Routes",
-                "Battle Claims & Revisions"
-            };
-
-            string[] counts =
-            {
-                $"{hvtCount} localized capital units (CV, CA, AO oilers)",
-                $"{Analytics.ModelFConcentrations.Count} active warship clusters (>threshold)",
-                $"{Analytics.PortConcentrations.Count} major staging ports monitored",
-                $"{Analytics.ModelGRoutes.Count} supply & invasion corridors mapped",
-                $"{claimsCount} hostile action assessments tracked"
-            };
-
-            for (int i = 0; i < options.Length; i++)
-            {
-                string desc = $"{options[i]} : {counts[i]}";
-                string lineOut;
-                if (i == _intelSumSel)
-                    lineOut = $"  [{i + 1}]  * {desc}";
-                else
-                    lineOut = $"  [{i + 1}]    {desc}";
-                sb.AppendLine(lineOut);
-                sb.AppendLine();
-            }
-
-            sb.AppendLine("      >> Use [UP/DOWN] to select domain, press [ENTER] to open navigable pop-up.");
-            AppendFooter(sb, "[UP/DOWN] Select Domain", "[ENTER] Open Pop-Up", "[1-5] Quick Filter", "[R] Range Modal", "PRESS ESC TO RETURN");
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  SPLIT-PANE INTEL DETAIL VIEW (RESOLUTION-INDEPENDENT DUAL PANE)
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildNavigablePopUp()
-        {
-            return _splitPaneLayoutEngine.Render(_splitPaneViewState, TurnInfo());
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  SIGINT MAP
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildSigintMapScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "WAR ROOM : GEOSPATIAL SIGINT MAP & SECTOR BEARING LOG", TurnInfo());
-            sb.AppendLine();
-
-            var allLogs = Analytics.GeospatialLog;
-            var log = allLogs
-                .Where(e => IsDateInActiveFilter(e.DateYYMMDD, e.AllDates))
-                .OrderByDescending(e => e.DateYYMMDD)
-                .ToList();
-
-            sb.AppendLine(RenderTemporalCommandStrip());
-            sb.AppendLine();
-            AppendSectionHeader(sb, "DATE     TYPE     LOCALIZED POS   SECTOR BEARING FROM HQ       DETAILS / INTERCEPT");
-
-            if (log.Count == 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine("    NO GEOSPATIAL CONTACTS LOCALIZED FOR THIS TURN DATE.");
-            }
-            else
-            {
-                const int maxVisible = 11;
-                int total = log.Count;
-                if (_sigintMapSel >= total) _sigintMapSel = Math.Max(0, total - 1);
-                int startIdx = _sigintMapSel >= maxVisible ? _sigintMapSel - maxVisible + 1 : 0;
-                int endIdx = Math.Min(total, startIdx + maxVisible);
-
-                for (int i = startIdx; i < endIdx; i++)
-                {
-                    var entry = log[i];
-                    string dStr = !string.IsNullOrEmpty(entry.LastSeenDate) ? entry.LastSeenDate : FileScanner.FormatYYMMDD(entry.DateYYMMDD);
-                    string posStr = $"{entry.HexX},{entry.HexY}";
-                    string pointer = (i == _sigintMapSel) ? "* " : "  ";
-                    string datePad = PadTo(dStr.Length > 8 ? dStr.Substring(0, 8) : dStr, 9);
-                    string typePad = PadTo(entry.EventType.Length > 8 ? entry.EventType.Substring(0, 8) : entry.EventType, 9);
-                    string posPad = PadTo(posStr.Length > 15 ? posStr.Substring(0, 15) : posStr, 16);
-                    string bearPad = PadTo(entry.BearingFromHQ.Length > 28 ? entry.BearingFromHQ.Substring(0, 28) : entry.BearingFromHQ, 29);
-                    string det = entry.Details.Length > 17 ? entry.Details.Substring(0, 17) : entry.Details;
-                    sb.AppendLine($"    {pointer}{datePad}{typePad}{posPad}{bearPad}{det}");
-                }
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("    >> Use [UP/DOWN] to traverse contacts. Press [ENTER] for reasoning. Press [D] for Dossier.");
-            AppendFooter(sb, "[UP/DOWN] Select Contact", "[ENTER] View Reasoning", "[1-5] Quick Filter", "[R] Range Modal", "[D] Dossier Search", "PRESS ESC TO RETURN");
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  DOSSIER SEARCH
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildDossierSearchScreen()
-        {
-            var sb = new StringBuilder();
-            if (_dossierSearching)
-            {
-                AppendHeader(sb, "UNIFIED INTELLIGENCE DOSSIER SEARCH", "ALL CATEGORIES");
-                sb.AppendLine();
-                AppendSectionHeader(sb, "TARGET LOOKUP : BASE | VESSEL | UNIT | AIR GROUP | CITY");
-                sb.AppendLine();
-                sb.AppendLine($"    ENTER SEARCH QUERY (PARTIAL NAME OR CATEGORY): {_dossierQuery}_\n");
-                AppendFooter(sb, "[ENTER] Execute Search", "[ESC] Return to SIGINT Map");
-            }
-            else
-            {
-                AppendHeader(sb, "DOSSIER SEARCH RESULTS", $"MATCHES: {_dossierResults.Count}");
-                sb.AppendLine();
-                AppendSectionHeader(sb, $"QUERY: \"{_dossierQuery}\" - ENTERPRISE KNOWLEDGE BASE");
-
-                if (_dossierResults.Count == 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("    NO MATCHING INTELLIGENCE ENTITIES IDENTIFIED IN CURRENT TELEMETRY.");
-                }
-                else
-                {
-                    sb.AppendLine("    CATEGORY    NAME / IDENTIFIER           LOCATION / STATUS");
-                    sb.AppendLine("    " + new string('─', 76));
-                    int maxShow = Math.Min(11, _dossierResults.Count);
-                    for (int i = 0; i < maxShow; i++)
-                    {
-                        var r = _dossierResults[i];
-                        string catPad = PadTo(r.Category.Length > 11 ? r.Category.Substring(0, 11) : r.Category, 12);
-                        string namePad = PadTo(r.Name.Length > 26 ? r.Name.Substring(0, 26) : r.Name, 28);
-                        string det = r.Details.Length > 38 ? r.Details.Substring(0, 38) : r.Details;
-                        sb.AppendLine($"    {catPad}{namePad}{det}");
-                    }
-                }
-                AppendFooter(sb, "PRESS ESC TO RETURN");
-            }
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
         //  TBD DOMAIN
         // ─────────────────────────────────────────────────────────────────────
         private string BuildTbdDomainScreen()
@@ -4602,64 +3829,6 @@ namespace ROCHEFORT6000.Core.Controller
                 $" {vm.SymmetryPair1}",
                 $" {vm.SymmetryPair2}",
                 $" {vm.SymmetryPair3}",
-                "",
-                " ------------------------------------------------------------------------",
-                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
-                $" \"{vm.TacticalAssessment}\"",
-                ""
-            };
-
-            foreach (var line in lines)
-            {
-                if (line.Length > innerWidth)
-                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
-                else
-                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
-            }
-
-            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
-            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
-            return sb.ToString();
-        }
-
-        private string BuildPredictiveForecastingScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "WAR ROOM : PREDICTIVE FORECASTING", TurnInfo());
-            sb.AppendLine();
-            AppendSectionHeader(sb, "PROBABLE AXIS & GLOBAL TEMPO PROJECTION");
-
-            const int bw = 78;
-            const int innerWidth = 74;
-            var vm = TelemetryAnalyticsEngine.BuildPredictiveForecastingPage5ViewModel(Analytics, Analytics.Heuristics);
-
-            string topTitle = "╔══ [ PROBABLE AXIS & GLOBAL TEMPO PROJECTION ] ";
-            int rem = bw - topTitle.Length - 1;
-            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
-
-            string[] lines =
-            {
-                "",
-                " -- SECTION 1: GLOBAL TEMPO PHASE ------------------------------------------",
-                $" [CURRENT PHASE]   : [ {vm.CurrentPhase.ToString().ToUpperInvariant()} ] [CONFIDENCE: {vm.CurrentPhaseConfidence}% ] [██████████████████░░]",
-                $" [NEXT PHASE PRED] : [ {vm.NextPhase.ToString().ToUpperInvariant()} ] [PROBABILITY: {vm.NextPhaseProbability}%] [████████████░░░░░]",
-                "",
-                " -- SECTION 2: PREDICTIVE TARGETING & AXIS ---------------------------------",
-                " [LABEL: PROBABLE AXIS OF ADVANCE (VECTOR PROJECTION)                      ]",
-                "",
-                "    Y",
-                "   10 |",
-                "    8 |                                  (Target Cluster)",
-                $"    6 |                      (Now)  -->  [ ({vm.TargetCluster.X},{vm.TargetCluster.Y}) ]",
-                $"    4 |                        ({vm.CurrentCoG.X},{vm.CurrentCoG.Y})",
-                "    2 |",
-                "    0 +------------------------------------------------------------------",
-                "       0 2 4 6 8 10  X",
-                "",
-                " -- SECTION 3: NAVAL TRENDS & MIGRATION ------------------------------------",
-                $" [SUB MIGRATION] : {vm.SubMigrationStatus}",
-                $" [MINE PATHING]  : {vm.MinePathingStatus}",
-                $" [INT. BLINDSPOT]: {vm.BlindspotStatus}",
                 "",
                 " ------------------------------------------------------------------------",
                 " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",

@@ -1,6 +1,11 @@
 # Changelog
 Newest first. History before 2026-10-02 lives in `docs/archive/scope-v1.md` (changelog section).
 
+## 2026-10-02 — Cleanup: War Room dead screens (awaiting owner confirmation)
+- Removed unreachable screens Intelligence Summary (+ detail pop-up and its advisor panel), SIGINT Map, Dossier Search and Predictive Forecasting, plus the Page 5 view-model; ~890 lines. TPIE had no code left.
+- Kept the analytics behind them (HVTs, geospatial log, `SearchDossier`, etc.) for re-homing, and the split-pane components (own tests).
+- The date-range filter modal is now unreachable; kept pending owner decision.
+
 ## 2026-10-02 — Foundations (awaiting owner confirmation)
 - Scan hygiene: only the campaign's chosen .pws; live-vs-archive de-dup; CombatEvents `MM/DD/YY` = next-day stamp; ignores autosave\, SAFE ARCH\, rar/placeholder/updateReport, j* (Japanese-side) reports; repo sample/golden data scanned by tests only.
 - `.wic` vault (`Core/Vault/CampaignVault.cs`): zip with manifest + ledger, raw reports, Allied-only decoded PWS snapshots, superseded versions kept (.prevN), atomic save + .bak.
