@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 
-namespace MUTHUR6000.Settings
+namespace ROCHEFORT6000.Settings
 {
     public class WidgetSettings
     {

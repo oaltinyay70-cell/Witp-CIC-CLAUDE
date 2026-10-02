@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-namespace MUTHUR6000.Core.Database
+namespace ROCHEFORT6000.Core.Database
 {
     public class BaseLocation
     {

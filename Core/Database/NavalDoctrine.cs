@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MUTHUR6000.Core.Database
+namespace ROCHEFORT6000.Core.Database
 {
     public enum NavalFunctionalClass
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MUTHUR6000.Terminal
+namespace ROCHEFORT6000.Terminal
 {
     public class TerminalReaderEngine : IDisposable
     {

@@ -1,0 +1,76 @@
+==========================================================================================================
+  ROCHEFORT 6000 // PACIFIC WAR ROOM TEMPORAL FILTER & RANGE PICKER MOCKUP (106-COLUMN STANDARD)
+==========================================================================================================
+
+----------------------------------------------------------------------------------------------------------
+VIEW 1: PRIMARY SCREEN INTEGRATION (SIGINT MAP & THEATER INTELLIGENCE SUMMARY)
+----------------------------------------------------------------------------------------------------------
+
+══════════════════════════════════════════════════════════════════════════════════════════════════════════
+  ROCHEFORT 6000 // PACIFIC THEATER INTELLIGENCE SUMMARY                                      05/04/42
+══════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+  ┌── TEMPORAL FILTER CONTROL ───────────────────────────────────────────────────────────────────────────┐
+  │ PRESETS: [1] LATEST (05/04/42)  [2] LAST 7D  [3] LAST 15D  [4] LAST 30D  [5] ALL  │ [R] RANGE MODAL │
+  │ ACTIVE:  * 04/27/42 -> 05/04/42 (LAST 7 DAYS)    << [ / ] STEP TURN: 05/04/42 >>     (24 CONTACTS)  │
+  └───-───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  DATE     TYPE     LOCALIZED POS    SECTOR BEARING FROM HQ         DETAILS / TELEMETRY INTERCEPT
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────
+* 05/04/42 SIGHTING 104,78           Shortlands (80 NM SE)          3 Japanese CA, 4 DD heading South
+  05/03/42 SIGHTING 102,74           Rabaul Approaches (30 NM S)    Fleet Carrier Division (CV Soryu class)
+  05/01/42 RADIO    098,71           Kavieng Outpost Sector         Radio traffic spike (IJN 5th CarDiv)
+  04/29/42 SIGHTING 095,68           Truks Staging Anchorage        4 Fleet Oilers (AO), 12 Transports
+  04/28/42 COMBAT   106,82           Deboyne Island Lagoon          SBD Dauntless strike hits Japanese xAK
+  04/27/42 SIGHTING 110,85           Louisiade Archipelago          2 Submarines (SS) cruising surfaced
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [UP/DOWN] Select Contact   [ENTER] Telemetry Details   [1-5] Quick Filter   [R] Range Modal   [ESC] Return
+
+
+----------------------------------------------------------------------------------------------------------
+VIEW 2: MODAL OVERLAY (OPENED ON DEMAND VIA [R] OR [F] KEY)
+----------------------------------------------------------------------------------------------------------
+
+╔══ [ TEMPORAL INTELLIGENCE FILTER & DATE RANGE SELECTOR ] ══════════════════════════════════════════════╗
+║                                                                                                        ║
+║   QUICK OPERATIONAL PRESETS:                                                                           ║
+║     [1] Latest Turn Only            05/04/42 (Turn 24)                                                 ║
+║     [2] Previous Turn               05/03/42 (Turn 23)                                                 ║
+║   * [3] Last 7 Days (Tactical)      04/27/42 -> 05/04/42                                               ║
+║     [4] Last 15 Days (Operational)  04/19/42 -> 05/04/42                                               ║
+║     [5] Last 30 Days (Strategic)    04/04/42 -> 05/04/42                                               ║
+║     [6] Entire Campaign (All Turns) 12/07/41 -> 05/04/42 (26 Turns Available)                           ║
+║                                                                                                        ║
+║   ──────────────────────────────────────────────────────────────────────────────────────────────────   ║
+║                                                                                                        ║
+║   CUSTOM DATE / RANGE ENTRY (MM/DD/YY):                                                                ║
+║     [S] Enter Specific Date:  [ 04/28/42          ]                                                    ║
+║     [C] Enter Custom Range:   [ 04/15/42 - 05/02/42 ]                                                  ║
+║                                                                                                        ║
+║   ──────────────────────────────────────────────────────────────────────────────────────────────────   ║
+║   ACTIVE FILTER: 04/27/42 -> 05/04/42 (LAST 7 DAYS)  │  MATCHING SIGHTINGS: 24 ENTRIES                   ║
+║                                                                                                        ║
+║   [1-6] Quick Preset   [S/C] Type Date/Range   [UP/DOWN] Traverse   [ENTER] Apply Filter  [ESC] Cancel ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+----------------------------------------------------------------------------------------------------------
+VIEW 3: INLINE CUSTOM RANGE TYPING PROMPT (ACTIVATED WHEN [S] OR [C] IS SELECTED)
+----------------------------------------------------------------------------------------------------------
+
+╔══ [ TEMPORAL INTELLIGENCE FILTER & DATE RANGE SELECTOR ] ══════════════════════════════════════════════╗
+║                                                                                                        ║
+║   CUSTOM RANGE ENTRY MODE:                                                                             ║
+║                                                                                                        ║
+║     ENTER START DATE (MM/DD/YY) OR RANGE (MM/DD/YY - MM/DD/YY):                                        ║
+║     >> 04/15/42 - 05/02/42_                                                                            ║
+║                                                                                                        ║
+║     VALID FORMATS:                                                                                     ║
+║       - Single Date: 05/04/42                                                                          ║
+║       - Date Range:  04/15/42 - 05/02/42  or  04/15/42 to 05/02/42                                     ║
+║       - Quick Span:  -7d (Last 7 Days), -15d (Last 15 Days), -30d (Last Month)                         ║
+║                                                                                                        ║
+║   ──────────────────────────────────────────────────────────────────────────────────────────────────   ║
+║   [ENTER] Confirm & Filter Telemetry          [BACKSPACE] Edit          [ESC] Cancel                   ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝

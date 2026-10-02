@@ -407,3 +407,15 @@ dist/Older Code/
 bin/
 obj/
 backups/*.zip
+
+# MegaMemory developer tool (personal state — not game code, do not ship)
+.megamemory/
+mcp_config.json
+
+# --- Takeover housekeeping (2026-10-02) ---
+# Build outputs and local archives are never versioned
+dist/
+_archive/
+_to_delete/
+.megamemory/
+scratch/

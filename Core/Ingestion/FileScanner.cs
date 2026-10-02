@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ROCHEFORT6000.Core.Ingestion.Pws;
 
-namespace MUTHUR6000.Core.Ingestion
+namespace ROCHEFORT6000.Core.Ingestion
 {
     public class DiscoveredFile
     {
@@ -19,7 +20,7 @@ namespace MUTHUR6000.Core.Ingestion
         public List<DiscoveredFile> Files { get; set; } = new List<DiscoveredFile>();
         public SortedSet<string> UniqueDates { get; set; } = new SortedSet<string>();
         public string LatestDate { get; set; } = "411207";
-        public string FormattedDate { get; set; } = "07 - Dec - 41";
+        public string FormattedDate { get; set; } = "07/12/41";
         public int DaysProcessed { get; set; } = 0;
     }
 
@@ -45,8 +46,7 @@ namespace MUTHUR6000.Core.Ingestion
                 return yymmdd;
             }
 
-            string mStr = MonthNames[mIdx - 1];
-            return $"{dd} - {mStr} - {yy}";
+            return $"{dd}/{mm}/{yy}";
         }
 
         public static string FormatShortDate(string yymmdd)
@@ -61,8 +61,7 @@ namespace MUTHUR6000.Core.Ingestion
                 return yymmdd;
             }
 
-            string mStr = MonthNames[mIdx - 1];
-            return $"{dd} - {mStr} - {yy}";
+            return $"{dd}/{mm}/{yy}";
         }
 
         public static string ExtractDateFromPws(string filePath)
@@ -70,43 +69,29 @@ namespace MUTHUR6000.Core.Ingestion
             if (!File.Exists(filePath)) return string.Empty;
             try
             {
-                using var fs = File.OpenRead(filePath);
-                using var gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Decompress);
-                using var ms = new MemoryStream();
-                byte[] buf = new byte[8192];
-                int read = gz.Read(buf, 0, buf.Length);
-                if (read < 12) return string.Empty;
-                int c = BitConverter.ToInt32(buf, 8);
-                if (read < 12 + c)
+                // Method 1: Scan decompressed outer blocks for block 550 (game header / meta)
+                byte[] outer = PwsBlockScanner.DecompressOuter(filePath);
+                foreach (var block in PwsBlockScanner.ScanBlocks(outer))
                 {
-                    ms.Write(buf, 12, read - 12);
-                    int needed = (12 + c) - read;
-                    while (needed > 0)
+                    if (block.BlockId == 550 && block.Payload != null && block.Payload.Length > 0)
                     {
-                        int r = gz.Read(buf, 0, Math.Min(buf.Length, needed));
-                        if (r <= 0) break;
-                        ms.Write(buf, 0, r);
-                        needed -= r;
+                        string headerText = System.Text.Encoding.Latin1.GetString(block.Payload);
+                        var m = Regex.Match(headerText, @"Date:\s*(\d{1,2})/(\d{1,2})/(\d{2})");
+                        if (m.Success)
+                        {
+                            int mm = int.Parse(m.Groups[1].Value);
+                            int dd = int.Parse(m.Groups[2].Value);
+                            int yy = int.Parse(m.Groups[3].Value);
+                            return $"{yy:D2}{mm:D2}{dd:D2}";
+                        }
                     }
-                    ms.Position = 0;
                 }
-                else
+
+                // Method 2: Fallback to full PwsFileParser parse
+                var snapshot = PwsFileParser.Parse(filePath);
+                if (!string.IsNullOrEmpty(snapshot.Meta.DateYYMMDD))
                 {
-                    ms.Write(buf, 12, c);
-                    ms.Position = 0;
-                }
-                using var zs = new System.IO.Compression.ZLibStream(ms, System.IO.Compression.CompressionMode.Decompress);
-                using var reader = new StreamReader(zs, System.Text.Encoding.Latin1);
-                char[] txtBuf = new char[500];
-                int txtRead = reader.Read(txtBuf, 0, txtBuf.Length);
-                string headerText = new string(txtBuf, 0, txtRead);
-                var m = Regex.Match(headerText, @"Date:\s*(\d{1,2})/(\d{1,2})/(\d{2})");
-                if (m.Success)
-                {
-                    int mm = int.Parse(m.Groups[1].Value);
-                    int dd = int.Parse(m.Groups[2].Value);
-                    int yy = int.Parse(m.Groups[3].Value);
-                    return $"{yy:D2}{mm:D2}{dd:D2}";
+                    return snapshot.Meta.DateYYMMDD;
                 }
             }
             catch
@@ -172,6 +157,8 @@ namespace MUTHUR6000.Core.Ingestion
         public static IngestionManifest ScanDirectories(IEnumerable<string> directories)
         {
             var manifest = new IngestionManifest();
+            var visitedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var seenFileSignatures = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var dir in directories)
             {
@@ -179,11 +166,35 @@ namespace MUTHUR6000.Core.Ingestion
                 {
                     if (!Directory.Exists(dir)) continue;
 
-                    var filePaths = Directory.GetFiles(dir);
+                    // Collect files from dir and all subdirectories
+                    var filePaths = new List<string>();
+                    try
+                    {
+                        filePaths.AddRange(Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories));
+                    }
+                    catch
+                    {
+                        // Fallback to top directory only if subdirectories are inaccessible
+                        filePaths.AddRange(Directory.GetFiles(dir));
+                    }
+
                     foreach (var fpath in filePaths)
                     {
+                        string canonicalPath = Path.GetFullPath(fpath);
+                        if (!visitedFiles.Add(canonicalPath)) continue;
+
                         string fname = Path.GetFileName(fpath);
                         string lowerName = fname.ToLowerInvariant();
+
+                        // Avoid processing duplicate files with identical names and file sizes from overlapping paths
+                        try
+                        {
+                            long fileLength = new FileInfo(fpath).Length;
+                            string signature = $"{lowerName}:{fileLength}";
+                            if (!seenFileSignatures.Add(signature)) continue;
+                        }
+                        catch { }
+
                         string ftype = string.Empty;
                         string dateCode = string.Empty;
 
@@ -197,9 +208,22 @@ namespace MUTHUR6000.Core.Ingestion
                         {
                             dateCode = ExtractDateFromReportHeader(fpath);
                         }
-                        else if (string.IsNullOrEmpty(dateCode) && lowerName.EndsWith(".pws"))
+                        // User rule: Only process .pws save files located under the canonical SAVE directory
+                        // (e.g. C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE) or test/sample directories.
+                        bool isEligiblePws = false;
+                        if (lowerName.EndsWith(".pws"))
                         {
-                            dateCode = ExtractDateFromPws(fpath);
+                            string dirOfFile = Path.GetDirectoryName(canonicalPath) ?? string.Empty;
+                            isEligiblePws = dirOfFile.EndsWith(@"\SAVE", StringComparison.OrdinalIgnoreCase) ||
+                                            dirOfFile.EndsWith(@"/SAVE", StringComparison.OrdinalIgnoreCase) ||
+                                            dirOfFile.IndexOf(@"\SAVE\", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                            dirOfFile.IndexOf(@"/SAVE/", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                            canonicalPath.IndexOf("sample_data", StringComparison.OrdinalIgnoreCase) >= 0;
+
+                            if (isEligiblePws && string.IsNullOrEmpty(dateCode))
+                            {
+                                dateCode = ExtractDateFromPws(fpath);
+                            }
                         }
 
                         if (lowerName.Contains("sigint"))
@@ -218,7 +242,7 @@ namespace MUTHUR6000.Core.Ingestion
                         {
                             ftype = "COMBAT_EVENTS";
                         }
-                        else if (lowerName.EndsWith(".pws"))
+                        else if (isEligiblePws)
                         {
                             ftype = "PWS_SAVE";
                         }
@@ -255,7 +279,7 @@ namespace MUTHUR6000.Core.Ingestion
             else
             {
                 manifest.LatestDate = "411207";
-                manifest.FormattedDate = "07 - Dec - 41";
+                manifest.FormattedDate = "07/12/41";
             }
 
             return manifest;

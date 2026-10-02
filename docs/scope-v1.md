@@ -9,16 +9,88 @@ Project: WITP:AE CIC Intelligence Helper — Version 1
 **Process rule (2026-09-19 18:22 UTC+3 — Ozgur):** Every answer Ozgur gives to any open question MUST be immediately recorded in this changelog with date/time, and mirrored into the relevant design doc (`docs/project-context.md`, `docs/architecture-decisions.md`, etc.). This applies to all questions, in all sessions, forever. No exception. Agent must write the entry before any implementation begins.
 
 ## Changelog
+- 2026-10-01 18:45 UTC+3: **Clean To-Do List & Canonical PWS Save Processing & Historical Retention Engine (witp-cic-rochefort-alpha4-27) (Ozgur):**
+  1. **Canonical PWS Save Scope Enforcement:**
+     - User directive: *"u will only process the pws files under the C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE , \SAVE is always under the install directory. Each turn a new pws file is placed there. u will read this file, extract the knowledge, store, use if applicable. new pws will arrive next turn, same process. never lose old knowledge, Store it."*
+     - Enforced in `FileScanner.cs`: `.pws` files are strictly classified as `PWS_SAVE` only when located in `...\SAVE` or test fixture paths (`sample_data`).
+     - Default scan paths in `TerminalScreenManager.cs` updated to include `C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE`.
+  2. **Multi-Turn Knowledge Store & Historical Retention:**
+     - `PwsRepository` accumulates every ingested snapshot into `SortedDictionary<DateOnly, PwsSnapshot>` (Pillar 13).
+     - Older snapshots are permanently retained for reinforcement countdown deltas, confirmed sunk ship tracking, fuel consumption deltas, and cross-turn gap detection.
+     - The latest save file becomes `PwsRepository.MostRecent` for active fleet authority.
+  3. **Split-Pane Architecture & UI Refactor (Builds 20-26):**
+     - Full resolution-independent split-pane console architecture implemented across 1024x640, 1366x768, 1920x1080, and 2560x1440.
+     - Double-line active border vs single-line inactive border focus switching.
+     - Zero text wrapping with ellipsis truncation in Upper Pane; nested reasoning and evidence navigation in Lower Pane.
+     - Clean exit modal handling: `[Y]` terminates session immediately with process exit (code 0).
+     - Standardized date format `[dd/mm/yy]` and lower-right version badge `v-{Phase}-build{BuildNumber}` (`v-alpha4-build27`).
+  4. **Clean To-Do List Reset:**
+     - Archived previous completed development tasks and initialized fresh active to-do list in `docs/todo.md`.
 
-- 2026-09-28 15:50 UTC+3: **General Polish & Baseline 1.9 Enforcement (witp-cic-rochefort-alpha4-15) (Ozgur):**
-  1. **Selection Markers Standardized to `* `:** Eliminated all box border disruption caused by `> <` brackets displacing character column counts. Standardized selection pointers across all menus, tables, modals, and navigable pop-ups to a clean `* ` prefix for selected items and `  ` for unselected items, strictly preserving 106-column table boundaries with 100% straight vertical right margins.
-  2. **Elimination of Screen Flicker & Glitches:** Disabled cursor blinking and text redraw invalidation timers (`_cursorTimer` in `MainWindow.xaml.cs`) in accordance with Baseline 1.9 Zero-Blinking Policy. Removed unnecessary screen flicker and CRT glitch/snow invalidation cycles.
-  3. **Standardized Date Formatting (`DD - monthname - Last 2 digits of year`):** Enforced universal display format `$"{dd} - {mStr} - {yy}"` (e.g. `07 - Dec - 41`, `13 - Dec - 41`) across `FileScanner`, `WarRoomAnalytics`, and all UI screens. Chronological date lists now strictly present newer dates first.
-  4. **Native `.pws` Save File Ingestion Engine:** Added full decompression and extraction pipeline for PBEM `.pws` save turn files (e.g., `wpae023.pws`, turn file from Japanese player to US player). Implemented gzip decompression, header date parsing from record `0x26`, 4-section CRLF operational/combat reports extraction from record `0x51` (feeding AAR, Combat Events, Ops Report, and SIGINT line parsers), and 464-byte ship structure parsing from record `0x08` for sunk combatants (`status == 19999`) and coordinates `@352, @354`.
-  5. **Interactive Date Sliders for SIGINT & Intelligence Summaries:** Added date slider banners (`DATE FILTER: [< {filterLabel} >]`) to the SIGINT Geospatial Map and Theater Intelligence Summary menus. Users can cycle through available operational dates in descending chronological order (newest first) using `[LEFT/RIGHT]`, `[,] [.]`, or `[` / `]`.
-  6. **Heuristics Menu Readability:** Applied double-line spacing (`sb.AppendLine()`) to the Heuristics domain menu.
-  7. **Redundant Prompt Cleanups:** Eliminated superfluous `[PRESS ENTER]` prompts from detail modal views where lower split panels already render full telemetry analysis.
-  8. **Release Binary:** Published sole authorized executable `dist/witp-cic-rochefort-alpha4-15.exe`. All 103 automated analytical test suites passing.
+- 2026-09-29 23:30 UTC+3: **Interactive Calendar Pop-Up Picker, Menu Descending Chronology, Domain Retirement, & Build 17 (witp-cic-rochefort-alpha4-17) (Ozgur):**
+  1. **Interactive Visual Calendar Pop-Up Picker (`[S]` and `[C]`):**
+     - Integrated `ScreenState.CalendarPickerModal` into `TerminalScreenManager.cs`.
+     - Opened via `[S]` (Single Date) or `[C]` (Custom Range) from the Temporal Filter Modal (`[R]`).
+     - Interactive cursor navigation via keyboard: `[Left/Right]` for days, `[Up/Down]` for weeks, `[PgUp/PgDn]` or `[M/N]` for months, `[Enter]` to confirm selection, `[Esc]` to cancel.
+     - Strict boundary clamping: Clamped between Pearl Harbor start date (`12/07/1941`) and campaign maximum (`12/31/1946`).
+     - Multi-step custom range flow: Step 1 (Select Start Date) and Step 2 (Select End Date) with interactive visual highlights (`(DD)` start, `[DD]` cursor, `=DD=` active range span).
+     - Strict 106-column monospace grid with 100% straight vertical borders (`║`).
+  2. **Label Clarity & Border Stabilization:**
+     - Replaced cryptic text such as `(3hvt)` with clear standard labeling `(3 HIGH-VALUE TARGETS)`.
+     - Eliminated border disturbance and jitter when keys are pressed in command strip and modal.
+  3. **Universal Descending Date Chronology (Newest to Oldest):**
+     - Enforced `OrderByDescending` by date across `SIGINT MAP` (`GeospatialLog`), `IntelligenceSummary` lists (`HighValueTargets`, `ModelEClaims`), and all other manifests.
+  4. **TPIE & Predictive Models Retirement:**
+     - Deleted sub-pages under TPIE Warning Dashboard; renamed option `[4]` in War Room Primary to `[ TBD ]` routing to `ScreenState.TbdDomain`.
+     - Deleted Predictive Models sub-menu and connected pages; renamed option `[5]` in War Room Primary to `[ TBD ]` routing to `ScreenState.TbdDomain`.
+  5. **Auto-Increment Release Build System:**
+     - Automated build counter auto-increment in `build_release.ps1` to produce `dist/witp-cic-rochefort-alpha4-17.exe`.
+     - 147 automated tests passing (100% pass rate).
+
+- 2026-09-29 18:45 UTC+3: **Compact Temporal Filter & Date Range Modal Integration (witp-cic-rochefort-alpha4-16) (Ozgur):**
+  1. **Compact 2-Line Command Strip Header:**
+     - Replaced the horizontal date slider track in both `BuildIntelligenceSummaryScreen()` and `BuildSigintMapScreen()` with a compact 2-line command strip:
+       `PRESETS: [1] LATEST (MM/DD/YY)  [2] LAST 7D  [3] LAST 15D  [4] LAST 30D  [5] ALL  │ [R] RANGE MODAL`
+       `ACTIVE:  * MM/DD/YY -> MM/DD/YY (LAST 7 DAYS)    << [ / ] STEP TURN: MM/DD/YY >>     (XX CONTACTS)`
+     - Hotkeys `[1-5]` trigger quick preset changes immediately from the primary view.
+     - Keys `[` and `]` step reference operational turns backward and forward.
+  2. **Dedicated Temporal Filter & Date Range Modal:**
+     - Added `ScreenState.TemporalFilterModal` providing View 2 (menu presets [1-6], single date entry [S], custom range [C]) and View 3 (interactive typing prompt with flexible `MM/DD/YY`, `MM/DD/YY - MM/DD/YY`, and `-7d`, `-15d`, `-30d` syntax).
+     - Live error validation banner prevents invalid inputs.
+  3. **Mandatory Default Filter Rule:**
+     - Upon first viewing or switching to `IntelligenceSummary` or `SigintMap`, the filter is reset via `ResetFilterToLast7Days()` to always display the **Last 7 Days** of the active campaign.
+  4. **Strict Monospace 106-Column Formatting:**
+     - Enforced straight box-drawing borders (`║`) and exact 106 terminal column width with zero horizontal clipping.
+  5. **Release Binary & Test Pass:**
+     - Standalone release compiled at `dist/witp-cic-rochefort-alpha4-16.exe`.
+     - 124 automated tests passing (100% pass rate).
+
+- 2026-09-29 14:15 UTC+3: **Native Semantic Concept Graph & Enhanced Dossier Search (witp-cic-rochefort-alpha4-15) (Ozgur):**
+  1. **Zero-Dependency Native C# Implementation:**
+     - Created `Core/Analytics/SemanticConceptGraph.cs` implementing a pure C# TF-IDF bag-of-words embedding engine and cosine similarity matcher. Zero new NuGet packages, zero external DLLs, zero runtime footprint increase.
+  2. **Comprehensive Domain Concept Indexing:**
+     - Ingests over 1,480 entities: 1,330 strategic bases & anchorages from `BaseLocationRegistry`, discovered vessels, units, air groups, High Value Targets (CVs, BBs, fleet oilers), Model A amphibious invasion objectives, and Model G logistics corridors.
+     - Builds domain vocabulary and TF-IDF vectors dynamically during `AnalyzeCampaign()`, adhering strictly to in-memory non-destructive architecture.
+  3. **Enhanced Dossier Search with Semantic Fallback:**
+     - In `WarRoomAnalytics.SearchDossier()`, searches both direct substring matches and semantic concept matches.
+     - Natural conceptual queries like `"carrier threat oiler"` or `"amphibious assault landing"` return highly relevant targets with semantic match scoring percentages (`[SEMANTIC: 89%]`).
+  4. **Release Binary & Test Pass:**
+     - Single-file release published at `dist/witp-cic-rochefort-alpha4-15.exe`.
+     - 114 test assertions passing (100% pass rate).
+
+- 2026-09-28 22:50 UTC+3: **Date Slider Track & Total CRT Glitch Defanging (witp-cic-rochefort-alpha4-15) (Ozgur):**
+  1. **Date Slider in SIGINT & Theater Intelligence Summary Menus:**
+     - Rendered full visual date track in both `BuildIntelligenceSummaryScreen()` and `BuildSigintMapScreen()`:
+       `DATE SLIDER:  [◀ 04 - May - 42 ▶]   23 - Dec - 41   ...   ALL`
+     - Dates strictly sorted descending (`OrderByDescending(d => d)`), listing newest operational turns first, followed by `ALL`.
+     - Prominently highlights active selected date (`[◀ {date} ▶]`), navigable via `[LEFT/RIGHT]`, `[,] [.]`, and `[` / `]`.
+     - Added navigation prompt `(USE [ / ] OR LEFT/RIGHT TO CYCLE DATES)`.
+  2. **Total Screen Flicker & CRT Glitch Elimination:**
+     - Completely defanged `GlitchTimer_Tick` and `TriggerRightToLeftBeamGlitch` in `MainWindow.xaml.cs`.
+     - Ensured zero `ContentJitterTransform` displacement (`X = 0`, `Y = 0`) across all states.
+     - Enforced `_crtGlitchEnabled = false`, `GlitchChance = 0.0` in code defaults and migrated `%APPDATA%\ROCHEFORT6000\settings.json`.
+     - Even if explicitly toggled on, glitch rendering logic produces zero random opacity slices, zero jitter, and zero visual flicker.
+  3. **Standalone Release Binary:** Published `dist/witp-cic-rochefort-alpha4-15.exe`. All 111 automated test suites passing.
 
 
 - 2026-09-27 15:25 UTC+3: **Universal Elimination of MUTHUR 6000 Wording Across Documentation & Programming (Ozgur):**

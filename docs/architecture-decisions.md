@@ -1031,6 +1031,96 @@ User uploaded screenshot (`media_1790439965456.png`) showing all 6 heuristic met
 
 **Source:** Ozgur directives (2026-09-26 19:26 UTC+3).
 
+## 79. Native Semantic Concept Graph & Enhanced Dossier Search (2026-09-29 14:15 UTC+3)
 
+**Context:**
+To support conceptual natural language searches across the extensive Pacific War Room knowledge base (1,330 strategic bases, naval units, air groups, invasion objectives, high-value targets, and logistics corridors) without adding bloated machine learning libraries, native external C++ runtimes, or external processes.
 
+**Decision:**
+1. **Zero-Dependency Native Pure C# Implementation:**
+   - Implemented `Core/Analytics/SemanticConceptGraph.cs` with an in-memory TF-IDF bag-of-words embedding generator and cosine similarity evaluator.
+   - Requires zero NuGet packages, zero external DLLs, and adds 0MB runtime footprint.
+2. **Domain Concept Indexing & Embedding Generation:**
+   - Over 1,480 entities indexed into `ConceptNode` representations:
+     - 1,330 bases and ports from `BaseLocationRegistry`.
+     - Discovered naval, air, and ground units from turn telemetry.
+     - High Value Targets (Fleet Carriers, Battleships, Fleet Oilers).
+     - Model A amphibious assault objectives.
+     - Model G logistics corridors.
+   - Builds dynamic 300-dimension domain vocabulary with smoothed IDF weights during `AnalyzeCampaign()`.
+3. **Enhanced Dossier Search Integration:**
+   - In `WarRoomAnalytics.SearchDossier()`: combines strict substring matching with semantic concept graph fallback when queries are conceptual (e.g. `"carrier threat oiler"` or `"amphibious assault landing"`).
+   - Results display match confidence percentages (`[SEMANTIC: 89%]`) and tactical details.
+4. **Non-Destructive In-Memory Architecture:**
+   - Preserves single executable integrity (`dist/witp-cic-rochefort-alpha4-15.exe`).
+   - Zero modifications to `.wic` vault format or PBEM turn save schemas.
+
+**Source:** Ozgur directives (2026-09-29 14:06 UTC+3).
+
+## 80. Compact Temporal Filter & Date Range Modal Integration (2026-09-29 18:45 UTC+3)
+
+**Context:**
+The previous horizontal ASCII Date Slider track rendered in the SIGINT Map (`BuildSigintMapScreen`) and Theater Intelligence Summary (`BuildIntelligenceSummaryScreen`) was visually cluttered, cumbersome to navigate across long campaigns, and lacked date range filtering capabilities. The user required a compact, intuitive filter supporting:
+1. Direct selection of single dates or date ranges in `MM/DD/YY` format.
+2. Quick-select presets: Latest Turn, Previous Turn, Last 7 Days, Last 15 Days, Last Month (30 Days), and Entire Campaign.
+3. Strict default rule: When first viewed (upon entering either screen), the filter MUST always default to the **Last 7 Days** of the campaign being viewed.
+4. Maintenance of the strict 106-column terminal boundary with 100% straight monospace borders (`║`).
+
+**Decision:**
+1. **Compact 2-Line Command Strip Header:**
+   - In `Core/Controller/TerminalScreenManager.cs`, implemented `RenderTemporalCommandStrip()` replacing the old `RenderDateSliderTrack()` on both the SIGINT Map and Theater Intelligence Summary screens:
+     - Line 1: `PRESETS: [1] LATEST (MM/DD/YY)  [2] LAST 7D  [3] LAST 15D  [4] LAST 30D  [5] ALL  │ [R] RANGE MODAL`
+     - Line 2: `ACTIVE:  * MM/DD/YY -> MM/DD/YY (LAST 7 DAYS)    << [ / ] STEP TURN: MM/DD/YY >>     (XX CONTACTS)`
+   - Hotkeys `[1]` through `[5]` provide instant single-keypress preset switching directly from the main view.
+   - Hotkeys `[` and `]` step the active reference turn backward and forward chronologically.
+2. **Dedicated Temporal Filter Modal Screen (`ScreenState.TemporalFilterModal`):**
+   - Pressing `[R]` or `[F]` opens a focused 106-column modal dialog:
+     - **View 2 (Preset & Mode Directory):** Offers menu choices `[1]` Latest Turn, `[2]` Previous Turn, `[3]` Last 7 Days, `[4]` Last 15 Days, `[5]` Last 30 Days, `[6]` Entire Campaign, `[S]` Enter Specific Date, and `[C]` Enter Custom Range.
+     - **View 3 (Interactive Custom Range Entry):** Prompts the user with `>> [text input]_`. Supports flexible syntax (`MM/DD/YY`, `MM/DD/YY - MM/DD/YY`, `MM/DD/YY to MM/DD/YY`, and quick spans `-7d`, `-15d`, `-30d`). Displays live syntax validation error feedback (`[!] INVALID DATE FORMAT: USE MM/DD/YY OR MM/DD/YY - MM/DD/YY`).
+3. **Strict Initial Last 7 Days Default:**
+   - In `OpenWarRoomSubMenu()`, when routing to option 0 (`IntelligenceSummary`) or option 1 (`SigintMap`), `ResetFilterToLast7Days()` is executed immediately. The view calculates `maxDate` from campaign records and sets the active window to `[maxDate.AddDays(-7), maxDate]`.
+4. **Comprehensive Telemetry Filtering:**
+   - In `BuildIntelligenceSummaryScreen()`, `OpenIntelDetailPopUp()`, and `BuildSigintMapScreen()`, contact reports, sightings, and telemetry records are evaluated against `IsDateInActiveFilter()`. Supports multi-turn sightings (`AllDates`) so contacts tracked across several days match properly if any sighting falls within the active window.
+5. **Rigid 106-Column Monospace Formatting:**
+   - All modal and header rows conform strictly to 106 columns with straight vertical borders (`║`), zero line overflow, and full text wrapping.
+
+**Source:** Ozgur directives (2026-09-29 17:15 UTC+3).
+
+## 81. Interactive Calendar Picker Pop-Up, Menu Descending Chronology, and Domain Retirement (2026-09-29 23:30 UTC+3)
+
+**Context:**
+The user requested 5 key refinements across the terminal user interface and temporal intelligence filtering subsystem:
+1. In the Date Filter Modal (`ScreenState.TemporalFilterModal`), options `[S]` (Single Date) and `[C]` (Custom Range) must open an interactive visual calendar pop-up window navigating with cursor keys, clamped to Pearl Harbor (`12/07/1941`) and campaign maximum (`12/31/1946`).
+2. Fix confusing text in the temporal filter header `(3hvt - what is it ?)` and replace with clear standard label `(3 HIGH-VALUE TARGETS)`. Fix border disturbance/jitter when keys are pressed in command strip / modal.
+3. In `SIGINT MAP` (`GeospatialLog`), `IntelligenceSummary` lists (`HighValueTargets`, `ModelEClaims`), and all menus, sort all items by date descending (from newest to oldest).
+4. Delete sub-pages under TPIE Warning Dashboard and rename menu item `[4]` in War Room Primary to `[ TBD ]` routing to `ScreenState.TbdDomain`.
+5. Delete Predictive Models and all pages connected to it, and rename menu item `[5]` in War Room Primary to `[ TBD ]` routing to `ScreenState.TbdDomain`.
+6. Auto-increment build number by +1 upon each build compilation (`dist/witp-cic-rochefort-alpha4-17.exe`).
+
+**Decision:**
+1. **Interactive Calendar Picker Modal Dialog (`ScreenState.CalendarPickerModal`):**
+   - Implemented `BuildCalendarPickerModalScreen()` and `HandleCalendarPickerModal()` in `Core/Controller/TerminalScreenManager.cs`.
+   - Cursor navigation:
+     - `[Left] / [Right]`: -1 / +1 day (clamped).
+     - `[Up] / [Down]`: -7 / +7 days (clamped).
+     - `[PgUp] / [M]`: -1 month.
+     - `[PgDn] / [N]`: +1 month.
+     - `[Enter]`:
+       - Single Date mode (`!_calendarIsRangeMode`): Sets `TemporalFilterMode.CustomDate` with selected date and returns to caller.
+       - Range Mode (`_calendarIsRangeMode`): Step 1 records `_calendarRangeStartDate`, transitions to Step 2 for End Date selection; Step 2 normalizes `dStart <= dEnd`, sets `TemporalFilterMode.CustomRange`, and returns to caller.
+   - Boundaries: Clamped strictly between `CalendarMinDate = new DateTime(1941, 12, 7)` and `CalendarMaxDate = new DateTime(1946, 12, 31)`.
+   - Visual Layout: Centered monthly calendar grid formatted to 106 columns with 100% straight vertical borders (`║`).
+2. **Label Clarity & Border Stabilization:**
+   - Replaced all cryptic abbreviations like `(3hvt)` with explicit terminology `(3 HIGH-VALUE TARGETS)`.
+   - Fixed monospace alignment and line width padding across all modal states.
+3. **Descending Date Chronology (Newest to Oldest):**
+   - Applied `OrderByDescending(x => x.DateYYMMDD)` to `GeospatialLog`, `HighValueTargets`, `ModelEClaims`, and `UniqueDates` across all War Room manifests and pop-ups.
+4. **Complete TPIE & Predictive Models Purge Without a Trace:**
+   - Decommissioned and completely eliminated all enum states (`TpieDashboard`, `PredictiveModels`, `PredModelPopUp`), methods (`BuildTpieDashboardScreen`, `BuildPredictiveModelsScreen`, `HandleTpieDashboard`, `HandlePredictiveModels`, `OpenPredModelPopUp`, `HandlePredModelPopUp`, `BuildPredModelAdvisorComment`), selection indexers (`_tpieSel`, `_predModelsSel`, `_predPopUpSel`), and caller state variables across the entire codebase.
+   - War Room Primary menu options `[4]` and `[5]` display `[ TBD ]` and route to `ScreenState.TbdDomain`.
+   - Replaced old model strings (`nostromo-tpie-v1` -> `rochefort-heuristics-v1`) and updated Wiki nodes. Zero references remain across all C# and XAML files.
+5. **Build Auto-Increment System:**
+   - Maintained release compiler script `build_release.ps1` to auto-detect the highest build number in `dist/` and increment to clean release [`dist/witp-cic-rochefort-alpha4-19.exe`](file:///c:/Users/ozgur/Documents/Witp-CIC-MUTHUR/dist/witp-cic-rochefort-alpha4-19.exe).
+
+**Source:** Ozgur directives (2026-09-29 23:20 UTC+3).
 

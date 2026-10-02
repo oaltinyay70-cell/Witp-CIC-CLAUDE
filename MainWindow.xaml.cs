@@ -15,16 +15,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using MUTHUR6000.Core.Controller;
-using MUTHUR6000.Settings;
-using MUTHUR6000.Terminal;
+using ROCHEFORT6000.Core.Controller;
+using ROCHEFORT6000.Settings;
+using ROCHEFORT6000.Terminal;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using FontFamily = System.Windows.Media.FontFamily;
 using Path = System.IO.Path;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
-namespace MUTHUR6000
+namespace ROCHEFORT6000
 {
     public partial class MainWindow : Window
     {
@@ -143,8 +143,11 @@ namespace MUTHUR6000
             _crtScanlinesEnabled = _settings.CrtScanlinesEnabled;
             _scanlineThickness = Math.Clamp(_settings.ScanlineThickness, 1.0, 20.0);
 
-            _crtGlitchEnabled = _settings.CrtGlitchEnabled;
-            _glitchChance = Math.Clamp(_settings.GlitchChance, 0.0, 100.0);
+            // Zero Flicker Policy: CRT Glitch and screen jitter are explicitly disabled
+            _crtGlitchEnabled = false;
+            _settings.CrtGlitchEnabled = false;
+            _glitchChance = 0.0;
+            _settings.GlitchChance = 0.0;
 
             _crtSnowEnabled = _settings.CrtSnowEnabled;
             _snowAmount = Math.Clamp(_settings.SnowAmount, 0.0, 100.0);
@@ -192,6 +195,7 @@ namespace MUTHUR6000
             // Initialize Terminal Screen Manager for interactive Pacific War Room
             _screenManager = new TerminalScreenManager();
             _screenManager.ScreenRenderRequested += OnScreenRenderRequested;
+            _screenManager.ShutdownRequested += () => Dispatcher.InvokeAsync(() => App.CleanProcessExit(0));
 
             // Initialize UI elements
             ApplyStyling();
@@ -252,15 +256,12 @@ namespace MUTHUR6000
             UpdateBackgroundColorMenuChecks(_settings.BackgroundColorHex);
             UpdateFontSizeMenuChecks();
 
-            // Sync Resolution ComboBox selection
+            // Sync Resolution ComboBox selection (0: 1280x720 720p, 1: 1920x1080 FHD)
             if (ResolutionComboBox != null)
             {
                 double curW = Width;
-                if (curW >= 2400) ResolutionComboBox.SelectedIndex = 3; // 2560x1440
-                else if (curW >= 1800) ResolutionComboBox.SelectedIndex = 2; // 1920x1080
-                else if (curW >= 1340) ResolutionComboBox.SelectedIndex = 1; // 1366x768
-                else if (curW >= 1200) ResolutionComboBox.SelectedIndex = 0; // 1280x720
-                else ResolutionComboBox.SelectedIndex = 4; // 1024x640
+                if (curW >= 1600) ResolutionComboBox.SelectedIndex = 1; // 1920x1080 FHD
+                else ResolutionComboBox.SelectedIndex = 0;              // 1280x720 720p
             }
 
             // Apply effects state
@@ -303,8 +304,7 @@ namespace MUTHUR6000
                 bool showAdvisor = _screenManager.CurrentState is
                     ScreenState.ReasoningModal or
                     ScreenState.HeuristicsPopUp or
-                    ScreenState.IntelDetailPopUp or
-                    ScreenState.PredModelPopUp;
+                    ScreenState.IntelDetailPopUp;
 
                 if (RochefortPanel != null && RochefortColumn != null)
                 {
@@ -523,117 +523,34 @@ namespace MUTHUR6000
 
         private void GlitchTimer_Tick(object? sender, EventArgs e)
         {
-            if (!_crtGlitchEnabled || _isClosed)
-            {
-                ContentJitterTransform.X = 0;
-                ContentJitterTransform.Y = 0;
-                return;
-            }
+            // Zero Flicker & Zero Glitch Policy: Ensure jitter transform is reset and do not create glitch artifacts
+            ContentJitterTransform.X = 0;
+            ContentJitterTransform.Y = 0;
 
-            // Clear previous horizontal slice glitches (keep beam and highlight elements in canvas)
+            if (_isClosed) return;
+
+            // Clear any lingering horizontal slice glitches
             var sliceRects = CrtGlitchCanvas.Children.OfType<Rectangle>().Where(r => r != GlitchBeamLine).ToList();
             foreach (var r in sliceRects)
             {
                 CrtGlitchCanvas.Children.Remove(r);
             }
 
-            if (Random.Shared.Next(100) < _glitchChance)
+            if (!_crtGlitchEnabled || _glitchChance <= 0)
             {
-                double w = CrtGlitchCanvas.ActualWidth;
-                double h = CrtGlitchCanvas.ActualHeight;
-
-                if (w > 30 && h > 30)
-                {
-                    int sliceCount = Random.Shared.Next(2, 5);
-                    for (int i = 0; i < sliceCount; i++)
-                    {
-                        var rect = new Rectangle
-                        {
-                            Width = Random.Shared.Next(40, (int)w),
-                            Height = Random.Shared.Next(2, 7),
-                            Fill = _glitchBrushes[Random.Shared.Next(_glitchBrushes.Length)],
-                            Opacity = Random.Shared.NextDouble() * 0.7 + 0.3
-                        };
-
-                        Canvas.SetLeft(rect, Random.Shared.Next(-10, (int)w - 20));
-                        Canvas.SetTop(rect, Random.Shared.Next(0, (int)h - 8));
-                        CrtGlitchCanvas.Children.Add(rect);
-                    }
-
-                    // Content micro jitter displacement
-                    ContentJitterTransform.X = (Random.Shared.NextDouble() * 4.0) - 2.0;
-                    ContentJitterTransform.Y = (Random.Shared.NextDouble() * 3.0) - 1.5;
-
-                    // Trigger Right-to-Left Beam Scan with Reverse-Video Highlight
-                    if (Random.Shared.Next(100) < 40)
-                    {
-                        TriggerRightToLeftBeamGlitch(w, h);
-                    }
-                }
+                return;
             }
-            else
-            {
-                ContentJitterTransform.X = 0;
-                ContentJitterTransform.Y = 0;
-            }
+
+            // If CRT Glitch is explicitly turned on by user, keep visual effects strictly stable and flicker-free
         }
 
         private void TriggerRightToLeftBeamGlitch(double canvasWidth, double canvasHeight)
         {
-            if (canvasWidth <= 50 || canvasHeight <= 50) return;
-
-            // Sample a character on screen or fallback
-            char highlightChar = '█';
-            string text = _textRun.Text;
-            if (!string.IsNullOrEmpty(text))
-            {
-                // Find a non-whitespace character from recent visible lines
-                int searchStart = Math.Max(0, text.Length - 1200);
-                var candidates = text.Substring(searchStart)
-                                     .Where(c => !char.IsWhiteSpace(c) && !char.IsControl(c))
-                                     .ToList();
-                if (candidates.Count > 0)
-                {
-                    highlightChar = candidates[Random.Shared.Next(candidates.Count)];
-                }
-            }
-
-            // Estimate character position on terminal grid
-            double approxCharWidth = Math.Max(7.0, _currentFontSize * 0.62);
-            double approxLineHeight = 18.0;
-
-            int maxCols = Math.Max(1, (int)((canvasWidth - 40) / approxCharWidth));
-            int maxRows = Math.Max(1, (int)((canvasHeight - 50) / approxLineHeight));
-
-            int targetCol = Random.Shared.Next(2, maxCols);
-            int targetRow = Random.Shared.Next(2, maxRows);
-
-            double targetX = 14 + (targetCol * approxCharWidth);
-            double targetY = 32 + (targetRow * approxLineHeight);
-
-            // Configure Right-to-Left Beam Scan Line
-            GlitchBeamLine.Fill = _currentPhosphorBrush;
-            GlitchBeamLine.Height = 2.5;
-            GlitchBeamLine.Opacity = 0.95;
-            Canvas.SetTop(GlitchBeamLine, targetY + 7);
-            Canvas.SetLeft(GlitchBeamLine, targetX);
-            GlitchBeamLine.Width = Math.Max(10.0, canvasWidth - targetX);
-
-            // Configure Reverse-Video Character Highlight
-            GlitchReverseHighlightBox.Background = _currentPhosphorBrush;
-            GlitchReverseHighlightText.Foreground = _currentBackgroundBrush;
-            GlitchReverseHighlightText.FontFamily = _currentFontFamily;
-            GlitchReverseHighlightText.FontSize = _currentFontSize;
-            GlitchReverseHighlightText.Text = highlightChar.ToString();
-
-            Canvas.SetLeft(GlitchReverseHighlightBox, targetX);
-            Canvas.SetTop(GlitchReverseHighlightBox, targetY);
-
-            GlitchReverseHighlightBox.Visibility = Visibility.Visible;
-            GlitchReverseHighlightBox.Opacity = 1.0;
-
-            _beamResetTimer.Stop();
-            _beamResetTimer.Start();
+            // Defanged per Zero Flicker & Zero CRT Glitch policy
+            GlitchBeamLine.Opacity = 0.0;
+            GlitchBeamLine.Width = 0;
+            GlitchReverseHighlightBox.Visibility = Visibility.Collapsed;
+            GlitchReverseHighlightBox.Opacity = 0.0;
         }
 
         private void BeamResetTimer_Tick(object? sender, EventArgs e)
@@ -743,6 +660,17 @@ namespace MUTHUR6000
             if (PhosphorLabelText != null)
             {
                 PhosphorLabelText.Foreground = new SolidColorBrush(Color.FromArgb(160, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
+            }
+
+            // Lower right frame version badge
+            if (VersionText != null)
+            {
+                VersionText.Text = ROCHEFORT6000.Core.Common.AppVersion.DisplayVersion;
+                VersionText.Foreground = new SolidColorBrush(Color.FromArgb(170, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
+            }
+            if (VersionBadgeBorder != null)
+            {
+                VersionBadgeBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(70, _currentPhosphorColor.R, _currentPhosphorColor.G, _currentPhosphorColor.B));
             }
 
             // Scrollbar thumb indicator tint
@@ -950,29 +878,17 @@ namespace MUTHUR6000
             if (!_isInitialized || ResolutionComboBox == null) return;
             if (ResolutionComboBox.SelectedItem is ComboBoxItem item && item.Tag is string res)
             {
-                double targetW = 1024, targetH = 640;
+                double targetW = 1280, targetH = 720;
                 switch (res)
                 {
-                    case "1280x720":
-                        targetW = 1280;
-                        targetH = 720;
-                        break;
-                    case "1366x768":
-                        targetW = 1366;
-                        targetH = 768;
-                        break;
                     case "1920x1080":
                         targetW = 1920;
                         targetH = 1080;
                         break;
-                    case "2560x1440":
-                        targetW = 2560;
-                        targetH = 1440;
-                        break;
-                    case "1024x640":
+                    case "1280x720":
                     default:
-                        targetW = 1024;
-                        targetH = 640;
+                        targetW = 1280;
+                        targetH = 720;
                         break;
                 }
 

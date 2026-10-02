@@ -1,4 +1,4 @@
-<Window x:Class="MUTHUR6000.MainWindow"
+<Window x:Class="ROCHEFORT6000.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ROCHEFORT 6000 // PACIFIC CIC"
@@ -709,11 +709,8 @@
                                     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#08140B" />
                                     <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#00FF66" />
                                 </ComboBox.Resources>
-                                <ComboBoxItem Content="1280 x 720 (HD)" Tag="1280x720"/>
-                                <ComboBoxItem Content="1366 x 768 (720p)" Tag="1366x768"/>
-                                <ComboBoxItem Content="1920 x 1080 (Full HD)" Tag="1920x1080"/>
-                                <ComboBoxItem Content="2560 x 1440 (QHD 2K)" Tag="2560x1440"/>
-                                <ComboBoxItem Content="1024 x 640 (Standard)" Tag="1024x640"/>
+                                <ComboBoxItem Content="1280 x 720 (720p)" Tag="1280x720"/>
+                                <ComboBoxItem Content="1920 x 1080 (FHD)" Tag="1920x1080"/>
                             </ComboBox>
                         </Border>
                     </StackPanel>
@@ -728,6 +725,23 @@
                                    Text="HOLD: 3.0s"
                                    FontSize="10"
                                    Foreground="#50FFFFFF"/>
+                        <!-- Lower Right Frame: Operational Phase & Build Badge -->
+                        <Border x:Name="VersionBadgeBorder"
+                                BorderBrush="#3500FF66"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Background="#14000000"
+                                Margin="12,0,0,0"
+                                Padding="6,1"
+                                VerticalAlignment="Center">
+                            <TextBlock x:Name="VersionText"
+                                       Text="v-alpha4-build24"
+                                       FontSize="10"
+                                       FontFamily="Cascadia Code, Consolas, Courier New"
+                                       FontWeight="SemiBold"
+                                       Foreground="#8000FF66"
+                                       VerticalAlignment="Center"/>
+                        </Border>
                     </StackPanel>
                 </DockPanel>
             </Border>

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MUTHUR6000.Core.Database;
-using MUTHUR6000.Core.Ingestion;
+using ROCHEFORT6000.Core.Database;
+using ROCHEFORT6000.Core.Ingestion;
+using WitpCic.Core.Analytics.EntityResolution;
+using WitpCic.Core.Analytics.Rules;
+using WitpCic.Core.Geospatial;
+using WitpCic.Core.State;
 
-namespace MUTHUR6000.Core.Analytics
+namespace ROCHEFORT6000.Core.Analytics
 {
     public class MinefieldHitRecord
     {
@@ -115,6 +119,9 @@ namespace MUTHUR6000.Core.Analytics
 
         // Metric 50: Operational Tempo (OPTEMPO)
         public List<DailyOptempoRecord> DailyOptempo { get; } = new();
+
+        // Strategic Rules Engine Alerts & Recommendations
+        public List<RuleEvaluationResult> RulesEngineAlerts { get; } = new();
 
         public static string ResolveRegion(int hexX, int hexY, string baseName)
         {
@@ -229,6 +236,11 @@ namespace MUTHUR6000.Core.Analytics
             // 50. Operational Tempo (OPTEMPO) (combatreport '---' count)
             // ─────────────────────────────────────────────────────────────────
             ComputeOperationalTempo(manifest, orderedDates);
+
+            // ─────────────────────────────────────────────────────────────────
+            // 51. Strategic Rules Engine (Actionable Decision Support Alerts)
+            // ─────────────────────────────────────────────────────────────────
+            ComputeStrategicRules(sightings, latestDate);
         }
 
         private void ClearAll()
@@ -243,6 +255,21 @@ namespace MUTHUR6000.Core.Analytics
             AxisStepVectors.Clear();
             StrategicDrift = new StepVector();
             DailyOptempo.Clear();
+            RulesEngineAlerts.Clear();
+        }
+
+        private void ComputeStrategicRules(IReadOnlyList<SightingEvent> sightings, string latestDate)
+        {
+            RulesEngineAlerts.Clear();
+            var repo = new WorldStateRepository();
+            foreach (var s in sightings)
+            {
+                repo.GetOrAddUnit(Guid.NewGuid(), s.Description, EntityType.SurfaceShip, new HexCoordinate(s.HexX, s.HexY));
+            }
+            var snapshot = repo.CreateSnapshot(DateOnly.MinValue);
+            var engine = new StrategicRulesEngine();
+            var results = engine.EvaluateAllAsync(snapshot).GetAwaiter().GetResult();
+            RulesEngineAlerts.AddRange(results);
         }
 
         private void ComputeRegionalPowerShift(

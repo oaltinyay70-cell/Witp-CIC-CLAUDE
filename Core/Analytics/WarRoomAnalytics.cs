@@ -3,11 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
-using MUTHUR6000.Core.Database;
-using MUTHUR6000.Core.Ingestion;
+using ROCHEFORT6000.Core.Database;
+using ROCHEFORT6000.Core.Ingestion;
+using ROCHEFORT6000.Core.Ingestion.Pws;
+using WitpCic.Core.Analytics.AirDenial;
+using WitpCic.Core.Analytics.Bayesian;
+using WitpCic.Core.Analytics.Clustering;
+using WitpCic.Core.Analytics.Continuity;
+using WitpCic.Core.Analytics.EntityResolution;
+using WitpCic.Core.Analytics.Logistics;
+using WitpCic.Core.Analytics.Prediction;
+using WitpCic.Core.Analytics.Rules;
+using WitpCic.Core.Analytics.Sensors;
+using WitpCic.Core.Analytics.TemporalDecay;
+using WitpCic.Core.Geospatial;
+using WitpCic.Core.Ingestion;
+using WitpCic.Core.State;
+using WitpCic.Core.State.Hazards;
 
-namespace MUTHUR6000.Core.Analytics
+namespace ROCHEFORT6000.Core.Analytics
 {
     public enum ReportType
     {
@@ -331,7 +347,57 @@ namespace MUTHUR6000.Core.Analytics
         public IReadOnlyList<string> AlertFeed => _alertFeed;
         public IReadOnlyList<string> EventLog => _eventLog;
         public IReadOnlyList<DiscoveredEntity> DiscoveredEntities => _discoveredEntities;
+        public SemanticConceptGraph ConceptGraph { get; } = new();
         public HeuristicsEngine Heuristics { get; } = new();
+
+        /// <summary>
+        /// Multi-file PWS timeline repository.
+        /// Retains all parsed PWS snapshots in chronological order.
+        /// Most recent snapshot is always the authority for live fleet state.
+        /// Historical snapshots are used for: fuel delta tracking, arrival-day countdowns,
+        /// sunk-ship history, and TF route reconstruction.
+        /// </summary>
+        public PwsRepository PwsTimeline { get; }
+
+        /// <summary>
+        /// Master System Blueprint: in-memory time-series data store.
+        /// Holds SCD Type 2 daily snapshots (ship_daily_state, task_force_daily_state,
+        /// tf_composition_history, fleet_summary) and event-sourced history
+        /// (lifecycle_events, operations_report_log).
+        /// </summary>
+        public TimeSeriesStore TimeSeries { get; } = new();
+
+        /// <summary>
+        /// Master System Blueprint: ETL service that transforms PwsSnapshot
+        /// into canonical time-series records via delta tracking.
+        /// </summary>
+        public TimeSeriesIngestionService TimeSeriesETL { get; }
+
+        // 14 Foundational Architectural Baseline Services
+        public SensorReliabilityService SensorService { get; } = new();
+        public SupplyNetworkGraph SupplyGraph { get; } = new();
+        public AirDenialHeatmapService AirDenialService { get; } = new();
+        public EntityResolutionService EntityResolver { get; } = new();
+        public AdvanceMomentumPredictor MomentumPredictor { get; } = new();
+        public TemporalContinuityChecker ContinuityChecker { get; } = new();
+        public HazardStateRepository HazardRepository { get; } = new();
+        public BayesianCorroborationEngine BayesianEngine { get; }
+
+        public WarRoomAnalytics()
+        {
+            BayesianEngine = new BayesianCorroborationEngine(EntityResolver);
+            TimeSeriesETL = new TimeSeriesIngestionService(TimeSeries);
+            // PwsRepository wired to live architectural services (Pillars 4 + 6)
+            PwsTimeline = new PwsRepository
+            {
+                EntityResolver = EntityResolver,
+                WorldState     = new WitpCic.Core.State.WorldStateRepository()
+            };
+            foreach (var b in BaseLocationRegistry.Instance.AllBases)
+            {
+                MomentumPredictor.RegisterTargetBase(b.Name, new HexCoordinate(b.HexX, b.HexY), b.IsPort ? 3 : 1);
+            }
+        }
 
         public bool AnalyzeCampaign(IngestionManifest manifest)
         {
@@ -351,10 +417,20 @@ namespace MUTHUR6000.Core.Analytics
             _alertFeed.Clear();
             _eventLog.Clear();
             _confidenceReports.Clear();
+            PwsTimeline.Clear();
+            TimeSeries.Clear();
+            TimeSeriesETL.Reset();
 
             string latestDate = string.IsNullOrEmpty(manifest.LatestDate) ? "411207" : manifest.LatestDate;
 
-            foreach (var file in manifest.Files)
+            // Sort files chronologically: non-PWS first or by date, and all PWS files in strictly ascending chronological order
+            // so each turn file updates the timeline, preserves history, and the latest file becomes the active authority.
+            var orderedFiles = manifest.Files
+                .OrderBy(f => f.FileType == "PWS_SAVE" ? 1 : 0)
+                .ThenBy(f => string.IsNullOrEmpty(f.DateYYMMDD) ? "000000" : f.DateYYMMDD)
+                .ToList();
+
+            foreach (var file in orderedFiles)
             {
                 string dateToPass = file.DateYYMMDD;
                 if (string.IsNullOrEmpty(dateToPass))
@@ -395,9 +471,98 @@ namespace MUTHUR6000.Core.Analytics
             ComputeModelF();
             ComputeModelG();
             BuildGeospatialAndDossier(manifest);
+            BuildConceptGraph();
             Heuristics.Analyze(manifest, _unitLoadouts, _sightings, _radioIntercepts, _confidenceReports);
 
             return true;
+        }
+
+        private void BuildConceptGraph()
+        {
+            // Reset concept graph for new campaign run
+            // 1. Populate from Base Registry (Strategic Bases & Regions)
+            foreach (var b in BaseLocationRegistry.Instance.AllBases)
+            {
+                ConceptGraph.AddNode(new ConceptNode
+                {
+                    Id = $"BASE:{b.Name}",
+                    Name = b.Name,
+                    Type = ConceptType.Base,
+                    HexX = b.HexX,
+                    HexY = b.HexY,
+                    Details = (b.IsPort ? "Port / Anchorage" : "Inland Airfield") + $" | Region: {b.InitialRegion} | Controller: {b.CurrentController}",
+                    SearchDocument = $"{b.Name} base port airfield anchorage {b.InitialRegion} {b.InitialNation} {b.CurrentController} hex {b.HexX} {b.HexY}"
+                });
+            }
+
+            // 2. Populate Discovered Entities (Units, Vessels, Air Groups)
+            foreach (var e in _discoveredEntities)
+            {
+                var cType = e.Category switch
+                {
+                    "VESSEL" => ConceptType.Vessel,
+                    "AIR_GROUP" => ConceptType.AirGroup,
+                    "UNIT" => ConceptType.Unit,
+                    _ => ConceptType.Base
+                };
+
+                ConceptGraph.AddNode(new ConceptNode
+                {
+                    Id = $"ENTITY:{e.Category}:{e.Name}",
+                    Name = e.Name,
+                    Type = cType,
+                    HexX = e.LastHexX,
+                    HexY = e.LastHexY,
+                    Details = e.Details,
+                    SearchDocument = $"{e.Name} {e.Category} {e.Details} last seen {e.LastDate} events {e.EventCount}"
+                });
+            }
+
+            // 3. Populate High Value Targets (Carriers, Battleships, Oilers)
+            foreach (var h in _highValueTargets)
+            {
+                ConceptGraph.AddNode(new ConceptNode
+                {
+                    Id = $"HVT:{h.Name}:{h.Location}",
+                    Name = h.Name,
+                    Type = ConceptType.CarrierThreat,
+                    HexX = h.HexX,
+                    HexY = h.HexY,
+                    Details = $"HVT {h.Type} | Loc: {h.Location} | Status: {h.Status} | Confidence: {h.ConfidencePct}%",
+                    SearchDocument = $"{h.Name} carrier threat strike group {h.Type} oiler cruiser warship {h.Location} {h.Status} {h.ConfidenceTier}"
+                });
+            }
+
+            // 4. Populate Model A Invasion Targets
+            foreach (var a in _amphibiousTargets)
+            {
+                ConceptGraph.AddNode(new ConceptNode
+                {
+                    Id = $"INVASION:{a.Destination}",
+                    Name = $"Invasion: {a.Destination}",
+                    Type = ConceptType.InvasionTarget,
+                    HexX = a.BaseHexX,
+                    HexY = a.BaseHexY,
+                    Details = $"Assessment: {a.Assessment} | Probability: {a.Probability * 100:F0}% | Threat: {a.ThreatLevel}",
+                    SearchDocument = $"amphibious assault invasion landing operation {a.Destination} {a.Assessment} threat {a.ThreatLevel}"
+                });
+            }
+
+            // 5. Populate Model G Logistics Routes
+            foreach (var r in _establishedRoutes)
+            {
+                ConceptGraph.AddNode(new ConceptNode
+                {
+                    Id = $"CORRIDOR:{r.CorridorName}",
+                    Name = r.CorridorName,
+                    Type = ConceptType.LogisticsCorridor,
+                    Details = $"From {r.DeparturePoint} -> {r.DestinationPoint} | Vessels: {r.VesselTypes}",
+                    SearchDocument = $"logistics corridor shipping convoy supply route {r.CorridorName} {r.DeparturePoint} {r.DestinationPoint} {r.VesselTypes} {r.Confidence}"
+                });
+            }
+
+            // 6. Build TF-IDF Vocabulary and Node Vectors
+            ConceptGraph.BuildEmbeddings(300);
         }
 
         public static bool ParseCoords(string text, out int outX, out int outY)
@@ -483,9 +648,21 @@ namespace MUTHUR6000.Core.Analytics
             string cleanName = name.Trim();
             if (string.IsNullOrEmpty(cleanName)) return;
 
+            var entityType = category switch
+            {
+                "VESSEL" => EntityType.SurfaceShip,
+                "AIR_GROUP" => EntityType.AirUnit,
+                "UNIT" => EntityType.GroundUnit,
+                _ => EntityType.Base
+            };
+
+            Guid canonicalId = EntityResolver.ResolveOrCreate(cleanName, entityType);
+            var resolved = EntityResolver.GetEntity(canonicalId);
+            string canonicalName = resolved?.CanonicalName ?? cleanName;
+
             if (category == "BASE" && (hexX <= 0 || hexY <= 0))
             {
-                var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(cleanName);
+                var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(canonicalName);
                 if (baseLoc != null)
                 {
                     hexX = baseLoc.HexX;
@@ -493,7 +670,7 @@ namespace MUTHUR6000.Core.Analytics
                 }
             }
 
-            var existing = _discoveredEntities.FirstOrDefault(e => e.Name.Equals(cleanName, StringComparison.OrdinalIgnoreCase) && e.Category == category);
+            var existing = _discoveredEntities.FirstOrDefault(e => e.Name.Equals(canonicalName, StringComparison.OrdinalIgnoreCase) && e.Category == category);
             if (existing != null)
             {
                 existing.EventCount++;
@@ -509,7 +686,7 @@ namespace MUTHUR6000.Core.Analytics
 
             _discoveredEntities.Add(new DiscoveredEntity
             {
-                Name = cleanName,
+                Name = canonicalName,
                 Category = category,
                 LastHexX = hexX,
                 LastHexY = hexY,
@@ -524,122 +701,95 @@ namespace MUTHUR6000.Core.Analytics
             if (!File.Exists(filePath)) return;
             try
             {
-                using var fs = File.OpenRead(filePath);
-                using var gz = new GZipStream(fs, CompressionMode.Decompress);
-                using var ms = new MemoryStream();
-                gz.CopyTo(ms);
-                byte[] raw = ms.ToArray();
+                // Ingest via PwsRepository — applies SharpZipLib block scanner,
+                // faction isolation, and full binary field decoding.
+                var snapshot = PwsTimeline.IngestFile(filePath, string.IsNullOrEmpty(dateYYMMDD) ? null : dateYYMMDD);
+                if (snapshot == null) return;
 
-                int pos = 0;
-                while (pos + 12 <= raw.Length)
+                // ── Master System Blueprint: ETL into time-series store ──
+                // Transforms PwsSnapshot → ShipDailyState, TaskForceDailyState,
+                // TfCompositionHistory, FleetSummary, LifecycleEvents, OperationsReportLog.
+                // Delta tracking compares this snapshot against the previous one.
+                TimeSeriesETL.IngestSnapshot(snapshot);
+
+                // Use resolved date from snapshot (may have been extracted from block 550)
+                string effectiveDate = string.IsNullOrEmpty(snapshot.Meta.DateYYMMDD)
+                    ? dateYYMMDD
+                    : snapshot.Meta.DateYYMMDD;
+
+                // ── 1. Apply turn reports (block 593) → existing parser pipeline ──
+                // This preserves all the existing combat/sigint/operations parsing logic.
+                foreach (var section in snapshot.Reports)
                 {
-                    int a = BitConverter.ToInt32(raw, pos);
-                    int b = BitConverter.ToInt32(raw, pos + 4);
-                    int c = BitConverter.ToInt32(raw, pos + 8);
-                    byte recType = (byte)(a & 0xFF);
-
-                    if (c > 0 && pos + 12 + c <= raw.Length)
+                    switch (section.Kind)
                     {
-                        try
-                        {
-                            using var zMs = new MemoryStream(raw, pos + 12, c);
-                            using var zs = new ZLibStream(zMs, CompressionMode.Decompress);
-                            using var outMs = new MemoryStream();
-                            zs.CopyTo(outMs);
-                            byte[] decomp = outMs.ToArray();
-
-                            if (recType == 0x51)
-                            {
-                                ParsePwsRecord51(decomp, dateYYMMDD);
-                            }
-                            else if (recType == 0x08)
-                            {
-                                ParsePwsRecord08(decomp, dateYYMMDD);
-                            }
-                            pos += 12 + c;
-                            continue;
-                        }
-                        catch
-                        {
-                            // Skip on non-conforming or corrupted record chunk
-                        }
-                    }
-                    pos++;
-                }
-            }
-            catch
-            {
-                // Fallback gracefully on unreadable PWS save
-            }
-        }
-
-        private void ParsePwsRecord51(byte[] decomp, string dateYYMMDD)
-        {
-            int p = 0;
-            int sectionIdx = 0;
-            while (p + 4 <= decomp.Length)
-            {
-                int secLen = BitConverter.ToInt32(decomp, p);
-                p += 4;
-                if (secLen > 0 && p + secLen <= decomp.Length)
-                {
-                    string text = System.Text.Encoding.Latin1.GetString(decomp, p, secLen);
-                    var lines = text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-                    switch (sectionIdx)
-                    {
-                        case 0: // AAR / Combat Report
-                            ParseCombatReportLines(lines, dateYYMMDD);
+                        case PwsReportSection.SectionKind.CombatReport:
+                            ParseCombatReportLines(section.Lines, effectiveDate);
                             break;
-                        case 1: // Combat Events
-                            ParseCombatEventsLines(lines, dateYYMMDD);
+                        case PwsReportSection.SectionKind.CombatEvents:
+                            ParseCombatEventsLines(section.Lines, effectiveDate);
                             break;
-                        case 2: // Operational Report
-                            ParseOperationsLines(lines, dateYYMMDD);
+                        case PwsReportSection.SectionKind.Operations:
+                            ParseOperationsLines(section.Lines, effectiveDate);
                             break;
-                        case 3: // SIGINT
-                            ParseSigintLines(lines, dateYYMMDD);
+                        case PwsReportSection.SectionKind.Sigint:
+                            ParseSigintLines(section.Lines, effectiveDate);
                             break;
                     }
-                    p += secLen;
                 }
-                sectionIdx++;
-            }
-        }
 
-        private void ParsePwsRecord08(byte[] decomp, string dateYYMMDD)
-        {
-            const int rowSize = 464;
-            int numRows = decomp.Length / rowSize;
-            for (int i = 0; i < numRows; i++)
-            {
-                int offset = i * rowSize;
-                ushort status = BitConverter.ToUInt16(decomp, offset + 36);
-                if (status == 19999) // Sunk / Out of play
+                // ── 2. Incorporate sunk ships from binary state (block 520) ──
+                // This is MORE reliable than text parsing: the binary state is authoritative.
+                // Allied ships only (faction-isolation enforced in PwsFileParser).
+                foreach (var ship in snapshot.AlliedShips)
                 {
-                    int nameEnd = 0;
-                    while (nameEnd < 36 && decomp[offset + nameEnd] != 0) nameEnd++;
-                    string shipName = System.Text.Encoding.Latin1.GetString(decomp, offset, nameEnd).Trim();
-                    if (string.IsNullOrEmpty(shipName)) continue;
+                    if (!ship.IsSunk) continue;
 
-                    ushort x = BitConverter.ToUInt16(decomp, offset + 352);
-                    ushort y = BitConverter.ToUInt16(decomp, offset + 354);
-                    bool isAllied = !NavalDoctrineRegistry.IsJapaneseVessel(shipName);
-
-                    if (!_battleClaimEvents.Any(bc => bc.ShipName.Equals(shipName, StringComparison.OrdinalIgnoreCase)))
+                    if (!_battleClaimEvents.Any(bc =>
+                        bc.ShipName.Equals(ship.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         _battleClaimEvents.Add(new BattleClaimEvent
                         {
-                            ShipName = shipName,
+                            ShipName     = ship.Name,
                             ReportedSunk = true,
-                            IsAllied = isAllied,
-                            DateYYMMDD = dateYYMMDD,
-                            Assessment = "CONFIRMED SUNK",
-                            Reason = (x > 0 && y > 0) ? $"Verified sunk at hex ({x},{y})" : "Verified sunk in PBEM save state"
+                            IsAllied     = true, // faction isolation guarantees this
+                            DateYYMMDD   = effectiveDate,
+                            Assessment   = "CONFIRMED SUNK",
+                            Reason       = (ship.HexX > 0 && ship.HexY > 0)
+                                ? $"Verified sunk at hex ({ship.HexX},{ship.HexY}) via PWS binary state"
+                                : "Verified sunk in PBEM save state (binary)"
                         });
-                        RegisterEntity(shipName, "VESSEL", x, y, dateYYMMDD, isAllied ? "Friendly vessel sunk (PWS Telemetry)" : "Hostile vessel sunk (PWS Telemetry)");
-                        _eventLog.Add($"[{dateYYMMDD}] LOSS: {shipName} sunk (Hex {x},{y}).");
+                        RegisterEntity(ship.Name, "VESSEL", ship.HexX, ship.HexY, effectiveDate,
+                            "Allied vessel sunk (PWS Binary Telemetry)");
+                        _eventLog.Add($"[{effectiveDate}] LOSS: {ship.Name} sunk (Hex {ship.HexX},{ship.HexY}).");
                     }
                 }
+
+                // ── 3. Incorporate reinforcements ──
+                // Ships with ArrivalDays > 0 — useful for strategic timing context.
+                foreach (var ship in snapshot.AlliedShips)
+                {
+                    if (!ship.IsReinforcement) continue;
+                    // Register as a known entity with "REINFORCEMENT" context for the dossier
+                    RegisterEntity(ship.Name, "VESSEL", 0, 0, effectiveDate,
+                        $"Allied reinforcement, ETA {ship.ArrivalDays} days");
+                }
+
+                // ── 4. Supply graph: update TF positions (Pillar 9) ──
+                foreach (var tf in snapshot.AlliedTaskForces)
+                {
+                    if (tf.HexX > 0 && tf.HexY > 0)
+                    {
+                        var tfCoord = new WitpCic.Core.Geospatial.HexCoordinate(tf.HexX, tf.HexY);
+                        // Register TF current position as a transient node in the supply network
+                        SupplyGraph.RegisterBase($"TF-{tf.Index}", tfCoord);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Non-fatal — log and continue with other files
+                _eventLog.Add($"[PWS] Error parsing {System.IO.Path.GetFileName(filePath)}: {ex.Message}");
             }
         }
 
@@ -737,7 +887,7 @@ namespace MUTHUR6000.Core.Analytics
             ParseSigintLines(File.ReadLines(filePath), dateYYMMDD);
         }
 
-        private void ParseOperationsLines(IEnumerable<string> rawLines, string dateYYMMDD)
+        private void ParseOperationsLines(IEnumerable<string> rawLines, string dateYYMMDD, bool skipSightings = false)
         {
             foreach (var rawLine in rawLines)
             {
@@ -748,6 +898,8 @@ namespace MUTHUR6000.Core.Analytics
                 int sightPos = line.IndexOf("sighting report:", StringComparison.OrdinalIgnoreCase);
                 if (sightPos != -1)
                 {
+                    if (skipSightings) continue;
+
                     string observer = (sightPos > 0) ? line.Substring(0, sightPos).Trim() : "Air Reconnaissance";
                     string rest = line.Substring(sightPos + 16).Trim();
 
@@ -892,6 +1044,70 @@ namespace MUTHUR6000.Core.Analytics
                     _eventLog.Add($"[{dateYYMMDD}] {line}");
                     RegisterEntity(baseName, "BASE", 0, 0, dateYYMMDD, "Captured by Japanese Forces");
                     BaseLocationRegistry.Instance.UpdateBaseController(baseName, "Japanese");
+
+                    // Mark severed node in supply network graph
+                    var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(baseName);
+                    if (baseLoc != null)
+                    {
+                        SupplyGraph.MarkNodeSevered(new HexCoordinate(baseLoc.HexX, baseLoc.HexY));
+                    }
+                    continue;
+                }
+
+                // 6. Minefield Deployment (Pillar 14)
+                if (line.Contains("lays minefield") || line.Contains("lays defensive minefield"))
+                {
+                    ParseCoords(line, out int mx, out int my);
+                    var hazardCoord = new HexCoordinate(mx, my);
+                    var hazard = new HazardState(
+                        Guid.NewGuid(),
+                        hazardCoord,
+                        line,
+                        HazardType.MinefieldDefensive,
+                        Faction.Allied,
+                        100,
+                        "Minelayer TF",
+                        DateTime.UtcNow
+                    );
+                    HazardRepository.AddOrUpdateHazard(hazard);
+                    _eventLog.Add($"[{dateYYMMDD}] HAZARD DEPLOYED: Minefield active at ({mx},{my}).");
+                    continue;
+                }
+
+                // 7. Air Overflights & Reconnaissance (Pillar 10)
+                if (line.Contains("sighted over") || line.Contains("observes") || line.Contains("snooped by"))
+                {
+                    ParseCoords(line, out int ax, out int ay);
+                    var threatClass = line.Contains("Bomber") ? AircraftThreatClass.TorpedoOrDiveBomber :
+                                      line.Contains("Fighter") ? AircraftThreatClass.FighterOrCap : AircraftThreatClass.ReconOrFloatPlane;
+
+                    AirDenialService.RecordOverflight(new AirOverflightEvent(
+                        new HexCoordinate(ax, ay),
+                        threatClass,
+                        line,
+                        DateTime.UtcNow
+                    ));
+                    continue;
+                }
+
+                // 8. Supply Transport Mission (Pillar 9)
+                if (line.Contains("transporting supplies to"))
+                {
+                    int toIdx = line.IndexOf("transporting supplies to ");
+                    string dest = (toIdx != -1) ? line.Substring(toIdx + 25).Trim().TrimEnd('.') : string.Empty;
+                    var baseLoc = BaseLocationRegistry.Instance.FindBaseByName(dest);
+                    if (baseLoc != null)
+                    {
+                        SupplyGraph.AddOrUpdateRoute(
+                            "Origin Base",
+                            new HexCoordinate(baseLoc.HexX - 5, baseLoc.HexY - 5),
+                            dest,
+                            new HexCoordinate(baseLoc.HexX, baseLoc.HexY),
+                            TransportVesselType.AirTransport_Hudson_C47,
+                            500
+                        );
+                    }
+                    continue;
                 }
             }
         }
@@ -899,7 +1115,33 @@ namespace MUTHUR6000.Core.Analytics
         private void ParseOperationsFile(string filePath, string dateYYMMDD)
         {
             if (!File.Exists(filePath)) return;
-            ParseOperationsLines(File.ReadLines(filePath), dateYYMMDD);
+
+            // Stream and deduplicate sighting events using zero-allocation streaming parser
+            var deduplicatedSightings = OperationsReportParser.ParseAndDeduplicate(filePath);
+            foreach (var s in deduplicatedSightings)
+            {
+                _sightings.Add(new SightingEvent
+                {
+                    Observer = string.IsNullOrEmpty(s.Reporter) ? "Air Reconnaissance" : s.Reporter,
+                    Description = s.TargetDescription,
+                    ShipCount = s.ShipCount ?? 1,
+                    HexX = s.Coordinate.X,
+                    HexY = s.Coordinate.Y,
+                    NearLocation = s.LocationName ?? string.Empty,
+                    Speed = s.Speed ?? 14,
+                    Heading = s.Heading ?? "Unknown",
+                    DateYYMMDD = dateYYMMDD,
+                    SourceFile = "OPERATIONS"
+                });
+
+                if (!string.IsNullOrEmpty(s.LocationName))
+                {
+                    RegisterEntity(s.LocationName, "BASE", s.Coordinate.X, s.Coordinate.Y, dateYYMMDD, "Naval Sighting Area");
+                }
+            }
+
+            // Ingest remaining non-sighting events (air kills, losses, logistics, captures)
+            ParseOperationsLines(File.ReadLines(filePath), dateYYMMDD, skipSightings: true);
         }
 
         private void ParseCombatReportLines(IEnumerable<string> rawLines, string dateYYMMDD)
@@ -1242,14 +1484,24 @@ namespace MUTHUR6000.Core.Analytics
                 }
 
                 int dayDiff = CalculateDayDifference(latestDate, rep.ReportDate);
-                cr.TimeDecay = dayDiff switch
+                IDecayStrategy decayStrategy = rep.Domain switch
                 {
-                    0 => 1.0,
-                    1 => 0.8,
-                    _ => 0.5
+                    ReportDomain.AIR => new AircraftDecayStrategy(),
+                    ReportDomain.NAVAL => new SightingDecayStrategy(),
+                    ReportDomain.LAND => new FuelDecayStrategy(),
+                    _ => new SightingDecayStrategy()
                 };
+                cr.TimeDecay = decayStrategy.CalculateConfidence(1.0, TimeSpan.FromDays(dayDiff));
 
-                double rawConf = (cr.BaseScore + cr.CorroborationBonus) * cr.TimeDecay;
+                // Pillar 8: Sensor & Source Reliability Weighting Strategy
+                var adjustedSensor = SensorService.CalculateAdjustedScore(
+                    Guid.NewGuid(),
+                    rep.EntityName,
+                    rep.RawText,
+                    (cr.BaseScore + cr.CorroborationBonus) / 100.0
+                );
+
+                double rawConf = adjustedSensor.FinalAdjustedScore * 100.0 * cr.TimeDecay;
                 cr.FinalScore = Math.Clamp((int)Math.Round(rawConf), 0, 100);
 
                 if (cr.FinalScore >= 90)
@@ -1436,24 +1688,12 @@ namespace MUTHUR6000.Core.Analytics
             {
                 if (s.HexX <= 0 || s.HexY <= 0 || string.IsNullOrEmpty(s.Heading) || s.Heading == "Unknown") continue;
 
-                double vx = 0.0, vy = 0.0;
-                string h = s.Heading.ToLowerInvariant();
+                var originHex = new HexCoordinate(s.HexX, s.HexY);
+                int speed = (s.Speed > 0) ? s.Speed : 15;
+                var projectedHex = originHex.ExtrapolatePosition(speed, s.Heading, 24.0f);
 
-                if (h.Contains("northwest")) { vx = -0.7; vy = -0.7; }
-                else if (h.Contains("northeast")) { vx = 0.7; vy = -0.7; }
-                else if (h.Contains("southwest")) { vx = -0.7; vy = 0.7; }
-                else if (h.Contains("southeast")) { vx = 0.7; vy = 0.7; }
-                else if (h.Contains("north")) { vx = 0.0; vy = -1.0; }
-                else if (h.Contains("south")) { vx = 0.0; vy = 1.0; }
-                else if (h.Contains("east")) { vx = 1.0; vy = 0.0; }
-                else if (h.Contains("west")) { vx = -1.0; vy = 0.0; }
-                else continue;
-
-                double speed = (s.Speed > 0) ? s.Speed : 15.0;
-                double deltaHex = (speed * 24.0) / 40.0;
-
-                int projX = (int)Math.Round(s.HexX + vx * deltaHex);
-                int projY = (int)Math.Round(s.HexY + vy * deltaHex);
+                int projX = projectedHex.X;
+                int projY = projectedHex.Y;
 
                 var traj = new ModelB_FleetTrajectory
                 {
@@ -1462,7 +1702,7 @@ namespace MUTHUR6000.Core.Analytics
                     StartHexX = s.HexX,
                     StartHexY = s.HexY,
                     OriginBase = s.NearLocation,
-                    SpeedKnots = (int)speed,
+                    SpeedKnots = speed,
                     Heading = s.Heading,
                     ProjectedHexX = projX,
                     ProjectedHexY = projY,
@@ -1527,10 +1767,17 @@ namespace MUTHUR6000.Core.Analytics
 
         private void ComputeModelD()
         {
+            var health = SupplyGraph.EvaluateNetworkHealth();
+            var starvedBases = health.Where(n => n.IsStarved).Select(n => n.BaseName).ToList();
+
+            string status = starvedBases.Count > 0 
+                ? $"CRITICAL SUPPLY DEFICIT: {starvedBases.Count} forward base(s) starved ({string.Join(", ", starvedBases)})"
+                : "SUPPLY FLOW STABLE / MONITORING FLEET SUSTAINMENT & TURNAROUND CYCLES";
+
             _logisticalPause = new ModelD_LogisticalPause
             {
                 ActivePauses = new List<LogisticsEvent>(_logisticsEvents),
-                OperationalStatus = "MONITORING FLEET SUSTAINMENT & TURNAROUND CYCLES",
+                OperationalStatus = status,
                 PauseWindow = "3 TO 5 DAYS MANDATORY PORT REPLENISHMENT",
                 VulnerabilityAssessment = "Hostile task forces completing initial operations face fuel/ammo depletion within 72 hours. Recommend submarine ambush along return corridors."
             };
@@ -1576,51 +1823,43 @@ namespace MUTHUR6000.Core.Analytics
         {
             _strikeConcentrations.Clear();
 
-            // Malaya cluster
-            int malayaShips = _sightings.Where(s => s.HexX is >= 48 and <= 66 && s.HexY is >= 68 and <= 78).Sum(s => s.ShipCount);
-            if (malayaShips >= 4)
-            {
-                _strikeConcentrations.Add(new ModelF_StrikeConcentration
-                {
-                    ClusterName = "Malaya Invasion Strike Force (Gulf of Siam / Kota Bharu)",
-                    CenterHexX = 51,
-                    CenterHexY = 75,
-                    WarshipCount = malayaShips,
-                    RadiusHexes = 3,
-                    ConstituentSightings = _sightings.Where(s => s.HexX is >= 48 and <= 66 && s.HexY is >= 68 and <= 78).Select(s => s.Description).ToList(),
-                    ThreatLevel = "CRITICAL: Surface Combat & Amphibious Force"
-                });
-            }
+            // Convert sightings to SightingRecord list for the clustering engine
+            var sightingRecords = _sightings.Select(s => new SightingRecord(
+                DateOnly.MinValue,
+                DateTime.UtcNow,
+                new HexCoordinate(s.HexX, s.HexY),
+                s.NearLocation,
+                TargetClassification.SurfaceShip,
+                s.Description,
+                s.ShipCount,
+                s.Speed,
+                s.Heading,
+                s.Observer,
+                1,
+                s.Description,
+                Array.Empty<string>()
+            )).ToList();
 
-            // Luzon cluster
-            int luzonShips = _sightings.Where(s => s.HexX is >= 80 and <= 88 && s.HexY is >= 62 and <= 72).Sum(s => s.ShipCount);
-            if (luzonShips >= 4)
-            {
-                _strikeConcentrations.Add(new ModelF_StrikeConcentration
-                {
-                    ClusterName = "Luzon Strait Invasion Force (Takao / Batan Island)",
-                    CenterHexX = 85,
-                    CenterHexY = 70,
-                    WarshipCount = luzonShips,
-                    RadiusHexes = 3,
-                    ConstituentSightings = _sightings.Where(s => s.HexX is >= 80 and <= 88 && s.HexY is >= 62 and <= 72).Select(s => s.Description).ToList(),
-                    ThreatLevel = "CRITICAL: Heavy Cruiser & Transport Formation"
-                });
-            }
+            var clusteringEngine = new HotspotClusteringEngine();
+            var hotspots = clusteringEngine.AnalyzeHotspots(sightingRecords, spatialRadius: 2);
 
-            // Hawaiian waters cluster
-            int hawaiiShips = _sightings.Where(s => s.HexX is >= 150 and <= 185 && s.HexY is >= 90 and <= 112).Sum(s => s.ShipCount);
-            if (hawaiiShips >= 4)
+            foreach (var hs in hotspots.Where(h => h.MaxReportedShips >= 3 || h.TotalReports >= 3))
             {
                 _strikeConcentrations.Add(new ModelF_StrikeConcentration
                 {
-                    ClusterName = "Kido Butai Striking Force (Hawaiian Waters / Midway Area)",
-                    CenterHexX = 180,
-                    CenterHexY = 107,
-                    WarshipCount = hawaiiShips,
-                    RadiusHexes = 5,
-                    ConstituentSightings = _sightings.Where(s => s.HexX is >= 150 and <= 185 && s.HexY is >= 90 and <= 112).Select(s => s.Description).ToList(),
-                    ThreatLevel = "EXTREME: Hostile Fleet Carrier Strike Group"
+                    ClusterName = hs.Description,
+                    CenterHexX = hs.PrimaryHex.X,
+                    CenterHexY = hs.PrimaryHex.Y,
+                    WarshipCount = hs.MaxReportedShips,
+                    RadiusHexes = 2,
+                    ConstituentSightings = hs.Sightings.Select(st => st.TargetDescription).ToList(),
+                    ThreatLevel = hs.ThreatLevel switch
+                    {
+                        HotspotThreatLevel.Critical => "CRITICAL: Major Naval Buildup / Strike Force",
+                        HotspotThreatLevel.High => "HIGH: Active Strike Assembly",
+                        HotspotThreatLevel.Moderate => "MODERATE: Concentrated Surface Formation",
+                        _ => "ELEVATED: Multi-contact cluster"
+                    }
                 });
             }
         }
@@ -1844,6 +2083,39 @@ namespace MUTHUR6000.Core.Analytics
                                   $" | Region: {b.InitialRegion} | Controller: {b.CurrentController}",
                         EventCount = 0
                     });
+                }
+            }
+
+            // Semantic Concept Graph fallback (when results are sparse or conceptual match is requested)
+            if (results.Count < 5 && ConceptGraph.Count > 0)
+            {
+                var semanticMatches = ConceptGraph.Understand(query, maxResults: 8);
+                foreach (var (node, score) in semanticMatches)
+                {
+                    string categoryStr = node.Type switch
+                    {
+                        ConceptType.Base => "BASE",
+                        ConceptType.Vessel => "VESSEL",
+                        ConceptType.Unit => "UNIT",
+                        ConceptType.AirGroup => "AIR_GROUP",
+                        ConceptType.InvasionTarget => "INVASION",
+                        ConceptType.CarrierThreat => "STRIKE_TF",
+                        ConceptType.LogisticsCorridor => "LOGISTICS",
+                        _ => "CONCEPT"
+                    };
+
+                    if (!results.Any(r => r.Name.Equals(node.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        results.Add(new DiscoveredEntity
+                        {
+                            Name = node.Name,
+                            Category = categoryStr,
+                            LastHexX = node.HexX,
+                            LastHexY = node.HexY,
+                            Details = $"[SEMANTIC: {Math.Round(score * 100)}%] {node.Details}",
+                            EventCount = 1
+                        });
+                    }
                 }
             }
 

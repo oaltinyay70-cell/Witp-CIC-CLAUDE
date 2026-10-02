@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MUTHUR6000
+namespace ROCHEFORT6000
 {
     public partial class FontPickerWindow : Window
     {

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 
-namespace MUTHUR6000
+namespace ROCHEFORT6000
 {
     public partial class App : Application
     {
@@ -61,10 +61,30 @@ namespace MUTHUR6000
         }
 
         /// <summary>
+        /// Test hook allowing unit tests to intercept process termination without shutting down the test runner.
+        /// </summary>
+        public static Action<int>? ExitHandler { get; set; }
+
+        /// <summary>
+        /// Resets the exiting state for test isolation.
+        /// </summary>
+        public static void ResetExitForTesting()
+        {
+            _isExiting = 0;
+            ExitHandler = null;
+        }
+
+        /// <summary>
         /// Guarantees a zero-footprint, immediate clean exit with no lingering background processes or worker threads.
         /// </summary>
         public static void CleanProcessExit(int exitCode = 0)
         {
+            if (ExitHandler != null)
+            {
+                ExitHandler(exitCode);
+                return;
+            }
+
             if (System.Threading.Interlocked.Exchange(ref _isExiting, 1) != 0)
             {
                 return;

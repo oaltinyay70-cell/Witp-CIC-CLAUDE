@@ -792,11 +792,63 @@ The following documentation suite constitutes the governing **Core Docs** of the
   2. **Baseline 1.9 Zero Flicker Mandate:** WPF invalidation cycles triggered by 500ms blinking cursor timers cause perceptible text flicker across large terminal screens. In accordance with Baseline 1.9, disable cursor blinking timers completely; static text renders crisply without constant repaints.
   3. **Universal Date Format Standard:** All user-facing and telemetry dates must follow `$"{dd} - {mStr} - {yy}"` (e.g. `07 - Dec - 41`). All date lists, selectors, and manifests must order dates chronologically descending (newest first).
   4. **Compound Decompression Pipeline for `.pws` Saves:** WITP:AE PBEM turn files (`.pws`) are composite files: an outer GZip envelope containing multiple zlib/raw binary records. Extracting operational intelligence requires parsing record `0x26` for turn date headers, record `0x51` for text reports (AAR, ops, sigint, combat), and record `0x08` for vessel casualty status.
-  5. **Contextual Date Filtering:** SIGINT maps and Intel summaries must provide interactive date sliders (`[LEFT/RIGHT]`, `[,] [.]`, `[` / `]`) to dynamically isolate single-turn sightings or view aggregate history (`ALL`), always defaulting to the latest turn date.
+### LL-066: Project-Wide Eradication of MUTHUR6000 Namespaces, Project Files, and Test Directories
+- **Date:** 2026-09-29 15:40 UTC+3
+- **Context:** User ordered:
+  > *"there is no MUTHUR6000 ! i told u to erase that reference ! what is missing here"*
+- **What Was Learned:**
+  1. **Comprehensive Scope of Renaming:** While user-facing titles and UI headers had been changed to ROCHEFORT 6000 earlier, internal project files, solution files, C# namespaces, and test folders still retained `MUTHUR6000` (e.g. `MUTHUR6000.csproj`, `MUTHUR6000.slnx`, `tests/MUTHUR6000.Tests/`, and `namespace MUTHUR6000`).
+  2. **Total Purge Across All Layers:**
+     - Renamed `MUTHUR6000.csproj` -> `ROCHEFORT6000.csproj`.
+     - Renamed `MUTHUR6000.slnx` -> `ROCHEFORT6000.slnx`.
+     - Renamed `tests/MUTHUR6000.Tests/` -> `tests/ROCHEFORT6000.Tests/`.
+     - Renamed `MUTHUR6000.Tests.csproj` -> `ROCHEFORT6000.Tests.csproj`.
+     - Updated all C# namespaces across the codebase from `MUTHUR6000.*` to `ROCHEFORT6000.*`.
+     - Updated XAML `x:Class` declarations in `App.xaml`, `MainWindow.xaml`, and `FontPickerWindow.xaml` to `ROCHEFORT6000.*`.
+     - Updated `build_release.ps1` to reference `ROCHEFORT6000.csproj`.
 - **What NOT to Repeat:**
-  - NEVER use asymmetric or width-expanding brackets like `> <` that alter line lengths inside fixed-width box drawing borders.
-  - NEVER run background invalidation timers for cursor blinking or pseudo-CRT glitch animations.
-  - NEVER display raw 6-digit numeric dates (`YYMMDD`) directly to the user.
+  - NEVER leave internal namespaces, project filenames, or test suites named after `MUTHUR6000`.
+  - When rebranding is requested, apply it completely across namespaces, filenames, solutions, and tests in one decisive pass.
+
+### LL-067: Compact 2-Line Command Strip & Modal Range Picker Architecture
+- **Date:** 2026-09-29 18:45 UTC+3
+- **Context:** User ordered:
+  > *"Date Slider in SIGINT & Theater Intelligence Summary Menus is really bad , looks bad and hard to use. suggest some variations that will be compact yet easy to use . it needs to let the user select a date or date range mm/dd/yy format, quick select last 7 days, last 15 last month selections. Consider the current interface style when suggesting"*
+  > *"do a mockup of 1 and 3 together"*
+  > *"show me a mockup as a ascii file"*
+  > *"look good. also add that, when first viewed it is always the last 7 days of the report screen user is looking at"*
+- **What Was Learned:**
+  1. **Compact Primary Command Strip Over Slider Tracks:** Long horizontal date slider tracks spanning many turns overflow terminal margins, truncate, or cause awkward cursor jumping. A 2-line fixed command strip provides clear presets `[1-5]`, reference turn step navigation `<< [ / ] >>`, and direct hotkey access to a dedicated modal dialog `[R]` without shifting or disrupting the primary report table layout.
+  2. **Mandatory Default Filter Rule:** Whenever entering `ScreenState.IntelligenceSummary` or `ScreenState.SigintMap`, the temporal filter must initialize to **Last 7 Days** of the active campaign (`maxDate.AddDays(-7)` to `maxDate`).
+  3. **Multi-Turn Telemetry Compatibility:** Intelligence sightings often span multiple observation dates (`AllDates`). Ingestion filtering (`IsDateInActiveFilter`) must check both the primary turn date and historical sighting timestamps so multi-day sightings are not improperly dropped when a range filter is applied.
+  4. **Strict 106-Column Box Invariance in Custom Range Typing:** In inline text entry modes (`>> MM/DD/YY - MM/DD/YY_`), cursor position and length must be clamped to prevent pushing the modal's right vertical border `║` outwards.
+  5. **Host .NET SDK Resolution:** On environments where `dotnet` wrapper fails to locate the SDK from system PATH, resolve directly to `$env:USERPROFILE\.dotnet\dotnet.exe` to guarantee smooth, deterministic release builds.
+- **What NOT to Repeat:**
+  - DO NOT reintroduce cluttered horizontal slider tracks that risk overflowing terminal bounds.
+  - DO NOT omit resetting to the Last 7 Days window upon entering intelligence screens.
+  - DO NOT deliver date entry prompts without validating format boundaries against the 106-column terminal width.
+
+### LL-068: Interactive Pop-Up Calendar Navigation, Clamping Bounds, & Menu Normalization
+- **Date:** 2026-09-29 23:30 UTC+3
+- **Context:** User ordered:
+  > *"u must increase the build number by +1 each time a new built is done"*
+  > *"Correct all of the below and update documentation"*
+  > *"In the date filter [s] and [c] must by a pop up window , user must be able to select using cursor keys from a calendar. Watchout for the start - game starts at pearl harbor date and ends at 12/31/46 at the latest"*
+  > *"TEMPORAL FILTER CONTROL has a text called (3hvt - what is it ? ) Also the border is disturbed when some keys are pressed"*
+  > *"In the SIGINT MAP , and in other menus, sort all items shown by the date , from most current to the oldest ones."*
+  > *"DELETE THE SUB PAGES UNDER TPIE WARNING DASHBOARD MENU ITEM. RENAME TPIE MENU ITEM TO TBD."*
+  > *"DELETE PREDICTIVE MODELS and ALL OTHER PAGES CONNECTED TO IT"*
+- **What Was Learned:**
+  1. **Visual Calendar Navigation in Terminal Interfaces:** Text-based date entry prompts alone are prone to user syntax confusion. An interactive ASCII/Unicode monthly grid modal that responds to arrow keys (`[Left/Right]` for days, `[Up/Down]` for weeks, `[PgUp/PgDn]` for months) provides instant clarity while keeping the operator inside the terminal experience.
+  2. **Strict Campaign Boundary Clamping:** Clamping navigation strictly between `1941-12-07` (Pearl Harbor attack) and `1946-12-31` prevents out-of-bounds dates and ensures historical consistency with WITP:AE scenarios.
+  3. **Multi-Step Date Range Workflow:** In custom range mode (`[C]`), splitting the flow into Step 1 (Start Date) and Step 2 (End Date) with clear interactive highlight (`(DD)` for start, `[DD]` for cursor, `=DD=` for active span) makes range selection intuitive.
+  4. **Unambiguous Domain Nomenclature:** Cryptic abbreviations such as `(3hvt)` cause confusion. Replacing them with explicit terminology like `(3 HIGH-VALUE TARGETS)` maintains operational professionalism.
+  5. **Chronological Sorting Convention:** Operational intel and logs in a war room interface should always display the most recent intelligence turns first (descending date sort: `OrderByDescending(d => d)`).
+  6. **Clean Domain Retirement:** When decommissioning features like TPIE or Predictive Models, retiring their sub-menus, renaming the primary menu items to `[ TBD ]`, and routing to the standard placeholder domain ensures no dead routes or lingering obsolete code remains.
+- **What NOT to Repeat:**
+  - DO NOT leave calendar dates unclamped to the valid historical game timeframe (1941-12-07 to 1946-12-31).
+  - DO NOT use unexplained shorthand acronyms like `hvt` in UI telemetry badges.
+  - DO NOT display intelligence or combat logs in ascending or arbitrary order when operators expect the newest intelligence first.
 
 ---
 

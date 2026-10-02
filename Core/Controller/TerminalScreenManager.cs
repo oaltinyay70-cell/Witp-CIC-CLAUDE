@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using MUTHUR6000.Core.Analytics;
-using MUTHUR6000.Core.Database;
-using MUTHUR6000.Core.Ingestion;
+using ROCHEFORT6000.Core.Analytics;
+using ROCHEFORT6000.Core.Common;
+using ROCHEFORT6000.Core.Database;
+using ROCHEFORT6000.Core.Ingestion;
 
-namespace MUTHUR6000.Core.Controller
+namespace ROCHEFORT6000.Core.Controller
 {
     // ──────────────────────────────────────────────────────────────────────────
     //  Screen state machine — full C++ navigation tree (alpha-rochefort / alpha3):
@@ -19,12 +20,13 @@ namespace MUTHUR6000.Core.Controller
     //               [E] ExitConfirmModal
     //               → (after campaign loaded) → VaultIngestion → MasterMenu
     //  MasterMenu (5 items)
-    //    [A] War Room  →  WarRoomPrimary (5 items)
-    //                        [1] IntelligenceSummary (5 domains) -> PopUp -> Reasoning -> Drill-Down
-    //                        [2] SigintMap (contacts log + [D] Dossier Search)
-    //                        [3] TbdDomain (Phase 08 reserved domain)
-    //                        [4] TpieDashboard (Heatmap + Vectors + [I] Intercepts)
-    //                        [5] PredictiveModels (Models A-G -> PopUp -> Reasoning)
+    //    [A] War Room  →  WarRoomPrimary (6 items)
+    //                        [1] TbdDomain (Reserved Partition)
+    //                        [2] TbdDomain (Reserved Partition)
+    //                        [3] GraphicsMenu (Visual Telemetry Displays)
+    //                        [4] TbdDomain (Reserved Partition)
+    //                        [5] TbdDomain (Reserved Partition)
+    //                        [6] Heuristics (Regional Power Shift) -> PopUp -> Reasoning
     //    [W] Wiki       →  WikiTopicMenu (3 root topics -> subtopics -> ArticleView)
     //    [F] FieldManual→  FieldManualMenu (Chapters -> Subsections -> ArticleView)
     //    [S] Settings   →  SettingsMenu (6 parameters + [1] AI Connection sub-menu)
@@ -52,9 +54,6 @@ namespace MUTHUR6000.Core.Controller
         TbdDomain,
         GraphicsMenu,
         GraphicsDisplayScreen,
-        TpieDashboard,
-        PredictiveModels,
-        PredModelPopUp,
         ReasoningModal,
         Heuristics,
         HeuristicsPopUp,
@@ -72,7 +71,11 @@ namespace MUTHUR6000.Core.Controller
         AiConnectionMenu,
 
         // ── Exit Confirmation ─────────────────────────────────────────────────
-        ExitConfirmModal
+        ExitConfirmModal,
+
+        // ── Temporal Filter & Date Range Modal ───────────────────────────────
+        TemporalFilterModal,
+        CalendarPickerModal
     }
 
     public class TerminalScreenManager
@@ -80,7 +83,6 @@ namespace MUTHUR6000.Core.Controller
         // ── State ────────────────────────────────────────────────────────────
         private ScreenState _state = ScreenState.Boot;
         private ScreenState _prevState = ScreenState.WarRoomPrimary;
-        private ScreenState _popUpCallerState = ScreenState.IntelligenceSummary;
         private ScreenState _exitReturnState = ScreenState.StartScreen;
 
         // ── Start Screen ─────────────────────────────────────────────────────
@@ -95,7 +97,9 @@ namespace MUTHUR6000.Core.Controller
         {
             @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE",
             @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive",
-            @"sample_data"
+            @"sample_data",
+            @"docs\golden",
+            @"archive"
         };
         private string _wizardCampaignName = "WITP_CAMPAIGN";
         private string _wizardDirInput = "";
@@ -116,23 +120,307 @@ namespace MUTHUR6000.Core.Controller
         private int _intelSumSel = 0;
         private int _intelPopUpSel = 0;
         private int _sigintMapSel = 0;
-        private int _tpieSel = 0;
-        private int _predModelsSel = 0;
-        private int _predPopUpSel = 0;
         private int _reasoningTopicSel = 0;
         private int _heuristicsSel = 0;
         private int _heuristicsPopUpSel = 0;
         private int _graphicsMenuSel = 0;
         private int _graphicsPageId = 1;
-        private int _intelDateFilterIdx = 0;
-        private int _sigintDateFilterIdx = 0;
+
+        // ── Temporal Intelligence Filter & Range Picker ──────────────────────
+        public enum TemporalFilterMode
+        {
+            LatestTurn,
+            PreviousTurn,
+            Last7Days,
+            Last15Days,
+            Last30Days,
+            AllCampaign,
+            CustomDate,
+            CustomRange
+        }
+
+        private TemporalFilterMode _filterMode = TemporalFilterMode.Last7Days;
+        private DateTime _filterStartDate = DateTime.MinValue;
+        private DateTime _filterEndDate = DateTime.MaxValue;
+        private ScreenState _filterReturnState = ScreenState.IntelligenceSummary;
+        private bool _filterTextEntryActive = false;
+        private string _filterTextInput = "";
+        private string _filterInputError = "";
+        private int _filterTurnStepIdx = 0; // Index into sorted turns list (0 = newest)
+
+        // ── Calendar Picker State ────────────────────────────────────────────
+        private DateTime _calendarCursorDate = new DateTime(1941, 12, 7);
+        private bool _calendarIsRangeMode = false;
+        private int _calendarRangeStep = 1; // 1 = selecting start date, 2 = selecting end date
+        private DateTime _calendarRangeStartDate = new DateTime(1941, 12, 7);
+        private static readonly DateTime CalendarMinDate = new DateTime(1941, 12, 7); // Pearl Harbor
+        private static readonly DateTime CalendarMaxDate = new DateTime(1946, 12, 31); // Max Campaign Date
+
+        private List<string> GetSortedTurnDatesDescending()
+        {
+            return Manifest.UniqueDates.OrderByDescending(d => d).ToList();
+        }
 
         private List<string> GetAvailableDateFilterList()
         {
-            var dates = Manifest.UniqueDates.OrderByDescending(d => d).ToList();
-            var list = new List<string> { "ALL" };
+            var dates = GetSortedTurnDatesDescending();
+            var list = new List<string>();
             list.AddRange(dates);
+            list.Add("ALL");
             return list;
+        }
+
+        public static bool TryParseYYMMDD(string raw, out DateTime dt)
+        {
+            dt = DateTime.MinValue;
+            if (string.IsNullOrWhiteSpace(raw) || raw.Length != 6) return false;
+            if (!int.TryParse(raw.Substring(0, 2), out int yy) ||
+                !int.TryParse(raw.Substring(2, 2), out int mm) ||
+                !int.TryParse(raw.Substring(4, 2), out int dd)) return false;
+            int fullYear = yy < 30 ? 2000 + yy : 1900 + yy;
+            try
+            {
+                dt = new DateTime(fullYear, mm, dd);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool TryParseFlexibleDate(string s, out DateTime dt)
+        {
+            dt = DateTime.MinValue;
+            if (string.IsNullOrWhiteSpace(s)) return false;
+            s = s.Trim();
+
+            // Try dd/MM/yy, MM/dd/yy or variations
+            string[] formats = { "dd/MM/yy", "d/M/yy", "dd/MM/yyyy", "d/M/yyyy", "MM/dd/yy", "M/d/yy", "MM/dd/yyyy", "M/d/yyyy", "dd-MM-yy", "dd-MM-yyyy", "MM-dd-yy", "M-d-yy", "yyyy-MM-dd", "yyMMdd" };
+            if (DateTime.TryParseExact(s, formats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
+            {
+                return true;
+            }
+
+            // Fallback general parse
+            return DateTime.TryParse(s, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt);
+        }
+
+        public static string FormatDDMMYY(DateTime dt)
+        {
+            if (dt == DateTime.MinValue || dt == DateTime.MaxValue) return "--/--/--";
+            return dt.ToString("dd/MM/yy");
+        }
+
+        public static string FormatMMDDYY(DateTime dt) => FormatDDMMYY(dt);
+
+        public void ResetFilterToLast7Days()
+        {
+            _filterMode = TemporalFilterMode.Last7Days;
+            _filterTextEntryActive = false;
+            _filterTextInput = "";
+            _filterInputError = "";
+            _filterTurnStepIdx = 0;
+
+            var turns = GetSortedTurnDatesDescending();
+            if (turns.Count > 0 && TryParseYYMMDD(turns[0], out DateTime latest))
+            {
+                _filterEndDate = latest;
+                _filterStartDate = latest.AddDays(-7);
+            }
+            else
+            {
+                _filterStartDate = DateTime.MinValue;
+                _filterEndDate = DateTime.MaxValue;
+            }
+        }
+
+        public void ApplyFilterPreset(TemporalFilterMode mode)
+        {
+            var turns = GetSortedTurnDatesDescending();
+            DateTime latest = DateTime.MinValue;
+            if (turns.Count > 0)
+                TryParseYYMMDD(turns[0], out latest);
+
+            _filterMode = mode;
+            _filterTurnStepIdx = 0;
+            _filterTextEntryActive = false;
+            _filterInputError = "";
+
+            switch (mode)
+            {
+                case TemporalFilterMode.LatestTurn:
+                    if (latest != DateTime.MinValue)
+                    {
+                        _filterStartDate = latest;
+                        _filterEndDate = latest;
+                    }
+                    break;
+
+                case TemporalFilterMode.PreviousTurn:
+                    if (turns.Count > 1 && TryParseYYMMDD(turns[1], out DateTime prev))
+                    {
+                        _filterStartDate = prev;
+                        _filterEndDate = prev;
+                        _filterTurnStepIdx = 1;
+                    }
+                    else if (latest != DateTime.MinValue)
+                    {
+                        _filterStartDate = latest;
+                        _filterEndDate = latest;
+                    }
+                    break;
+
+                case TemporalFilterMode.Last7Days:
+                    if (latest != DateTime.MinValue)
+                    {
+                        _filterEndDate = latest;
+                        _filterStartDate = latest.AddDays(-7);
+                    }
+                    break;
+
+                case TemporalFilterMode.Last15Days:
+                    if (latest != DateTime.MinValue)
+                    {
+                        _filterEndDate = latest;
+                        _filterStartDate = latest.AddDays(-15);
+                    }
+                    break;
+
+                case TemporalFilterMode.Last30Days:
+                    if (latest != DateTime.MinValue)
+                    {
+                        _filterEndDate = latest;
+                        _filterStartDate = latest.AddDays(-30);
+                    }
+                    break;
+
+                case TemporalFilterMode.AllCampaign:
+                    _filterStartDate = DateTime.MinValue;
+                    _filterEndDate = DateTime.MaxValue;
+                    break;
+            }
+        }
+
+        public void StepTurnDate(int direction) // -1 = step backwards (older), +1 = step forwards (newer)
+        {
+            var turns = GetSortedTurnDatesDescending();
+            if (turns.Count == 0) return;
+
+            // _filterTurnStepIdx: 0 is newest
+            _filterTurnStepIdx = Math.Clamp(_filterTurnStepIdx - direction, 0, turns.Count - 1);
+            if (TryParseYYMMDD(turns[_filterTurnStepIdx], out DateTime stepDt))
+            {
+                _filterMode = TemporalFilterMode.CustomDate;
+                _filterStartDate = stepDt;
+                _filterEndDate = stepDt;
+            }
+        }
+
+        public bool IsDateInActiveFilter(string dateYYMMDD, List<string>? allDates = null)
+        {
+            if (_filterMode == TemporalFilterMode.AllCampaign) return true;
+
+            // Check primary dateYYMMDD
+            if (TryParseYYMMDD(dateYYMMDD, out DateTime dt))
+            {
+                if (dt >= _filterStartDate && dt <= _filterEndDate) return true;
+            }
+
+            // Also check constituent turn dates if present
+            if (allDates != null && allDates.Count > 0)
+            {
+                foreach (var dStr in allDates)
+                {
+                    if (TryParseFlexibleDate(dStr, out DateTime altDt))
+                    {
+                        if (altDt >= _filterStartDate && altDt <= _filterEndDate) return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public string GetActiveFilterDescription()
+        {
+            return _filterMode switch
+            {
+                TemporalFilterMode.LatestTurn   => $"{FormatDDMMYY(_filterEndDate)} (LATEST TURN)",
+                TemporalFilterMode.PreviousTurn => $"{FormatDDMMYY(_filterEndDate)} (PREVIOUS TURN)",
+                TemporalFilterMode.Last7Days    => $"{FormatDDMMYY(_filterStartDate)} -> {FormatDDMMYY(_filterEndDate)} (LAST 7 DAYS)",
+                TemporalFilterMode.Last15Days   => $"{FormatDDMMYY(_filterStartDate)} -> {FormatDDMMYY(_filterEndDate)} (LAST 15 DAYS)",
+                TemporalFilterMode.Last30Days   => $"{FormatDDMMYY(_filterStartDate)} -> {FormatDDMMYY(_filterEndDate)} (LAST 30 DAYS)",
+                TemporalFilterMode.AllCampaign  => "ENTIRE CAMPAIGN (ALL TURNS)",
+                TemporalFilterMode.CustomDate   => $"{FormatDDMMYY(_filterEndDate)} (SINGLE DATE)",
+                TemporalFilterMode.CustomRange  => $"{FormatDDMMYY(_filterStartDate)} -> {FormatDDMMYY(_filterEndDate)} (CUSTOM RANGE)",
+                _                               => "ALL DATES"
+            };
+        }
+
+        private string RenderTemporalCommandStrip()
+        {
+            const int boxWidth = 63;
+            const int innerWidth = boxWidth - 4; // 59
+            var sb = new StringBuilder();
+
+            // Top boundary
+            sb.AppendLine("┌─ TEMPORAL FILTER CONTROL ───────────────────────────────────┐");
+
+            // Line 1: Presets & Range Hotkey
+            string p1 = (_filterMode == TemporalFilterMode.LatestTurn ? "*[1]LATEST" : "[1]LATEST");
+            string p2 = (_filterMode == TemporalFilterMode.Last7Days ? "*[2]7D" : "[2]7D");
+            string p3 = (_filterMode == TemporalFilterMode.Last15Days ? "*[3]15D" : "[3]15D");
+            string p4 = (_filterMode == TemporalFilterMode.Last30Days ? "*[4]30D" : "[4]30D");
+            string p5 = (_filterMode == TemporalFilterMode.AllCampaign ? "*[5]ALL" : "[5]ALL");
+            string pR = (_filterMode is TemporalFilterMode.CustomRange or TemporalFilterMode.CustomDate ? "*[R]RANGE" : "[R]RANGE");
+
+            string line1Content = $"{p1}  {p2}  {p3}  {p4}  {p5}  |  {pR}";
+            sb.AppendLine($"│ {PadTo(line1Content, innerWidth)} │");
+
+            // Line 2: Empty Spacer Line
+            sb.AppendLine($"│ {new string(' ', innerWidth)} │");
+
+            // Line 3: Active Range & Step Navigation (strictly NO mention of targets/contacts)
+            string rangeDesc;
+            switch (_filterMode)
+            {
+                case TemporalFilterMode.Last7Days:
+                    rangeDesc = $"{_filterStartDate:MM/dd}->{_filterEndDate:MM/dd} (7D)";
+                    break;
+                case TemporalFilterMode.Last15Days:
+                    rangeDesc = $"{_filterStartDate:MM/dd}->{_filterEndDate:MM/dd} (15D)";
+                    break;
+                case TemporalFilterMode.Last30Days:
+                    rangeDesc = $"{_filterStartDate:MM/dd}->{_filterEndDate:MM/dd} (30D)";
+                    break;
+                case TemporalFilterMode.LatestTurn:
+                    rangeDesc = $"{_filterEndDate:dd/MM/yy} (LATEST)";
+                    break;
+                case TemporalFilterMode.PreviousTurn:
+                    rangeDesc = $"{_filterEndDate:dd/MM/yy} (PREVIOUS)";
+                    break;
+                case TemporalFilterMode.AllCampaign:
+                    rangeDesc = "ALL CAMPAIGN (ALL TURNS)";
+                    break;
+                case TemporalFilterMode.CustomDate:
+                    rangeDesc = $"{_filterEndDate:dd/MM/yy} (SINGLE DATE)";
+                    break;
+                case TemporalFilterMode.CustomRange:
+                    rangeDesc = $"{_filterStartDate:MM/dd}->{_filterEndDate:MM/dd} (RANGE)";
+                    break;
+                default:
+                    rangeDesc = $"{_filterStartDate:MM/dd}->{_filterEndDate:MM/dd}";
+                    break;
+            }
+
+            string line3Content = $"ACTIVE: {rangeDesc}  << [ / ] >>";
+            sb.AppendLine($"│ {PadTo(line3Content, innerWidth)} │");
+
+            // Bottom boundary
+            sb.AppendLine("└─────────────────────────────────────────────────────────────┘");
+
+            return sb.ToString().TrimEnd();
         }
 
         // ── Dossier Search ───────────────────────────────────────────────────
@@ -149,6 +437,10 @@ namespace MUTHUR6000.Core.Controller
         private string _reasoningBulletTitle = "";
         private int _reasoningConfPct = 0;
         private readonly List<ReasoningTopic> _reasoningTopics = new();
+
+        // ── Split-Pane Controller & Layout Engine ───────────────────────────
+        private readonly SplitPaneViewState _splitPaneViewState = new();
+        private readonly SplitPaneLayoutEngine _splitPaneLayoutEngine = SplitPaneLayoutEngine.CreateForResolution(1024, 640);
 
         // ── Wiki Module State ────────────────────────────────────────────────
         private WikiNode _wikiRoot = new();
@@ -176,7 +468,7 @@ namespace MUTHUR6000.Core.Controller
         private int _strikeHexRadius = 10;         // 5, 10, 15, 20, 25
         private int _invasionSensitivity = 80;     // 60, 70, 80, 90
         private string _aiEndpointUrl = "in-process://heuristics";
-        private string _aiModelName = "nostromo-tpie-v1";
+        private string _aiModelName = "rochefort-heuristics-v1";
         private bool _aiConnected = true;
 
         public IngestionManifest Manifest { get; private set; } = new();
@@ -187,24 +479,66 @@ namespace MUTHUR6000.Core.Controller
         public bool IsAllied => _wizardSideSel == 0;
 
         public event Action<string, bool>? ScreenRenderRequested;
+        public event Action? ShutdownRequested;
 
         // ── Ctor ─────────────────────────────────────────────────────────────
         public TerminalScreenManager()
         {
             InitializeWikiTree();
             InitializeFieldManual();
+            InitializeData();
+        }
+
+        private static string FindProjectRootDir()
+        {
+            string root = AppDomain.CurrentDomain.BaseDirectory;
+            while (!string.IsNullOrEmpty(root) && !System.IO.File.Exists(System.IO.Path.Combine(root, "CANONICAL.txt")))
+            {
+                var parent = System.IO.Directory.GetParent(root);
+                if (parent == null) break;
+                root = parent.FullName;
+            }
+            if (string.IsNullOrEmpty(root) || !System.IO.File.Exists(System.IO.Path.Combine(root, "CANONICAL.txt")))
+            {
+                root = Directory.GetCurrentDirectory();
+            }
+            return root;
         }
 
         public void InitializeData(List<string>? dirs = null)
         {
-            var searchPaths = dirs ?? new List<string>
+            string root = FindProjectRootDir();
+            var searchPaths = new List<string>();
+
+            if (dirs != null)
             {
-                @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive",
-                @"C:\WitP-CIC\Campaigns",
-                System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_data"),
-                System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive"),
-                System.IO.Path.Combine(Directory.GetCurrentDirectory(), "sample_data")
-            };
+                foreach (var d in dirs)
+                {
+                    searchPaths.Add(d);
+                    if (!Path.IsPathRooted(d))
+                    {
+                        searchPaths.Add(Path.Combine(root, d));
+                        searchPaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, d));
+                    }
+                }
+            }
+            else
+            {
+                searchPaths.AddRange(new[]
+                {
+                    @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE",
+                    @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive",
+                    @"C:\WitP-CIC\Campaigns",
+                    Path.Combine(root, "sample_data"),
+                    Path.Combine(root, "docs", "golden"),
+                    Path.Combine(root, "archive"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_data"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "docs", "golden"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive"),
+                    Path.Combine(Directory.GetCurrentDirectory(), "sample_data")
+                });
+            }
+
             Manifest = FileScanner.ScanDirectories(searchPaths);
             Analytics.AnalyzeCampaign(Manifest);
         }
@@ -274,18 +608,6 @@ namespace MUTHUR6000.Core.Controller
                     HandleGraphicsDisplayScreen(key);
                     break;
 
-                case ScreenState.TpieDashboard:
-                    HandleTpieDashboard(key);
-                    break;
-
-                case ScreenState.PredictiveModels:
-                    HandlePredictiveModels(key);
-                    break;
-
-                case ScreenState.PredModelPopUp:
-                    HandlePredModelPopUp(key);
-                    break;
-
                 case ScreenState.ReasoningModal:
                     HandleReasoningModal(key);
                     break;
@@ -324,6 +646,14 @@ namespace MUTHUR6000.Core.Controller
 
                 case ScreenState.ExitConfirmModal:
                     HandleExitConfirmModal(key);
+                    break;
+
+                case ScreenState.TemporalFilterModal:
+                    HandleTemporalFilterModal(key);
+                    break;
+
+                case ScreenState.CalendarPickerModal:
+                    HandleCalendarPickerModal(key);
                     break;
             }
         }
@@ -404,7 +734,8 @@ namespace MUTHUR6000.Core.Controller
 
         public bool IsAwaitingTextInput =>
             (_state == ScreenState.NewCampaignWizard && (_wizardStep == 2 || (_wizardStep == 3 && _wizardAwaitingDirInput) || _wizardStep == 4))
-            || (_state == ScreenState.DossierSearch && _dossierSearching);
+            || (_state == ScreenState.DossierSearch && _dossierSearching)
+            || (_state == ScreenState.TemporalFilterModal && _filterTextEntryActive);
 
         // ── New Campaign Wizard ──────────────────────────────────────────────
         private void HandleNewCampaignWizard(System.Windows.Input.Key key)
@@ -604,6 +935,15 @@ namespace MUTHUR6000.Core.Controller
                     RenderCurrentScreen();
                 }
             }
+            else if (_state == ScreenState.TemporalFilterModal && _filterTextEntryActive)
+            {
+                if (_filterTextInput.Length < 40)
+                {
+                    _filterTextInput += c;
+                    _filterInputError = "";
+                    RenderCurrentScreen();
+                }
+            }
         }
 
         // ── Continue Campaign ────────────────────────────────────────────────
@@ -788,24 +1128,20 @@ namespace MUTHUR6000.Core.Controller
             switch (idx)
             {
                 case 0:
-                    _state = ScreenState.IntelligenceSummary;
-                    _intelSumSel = 0;
+                    _state = ScreenState.TbdDomain;
                     break;
                 case 1:
-                    _state = ScreenState.SigintMap;
-                    _sigintMapSel = 0;
+                    _state = ScreenState.TbdDomain;
                     break;
                 case 2:
                     _state = ScreenState.GraphicsMenu;
                     _graphicsMenuSel = 0;
                     break;
                 case 3:
-                    _state = ScreenState.TpieDashboard;
-                    _tpieSel = 0;
+                    _state = ScreenState.TbdDomain;
                     break;
                 case 4:
-                    _state = ScreenState.PredictiveModels;
-                    _predModelsSel = 0;
+                    _state = ScreenState.TbdDomain;
                     break;
                 case 5:
                     _state = ScreenState.Heuristics;
@@ -818,9 +1154,6 @@ namespace MUTHUR6000.Core.Controller
         // ── Intelligence Summary Screen ──────────────────────────────────────
         private void HandleIntelligenceSummary(System.Windows.Input.Key key)
         {
-            var filterDates = GetAvailableDateFilterList();
-            int numDates = filterDates.Count;
-
             switch (key)
             {
                 case System.Windows.Input.Key.Escape:
@@ -831,21 +1164,50 @@ namespace MUTHUR6000.Core.Controller
                 case System.Windows.Input.Key.Left:
                 case System.Windows.Input.Key.OemOpenBrackets:
                 case System.Windows.Input.Key.OemComma:
-                    if (numDates > 0)
-                    {
-                        _intelDateFilterIdx = (_intelDateFilterIdx - 1 + numDates) % numDates;
-                        RenderCurrentScreen();
-                    }
+                    StepTurnDate(-1);
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Right:
                 case System.Windows.Input.Key.OemCloseBrackets:
                 case System.Windows.Input.Key.OemPeriod:
-                    if (numDates > 0)
-                    {
-                        _intelDateFilterIdx = (_intelDateFilterIdx + 1) % numDates;
-                        RenderCurrentScreen();
-                    }
+                    StepTurnDate(1);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D1:
+                    ApplyFilterPreset(TemporalFilterMode.LatestTurn);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D2:
+                    ApplyFilterPreset(TemporalFilterMode.Last7Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D3:
+                    ApplyFilterPreset(TemporalFilterMode.Last15Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D4:
+                    ApplyFilterPreset(TemporalFilterMode.Last30Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D5:
+                    ApplyFilterPreset(TemporalFilterMode.AllCampaign);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.R:
+                case System.Windows.Input.Key.F:
+                    _filterReturnState = ScreenState.IntelligenceSummary;
+                    _filterTextEntryActive = false;
+                    _filterTextInput = "";
+                    _filterInputError = "";
+                    _state = ScreenState.TemporalFilterModal;
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Up:
@@ -862,12 +1224,6 @@ namespace MUTHUR6000.Core.Controller
                 case System.Windows.Input.Key.Enter:
                     OpenIntelDetailPopUp(_intelSumSel);
                     break;
-
-                case System.Windows.Input.Key.D1: OpenIntelDetailPopUp(0); break;
-                case System.Windows.Input.Key.D2: OpenIntelDetailPopUp(1); break;
-                case System.Windows.Input.Key.D3: OpenIntelDetailPopUp(2); break;
-                case System.Windows.Input.Key.D4: OpenIntelDetailPopUp(3); break;
-                case System.Windows.Input.Key.D5: OpenIntelDetailPopUp(4); break;
             }
         }
 
@@ -878,24 +1234,21 @@ namespace MUTHUR6000.Core.Controller
             _popUpReasonings.Clear();
             _popUpConfidences.Clear();
 
-            var filterDates = GetAvailableDateFilterList();
-            if (_intelDateFilterIdx >= filterDates.Count) _intelDateFilterIdx = 0;
-            string curFilterDate = filterDates[_intelDateFilterIdx];
-
             switch (category)
             {
                 case 0:
                     _popUpTitle = "HIGH-VALUE TARGET (HVT) LOCALIZATION MANIFEST";
-                    var hvts = curFilterDate == "ALL"
-                        ? Analytics.HighValueTargets
-                        : Analytics.HighValueTargets.Where(h => h.Date == curFilterDate || h.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
+                    var hvts = Analytics.HighValueTargets
+                        .Where(h => IsDateInActiveFilter(h.Date, h.AllDates))
+                        .OrderByDescending(h => h.Date)
+                        .ToList();
 
                     if (hvts.Count == 0)
                     {
                         _popUpBullets.Add("NO HIGH-VALUE TARGETS LOCALIZED FOR THIS TURN DATE.");
                         _popUpReasonings.Add(new List<string> {
                             "TELEMETRY SOURCE: SIGINT Intercept Report & Radio Direction Finding",
-                            $"DATE FILTER: {(curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate))}",
+                            $"DATE FILTER: {GetActiveFilterDescription()}",
                             "OBSERVATION STATUS: No capital ship sightings matched the selected date window."
                         });
                         _popUpConfidences.Add(0);
@@ -985,17 +1338,17 @@ namespace MUTHUR6000.Core.Controller
 
                 case 4:
                     _popUpTitle = "BATTLE DAMAGE ASSESSMENT & CLAIMS REVISION REGISTER";
-                    var allClaims = Analytics.ModelEClaims.Claims;
-                    var claims = curFilterDate == "ALL"
-                        ? allClaims
-                        : allClaims.Where(c => c.DateYYMMDD == curFilterDate).ToList();
+                    var claims = Analytics.ModelEClaims.Claims
+                        .Where(c => IsDateInActiveFilter(c.DateYYMMDD))
+                        .OrderByDescending(c => c.DateYYMMDD)
+                        .ToList();
 
                     if (claims.Count == 0)
                     {
                         _popUpBullets.Add("NO HOSTILE COMBAT DAMAGE CLAIMS RECORDED FOR THIS TURN RANGE.");
                         _popUpReasonings.Add(new List<string> {
                             "INTELLIGENCE STATUS: No hostile vessels currently identified taking damage or sunk in verified combat reports.",
-                            $"DATE FILTER: {(curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate))}",
+                            $"DATE FILTER: {GetActiveFilterDescription()}",
                             "ASSESSMENT CRITERIA: Fog-of-war claims register tracks enemy losses only.",
                             "FRIENDLY STATUS: Friendly unit casualties are managed exclusively through operational commands."
                         });
@@ -1023,7 +1376,16 @@ namespace MUTHUR6000.Core.Controller
                     break;
             }
 
-            _popUpCallerState = ScreenState.IntelligenceSummary;
+            var splitItems = new List<SplitPaneItem>();
+            for (int i = 0; i < _popUpBullets.Count; i++)
+            {
+                string bTitle = _popUpBullets[i];
+                int conf = i < _popUpConfidences.Count ? _popUpConfidences[i] : 0;
+                var rawReasoning = i < _popUpReasonings.Count ? _popUpReasonings[i] : null;
+                splitItems.Add(SplitPaneItem.FromRawTelemetry(bTitle, conf, rawReasoning));
+            }
+            _splitPaneViewState.LoadItems(splitItems, _popUpTitle);
+
             _state = ScreenState.IntelDetailPopUp;
             _intelPopUpSel = 0;
             RenderCurrentScreen();
@@ -1031,32 +1393,69 @@ namespace MUTHUR6000.Core.Controller
 
         private void HandleIntelDetailPopUp(System.Windows.Input.Key key)
         {
-            int total = _popUpBullets.Count;
             switch (key)
             {
                 case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.IntelligenceSummary;
-                    RenderCurrentScreen();
+                    if (_splitPaneViewState.ActivePane == PaneFocus.Lower)
+                    {
+                        _splitPaneViewState.FocusUpper();
+                        RenderCurrentScreen();
+                    }
+                    else
+                    {
+                        _state = ScreenState.IntelligenceSummary;
+                        RenderCurrentScreen();
+                    }
                     break;
 
                 case System.Windows.Input.Key.Up:
-                    if (total > 0) { _intelPopUpSel = Math.Max(0, _intelPopUpSel - 1); RenderCurrentScreen(); }
+                    _splitPaneViewState.MoveUp();
+                    _intelPopUpSel = _splitPaneViewState.SelectedItemIndex;
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Down:
-                    if (total > 0) { _intelPopUpSel = Math.Min(total - 1, _intelPopUpSel + 1); RenderCurrentScreen(); }
+                    _splitPaneViewState.MoveDown();
+                    _intelPopUpSel = _splitPaneViewState.SelectedItemIndex;
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Tab:
-                    if (total > 0) { _intelPopUpSel = (_intelPopUpSel + 1) % total; RenderCurrentScreen(); }
+                    _splitPaneViewState.ToggleFocus();
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Enter:
-                    if (total > 0 && _intelPopUpSel < total)
-                        OpenReasoningModal(_popUpBullets[_intelPopUpSel],
-                                           _popUpReasonings[_intelPopUpSel],
-                                           _intelPopUpSel < _popUpConfidences.Count ? _popUpConfidences[_intelPopUpSel] : 0,
-                                           ScreenState.IntelDetailPopUp);
+                    if (_splitPaneViewState.ActivePane == PaneFocus.Upper)
+                    {
+                        _splitPaneViewState.FocusLower();
+                        RenderCurrentScreen();
+                    }
+                    else
+                    {
+                        var curItem = _splitPaneViewState.SelectedItem;
+                        if (curItem != null)
+                        {
+                            var allRaw = new List<string>();
+                            foreach (var topic in curItem.Topics)
+                            {
+                                allRaw.AddRange(topic.Lines);
+                            }
+                            int targetTopicIdx = _splitPaneViewState.SelectedTopicIndex;
+                            OpenReasoningModal(curItem.Title, allRaw, curItem.ConfidencePct, ScreenState.IntelDetailPopUp);
+                            _reasoningTopicSel = Math.Max(0, Math.Min(targetTopicIdx, _reasoningTopics.Count - 1));
+                        }
+                    }
+                    break;
+
+                case System.Windows.Input.Key.Left:
+                    _splitPaneViewState.FocusUpper();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Right:
+                    _splitPaneViewState.FocusLower();
+                    RenderCurrentScreen();
                     break;
             }
         }
@@ -1064,15 +1463,10 @@ namespace MUTHUR6000.Core.Controller
         // ── SIGINT Map Screen ────────────────────────────────────────────────
         private void HandleSigintMap(System.Windows.Input.Key key)
         {
-            var filterDates = GetAvailableDateFilterList();
-            int numDates = filterDates.Count;
-            if (_sigintDateFilterIdx >= numDates) _sigintDateFilterIdx = 0;
-            string curFilterDate = filterDates[_sigintDateFilterIdx];
-
-            var allLogs = Analytics.GeospatialLog;
-            var logs = curFilterDate == "ALL"
-                ? allLogs
-                : allLogs.Where(e => e.DateYYMMDD == curFilterDate || e.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
+            var logs = Analytics.GeospatialLog
+                .Where(e => IsDateInActiveFilter(e.DateYYMMDD, e.AllDates))
+                .OrderByDescending(e => e.DateYYMMDD)
+                .ToList();
 
             int total = logs.Count;
 
@@ -1086,23 +1480,57 @@ namespace MUTHUR6000.Core.Controller
                 case System.Windows.Input.Key.Left:
                 case System.Windows.Input.Key.OemOpenBrackets:
                 case System.Windows.Input.Key.OemComma:
-                    if (numDates > 0)
-                    {
-                        _sigintDateFilterIdx = (_sigintDateFilterIdx - 1 + numDates) % numDates;
-                        _sigintMapSel = 0;
-                        RenderCurrentScreen();
-                    }
+                    StepTurnDate(-1);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Right:
                 case System.Windows.Input.Key.OemCloseBrackets:
                 case System.Windows.Input.Key.OemPeriod:
-                    if (numDates > 0)
-                    {
-                        _sigintDateFilterIdx = (_sigintDateFilterIdx + 1) % numDates;
-                        _sigintMapSel = 0;
-                        RenderCurrentScreen();
-                    }
+                    StepTurnDate(1);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D1:
+                    ApplyFilterPreset(TemporalFilterMode.LatestTurn);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D2:
+                    ApplyFilterPreset(TemporalFilterMode.Last7Days);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D3:
+                    ApplyFilterPreset(TemporalFilterMode.Last15Days);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D4:
+                    ApplyFilterPreset(TemporalFilterMode.Last30Days);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D5:
+                    ApplyFilterPreset(TemporalFilterMode.AllCampaign);
+                    _sigintMapSel = 0;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.R:
+                case System.Windows.Input.Key.F:
+                    _filterReturnState = ScreenState.SigintMap;
+                    _filterTextEntryActive = false;
+                    _filterTextInput = "";
+                    _filterInputError = "";
+                    _state = ScreenState.TemporalFilterModal;
+                    RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.D:
@@ -1129,7 +1557,7 @@ namespace MUTHUR6000.Core.Controller
                     if (total > 0 && _sigintMapSel < total)
                     {
                         var ent = logs[_sigintMapSel];
-                        string dStr = string.IsNullOrEmpty(ent.LastSeenDate) ? ent.DateYYMMDD : ent.LastSeenDate;
+                        string dStr = !string.IsNullOrEmpty(ent.LastSeenDate) ? ent.LastSeenDate : FileScanner.FormatYYMMDD(ent.DateYYMMDD);
                         string datesStr = ent.AllDates.Count > 0 ? string.Join(", ", ent.AllDates) : dStr;
                         int freq = Math.Max(1, ent.AllDates.Count);
                         string freqStr = freq > 1
@@ -1256,319 +1684,6 @@ namespace MUTHUR6000.Core.Controller
             }
         }
 
-        // ── TPIE Dashboard ───────────────────────────────────────────────────
-        private void HandleTpieDashboard(System.Windows.Input.Key key)
-        {
-            var targets = Analytics.ModelATargets;
-            int maxShow = Math.Min(5, targets.Count);
-
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.WarRoomPrimary;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    if (maxShow > 0) { _tpieSel = Math.Max(0, _tpieSel - 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    if (maxShow > 0) { _tpieSel = Math.Min(maxShow - 1, _tpieSel + 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Tab:
-                    if (maxShow > 0) { _tpieSel = (_tpieSel + 1) % maxShow; RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.I:
-                    OpenInterceptWindowsModal();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    if (_tpieSel < targets.Count)
-                    {
-                        var t = targets[_tpieSel];
-                        string probStr = $"{t.Probability * 100:F1}% Probability";
-                        var r = new List<string> {
-                            "PREDICTIVE ENGINE: Model A — Weighted Evidence Accumulator (Heuristic Bayes)",
-                            $"TARGET OBJECTIVE: {t.Destination} [{probStr} - {t.ThreatLevel}]",
-                            "MATHEMATICAL REASONING: Score >= 15 yields >90% probability threshold alert.",
-                            $"INTELLIGENCE EVIDENCE: {t.Assessment}",
-                            "RECENCY DECAY: Applied temporal decay factor 0.9^delta_t across observed turns."
-                        };
-                        foreach (var u in t.LoadedUnits) r.Add($"  + EMBARKED UNIT: {u}");
-                        foreach (var s in t.RadioTransmissions) r.Add($"  + RADIO SIGNAL: {s}");
-                        OpenReasoningModal($"{t.Destination} ({probStr})", r, 0, ScreenState.TpieDashboard);
-                    }
-                    break;
-            }
-        }
-
-        private void OpenInterceptWindowsModal()
-        {
-            var trajs = Analytics.ModelBTrajectories;
-            _popUpBullets.Clear();
-            _popUpReasonings.Clear();
-            _popUpConfidences.Clear();
-            _popUpTitle = "TPIE INTERCEPT WINDOWS & PATROL ZONES";
-
-            if (trajs.Count == 0)
-            {
-                _popUpBullets.Add("NO ACTIVE FLEET TRAJECTORIES LOCALIZED TO COMPUTE INTERCEPT WINDOWS.");
-                _popUpReasonings.Add(new List<string> { "INTELLIGENCE STATUS: No trajectory data available." });
-                _popUpConfidences.Add(0);
-            }
-            else
-            {
-                foreach (var t in trajs.Take(11))
-                {
-                    string hexStr = $"{t.ProjectedHexX},{t.ProjectedHexY}";
-                    _popUpBullets.Add($"{t.TargetDestination,-22} Proj: {hexStr,-14}+/-2.5 Hex  {t.InterceptWindow}");
-                    _popUpReasonings.Add(new List<string> {
-                        $"MATHEMATICAL FORMULATION: Dead Reckoning T+1 (x_next = x0 + v*cos(theta), y_next = y0 + v*sin(theta))",
-                        $"CONTACT: {t.Description}",
-                        $"PROJECTED POSITION: Hex {t.ProjectedHexX},{t.ProjectedHexY} (Confidence: +/- 2.5 hexes)",
-                        $"ESTIMATED DESTINATION: {t.TargetDestination}",
-                        $"INTERCEPT WINDOW: {t.InterceptWindow}"
-                    });
-                    _popUpConfidences.Add(0);
-                }
-            }
-
-            _popUpCallerState = ScreenState.TpieDashboard;
-            _state = ScreenState.PredModelPopUp;
-            _predPopUpSel = 0;
-            RenderCurrentScreen();
-        }
-
-        // ── Predictive Models Screen ─────────────────────────────────────────
-        private void HandlePredictiveModels(System.Windows.Input.Key key)
-        {
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = ScreenState.WarRoomPrimary;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    _predModelsSel = Math.Max(0, _predModelsSel - 1);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    _predModelsSel = Math.Min(6, _predModelsSel + 1);
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Tab:
-                    _predModelsSel = (_predModelsSel + 1) % 7;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    OpenPredModelPopUp(_predModelsSel);
-                    break;
-
-                case System.Windows.Input.Key.A: OpenPredModelPopUp(0); break;
-                case System.Windows.Input.Key.B: OpenPredModelPopUp(1); break;
-                case System.Windows.Input.Key.C: OpenPredModelPopUp(2); break;
-                case System.Windows.Input.Key.D: OpenPredModelPopUp(3); break;
-                case System.Windows.Input.Key.E: OpenPredModelPopUp(4); break;
-                case System.Windows.Input.Key.F: OpenPredModelPopUp(5); break;
-                case System.Windows.Input.Key.G: OpenPredModelPopUp(6); break;
-            }
-        }
-
-        private void OpenPredModelPopUp(int modelIdx)
-        {
-            _predModelsSel = modelIdx;
-            _popUpBullets.Clear();
-            _popUpReasonings.Clear();
-            _popUpConfidences.Clear();
-
-            switch (modelIdx)
-            {
-                case 0:
-                    _popUpTitle = "MODEL A: AMPHIBIOUS ASSAULT PROBABILITY ENGINE";
-                    foreach (var t in Analytics.ModelATargets)
-                    {
-                        _popUpBullets.Add($"{t.Destination} | Prob: {t.Probability * 100:F1}% | Threat: {t.ThreatLevel}");
-                        _popUpReasonings.Add(new List<string> {
-                            "MATHEMATICAL FORMULATION: Weighted Evidence Accumulator P = min(0.99, Score / 15.0)",
-                            $"TARGET: {t.Destination} ({t.ThreatLevel})",
-                            $"ASSESSMENT EVIDENCE: {t.Assessment}",
-                            "TEMPORAL FACTOR: Recency decay 0.9^delta_t applied across turn delta."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 1:
-                    _popUpTitle = "MODEL B: FLEET TRAJECTORY & INTERCEPT PROJECTION";
-                    foreach (var tr in Analytics.ModelBTrajectories)
-                    {
-                        string hexStr = $"{tr.StartHexX},{tr.StartHexY} -> {tr.ProjectedHexX},{tr.ProjectedHexY}";
-                        _popUpBullets.Add($"{tr.Description} [{hexStr}] {tr.Heading} @ {tr.SpeedKnots} kts");
-                        _popUpReasonings.Add(new List<string> {
-                            "MATHEMATICAL FORMULATION: Dead Reckoning T+1 (x_next = x0 + v*cos(theta), y_next = y0 + v*sin(theta))",
-                            $"CONTACT: {tr.Description}",
-                            $"PROJECTED POSITION: Hex {tr.ProjectedHexX},{tr.ProjectedHexY} (Confidence: +/- 2.5 hexes)",
-                            $"ESTIMATED DESTINATION: {tr.TargetDestination}",
-                            $"INTERCEPT WINDOW: {tr.InterceptWindow}"
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 2:
-                    _popUpTitle = "MODEL C: AIR SUPERIORITY & COMBAT LOSS FORECASTER";
-                    var ac = Analytics.ModelCAttrition;
-                    _popUpBullets.Add($"Allied Losses: {ac.TotalAlliedLosses} | Japanese Losses: {ac.TotalJapaneseLosses}");
-                    _popUpReasonings.Add(new List<string> {
-                        "MATHEMATICAL FORMULATION: Exponential Moving Average (EMA) Attrition Decay (alpha = 0.3)",
-                        $"COMBAT AIR LOSSES TABULATION: Allied Air Losses: {ac.TotalAlliedLosses} aircraft",
-                        $"OPPOSING AIR LOSSES: Japanese Air Losses: {ac.TotalJapaneseLosses} aircraft",
-                        $"SUPERIORITY PROJECTION: {ac.Forecast}"
-                    });
-                    _popUpConfidences.Add(0);
-                    foreach (var ace in ac.TopAces)
-                    {
-                        _popUpBullets.Add($"Allied Ace: {ace.PilotName} ({ace.Squadron}) - {ace.KillNumber} confirmed kills");
-                        _popUpReasonings.Add(new List<string> {
-                            "TELEMETRY SOURCE: Combat Events Dogfight & Air-to-Air Resolution Log",
-                            $"PILOT: {ace.PilotName} | SQUADRON: {ace.Squadron}",
-                            $"CONFIRMED AIR KILLS: {ace.KillNumber} hostile aircraft downed",
-                            "OPERATIONAL STATUS: Ace pilot status active."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 3:
-                    _popUpTitle = "MODEL D: LOGISTICAL & OPERATIONAL PAUSE DETECTOR";
-                    var p = Analytics.ModelDLogistics;
-                    foreach (var a in p.ActivePauses)
-                    {
-                        _popUpBullets.Add($"{a.EventType} [{a.TfId}] -> {a.Base} ({a.Details})");
-                        _popUpReasonings.Add(new List<string> {
-                            $"TELEMETRY SOURCE: Operations Report Logistical Status ({a.DateYYMMDD})",
-                            $"TASK FORCE: {a.TfId} | BASE: {a.Base}",
-                            $"EVENT TYPE: {a.EventType}",
-                            $"OPERATIONAL PAUSE REASONING: {a.Details}",
-                            $"PAUSE WINDOW ASSESSMENT: {p.PauseWindow}"
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    if (p.ActivePauses.Count == 0)
-                    {
-                        _popUpBullets.Add("NO ACTIVE LOGISTICAL PAUSES DETECTED.");
-                        _popUpReasonings.Add(new List<string> { "INTELLIGENCE STATUS: All task forces operational." });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 4:
-                    _popUpTitle = "MODEL E: BATTLE CLAIMS & DAMAGE REVISION REGISTER";
-                    var oppClaims = Analytics.ModelEClaims.Claims;
-                    if (oppClaims.Count == 0)
-                    {
-                        _popUpBullets.Add("NO HOSTILE COMBAT DAMAGE CLAIMS RECORDED FOR THIS TURN RANGE.");
-                        _popUpReasonings.Add(new List<string> {
-                            "INTELLIGENCE STATUS: No hostile combat claims currently pending revision.",
-                            "METHODOLOGY: Model E tracks enemy BDA and ghost ships only.",
-                            "FRIENDLY STATUS: Friendly forces managed via operational fleet screens."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    else
-                    {
-                        foreach (var c in oppClaims)
-                        {
-                            _popUpBullets.Add($"{c.ShipName} : {c.Assessment} ({c.Reason})");
-                            _popUpReasonings.Add(new List<string> {
-                                "TELEMETRY SOURCE: Combat Action Report Claims vs Operations Sighting Reconciliation",
-                                $"VESSEL: {c.ShipName} | DATE: {c.DateYYMMDD}",
-                                $"REVISED ASSESSMENT: {c.Assessment}",
-                                $"RECONCILIATION CRITERIA: {c.Reason}",
-                                "GROUND TRUTH: Confirmed against entity persistence layer."
-                            });
-                            _popUpConfidences.Add(0);
-                        }
-                    }
-                    break;
-
-                case 5:
-                    _popUpTitle = "MODEL F: STRIKE CONCENTRATION DETECTOR";
-                    foreach (var sc in Analytics.ModelFConcentrations)
-                    {
-                        _popUpBullets.Add($"{sc.ClusterName} [Hex {sc.CenterHexX},{sc.CenterHexY}] : {sc.WarshipCount} Warships");
-                        _popUpReasonings.Add(new List<string> {
-                            "MATHEMATICAL FORMULATION: Hex Grid Spatial Density Clustering (Radius = 10 hexes)",
-                            $"CLUSTER: {sc.ClusterName} at Hex {sc.CenterHexX},{sc.CenterHexY}",
-                            $"FORCE DENSITY: {sc.WarshipCount} surface warships detected.",
-                            $"THREAT RATING: {sc.ThreatLevel} (Cruiser-class presence exceeds threshold)."
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-
-                case 6:
-                    _popUpTitle = "MODEL G: ESTABLISHED SHIPPING ROUTES & CORRIDORS";
-                    foreach (var r in Analytics.ModelGRoutes)
-                    {
-                        _popUpBullets.Add($"{r.CorridorName} : {r.DeparturePoint} -> {r.DestinationPoint} | {r.Confidence}");
-                        _popUpReasonings.Add(new List<string> {
-                            "MATHEMATICAL FORMULATION: Repeated Waypoint Graph Vectorization",
-                            $"CORRIDOR: {r.CorridorName}",
-                            $"ENDPOINTS: {r.DeparturePoint} -> {r.DestinationPoint}",
-                            $"TRAFFIC PROFILE: {r.VesselTypes}",
-                            $"CONFIDENCE ASSESSMENT: {r.Confidence}"
-                        });
-                        _popUpConfidences.Add(0);
-                    }
-                    break;
-            }
-
-            _popUpCallerState = ScreenState.PredictiveModels;
-            _state = ScreenState.PredModelPopUp;
-            _predPopUpSel = 0;
-            RenderCurrentScreen();
-        }
-
-        private void HandlePredModelPopUp(System.Windows.Input.Key key)
-        {
-            int total = _popUpBullets.Count;
-            switch (key)
-            {
-                case System.Windows.Input.Key.Escape:
-                    _state = _popUpCallerState;
-                    RenderCurrentScreen();
-                    break;
-
-                case System.Windows.Input.Key.Up:
-                    if (total > 0) { _predPopUpSel = Math.Max(0, _predPopUpSel - 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    if (total > 0) { _predPopUpSel = Math.Min(total - 1, _predPopUpSel + 1); RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Tab:
-                    if (total > 0) { _predPopUpSel = (_predPopUpSel + 1) % total; RenderCurrentScreen(); }
-                    break;
-
-                case System.Windows.Input.Key.Enter:
-                    if (total > 0 && _predPopUpSel < total)
-                        OpenReasoningModal(_popUpBullets[_predPopUpSel],
-                                           _popUpReasonings[_predPopUpSel],
-                                           _predPopUpSel < _popUpConfidences.Count ? _popUpConfidences[_predPopUpSel] : 0,
-                                           ScreenState.PredModelPopUp);
-                    break;
-            }
-        }
-
         // ── Heuristics Screen ────────────────────────────────────────────────
         private void HandleHeuristics(System.Windows.Input.Key key)
         {
@@ -1580,16 +1695,48 @@ namespace MUTHUR6000.Core.Controller
                     break;
 
                 case System.Windows.Input.Key.Up:
+                    _heuristicsSel = (_heuristicsSel - 1 + 6) % 6;
+                    RenderCurrentScreen();
+                    break;
+
                 case System.Windows.Input.Key.Down:
                 case System.Windows.Input.Key.Tab:
-                    _heuristicsSel = 0;
+                    _heuristicsSel = (_heuristicsSel + 1) % 6;
                     RenderCurrentScreen();
                     break;
 
                 case System.Windows.Input.Key.Enter:
+                    OpenHeuristicsPopUp(_heuristicsSel);
+                    break;
+
                 case System.Windows.Input.Key.D1:
                     _heuristicsSel = 0;
                     OpenHeuristicsPopUp(0);
+                    break;
+
+                case System.Windows.Input.Key.D2:
+                    _heuristicsSel = 1;
+                    OpenHeuristicsPopUp(1);
+                    break;
+
+                case System.Windows.Input.Key.D3:
+                    _heuristicsSel = 2;
+                    OpenHeuristicsPopUp(2);
+                    break;
+
+                case System.Windows.Input.Key.D4:
+                    _heuristicsSel = 3;
+                    OpenHeuristicsPopUp(3);
+                    break;
+
+                case System.Windows.Input.Key.D5:
+                    _heuristicsSel = 4;
+                    OpenHeuristicsPopUp(4);
+                    break;
+
+                case System.Windows.Input.Key.D6:
+                    _heuristicsSel = 5;
+                    OpenHeuristicsPopUp(5);
                     break;
             }
         }
@@ -1674,11 +1821,12 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var m in h.MineHitsChronological)
                         {
-                            _popUpBullets.Add($"[{m.DateYYMMDD}] Hex {m.HexX,3},{m.HexY,-3} ──■── ({m.LocationName}) : {m.Details}");
+                            string dFormatted = FileScanner.FormatYYMMDD(m.DateYYMMDD);
+                            _popUpBullets.Add($"[{dFormatted}] Hex {m.HexX,3},{m.HexY,-3} ──■── ({m.LocationName}) : {m.Details}");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: Combat Report Minefield Engagement Log",
                                 $"COORDINATES: Hex {m.HexX},{m.HexY} (Near {m.LocationName})",
-                                $"DATE: {m.DateYYMMDD}",
+                                $"DATE: {dFormatted}",
                                 $"RAW EXCERPT: {m.RawLine}",
                                 "MATHEMATICAL FORMULATION: Coordinate (X,Y) registered in HashSet unique spatial barrier set",
                                 "TACTICAL ASSESSMENT: Hostile naval passage through Allied defensive mine barrier."
@@ -1704,12 +1852,13 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var c in h.SubmarineCentroids)
                         {
+                            string dFormatted = FileScanner.FormatYYMMDD(c.DateYYMMDD);
                             int barCount = Math.Min(6, c.ContactCount);
                             string densityBar = new string('■', barCount) + new string('·', 6 - barCount);
-                            _popUpBullets.Add($"[{c.DateYYMMDD}] Centroid: ({c.CentroidX:F1},{c.CentroidY:F1}) [{densityBar}] {c.ContactCount,2} SS contacts");
+                            _popUpBullets.Add($"[{dFormatted}] Centroid: ({c.CentroidX:F1},{c.CentroidY:F1}) [{densityBar}] {c.ContactCount,2} SS contacts");
                             var rList = new List<string> {
                                 "TELEMETRY SOURCE: asigint & Operational Submarine Sightings Log",
-                                $"DATE: {c.DateYYMMDD}",
+                                $"DATE: {dFormatted}",
                                 $"MATHEMATICAL FORMULATION: Centroid (X_bar, Y_bar) = ({c.CentroidX:F2}, {c.CentroidY:F2}) computed across N={c.ContactCount} contacts",
                                 $"TACTICAL ASSESSMENT: Daily spatial center of mass for hostile submarine operations.",
                                 "EVIDENCE SIGHTINGS & INTERCEPTS:"
@@ -1752,11 +1901,12 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var b in h.IntelligenceBlindspots)
                         {
-                            _popUpBullets.Add($"[{b.DateYYMMDD}] Hex {b.HexX,3},{b.HexY,-3} [░░░░░░ GAP 0%] {b.LocationName} : Combat Blindspot");
+                            string dFormatted = FileScanner.FormatYYMMDD(b.DateYYMMDD);
+                            _popUpBullets.Add($"[{dFormatted}] Hex {b.HexX,3},{b.HexY,-3} [░░░░░░ GAP 0%] {b.LocationName} : Combat Blindspot");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: combatreport Engagement Records",
                                 $"LOCATION: Hex {b.HexX},{b.HexY} ({b.LocationName})",
-                                $"DATE: {b.DateYYMMDD}",
+                                $"DATE: {dFormatted}",
                                 $"RAW EXCERPT: {b.Description}",
                                 "MATHEMATICAL FORMULATION: Engagement_Events = 1, Prior_SIGINT_Count(3 Days) = 0 -> Blindspot Confirmed",
                                 "TACTICAL ASSESSMENT: Hostile force achieved tactical surprise on unmonitored approach vector."
@@ -1782,12 +1932,13 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var m in h.FleetMeans)
                         {
+                            string dFormatted = FileScanner.FormatYYMMDD(m.DateYYMMDD);
                             int densityBars = Math.Min(8, m.TotalVesselsCounted / 4);
                             string fleetBar = new string('█', densityBars) + new string('░', 8 - densityBars);
-                            _popUpBullets.Add($"[{m.DateYYMMDD}] Fleet Center: ({m.MeanX:F1},{m.MeanY:F1}) [{fleetBar}] {m.TotalVesselsCounted,2} vessels counted");
+                            _popUpBullets.Add($"[{dFormatted}] Fleet Center: ({m.MeanX:F1},{m.MeanY:F1}) [{fleetBar}] {m.TotalVesselsCounted,2} vessels counted");
                             var r = new List<string> {
                                 "TELEMETRY SOURCE: asigint & Sighting Telemetry Log",
-                                $"DATE: {m.DateYYMMDD}",
+                                $"DATE: {dFormatted}",
                                 $"MATHEMATICAL FORMULATION: Mean Coordinates = ({m.MeanX:F2}, {m.MeanY:F2}) across N={m.TotalVesselsCounted} vessels",
                                 "TACTICAL ASSESSMENT: Daily theater-wide center of enemy naval mass.",
                                 "EVIDENCE CONTRIBUTING CONTACTS:"
@@ -1804,7 +1955,7 @@ namespace MUTHUR6000.Core.Controller
                             _popUpBullets.Add($"STRATEGIC DRIFT: [{speedGraph}] {sd.DistanceHex:F1} Hx/D Brg {sd.BearingDeg:000}° ({sd.CompassHeading}) dX:{sd.DeltaX:+0.0;-0.0;0} dY:{sd.DeltaY:+0.0;-0.0;0}");
                             _popUpReasonings.Add(new List<string> {
                                 "TELEMETRY SOURCE: 3-Day Rolling Window of Mean Fleet Coordinates",
-                                $"INTERVAL: {sd.FromDate} to {sd.ToDate}",
+                                $"INTERVAL: {FileScanner.FormatYYMMDD(sd.FromDate)} to {FileScanner.FormatYYMMDD(sd.ToDate)}",
                                 $"MATHEMATICAL FORMULATION: Drift_Vector = (1/3) * sum(V_step_k); dX={sd.DeltaX:+0.00;-0.00;0.00}, dY={sd.DeltaY:+0.00;-0.00;0.00}",
                                 $"ADVANCE RATE: Advance Rate = {sd.DistanceHex:F1} hexes/day ({sd.DistanceHex * 40.0:F0} NM/day)",
                                 $"DISPLACEMENT: Axis Bearing = atan2(avg_dX, -avg_dY) = {sd.BearingDeg:000}° ({sd.CompassHeading})",
@@ -1831,12 +1982,13 @@ namespace MUTHUR6000.Core.Controller
                     {
                         foreach (var opt in h.DailyOptempo)
                         {
+                            string dFormatted = FileScanner.FormatYYMMDD(opt.DateYYMMDD);
                             int barLen = Math.Min(16, opt.SeparatorCount / 2);
                             string bar = new string('█', barLen) + new string('░', Math.Max(0, 16 - barLen));
-                            _popUpBullets.Add($"[{opt.DateYYMMDD}] Engagements: {opt.SeparatorCount,2} [{bar}] 3D-Avg: {opt.Rolling3DayAvg:F1}");
+                            _popUpBullets.Add($"[{dFormatted}] Engagements: {opt.SeparatorCount,2} [{bar}] 3D-Avg: {opt.Rolling3DayAvg:F1}");
                             var r = new List<string> {
                                 "TELEMETRY SOURCE: combatreport files across daily turns",
-                                $"OPERATIONAL DATE: {opt.DateYYMMDD}",
+                                $"OPERATIONAL DATE: {dFormatted}",
                                 $"TOTAL ENGAGEMENTS: {opt.SeparatorCount} individual combat resolution engagements ('---')",
                                 $"MATHEMATICAL FORMULATION: Rolling 3-Day Avg = sum(Separators_last_3_days) / 3.0 = {opt.Rolling3DayAvg:F2} engagements/day",
                                 $"TACTICAL ASSESSMENT: Operational tempo evaluated at {opt.Rolling3DayAvg:F1} engagements per day.",
@@ -1851,7 +2003,6 @@ namespace MUTHUR6000.Core.Controller
                     break;
             }
 
-            _popUpCallerState = ScreenState.Heuristics;
             _state = ScreenState.HeuristicsPopUp;
             RenderCurrentScreen();
         }
@@ -1898,35 +2049,75 @@ namespace MUTHUR6000.Core.Controller
 
             var h = Analytics.Heuristics;
             bool enoughData = h.HasSufficientTemporalData;
-            string earlyWarning = enoughData ? "" : " [!] DATA ACCUMULATING (< 4 DAYS)";
 
-            string titleStr = "1. Regional Power Shift (7-Day Delta)";
-            string sumStr;
+            string[] titles =
+            {
+                "Regional Power Shift (7-Day Force Concentration Delta)",
+                "Defensive Barrier & Minefield Hazard Mapping",
+                "Submarine Migration & Daily ASW Threat Centroids",
+                "Intelligence Blindspots & Combat Surveillance Gaps",
+                "Axis of Advance, Task Force Kinematics & Strategic Drift",
+                "Operational Tempo (OPTEMPO) & Combat Intensity Index"
+            };
+
+            string[] statuses = new string[6];
+
+            // 1. Regional Power Shift
             if (!enoughData)
-                sumStr = "NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE";
+                statuses[0] = "NOT ENOUGH DATA // NEED MORE DATA POINTS - WAIT SOME TIME MORE";
             else
             {
                 var topBuild = h.RegionalShifts.OrderByDescending(s => s.ShiftDelta).FirstOrDefault();
-                sumStr = topBuild != null && topBuild.ShiftDelta != 0
+                statuses[0] = topBuild != null && topBuild.ShiftDelta != 0
                     ? $"Primary Shift: {topBuild.RegionName} ({topBuild.Trend})"
                     : "Regional power distribution stable across all theaters";
             }
 
-            sb.AppendLine($"    * [1] {titleStr}");
-            sb.AppendLine();
-            sb.AppendLine($"        STATUS: {sumStr}");
-            sb.AppendLine();
+            // 2. Minefield Mapping
+            statuses[1] = h.MineHitsChronological.Count > 0
+                ? $"{h.MineHitsChronological.Count} confirmed barrier encounter(s) tracked in combat telemetry"
+                : "Defensive mine barriers intact; 0 hostile detonations logged";
 
-            sb.AppendLine("    >> Press [1] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
-            sb.AppendLine();
-            AppendFooter(sb, "[1/ENTER] Open Findings", "PRESS ESC TO RETURN");
+            // 3. Submarine Migration
+            statuses[2] = h.SubmarineCentroids.Count > 0
+                ? $"{h.SubmarineCentroids.Count} daily SS center-of-mass centroid(s) mapped across theater"
+                : "0 hostile submarine contact clusters localized for migration vectors";
+
+            // 4. Intelligence Blindspots
+            statuses[3] = h.IntelligenceBlindspots.Count > 0
+                ? $"{h.IntelligenceBlindspots.Count} engagement hex(es) occurred with zero prior SIGINT surveillance"
+                : "All tactical combat hexes preceded by corroborated reconnaissance";
+
+            // 5. Axis of Advance
+            statuses[4] = h.StrategicDrift.DistanceHex > 0.001
+                ? $"Drift: {h.StrategicDrift.DistanceHex:F1} Hx/D Brg {h.StrategicDrift.BearingDeg:000}° ({h.StrategicDrift.CompassHeading})"
+                : (h.FleetMeans.Count > 0 ? $"{h.FleetMeans.Count} fleet center-of-mass positions plotted" : "Enemy fleet center-of-mass vector stationary");
+
+            // 6. OPTEMPO
+            statuses[5] = h.DailyOptempo.Count > 0
+                ? $"Current OPTEMPO: {h.DailyOptempo[^1].SeparatorCount} engagements (3D-Avg: {h.DailyOptempo[^1].Rolling3DayAvg:F1}/day)"
+                : "Combat resolution rhythm baseline stable; awaiting daily battle logs";
+
+            for (int i = 0; i < 6; i++)
+            {
+                string optText = $"[{i + 1}]  {titles[i]}";
+                if (i == _heuristicsSel)
+                    sb.AppendLine($"    * {optText}");
+                else
+                    sb.AppendLine($"      {optText}");
+                sb.AppendLine($"        STATUS: {statuses[i]}");
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("    >> Press [1-6] or [ENTER] to open findings modal. Press [ESC] to return to War Room.");
+            AppendFooter(sb, "[UP/DOWN] Select Metric", "[1-6/ENTER] Open Findings", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
         private string BuildHeuristicsPopUp()
         {
-            const int boxWidth = 106;
-            const int innerWidth = 102;
+            const int boxWidth = 72;
+            const int innerWidth = 68;
             const int maxVisible = 11;
 
             var sb = new StringBuilder();
@@ -2467,7 +2658,7 @@ namespace MUTHUR6000.Core.Controller
                     if (_aiConnSel == 0)
                     {
                         _aiModelProvider = (_aiModelProvider % 4) + 1;
-                        if (_aiModelProvider == 1) { _aiEndpointUrl = "in-process://heuristics"; _aiModelName = "nostromo-tpie-v1"; }
+                        if (_aiModelProvider == 1) { _aiEndpointUrl = "in-process://heuristics"; _aiModelName = "rochefort-heuristics-v1"; }
                         else if (_aiModelProvider == 2) { _aiEndpointUrl = "http://localhost:11434"; _aiModelName = "mistral:latest"; }
                         else if (_aiModelProvider == 3) { _aiEndpointUrl = "https://generativelanguage.googleapis.com"; _aiModelName = "gemini-1.5-pro"; }
                         else { _aiEndpointUrl = "http://127.0.0.1:8080/v1"; _aiModelName = "custom-llm"; }
@@ -2496,15 +2687,341 @@ namespace MUTHUR6000.Core.Controller
         {
             if (key is System.Windows.Input.Key.Y)
             {
-                // Purge memory and reset to boot screen
-                _state = ScreenState.Boot;
-                RenderCurrentScreen();
+                // Purge memory and cleanly exit application
+                ShutdownRequested?.Invoke();
+                App.CleanProcessExit(0);
             }
             else if (key is System.Windows.Input.Key.N or System.Windows.Input.Key.Escape)
             {
                 _state = _exitReturnState;
                 RenderCurrentScreen();
             }
+        }
+
+        // ── Temporal Intelligence Filter & Range Modal ─────────────────────────
+        private void HandleTemporalFilterModal(System.Windows.Input.Key key)
+        {
+            if (_filterTextEntryActive)
+            {
+                if (key == System.Windows.Input.Key.Escape)
+                {
+                    _filterTextEntryActive = false;
+                    _filterTextInput = "";
+                    _filterInputError = "";
+                    RenderCurrentScreen();
+                    return;
+                }
+
+                if (key == System.Windows.Input.Key.Back)
+                {
+                    if (_filterTextInput.Length > 0)
+                    {
+                        _filterTextInput = _filterTextInput.Substring(0, _filterTextInput.Length - 1);
+                        _filterInputError = "";
+                        RenderCurrentScreen();
+                    }
+                    return;
+                }
+
+                if (key == System.Windows.Input.Key.Enter)
+                {
+                    if (string.IsNullOrWhiteSpace(_filterTextInput))
+                    {
+                        _filterTextEntryActive = false;
+                        _filterInputError = "";
+                        RenderCurrentScreen();
+                        return;
+                    }
+
+                    string raw = _filterTextInput.Trim().ToLowerInvariant();
+
+                    // Check quick span shortcuts: -7d, -15d, -30d
+                    if (raw == "-7d" || raw == "7d" || raw == "-7")
+                    {
+                        ApplyFilterPreset(TemporalFilterMode.Last7Days);
+                        _state = _filterReturnState;
+                        RenderCurrentScreen();
+                        return;
+                    }
+                    if (raw == "-15d" || raw == "15d" || raw == "-15")
+                    {
+                        ApplyFilterPreset(TemporalFilterMode.Last15Days);
+                        _state = _filterReturnState;
+                        RenderCurrentScreen();
+                        return;
+                    }
+                    if (raw == "-30d" || raw == "30d" || raw == "-30" || raw == "-1m" || raw == "1m")
+                    {
+                        ApplyFilterPreset(TemporalFilterMode.Last30Days);
+                        _state = _filterReturnState;
+                        RenderCurrentScreen();
+                        return;
+                    }
+
+                    // Check range: split on " - " or " to " or "-"
+                    string[] parts;
+                    if (_filterTextInput.Contains(" - "))
+                        parts = _filterTextInput.Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+                    else if (_filterTextInput.ToLowerInvariant().Contains(" to "))
+                        parts = System.Text.RegularExpressions.Regex.Split(_filterTextInput, @"\s+to\s+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    else if (_filterTextInput.Contains('-') && _filterTextInput.Length > 8 && !_filterTextInput.StartsWith("-"))
+                    {
+                        int dashIdx = _filterTextInput.IndexOf('-', 4); // avoid potential leading dash
+                        if (dashIdx > 0 && dashIdx < _filterTextInput.Length - 1)
+                            parts = new[] { _filterTextInput.Substring(0, dashIdx), _filterTextInput.Substring(dashIdx + 1) };
+                        else
+                            parts = new[] { _filterTextInput };
+                    }
+                    else
+                    {
+                        parts = new[] { _filterTextInput };
+                    }
+
+                    if (parts.Length == 2)
+                    {
+                        if (TryParseFlexibleDate(parts[0], out DateTime dStart) &&
+                            TryParseFlexibleDate(parts[1], out DateTime dEnd))
+                        {
+                            if (dStart > dEnd)
+                            {
+                                var temp = dStart;
+                                dStart = dEnd;
+                                dEnd = temp;
+                            }
+                            _filterMode = TemporalFilterMode.CustomRange;
+                            _filterStartDate = dStart;
+                            _filterEndDate = dEnd;
+                            _filterTextEntryActive = false;
+                            _filterTextInput = "";
+                            _filterInputError = "";
+                            _state = _filterReturnState;
+                            RenderCurrentScreen();
+                            return;
+                        }
+                        else
+                        {
+                            _filterInputError = "INVALID RANGE FORMAT. USE DD/MM/YY - DD/MM/YY.";
+                            RenderCurrentScreen();
+                            return;
+                        }
+                    }
+                    else if (parts.Length == 1)
+                    {
+                        if (TryParseFlexibleDate(parts[0], out DateTime dSingle))
+                        {
+                            _filterMode = TemporalFilterMode.CustomDate;
+                            _filterStartDate = dSingle;
+                            _filterEndDate = dSingle;
+                            _filterTextEntryActive = false;
+                            _filterTextInput = "";
+                            _filterInputError = "";
+                            _state = _filterReturnState;
+                            RenderCurrentScreen();
+                            return;
+                        }
+                        else
+                        {
+                            _filterInputError = "UNRECOGNIZED DATE FORMAT. USE DD/MM/YY (E.G. 04/05/42).";
+                            RenderCurrentScreen();
+                            return;
+                        }
+                    }
+
+                    _filterInputError = "INVALID INPUT FORMAT.";
+                    RenderCurrentScreen();
+                    return;
+                }
+
+                return;
+            }
+
+            // Navigation mode (not typing custom date)
+            switch (key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    _state = _filterReturnState;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    _state = _filterReturnState;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D1:
+                    ApplyFilterPreset(TemporalFilterMode.LatestTurn);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D2:
+                    ApplyFilterPreset(TemporalFilterMode.PreviousTurn);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D3:
+                    ApplyFilterPreset(TemporalFilterMode.Last7Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D4:
+                    ApplyFilterPreset(TemporalFilterMode.Last15Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D5:
+                    ApplyFilterPreset(TemporalFilterMode.Last30Days);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.D6:
+                    ApplyFilterPreset(TemporalFilterMode.AllCampaign);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.S:
+                    OpenCalendarPickerModal(isRangeMode: false);
+                    break;
+
+                case System.Windows.Input.Key.C:
+                    OpenCalendarPickerModal(isRangeMode: true);
+                    break;
+
+                case System.Windows.Input.Key.Up:
+                case System.Windows.Input.Key.Left:
+                case System.Windows.Input.Key.OemOpenBrackets:
+                    StepTurnDate(-1);
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Down:
+                case System.Windows.Input.Key.Right:
+                case System.Windows.Input.Key.OemCloseBrackets:
+                    StepTurnDate(1);
+                    RenderCurrentScreen();
+                    break;
+            }
+        }
+
+        private void OpenCalendarPickerModal(bool isRangeMode)
+        {
+            _calendarIsRangeMode = isRangeMode;
+            _calendarRangeStep = 1;
+
+            var turns = GetSortedTurnDatesDescending();
+            DateTime candidate = CalendarMinDate;
+            if (turns.Count > 0 && TryParseYYMMDD(turns[0], out DateTime latestTurn))
+            {
+                candidate = latestTurn;
+            }
+            if (_filterMode == TemporalFilterMode.CustomDate && _filterEndDate >= CalendarMinDate && _filterEndDate <= CalendarMaxDate)
+            {
+                candidate = _filterEndDate;
+            }
+            else if (_filterMode == TemporalFilterMode.CustomRange && _filterStartDate >= CalendarMinDate && _filterStartDate <= CalendarMaxDate)
+            {
+                candidate = _filterStartDate;
+            }
+
+            if (candidate < CalendarMinDate) candidate = CalendarMinDate;
+            if (candidate > CalendarMaxDate) candidate = CalendarMaxDate;
+
+            _calendarCursorDate = candidate;
+            _calendarRangeStartDate = candidate;
+            _state = ScreenState.CalendarPickerModal;
+            RenderCurrentScreen();
+        }
+
+        private void HandleCalendarPickerModal(System.Windows.Input.Key key)
+        {
+            switch (key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    _state = ScreenState.TemporalFilterModal;
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Left:
+                    _calendarCursorDate = _calendarCursorDate.AddDays(-1);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Right:
+                    _calendarCursorDate = _calendarCursorDate.AddDays(1);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Up:
+                    _calendarCursorDate = _calendarCursorDate.AddDays(-7);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Down:
+                    _calendarCursorDate = _calendarCursorDate.AddDays(7);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.PageUp:
+                case System.Windows.Input.Key.M:
+                case System.Windows.Input.Key.OemOpenBrackets:
+                    _calendarCursorDate = _calendarCursorDate.AddMonths(-1);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.PageDown:
+                case System.Windows.Input.Key.N:
+                case System.Windows.Input.Key.OemCloseBrackets:
+                    _calendarCursorDate = _calendarCursorDate.AddMonths(1);
+                    ClampCalendarDate();
+                    RenderCurrentScreen();
+                    break;
+
+                case System.Windows.Input.Key.Enter:
+                    if (!_calendarIsRangeMode)
+                    {
+                        _filterMode = TemporalFilterMode.CustomDate;
+                        _filterStartDate = _calendarCursorDate.Date;
+                        _filterEndDate = _calendarCursorDate.Date;
+                        _state = _filterReturnState;
+                        RenderCurrentScreen();
+                    }
+                    else
+                    {
+                        if (_calendarRangeStep == 1)
+                        {
+                            _calendarRangeStartDate = _calendarCursorDate.Date;
+                            _calendarRangeStep = 2;
+                            RenderCurrentScreen();
+                        }
+                        else
+                        {
+                            DateTime dStart = _calendarRangeStartDate.Date;
+                            DateTime dEnd = _calendarCursorDate.Date;
+                            if (dStart > dEnd)
+                            {
+                                var tmp = dStart;
+                                dStart = dEnd;
+                                dEnd = tmp;
+                            }
+                            _filterMode = TemporalFilterMode.CustomRange;
+                            _filterStartDate = dStart;
+                            _filterEndDate = dEnd;
+                            _state = _filterReturnState;
+                            RenderCurrentScreen();
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void ClampCalendarDate()
+        {
+            if (_calendarCursorDate < CalendarMinDate) _calendarCursorDate = CalendarMinDate;
+            if (_calendarCursorDate > CalendarMaxDate) _calendarCursorDate = CalendarMaxDate;
         }
 
         // ════════════════════════════════════════════════════════════════════
@@ -2529,9 +3046,6 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.TbdDomain               => BuildTbdDomainScreen(),
                 ScreenState.GraphicsMenu            => BuildGraphicsMenuScreen(),
                 ScreenState.GraphicsDisplayScreen   => BuildGraphicsDisplayScreen(),
-                ScreenState.TpieDashboard           => BuildTpieDashboardScreen(),
-                ScreenState.PredictiveModels        => BuildPredictiveModelsScreen(),
-                ScreenState.PredModelPopUp          => BuildNavigablePopUp(),
                 ScreenState.ReasoningModal          => BuildReasoningModal(),
                 ScreenState.Heuristics              => BuildHeuristicsScreen(),
                 ScreenState.HeuristicsPopUp         => BuildHeuristicsPopUp(),
@@ -2542,6 +3056,8 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.SettingsMenu            => BuildSettingsMenuScreen(),
                 ScreenState.AiConnectionMenu        => BuildAiConnectionMenuScreen(),
                 ScreenState.ExitConfirmModal        => BuildExitConfirmModal(),
+                ScreenState.TemporalFilterModal     => BuildTemporalFilterModalScreen(),
+                ScreenState.CalendarPickerModal     => BuildCalendarPickerModalScreen(),
                 _                                   => BuildStartScreen()
             };
         }
@@ -2550,8 +3066,11 @@ namespace MUTHUR6000.Core.Controller
         {
             string buffer = BuildCurrentScreen();
             bool isInstant = _state is ScreenState.ReasoningModal
+                                    or ScreenState.IntelDetailPopUp
                                     or ScreenState.VaultIngestion
-                                    or ScreenState.ExitConfirmModal;
+                                    or ScreenState.ExitConfirmModal
+                                    or ScreenState.TemporalFilterModal
+                                    or ScreenState.CalendarPickerModal;
             ScreenRenderRequested?.Invoke(buffer, isInstant);
         }
 
@@ -2562,7 +3081,6 @@ namespace MUTHUR6000.Core.Controller
                 ScreenState.ReasoningModal   => BuildReasoningAdvisorComment(),
                 ScreenState.HeuristicsPopUp  => BuildHeuristicsAdvisorComment(),
                 ScreenState.IntelDetailPopUp => BuildIntelAdvisorComment(),
-                ScreenState.PredModelPopUp   => BuildPredModelAdvisorComment(),
                 _                            => string.Empty
             };
         }
@@ -2851,12 +3369,23 @@ namespace MUTHUR6000.Core.Controller
         private string BuildIntelAdvisorComment()
         {
             var sb = new StringBuilder();
+            var curItem = _splitPaneViewState.SelectedItem;
+            var curTopic = _splitPaneViewState.SelectedTopic;
+
             if (IsAllied)
             {
                 sb.AppendLine("CMDR. ROCHEFORT // OPERATIONAL INTELLIGENCE BRIEF");
                 sb.AppendLine("────────────────────────────────────────────────");
                 sb.AppendLine($"DOMAIN: {_popUpTitle}");
-                if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
+                if (curItem != null)
+                {
+                    sb.AppendLine($"TARGET: {curItem.Title}");
+                    if (curItem.ConfidencePct > 0)
+                    {
+                        sb.AppendLine($"CONFIDENCE: {curItem.ConfidencePct}% [RADAR/RDF CORROBORATED]");
+                    }
+                }
+                else if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
                 {
                     sb.AppendLine($"TARGET: {_popUpBullets[_intelPopUpSel]}");
                     if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
@@ -2867,7 +3396,17 @@ namespace MUTHUR6000.Core.Controller
                 sb.AppendLine();
                 sb.AppendLine("STATION HYPO READOUT:");
                 sb.AppendLine("Cross-referencing SIGINT traffic analysis with coastwatcher reports. Enemy naval communication volume remains elevated.");
-                if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
+
+                if (curTopic != null)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"ACTIVE REASONING: {curTopic.Title}");
+                    foreach (var note in curTopic.Lines.Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
+                else if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
                 {
                     sb.AppendLine();
                     sb.AppendLine("CORROBORATED SIGNALS TELEMETRY:");
@@ -2878,14 +3417,22 @@ namespace MUTHUR6000.Core.Controller
                 }
                 sb.AppendLine();
                 sb.AppendLine("INTERPRETATION:");
-                sb.AppendLine("Select item and press [ENTER] to drill down into decrypted raw telemetry sources.");
+                sb.AppendLine("Live telemetry displayed in Lower Pane. Use [UP/DOWN] to inspect, [TAB/ENTER] to switch panes.");
             }
             else
             {
                 sb.AppendLine("V.ADM. M. UGAKI // COMBINED FLEET INTEL BRIEF");
                 sb.AppendLine("────────────────────────────────────────────────");
                 sb.AppendLine($"CATEGORY: {_popUpTitle}");
-                if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
+                if (curItem != null)
+                {
+                    sb.AppendLine($"SIGHTING/OBJECTIVE: {curItem.Title}");
+                    if (curItem.ConfidencePct > 0)
+                    {
+                        sb.AppendLine($"RECON CERTAINTY: {curItem.ConfidencePct}% [IMPERIAL AIR RECON VERIFIED]");
+                    }
+                }
+                else if (_popUpBullets.Count > 0 && _intelPopUpSel < _popUpBullets.Count)
                 {
                     sb.AppendLine($"SIGHTING/OBJECTIVE: {_popUpBullets[_intelPopUpSel]}");
                     if (_intelPopUpSel < _popUpConfidences.Count && _popUpConfidences[_intelPopUpSel] > 0)
@@ -2896,7 +3443,17 @@ namespace MUTHUR6000.Core.Controller
                 sb.AppendLine();
                 sb.AppendLine("COMBINED FLEET DISPATCH:");
                 sb.AppendLine("Imperial Navy air reconnaissance and naval telegraph intercepts processed from Southern Area command.");
-                if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
+
+                if (curTopic != null)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"SECTOR EMPHASIS: {curTopic.Title}");
+                    foreach (var note in curTopic.Lines.Take(4))
+                    {
+                        sb.AppendLine($" • {note.Trim()}");
+                    }
+                }
+                else if (_intelPopUpSel < _popUpReasonings.Count && _popUpReasonings[_intelPopUpSel].Count > 0)
                 {
                     sb.AppendLine();
                     sb.AppendLine("STAFF LOG TELEMETRY (SENKUN):");
@@ -2907,63 +3464,7 @@ namespace MUTHUR6000.Core.Controller
                 }
                 sb.AppendLine();
                 sb.AppendLine("STAFF ORDER:");
-                sb.AppendLine("Select item and press [ENTER] to review granular recon details and mission verification.");
-            }
-            return sb.ToString();
-        }
-
-        private string BuildPredModelAdvisorComment()
-        {
-            var sb = new StringBuilder();
-            if (IsAllied)
-            {
-                sb.AppendLine("CMDR. ROCHEFORT // PREDICTIVE MODEL INTERPRETATION");
-                sb.AppendLine("────────────────────────────────────────────────");
-                sb.AppendLine($"MODEL: {_popUpTitle}");
-                if (_popUpBullets.Count > 0 && _predPopUpSel < _popUpBullets.Count)
-                {
-                    sb.AppendLine($"FORECAST ITEM: {_popUpBullets[_predPopUpSel]}");
-                }
-                sb.AppendLine();
-                sb.AppendLine("STRATEGIC SUMMARY:");
-                sb.AppendLine("Predictive algorithms project enemy intentions using historical movement vectors and supply capacities.");
-                if (_predPopUpSel < _popUpReasonings.Count && _popUpReasonings[_predPopUpSel].Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("MODEL PROJECTION TELEMETRY:");
-                    foreach (var note in _popUpReasonings[_predPopUpSel].Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("TACTICAL ADVICE:");
-                sb.AppendLine("Deploy scouting aircraft along the perimeter. Do not allow your strike groups to be caught out of position.");
-            }
-            else
-            {
-                sb.AppendLine("V.ADM. M. UGAKI // STRATEGIC FORECAST ASSESSMENT");
-                sb.AppendLine("────────────────────────────────────────────────");
-                sb.AppendLine($"PROJECTION: {_popUpTitle}");
-                if (_popUpBullets.Count > 0 && _predPopUpSel < _popUpBullets.Count)
-                {
-                    sb.AppendLine($"WAR PLAN ELEMENT: {_popUpBullets[_predPopUpSel]}");
-                }
-                sb.AppendLine();
-                sb.AppendLine("CHIEF OF STAFF FORECAST:");
-                sb.AppendLine("Combined Fleet predictive analytics evaluate probable Allied resistance lines and carrier strike probabilities.");
-                if (_predPopUpSel < _popUpReasonings.Count && _popUpReasonings[_predPopUpSel].Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("COMBINED FLEET WAR PLAN ESTIMATE:");
-                    foreach (var note in _popUpReasonings[_predPopUpSel].Take(4))
-                    {
-                        sb.AppendLine($" • {note.Trim()}");
-                    }
-                }
-                sb.AppendLine();
-                sb.AppendLine("DIRECTIVE:");
-                sb.AppendLine("Maintain aggressive reconnaissance screens. Strike swiftly when Allied surface assets sortie.");
+                sb.AppendLine("Live recon analysis displayed in Lower Pane. Use [UP/DOWN] to inspect, [TAB/ENTER] to switch panes.");
             }
             return sb.ToString();
         }
@@ -3014,14 +3515,16 @@ namespace MUTHUR6000.Core.Controller
         {
             sb.AppendLine();
             sb.AppendLine(Rule('═'));
-            sb.AppendLine(string.Join("  │  ", hotkeys));
+            string left = string.Join("  │  ", hotkeys);
+            sb.AppendLine(left);
         }
 
         private void AppendFooterCustom(StringBuilder sb, int width, params string[] hotkeys)
         {
             sb.AppendLine();
             sb.AppendLine(Rule('═', width));
-            sb.AppendLine(string.Join("  │  ", hotkeys));
+            string left = string.Join("  │  ", hotkeys);
+            sb.AppendLine(left);
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -3262,15 +3765,76 @@ namespace MUTHUR6000.Core.Controller
             sb.AppendLine();
             AppendSectionHeader(sb, "P R O C E S S E D   F I L E   S U M M A R Y");
 
-            sb.AppendLine($"  Total Relevant Game Files Detected: {Manifest.Files.Count}");
-            sb.AppendLine($"  Total Operational Days Processed   : {Manifest.DaysProcessed}");
-            sb.AppendLine($"  Latest Campaign Date               : {Manifest.FormattedDate}\n");
+            var typeGroups = Manifest.Files
+                .GroupBy(f => f.FileType)
+                .OrderBy(g => g.Key switch
+                {
+                    "SIGINT" => 1,
+                    "OPERATIONS" => 2,
+                    "PWS_SAVE" => 3,
+                    "COMBAT_EVENTS" => 4,
+                    "COMBAT_REPORT" => 5,
+                    _ => 6
+                })
+                .ToList();
+
+            if (typeGroups.Count > 0)
+            {
+                sb.AppendLine("  TYPE            FILES  DAYS PROCESSED                   NEW");
+                sb.AppendLine("  " + new string('─', 74));
+
+                foreach (var group in typeGroups)
+                {
+                    string fType = group.Key;
+                    int fileCount = group.Count();
+                    int newCount = fileCount; // Ingestion scan detects active batch additions
+
+                    var sortedDates = group
+                        .Where(f => !string.IsNullOrEmpty(f.DateYYMMDD) && TryParseYYMMDD(f.DateYYMMDD, out _))
+                        .Select(f => { TryParseYYMMDD(f.DateYYMMDD, out var d); return d; })
+                        .Distinct()
+                        .OrderBy(d => d)
+                        .ToList();
+
+                    string daysInfo;
+                    if (sortedDates.Count == 0)
+                    {
+                        daysInfo = "[Turn Data / Meta]";
+                    }
+                    else if (sortedDates.Count <= 3)
+                    {
+                        daysInfo = string.Join(", ", sortedDates.Select(d => FormatDDMMYY(d)));
+                        if (sortedDates.Count > 1)
+                        {
+                            daysInfo += $" ({sortedDates.Count} days)";
+                        }
+                    }
+                    else
+                    {
+                        DateTime minDate = sortedDates.First();
+                        DateTime maxDate = sortedDates.Last();
+                        daysInfo = $"{FormatDDMMYY(minDate)} - {FormatDDMMYY(maxDate)} ({sortedDates.Count} days)";
+                    }
+
+                    sb.AppendLine($"  {fType,-14}  {fileCount,5}  {daysInfo,-31}  {"+" + newCount,4}");
+                }
+                sb.AppendLine("  " + new string('─', 74));
+                sb.AppendLine($"  Total Relevant Game Files Detected: {Manifest.Files.Count}");
+                sb.AppendLine($"  Total Operational Days Processed   : {Manifest.DaysProcessed}");
+                sb.AppendLine($"  Latest Campaign Date               : {Manifest.FormattedDate}\n");
+            }
+            else
+            {
+                sb.AppendLine($"  Total Relevant Game Files Detected: 0");
+                sb.AppendLine($"  Total Operational Days Processed   : 0");
+                sb.AppendLine($"  Latest Campaign Date               : --/--/--\n");
+            }
 
             AppendSectionHeader(sb, "F I L E   I N V E N T O R Y   ( P W S   &   T X T )");
             int displayCount = 0;
             foreach (var file in Manifest.Files)
             {
-                string dateInfo = string.IsNullOrEmpty(file.DateYYMMDD) ? "SAVE" : file.DateYYMMDD;
+                string dateInfo = string.IsNullOrEmpty(file.DateYYMMDD) ? "SAVE" : FileScanner.FormatYYMMDD(file.DateYYMMDD);
                 sb.AppendLine($"    [{file.FileType,-14}] {file.FileName,-35} (Date: {dateInfo})");
                 displayCount++;
                 if (displayCount >= 10)
@@ -3347,7 +3911,7 @@ namespace MUTHUR6000.Core.Controller
 
             string[] menuLabels =
             {
-                "WAR ROOM (INTELLIGENCE & TPIE DASHBOARDS)",
+                "WAR ROOM (THEATER INTELLIGENCE & HEURISTICS)",
                 "WIKI (WITP-CIC SYSTEM & ERROR REGISTRY)",
                 "FIELD MANUAL (WITP:AE GAME MANUAL BROWSER)",
                 "SYSTEM SETTINGS & DETECTION THRESHOLDS",
@@ -3385,11 +3949,11 @@ namespace MUTHUR6000.Core.Controller
 
             string[] menuLabels =
             {
-                "Intelligence Summary",
-                "SIGINT Map",
+                "[ TBD ]",
+                "[ TBD ]",
                 "Graphics",
-                "TPIE Warning Dashboard",
-                "Predictive Models Sub-Menu",
+                "[ TBD ]",
+                "[ TBD ]",
                 "Heuristics (Logical Blueprints)"
             };
 
@@ -3416,12 +3980,11 @@ namespace MUTHUR6000.Core.Controller
             var sb = new StringBuilder();
             AppendHeader(sb, "WAR ROOM : THEATER INTELLIGENCE SUMMARY & CONCENTRATIONS", TurnInfo());
             sb.AppendLine();
-            var filterDates = GetAvailableDateFilterList();
-            if (_intelDateFilterIdx >= filterDates.Count) _intelDateFilterIdx = 0;
-            string curFilterDate = filterDates[_intelDateFilterIdx];
-            string filterLabel = curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate);
 
-            sb.AppendLine($"    DATE FILTER: [< {filterLabel} >]  (USE [ / ] OR LEFT/RIGHT TO CYCLE DATES)");
+            int hvtCount = Analytics.HighValueTargets.Count(h => IsDateInActiveFilter(h.Date, h.AllDates));
+            int claimsCount = Analytics.ModelEClaims.Claims.Count(c => IsDateInActiveFilter(c.DateYYMMDD));
+
+            sb.AppendLine(RenderTemporalCommandStrip());
             sb.AppendLine();
 
             string[] options =
@@ -3432,14 +3995,6 @@ namespace MUTHUR6000.Core.Controller
                 "Established Shipping Routes",
                 "Battle Claims & Revisions"
             };
-
-            int hvtCount = curFilterDate == "ALL" 
-                ? Analytics.HighValueTargets.Count 
-                : Analytics.HighValueTargets.Count(h => h.Date == curFilterDate || h.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate)));
-
-            int claimsCount = curFilterDate == "ALL"
-                ? Analytics.ModelEClaims.Claims.Count
-                : Analytics.ModelEClaims.Claims.Count(c => c.DateYYMMDD == curFilterDate);
 
             string[] counts =
             {
@@ -3463,60 +4018,16 @@ namespace MUTHUR6000.Core.Controller
             }
 
             sb.AppendLine("      >> Use [UP/DOWN] to select domain, press [ENTER] to open navigable pop-up.");
-            AppendFooter(sb, "[LEFT/RIGHT] Cycle Date", "[UP/DOWN] Select Domain", "[ENTER] Open Pop-Up", "PRESS ESC TO RETURN");
+            AppendFooter(sb, "[UP/DOWN] Select Domain", "[ENTER] Open Pop-Up", "[1-5] Quick Filter", "[R] Range Modal", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  NAVIGABLE POP-UP
+        //  SPLIT-PANE INTEL DETAIL VIEW (RESOLUTION-INDEPENDENT DUAL PANE)
         // ─────────────────────────────────────────────────────────────────────
         private string BuildNavigablePopUp()
         {
-            const int boxWidth = 106;
-            const int innerWidth = 102;
-            const int maxVisible = 11;
-
-            var sb = new StringBuilder();
-
-            string turnInfo = TurnInfo();
-            string rightHeader = string.IsNullOrEmpty(turnInfo)
-                ? $"ITEMS: {_popUpBullets.Count}"
-                : $"{turnInfo} | ITEMS: {_popUpBullets.Count}";
-
-            AppendHeader(sb, _popUpTitle, rightHeader, boxWidth);
-            sb.AppendLine();
-            AppendSectionHeader(sb, "TRAVERSE BULLETS WITH ARROW KEYS | PRESS [ENTER] TO DISCLOSE REASONING", boxWidth);
-
-            int total = _popUpBullets.Count;
-            int sel = _state == ScreenState.IntelDetailPopUp ? _intelPopUpSel : _predPopUpSel;
-            int startIdx = sel >= maxVisible ? sel - maxVisible + 1 : 0;
-
-            string shortTitle = _popUpTitle.Length > 90 ? _popUpTitle.Substring(0, 87) + "..." : _popUpTitle;
-            string topPrefix = $"╔══ [ {shortTitle} ] ";
-            int rem = boxWidth - topPrefix.Length - 1;
-            sb.AppendLine(topPrefix + (rem > 0 ? new string('═', rem) : "") + "╗");
-
-            for (int i = 0; i < maxVisible; i++)
-            {
-                int idx = startIdx + i;
-                if (idx < total)
-                {
-                    string prefix = (idx == sel) ? "* " : "  ";
-                    string content = prefix + _popUpBullets[idx];
-                    content = PadTo(content.Length > innerWidth ? content.Substring(0, innerWidth) : content, innerWidth);
-                    sb.AppendLine($"║ {content} ║");
-                }
-                else
-                {
-                    sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
-                }
-            }
-
-            sb.AppendLine("╚" + new string('═', boxWidth - 2) + "╝");
-            sb.AppendLine();
-            sb.AppendLine("    >> Press [ENTER] to view granular telemetry evidence & reasoning for this line.");
-            AppendFooterCustom(sb, boxWidth, "[UP/DOWN] Traverse Bullets", "[ENTER] View Reasoning", "PRESS ESC TO RETURN");
-            return sb.ToString();
+            return _splitPaneLayoutEngine.Render(_splitPaneViewState, TurnInfo());
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -3528,19 +4039,15 @@ namespace MUTHUR6000.Core.Controller
             AppendHeader(sb, "WAR ROOM : GEOSPATIAL SIGINT MAP & SECTOR BEARING LOG", TurnInfo());
             sb.AppendLine();
 
-            var filterDates = GetAvailableDateFilterList();
-            if (_sigintDateFilterIdx >= filterDates.Count) _sigintDateFilterIdx = 0;
-            string curFilterDate = filterDates[_sigintDateFilterIdx];
-            string filterLabel = curFilterDate == "ALL" ? "ALL DATES" : FileScanner.FormatShortDate(curFilterDate);
+            var allLogs = Analytics.GeospatialLog;
+            var log = allLogs
+                .Where(e => IsDateInActiveFilter(e.DateYYMMDD, e.AllDates))
+                .OrderByDescending(e => e.DateYYMMDD)
+                .ToList();
 
-            sb.AppendLine($"    DATE FILTER: [< {filterLabel} >]  (USE [ / ] OR LEFT/RIGHT TO CYCLE DATES)");
+            sb.AppendLine(RenderTemporalCommandStrip());
             sb.AppendLine();
             AppendSectionHeader(sb, "DATE     TYPE     LOCALIZED POS   SECTOR BEARING FROM HQ       DETAILS / INTERCEPT");
-
-            var allLogs = Analytics.GeospatialLog;
-            var log = curFilterDate == "ALL"
-                ? allLogs
-                : allLogs.Where(e => e.DateYYMMDD == curFilterDate || e.AllDates.Contains(FileScanner.FormatShortDate(curFilterDate))).ToList();
 
             if (log.Count == 0)
             {
@@ -3558,7 +4065,7 @@ namespace MUTHUR6000.Core.Controller
                 for (int i = startIdx; i < endIdx; i++)
                 {
                     var entry = log[i];
-                    string dStr = string.IsNullOrEmpty(entry.LastSeenDate) ? entry.DateYYMMDD : entry.LastSeenDate;
+                    string dStr = !string.IsNullOrEmpty(entry.LastSeenDate) ? entry.LastSeenDate : FileScanner.FormatYYMMDD(entry.DateYYMMDD);
                     string posStr = $"{entry.HexX},{entry.HexY}";
                     string pointer = (i == _sigintMapSel) ? "* " : "  ";
                     string datePad = PadTo(dStr.Length > 8 ? dStr.Substring(0, 8) : dStr, 9);
@@ -3572,7 +4079,7 @@ namespace MUTHUR6000.Core.Controller
 
             sb.AppendLine();
             sb.AppendLine("    >> Use [UP/DOWN] to traverse contacts. Press [ENTER] for reasoning. Press [D] for Dossier.");
-            AppendFooter(sb, "[LEFT/RIGHT] Cycle Date", "[UP/DOWN] Select Contact", "[ENTER] View Reasoning", "[D] Dossier Search", "PRESS ESC TO RETURN");
+            AppendFooter(sb, "[UP/DOWN] Select Contact", "[ENTER] View Reasoning", "[1-5] Quick Filter", "[R] Range Modal", "[D] Dossier Search", "PRESS ESC TO RETURN");
             return sb.ToString();
         }
 
@@ -3677,9 +4184,9 @@ namespace MUTHUR6000.Core.Controller
 
             string[] options =
             {
-                "[ TBD ]",
-                "[ TBD ]",
-                "[ TBD ]",
+                "Tactical Theater Hex Map & Fleet Dispositions",
+                "Fleet Attrition & Cumulative Loss Curves",
+                "Task Force Movement & Kinematics Plot",
                 "[ TBD ]",
                 "[ TBD ]",
                 "[ TBD ]",
@@ -3710,11 +4217,95 @@ namespace MUTHUR6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  GRAPHICS DISPLAY SCREEN (STANDARDIZED TBD PARTITIONS)
+        //  GRAPHICS DISPLAY SCREEN (STANDARDIZED PARTITIONS)
         // ─────────────────────────────────────────────────────────────────────
         private string BuildGraphicsDisplayScreen()
         {
-            return BuildGraphicsTbdScreen(_graphicsPageId);
+            return _graphicsPageId switch
+            {
+                1 => BuildTheaterHexMapScreen(),
+                2 => BuildLogisticalAttritionScreen(),
+                3 => BuildStrategicVectorScreen(),
+                _ => BuildGraphicsTbdScreen(_graphicsPageId)
+            };
+        }
+
+        private string BuildTheaterHexMapScreen()
+        {
+            var sb = new StringBuilder();
+            AppendHeader(sb, "WAR ROOM : TACTICAL THEATER HEX MAP", TurnInfo());
+            sb.AppendLine();
+            AppendSectionHeader(sb, "PACIFIC THEATER OPERATIONAL GRID & TASK FORCE POSITIONS");
+
+            const int bw = 78;
+            const int innerWidth = 74;
+
+            string topTitle = "╔══ [ PACIFIC THEATER OPERATIONAL HEX GRID & FLEET POSITIONS ] ";
+            int rem = bw - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+
+            int activeTfCount = Analytics.PwsTimeline.MostRecent?.AlliedTaskForceCount ?? 0;
+            int atSeaCount = Analytics.PwsTimeline.MostRecent?.AlliedAtSeaCount ?? 0;
+            int inPortCount = Analytics.PwsTimeline.MostRecent?.AlliedInPortCount ?? 0;
+
+            string tfSummaryStr = GetActiveTfSummary();
+
+            string[] mapLines =
+            {
+                "",
+                " -- PACIFIC BASIN STRATEGIC HEX GRID (APPROX SCALE 1:40 NM) --------------",
+                "   HEX  40   60   80  100  120  140  160  180  200  220  X",
+                "    40  ·    ·   [TOKYO] ·   ·    ·    ·    ·    ·   [DUTCH HBR]     40",
+                "    60  ·  [MANILA]  ·   ·   ·    ·    ·  [MIDWAY] ·    ·           60",
+                "    80 [SINGAPORE]   · [TRUK]·    ·    · [PEARL HBR]· [SAN FRAN]    80",
+                "   100  ·   [JAVA]   ·   ·   ·  [TARAWA]·   ·    ·    ·            100",
+                "   120  ·    ·    ·  [RABAUL]·    ·    ·    ·    ·    ·            120",
+                "   140  ·  [DARWIN]  ·  [GUADALCANAL]  ·    ·    ·    ·            140",
+                "   160  ·    ·   [SYDNEY]·   ·  [NOUMEA]    ·    ·    ·            160",
+                "    Y   40   60   80  100  120  140  160  180  200  220",
+                "",
+                " -- ALLIED TASK FORCE DISPOSITIONS ---------------------------------------",
+                $" [FORCE STATUS]   : {activeTfCount} TASK FORCE(S) ACTIVE | {atSeaCount} AT SEA | {inPortCount} IN PORT",
+                $" [FLAGSHIP TRACKS]: {tfSummaryStr}",
+                "",
+                " -- STRATEGIC CHOKEPOINTS & APPROACH CORRIDORS ---------------------------",
+                " [MALACCA STR.] : Hex (50,84)  │ [LOMBOK STR.] : Hex (67,105)",
+                " [SURIGAO STR.] : Hex (83,86)  │ [TORRES STR.] : Hex (93,131)",
+                " [SAN BERNARDINO]: Hex (84,79) │ [IRONBOTTOM]  : Hex (113,138)",
+                "",
+                " ------------------------------------------------------------------------",
+                " [ TACTICAL ASSESSMENT & WHY THIS MATTERS BOX ]",
+                $" \"Strategic sea lines of communication monitored across {activeTfCount} Allied TF groups.\"",
+                ""
+            };
+
+            foreach (var line in mapLines)
+            {
+                if (line.Length > innerWidth)
+                    sb.AppendLine($"║ {PadTo(line.Substring(0, innerWidth), innerWidth)} ║");
+                else
+                    sb.AppendLine($"║ {PadTo(line, innerWidth)} ║");
+            }
+
+            sb.AppendLine("╚" + new string('═', bw - 2) + "╝");
+            AppendFooter(sb, "PRESS ESC OR ENTER TO RETURN");
+            return sb.ToString();
+        }
+
+        private string GetActiveTfSummary()
+        {
+            var snap = Analytics.PwsTimeline.MostRecent;
+            if (snap == null || snap.AlliedTaskForces.Count == 0)
+                return "Zero active Task Forces deployed.";
+
+            var items = new List<string>();
+            foreach (var tf in snap.AlliedTaskForces.Take(2))
+            {
+                var flagship = snap.AlliedShips.FirstOrDefault(s => s.Index == tf.FlagshipIndex);
+                string flagName = flagship != null ? flagship.Name : $"Flagship #{tf.FlagshipIndex}";
+                items.Add($"TF {tf.Index} ({flagName}) @ ({tf.HexX},{tf.HexY})");
+            }
+            return string.Join(" | ", items);
         }
 
         private string BuildLogisticalAttritionScreen()
@@ -4058,109 +4649,12 @@ namespace MUTHUR6000.Core.Controller
         }
 
         // ─────────────────────────────────────────────────────────────────────
-        //  TPIE DASHBOARD
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildTpieDashboardScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "WAR ROOM : THEATER PREDICTIVE INTELLIGENCE ENGINE (TPIE)", TurnInfo());
-            sb.AppendLine();
-            AppendSectionHeader(sb, "STRATEGIC INVASION PROBABILITY HEATMAP & FLEET TRAJECTORIES");
-
-            sb.AppendLine("[ STRATEGIC INVASION PROBABILITY HEATMAP ]  (Weighted Evidence Accumulator)");
-            sb.AppendLine("DESTINATION      PROBABILITY  THREAT LEVEL      TRANSPORTS / UNITS / STATUS");
-            sb.AppendLine(Rule('-'));
-
-            var targets = Analytics.ModelATargets;
-            if (targets.Count == 0)
-            {
-                sb.AppendLine("    NO ACTIVE AMPHIBIOUS PREDICTIONS GENERATED YET.");
-            }
-            else
-            {
-                int maxShow = Math.Min(5, targets.Count);
-                for (int i = 0; i < maxShow; i++)
-                {
-                    var t = targets[i];
-                    string probBuf = $"{t.Probability * 100,3:F0}%";
-                    string unitSummary = t.LoadedUnits.Count == 0
-                        ? t.Assessment
-                        : $"{t.LoadedUnits[0]} on {(t.Transports.Count == 0 ? "xAK" : t.Transports[0])}";
-
-                    string dest = PadTo(t.Destination.Length > 15 ? t.Destination.Substring(0, 15) : t.Destination, 16);
-                    string prob = PadTo(probBuf, 12);
-                    string threat = PadTo(t.ThreatLevel.Length > 16 ? t.ThreatLevel.Substring(0, 16) : t.ThreatLevel, 17);
-                    string units = unitSummary.Length > 32 ? unitSummary.Substring(0, 32) : unitSummary;
-
-                    string marker = (i == _tpieSel) ? "* " : "  ";
-                    sb.AppendLine($"{marker}{dest}{prob}{threat}{units}");
-                }
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("[ FLEET TRAJECTORIES & INTERCEPT AMBUSH WINDOWS ]  (Dead reckoning at T+1 turn)");
-            var trajs = Analytics.ModelBTrajectories;
-            if (trajs.Count > 0)
-            {
-                var topTraj = trajs[0];
-                sb.AppendLine($"  LEAD CONTACT : {topTraj.Description}");
-                sb.AppendLine($"  VECTOR       : {topTraj.StartHexX},{topTraj.StartHexY} -> Proj Hex {topTraj.ProjectedHexX},{topTraj.ProjectedHexY} ({topTraj.Heading} @ {topTraj.SpeedKnots} kts) | {topTraj.TargetDestination}");
-            }
-            else
-            {
-                sb.AppendLine("  NO ACTIVE FLEET TRAJECTORIES LOCALIZED TO COMPUTE INTERCEPT WINDOWS.");
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("    >> Press [ENTER] over target for predictive reasoning. Press [I] for Intercepts.");
-            AppendFooter(sb, "[UP/DOWN] Select Target", "[ENTER] View Reasoning", "[I] Intercept Windows", "PRESS ESC TO RETURN");
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  PREDICTIVE MODELS SUB-MENU
-        // ─────────────────────────────────────────────────────────────────────
-        private string BuildPredictiveModelsScreen()
-        {
-            var sb = new StringBuilder();
-            AppendHeader(sb, "WAR ROOM : GRANULAR PREDICTIVE INTELLIGENCE MODELS (A-G)", TurnInfo());
-            sb.AppendLine();
-            AppendSectionHeader(sb, "SELECT PREDICTIVE ANALYTIC ENGINE TO DISCLOSE REASONING DUMP");
-
-            string[] modelTitles =
-            {
-                "MODEL A : Amphibious Assault Probability Engine (Heuristic Bayes)",
-                "MODEL B : Enemy Fleet Trajectory & Intercept Projection (Dead Reckoning)",
-                "MODEL C : Air Superiority & Combat Loss Forecaster (EMA Decay)",
-                "MODEL D : Logistical & Operational Pause Detector (TF State Machine)",
-                "MODEL E : Battle Claims & Damage Revision Register (Entity Match)",
-                "MODEL F : Strike Concentration Detector (Spatial Hex Cluster)",
-                "MODEL G : Established Shipping Routes & Corridors (Waypoint Graph)"
-            };
-
-            for (int i = 0; i < modelTitles.Length; i++)
-            {
-                string letter = ((char)('A' + i)).ToString();
-                string title = modelTitles[i];
-                if (i == _predModelsSel)
-                    sb.AppendLine($"  [{letter}]  * {title}");
-                else
-                    sb.AppendLine($"  [{letter}]    {title}");
-                sb.AppendLine();
-            }
-
-            sb.AppendLine("    >> Press [ENTER] to view granular telemetry dump and mathematical reasoning.");
-            AppendFooter(sb, "[UP/DOWN] Select Model", "[ENTER] View Reasoning", "PRESS ESC TO RETURN");
-            return sb.ToString();
-        }
-
-        // ─────────────────────────────────────────────────────────────────────
         //  REASONING MODAL
         // ─────────────────────────────────────────────────────────────────────
         private string BuildReasoningModal()
         {
-            const int width = 106;
-            const int innerWidth = 102;
+            const int width = 72;
+            const int innerWidth = 68;
             var sb = new StringBuilder();
 
             string titlePrefix = "╔══ [ REASONING & TELEMETRY EVIDENCE ] ";
@@ -4218,6 +4712,272 @@ namespace MUTHUR6000.Core.Controller
             string footerText = "[UP/DOWN] Select Topic  │  PRESS ESC TO RETURN";
             sb.AppendLine($"║ {PadTo(footerText, innerWidth)} ║");
             sb.AppendLine("╚" + new string('═', width - 2) + "╝");
+            return sb.ToString();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  TEMPORAL FILTER MODAL
+        // ─────────────────────────────────────────────────────────────────────
+        private string BuildTemporalFilterModalScreen()
+        {
+            const int width = 106;
+            const int innerWidth = width - 4; // 102
+            var sb = new StringBuilder();
+
+            string topTitle = "╔══ [ TEMPORAL INTELLIGENCE FILTER & DATE RANGE SELECTOR ] ";
+            int rem = width - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            if (_filterTextEntryActive)
+            {
+                // VIEW 3: INLINE CUSTOM RANGE TYPING PROMPT
+                sb.AppendLine($"║ {PadTo("  CUSTOM RANGE ENTRY MODE:", innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                sb.AppendLine($"║ {PadTo("    ENTER START DATE (DD/MM/YY) OR RANGE (DD/MM/YY - DD/MM/YY):", innerWidth)} ║");
+                string promptLine = $"    >> {_filterTextInput}_";
+                sb.AppendLine($"║ {PadTo(promptLine, innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+                if (!string.IsNullOrEmpty(_filterInputError))
+                {
+                    sb.AppendLine($"║ {PadTo("    [!] " + _filterInputError, innerWidth)} ║");
+                    sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                }
+
+                sb.AppendLine($"║ {PadTo("    VALID FORMATS:", innerWidth)} ║");
+                sb.AppendLine($"║ {PadTo("      - Single Date: 04/05/42", innerWidth)} ║");
+                sb.AppendLine($"║ {PadTo("      - Date Range:  15/04/42 - 02/05/42  or  15/04/42 to 02/05/42", innerWidth)} ║");
+                sb.AppendLine($"║ {PadTo("      - Quick Span:  -7d (Last 7 Days), -15d (Last 15 Days), -30d (Last Month)", innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+                sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+                string customFooter = "  [ENTER] Confirm & Filter Telemetry          [BACKSPACE] Edit          [ESC] Cancel";
+                sb.AppendLine($"║ {PadTo(customFooter, innerWidth)} ║");
+                sb.AppendLine("╚" + new string('═', width - 2) + "╝");
+                return sb.ToString();
+            }
+
+            // VIEW 2: MODAL OVERLAY MENU
+            var turns = GetSortedTurnDatesDescending();
+            DateTime latest = DateTime.MinValue;
+            if (turns.Count > 0) TryParseYYMMDD(turns[0], out latest);
+            string latestTurnStr = latest != DateTime.MinValue ? FormatMMDDYY(latest) : "--/--/--";
+
+            DateTime prev = DateTime.MinValue;
+            if (turns.Count > 1) TryParseYYMMDD(turns[1], out prev);
+            else prev = latest;
+            string prevTurnStr = prev != DateTime.MinValue ? FormatMMDDYY(prev) : latestTurnStr;
+
+            string d7Start = latest != DateTime.MinValue ? FormatMMDDYY(latest.AddDays(-7)) : "--/--/--";
+            string d15Start = latest != DateTime.MinValue ? FormatMMDDYY(latest.AddDays(-15)) : "--/--/--";
+            string d30Start = latest != DateTime.MinValue ? FormatMMDDYY(latest.AddDays(-30)) : "--/--/--";
+            string earliestStr = turns.Count > 0 && TryParseYYMMDD(turns[^1], out DateTime eDt) ? FormatMMDDYY(eDt) : "07/12/41";
+
+            string p1Mark = _filterMode == TemporalFilterMode.LatestTurn ? "* " : "  ";
+            string p2Mark = _filterMode == TemporalFilterMode.PreviousTurn ? "* " : "  ";
+            string p3Mark = _filterMode == TemporalFilterMode.Last7Days ? "* " : "  ";
+            string p4Mark = _filterMode == TemporalFilterMode.Last15Days ? "* " : "  ";
+            string p5Mark = _filterMode == TemporalFilterMode.Last30Days ? "* " : "  ";
+            string p6Mark = _filterMode == TemporalFilterMode.AllCampaign ? "* " : "  ";
+
+            sb.AppendLine($"║ {PadTo("  QUICK OPERATIONAL PRESETS:", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p1Mark}[1] Latest Turn Only            {latestTurnStr} (Turn {turns.Count})", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p2Mark}[2] Previous Turn               {prevTurnStr} (Turn {Math.Max(1, turns.Count - 1)})", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p3Mark}[3] Last 7 Days (Tactical)      {d7Start} -> {latestTurnStr}", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p4Mark}[4] Last 15 Days (Operational)  {d15Start} -> {latestTurnStr}", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p5Mark}[5] Last 30 Days (Strategic)    {d30Start} -> {latestTurnStr}", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    {p6Mark}[6] Entire Campaign (All Turns) {earliestStr} -> {latestTurnStr} ({turns.Count} Turns Available)", innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            string sVal = _filterMode == TemporalFilterMode.CustomDate ? FormatMMDDYY(_filterEndDate) : "";
+            string cVal = _filterMode == TemporalFilterMode.CustomRange ? $"{FormatMMDDYY(_filterStartDate)} - {FormatMMDDYY(_filterEndDate)}" : "";
+
+            string sDisplay = PadTo(sVal, 16);
+            string cDisplay = PadTo(cVal, 21);
+
+            sb.AppendLine($"║ {PadTo("  CUSTOM DATE / RANGE ENTRY (DD/MM/YY):", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    [S] Enter Specific Date:  [ {sDisplay} ]", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo($"    [C] Enter Custom Range:   [ {cDisplay} ]", innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+
+            // Calculate matching entries count
+            int matchCount = Analytics.GeospatialLog.Count(e => IsDateInActiveFilter(e.DateYYMMDD, e.AllDates));
+            string activeLine = $"  ACTIVE FILTER: {GetActiveFilterDescription()}  │  MATCHING SIGHTINGS: {matchCount} ENTRIES";
+            sb.AppendLine($"║ {PadTo(activeLine, innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            string footerNav = "  [1-6] Quick Preset   [S/C] Calendar Pop-up   [UP/DOWN] Traverse   [ENTER] Apply Filter  [ESC] Cancel";
+            sb.AppendLine($"║ {PadTo(footerNav, innerWidth)} ║");
+            sb.AppendLine("╚" + new string('═', width - 2) + "╝");
+
+            return sb.ToString();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        //  CALENDAR PICKER MODAL
+        // ─────────────────────────────────────────────────────────────────────
+        private string BuildCalendarPickerModalScreen()
+        {
+            const int width = 106;
+            const int innerWidth = width - 4; // 102
+            var sb = new StringBuilder();
+
+            string topTitle = "╔══ [ TEMPORAL INTELLIGENCE FILTER // INTERACTIVE CALENDAR SELECTOR ] ";
+            int rem = width - topTitle.Length - 1;
+            sb.AppendLine(topTitle + (rem > 0 ? new string('═', rem) : "") + "╗");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            string modeDesc;
+            if (!_calendarIsRangeMode)
+            {
+                modeDesc = "  MODE: SINGLE OPERATIONAL DATE SELECTION";
+            }
+            else if (_calendarRangeStep == 1)
+            {
+                modeDesc = "  MODE: CUSTOM DATE RANGE — [STEP 1 OF 2] SELECT START DATE";
+            }
+            else
+            {
+                modeDesc = $"  MODE: CUSTOM DATE RANGE — [STEP 2 OF 2] SELECT END DATE (START: {FormatMMDDYY(_calendarRangeStartDate)})";
+            }
+            sb.AppendLine($"║ {PadTo(modeDesc, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            // Month navigation banner
+            string monthYearStr = _calendarCursorDate.ToString("MMMM yyyy").ToUpperInvariant();
+            string navBanner = $"« [PgUp/M] PREV MONTH        [  {monthYearStr}  ]        NEXT MONTH [PgDn/N] »";
+            int navPad = Math.Max(0, (innerWidth - navBanner.Length) / 2);
+            string centeredNav = new string(' ', navPad) + navBanner;
+            sb.AppendLine($"║ {PadTo(centeredNav, innerWidth)} ║");
+            sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+
+            // Day-of-week header: 7 columns of 8 chars = 56 chars
+            string dowHeader = "  SUN      MON      TUE      WED      THU      FRI      SAT";
+            int gridPad = Math.Max(0, (innerWidth - 56) / 2);
+            string padStr = new string(' ', gridPad);
+            sb.AppendLine($"║ {PadTo(padStr + dowHeader, innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo(padStr + "  ───      ───      ───      ───      ───      ───      ───", innerWidth)} ║");
+
+            // Calendar grid
+            DateTime monthStart = new DateTime(_calendarCursorDate.Year, _calendarCursorDate.Month, 1);
+            int daysInMonth = DateTime.DaysInMonth(_calendarCursorDate.Year, _calendarCursorDate.Month);
+            int startCol = (int)monthStart.DayOfWeek; // 0 = Sunday
+
+            var knownDates = new HashSet<string>(Manifest.UniqueDates);
+
+            int currentDay = 1;
+            int totalWeeks = (startCol + daysInMonth + 6) / 7;
+
+            for (int w = 0; w < totalWeeks; w++)
+            {
+                var rowSb = new StringBuilder();
+                rowSb.Append(padStr);
+                for (int col = 0; col < 7; col++)
+                {
+                    int dayIndex = w * 7 + col;
+                    if (dayIndex < startCol || currentDay > daysInMonth)
+                    {
+                        rowSb.Append("        "); // 8 spaces
+                    }
+                    else
+                    {
+                        DateTime thisDate = new DateTime(_calendarCursorDate.Year, _calendarCursorDate.Month, currentDay);
+                        bool isOutOfBounds = thisDate < CalendarMinDate || thisDate > CalendarMaxDate;
+                        bool isCursor = thisDate.Date == _calendarCursorDate.Date;
+                        bool isRangeStart = _calendarIsRangeMode && _calendarRangeStep == 2 && thisDate.Date == _calendarRangeStartDate.Date;
+                        bool inSelectedRange = false;
+                        if (_calendarIsRangeMode && _calendarRangeStep == 2)
+                        {
+                            DateTime minD = _calendarRangeStartDate < _calendarCursorDate ? _calendarRangeStartDate : _calendarCursorDate;
+                            DateTime maxD = _calendarRangeStartDate > _calendarCursorDate ? _calendarRangeStartDate : _calendarCursorDate;
+                            if (thisDate.Date >= minD.Date && thisDate.Date <= maxD.Date)
+                            {
+                                inSelectedRange = true;
+                            }
+                        }
+
+                        string yymmdd = thisDate.ToString("yyMMdd");
+                        bool hasTurn = knownDates.Contains(yymmdd);
+
+                        string cell;
+                        if (isOutOfBounds)
+                        {
+                            cell = $"  ..    ";
+                        }
+                        else if (isCursor && isRangeStart)
+                        {
+                            cell = $"*[{currentDay:D2}]*  ";
+                        }
+                        else if (isCursor)
+                        {
+                            cell = $" [{currentDay:D2}]   ";
+                        }
+                        else if (isRangeStart)
+                        {
+                            cell = $" ({currentDay:D2})   ";
+                        }
+                        else if (inSelectedRange)
+                        {
+                            cell = $" ={currentDay:D2}=   ";
+                        }
+                        else if (hasTurn)
+                        {
+                            cell = $"  {currentDay:D2}*   ";
+                        }
+                        else
+                        {
+                            cell = $"  {currentDay:D2}    ";
+                        }
+
+                        rowSb.Append(cell);
+                        currentDay++;
+                    }
+                }
+                sb.AppendLine($"║ {PadTo(rowSb.ToString(), innerWidth)} ║");
+            }
+
+            // Pad remaining lines to keep height consistent (ensure at least 6 weeks rendered)
+            for (int w = totalWeeks; w < 6; w++)
+            {
+                sb.AppendLine($"║ {new string(' ', innerWidth)} ║");
+            }
+
+            sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+
+            // Info section
+            string curDateFormatted = _calendarCursorDate.ToString("dddd, MMMM dd, yyyy").ToUpperInvariant();
+            string curCode = FormatMMDDYY(_calendarCursorDate);
+            string curTurnCheck = knownDates.Contains(_calendarCursorDate.ToString("yyMMdd")) ? "[TURN TELEMETRY PRESENT]" : "[NO TURN FILE]";
+            sb.AppendLine($"║ {PadTo($"  CURRENT CURSOR : {curDateFormatted} ({curCode})  {curTurnCheck}", innerWidth)} ║");
+
+            if (_calendarIsRangeMode)
+            {
+                string rStartStr = FormatMMDDYY(_calendarRangeStartDate);
+                string rEndStr = _calendarRangeStep == 1 ? "PENDING..." : FormatMMDDYY(_calendarCursorDate);
+                int spanDays = _calendarRangeStep == 1 ? 1 : Math.Abs((_calendarCursorDate.Date - _calendarRangeStartDate.Date).Days) + 1;
+                sb.AppendLine($"║ {PadTo($"  SELECTED RANGE : {rStartStr}  ──>  {rEndStr}  ({spanDays} DAYS SPAN)", innerWidth)} ║");
+            }
+            else
+            {
+                sb.AppendLine($"║ {PadTo($"  TARGET FILTER  : SINGLE OPERATIONAL TURN / REPORT DATE [{curCode}]", innerWidth)} ║");
+            }
+
+            sb.AppendLine($"║ {PadTo("  BOUNDS         : PEARL HARBOR (12/07/1941) TO CAMPAIGN CONCLUSION (12/31/1946)", innerWidth)} ║");
+            sb.AppendLine($"║ {PadTo("  " + new string('─', innerWidth - 4), innerWidth)} ║");
+
+            string calFooter = "  [ARROWS] Day/Week   [PgUp/PgDn/M/N] Month   [ENTER] Select Date   [ESC] Cancel";
+            sb.AppendLine($"║ {PadTo(calFooter, innerWidth)} ║");
+            sb.AppendLine("╚" + new string('═', width - 2) + "╝");
+
             return sb.ToString();
         }
 
@@ -4599,7 +5359,7 @@ namespace MUTHUR6000.Core.Controller
             sb.AppendLine("    ║  [Y] YES - PURGE & SHUTDOWN       [N/ESC] CANCEL          ║");
             sb.AppendLine("    ╚═══════════════════════════════════════════════════════════╝");
             sb.AppendLine();
-            AppendFooter(sb, "[Y] Yes, Purge and Reset", "[N/ESC] Cancel");
+            AppendFooter(sb, "[Y] Yes, Purge & Shutdown", "[N/ESC] Cancel");
             return sb.ToString();
         }
 
@@ -4619,9 +5379,14 @@ namespace MUTHUR6000.Core.Controller
                     result.Add((first ? "" : new string(' ', indent)) + rem);
                     break;
                 }
-                int breakPos = rem.LastIndexOf(' ', curWidth - 1);
-                if (breakPos < 0 || breakPos < curWidth / 3) breakPos = curWidth;
-                result.Add((first ? "" : new string(' ', indent)) + rem.Substring(0, Math.Min(breakPos, rem.Length)));
+                int breakPos = rem.LastIndexOf(' ', curWidth);
+                if (breakPos <= 0)
+                {
+                    // Single unbroken word exceeds curWidth: break at curWidth
+                    breakPos = curWidth;
+                }
+                string chunk = rem.Substring(0, Math.Min(breakPos, rem.Length));
+                result.Add((first ? "" : new string(' ', indent)) + chunk);
                 rem = breakPos < rem.Length ? rem.Substring(breakPos).TrimStart() : "";
                 first = false;
             }
@@ -4663,9 +5428,9 @@ namespace MUTHUR6000.Core.Controller
                     "  amphibious preparations or fleet replenishment.",
                     "- Established Routes: Reconstructed convoy trajectories expose supply lanes.",
                     "",
-                    "1.3 TACTICAL INTERCEPT WINDOWS (TPIE)",
-                    "The Tactical Patrol & Intercept Engine models enemy heading and speed vectors,",
-                    "calculating intercept opportunities for friendly strike aircraft and submarines."
+                    "1.3 THEATER HEURISTICS & DRIFT ANALYSIS",
+                    "Mathematical heuristics track theater power distribution shifts, enemy fleet centers",
+                    "of gravity, and operational drift vectors across continuous campaigns."
                 }
             };
 
@@ -4709,13 +5474,13 @@ namespace MUTHUR6000.Core.Controller
             {
                 Id = "2",
                 Title = "COMBAT INFORMATION CENTER (WAR ROOM)",
-                Description = "Intelligence summary, localized hex bearings, and tactical intercept engine",
+                Description = "Intelligence summary, localized hex bearings, and theater heuristics",
                 ContentLines = new List<string>
                 {
                     "2.2 COMBAT INFORMATION CENTER (WAR ROOM) (§4.5)",
                     "----------------------------------------------------------------------",
                     "",
-                    "TAB 1: STRATEGIC INTELLIGENCE SUMMARY",
+                    "OPTION 1: STRATEGIC INTELLIGENCE SUMMARY",
                     "- High-Value Targets (HVT): Monitors spotted enemy aircraft carriers (CV/CVL),",
                     "  battleships (BB), fleet oilers (AO), and amphibious transports (AP/AK).",
                     "- Strike Concentrations: Detects clusters of 3+ capital warships (cruisers+",
@@ -4724,14 +5489,14 @@ namespace MUTHUR6000.Core.Controller
                     "- Battle Damage Claims: Tracks combat sinkings with fog-of-war skepticism.",
                     "- Ghost Fleet: Flags lost contacts whose tracks have gone cold.",
                     "",
-                    "TAB 2: GEOSPATIAL CONTACT LIST",
+                    "OPTION 2: GEOSPATIAL CONTACT LIST (SIGINT MAP)",
                     "Renders SIGINT radio intercepts and visual sightings as structured tabular",
                     "records with hex coordinates, localized range in hexes, and sector bearings",
                     "(e.g., '14 hexes ENE of Pearl Harbor HQ').",
                     "",
-                    "TAB 3: TACTICAL PATROL & INTERCEPT ENGINE (TPIE)",
-                    "Simulates enemy task force trajectories based on reported headings and",
-                    "cruising speeds. Projects intercept windows and highlights search patrol gaps."
+                    "OPTION 3: VISUAL GRAPHICS MATRIX (TBD)",
+                    "Option 4 & 5: Reserved TBD domains.",
+                    "Option 6: Mathematical Heuristics and Strategic Drift."
                 }
             };
 

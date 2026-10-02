@@ -9,6 +9,8 @@
 		<ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
 
 		<!-- Assembly & Package Metadata -->
+		<AssemblyName>witp-cic-rochefort-alpha4-16</AssemblyName>
+		<TargetName>witp-cic-rochefort-alpha4-16</TargetName>
 		<AssemblyTitle>ROCHEFORT 6000 // PACIFIC WAR ROOM INTELLIGENCE SYSTEM</AssemblyTitle>
 		<Product>WITP-CIC-ROCHEFORT</Product>
 		<Description>ROCHEFORT 6000 Pacific War Room Combat Information Center and Intelligence Engine for War in the Pacific: Admiral's Edition.</Description>
@@ -62,6 +64,13 @@
 	<ItemGroup>
 		<Compile Remove="tests\**\*.*" />
 		<None Remove="tests\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Pure C# managed zlib inflater — zero native DLLs, PublishSingleFile-safe.
+		     Required for accurate compressed-byte-position tracking in the PWS block scanner.
+		     .NET ZLibStream internal read-ahead buffer cannot be trusted for this. -->
+		<PackageReference Include="SharpZipLib" Version="1.4.2" />
 	</ItemGroup>
 
 </Project>

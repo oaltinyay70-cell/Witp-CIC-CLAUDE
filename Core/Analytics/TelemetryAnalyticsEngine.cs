@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MUTHUR6000.Core.Ingestion;
+using System.Numerics;
+using ROCHEFORT6000.Core.Ingestion;
+using WitpCic.Core.Analytics.AirDenial;
+using WitpCic.Core.Analytics.Logistics;
+using WitpCic.Core.Analytics.Prediction;
+using WitpCic.Core.Geospatial;
+using WitpCic.Core.State;
 
-namespace MUTHUR6000.Core.Analytics
+namespace ROCHEFORT6000.Core.Analytics
 {
     /// <summary>
     /// Global war state enumeration evaluated by the Global Tempo State Machine (§4).
