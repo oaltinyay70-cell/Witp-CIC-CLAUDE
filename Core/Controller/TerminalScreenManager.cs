@@ -505,6 +505,12 @@ namespace ROCHEFORT6000.Core.Controller
             return root;
         }
 
+        /// <summary>The one .pws that belongs to the active campaign (e.g. wpae021.pws). Null = none chosen yet.</summary>
+        public string? CampaignPwsPath { get; set; }
+
+        /// <summary>Tests only: replaces the default scan options (e.g. ScanOptions.TestMode).</summary>
+        public ScanOptions? ScanOptionsOverride { get; set; }
+
         public void InitializeData(List<string>? dirs = null)
         {
             string root = FindProjectRootDir();
@@ -524,22 +530,15 @@ namespace ROCHEFORT6000.Core.Controller
             }
             else
             {
+                // Real campaigns scan only the game's SAVE folder (+ its archive). Never repo sample/golden data.
                 searchPaths.AddRange(new[]
                 {
                     @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE",
-                    @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive",
-                    @"C:\WitP-CIC\Campaigns",
-                    Path.Combine(root, "sample_data"),
-                    Path.Combine(root, "docs", "golden"),
-                    Path.Combine(root, "archive"),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_data"),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "docs", "golden"),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive"),
-                    Path.Combine(Directory.GetCurrentDirectory(), "sample_data")
+                    @"C:\Matrix Games\War in the Pacific Admiral's Edition\SAVE\archive"
                 });
             }
 
-            Manifest = FileScanner.ScanDirectories(searchPaths);
+            Manifest = FileScanner.ScanDirectories(searchPaths, ScanOptionsOverride ?? new ScanOptions { CampaignPwsPath = CampaignPwsPath });
             Analytics.AnalyzeCampaign(Manifest);
         }
 

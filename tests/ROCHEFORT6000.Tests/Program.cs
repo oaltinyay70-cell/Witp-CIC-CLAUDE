@@ -80,9 +80,30 @@ namespace ROCHEFORT6000.Tests
                 Path.Combine(rootDir, "sample_data"),
                 Path.Combine(rootDir, "archive")
             };
-            var manifest = FileScanner.ScanDirectories(searchPaths);
+            var manifest = FileScanner.ScanDirectories(searchPaths, ScanOptions.TestMode);
             Assert(manifest.Files.Count > 0, $"FileScanner processed {manifest.Files.Count} files");
             Assert(manifest.UniqueDates.Count > 0, $"Ingested {manifest.UniqueDates.Count} distinct operational dates: [{string.Join(", ", manifest.UniqueDates)}]");
+
+            // ── Test Suite 3b: Scan hygiene (live vs archive, CombatEvents date, clutter, campaign PWS) ──
+            Console.WriteLine("\n--- TEST SUITE 3b: Scan Hygiene ---");
+            {
+                string tmp = Path.Combine(Path.GetTempPath(), "r6k_scan_" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(Path.Combine(tmp, "archive"));
+                Directory.CreateDirectory(Path.Combine(tmp, "autosave"));
+                File.WriteAllText(Path.Combine(tmp, "archive", "OperationsReport_411226.txt"), "OPERATIONS REPORT FOR Dec 26, 41\n");
+                File.WriteAllText(Path.Combine(tmp, "OperationsReport.txt"), "OPERATIONS REPORT FOR Dec 26, 41\n");
+                File.WriteAllText(Path.Combine(tmp, "CombatEvents.txt"), "COMBAT EVENTS FOR 12/27/41\n");
+                File.WriteAllText(Path.Combine(tmp, "placeholder.txt"), "x");
+                File.WriteAllText(Path.Combine(tmp, "autosave", "OperationsReport_411220.txt"), "OPERATIONS REPORT FOR Dec 20, 41\n");
+                var hyg = FileScanner.ScanDirectories(new[] { tmp, Path.Combine(tmp, "archive") });
+                Assert(hyg.Files.Count(f => f.FileType == "OPERATIONS") == 1, "Live undated ops report de-duplicated against archived day");
+                Assert(hyg.Files.Any(f => f.FileType == "OPERATIONS" && f.FileName.Contains("411226")), "Archive (dated name) copy is the one kept");
+                Assert(hyg.Files.Any(f => f.FileType == "COMBAT_EVENTS" && f.DateYYMMDD == "411226"), "CombatEvents 'FOR 12/27/41' normalised to previous day 411226");
+                Assert(!hyg.Files.Any(f => f.FileName.Contains("411220")), "autosave\\ folder ignored");
+                Assert(!hyg.Files.Any(f => f.FileName.Equals("placeholder.txt", StringComparison.OrdinalIgnoreCase)), "placeholder.txt ignored");
+                Assert(hyg.UniqueDates.Count == 1, "Unique dates recomputed after de-duplication");
+                try { Directory.Delete(tmp, true); } catch { }
+            }
 
             // ── Test Suite 4: War Room Analytics & Predictive Models ────────────────
             Console.WriteLine("\n--- TEST SUITE 4: War Room Analytics & Models A-G ---");
@@ -140,7 +161,7 @@ namespace ROCHEFORT6000.Tests
 
             // ── Test Suite 7: Terminal Screen Manager Flow & Navigation ─────────────
             Console.WriteLine("\n--- TEST SUITE 7: Terminal Screen Manager Flow ---");
-            var screenManager = new TerminalScreenManager();
+            var screenManager = new TerminalScreenManager { ScanOptionsOverride = ScanOptions.TestMode };
             screenManager.InitializeData(searchPaths);
             Assert(screenManager.CurrentState == ScreenState.Boot, "ScreenManager starts in Boot state");
             string bootScreenText = screenManager.BuildCurrentScreen();
@@ -682,7 +703,7 @@ namespace ROCHEFORT6000.Tests
 
                 // ── Verify FileScanner & MasterMenu PWS Ingestion Integration ──
                 var testPaths = new List<string> { Path.GetDirectoryName(samplePws) ?? "" };
-                var testManifest = FileScanner.ScanDirectories(testPaths);
+                var testManifest = FileScanner.ScanDirectories(testPaths, ScanOptions.TestMode);
                 int foundPwsCount = testManifest.Files.Count(f => f.FileType == "PWS_SAVE");
                 Assert(foundPwsCount > 0, $"FileScanner discovered {foundPwsCount} PWS file(s) in sample_data (pwsCount > 0)");
                 Assert(testManifest.Files.Any(f => f.FileType == "PWS_SAVE" && !string.IsNullOrEmpty(f.DateYYMMDD)), "Discovered PWS file has valid parsed DateYYMMDD");
